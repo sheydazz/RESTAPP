@@ -1,0 +1,24 @@
+class AppRoutes {
+  // Intro & Auth
+  static const intro = '/intro';
+  static const login = '/login';
+  static const register = '/register';
+
+  // Main App (con Bottom Navigation)
+  static const mainApp = '/main';
+
+  // Home
+  static const home = '/home';
+  static const settings = '/settings';
+  static const help = '/help'; // Salvavidas
+
+  // Registro Emocional
+  static const emotionHome = '/emotionregister';
+  static const chat = '/chat';
+  static const trafficLight = '/traffic_light';
+  static const advice = '/advice';
+  static const check = '/check';
+
+  // Mi Progreso
+  static const progress = '/progress';
+}

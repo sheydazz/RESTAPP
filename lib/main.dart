@@ -1,4 +1,18 @@
 import 'package:flutter/material.dart';
+import 'core/routes/app_routes.dart';
+import 'features/intro_auth/screens/intro_screen.dart';
+import 'features/intro_auth/screens/login_screen.dart';
+import 'features/intro_auth/screens/register_screen.dart';
+import 'features/home/screens/home_screen.dart';
+import 'features/home/screens/settings_screen.dart';
+import 'features/home/screens/help_screen.dart';
+import 'features/emotion/screens/emotionregister_screen.dart';
+import 'features/emotion/screens/chat_screen.dart';
+import 'features/emotion/screens/traffic_light_screen.dart';
+import 'features/emotion/screens/advice_screen.dart';
+import 'features/emotion/screens/check_screen.dart';
+import 'features/progress/screens/progress_screen.dart';
+import 'features/navigation/main_app.dart';
 
 void main() {
   runApp(const MyApp());
@@ -11,53 +25,31 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'REST',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: const SplashScreen(), // 👈 primera página
-    );
-  }
-}
+      initialRoute: AppRoutes.intro,
+      routes: {
+        // Intro & Auth
+        AppRoutes.intro: (context) =>  IntroScreen(),
+        AppRoutes.login: (context) =>  LoginScreen(),
+        AppRoutes.register: (context) =>  RegisterScreen(),
 
-class SplashScreen extends StatelessWidget {
-  const SplashScreen({super.key});
+        // Main App
+        AppRoutes.mainApp: (context) =>  MainApp(),
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white, // fondo blanco
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            // Logo REST
-            Text(
-              'REST',
-              style: TextStyle(
-                fontSize: 100,
-                fontWeight: FontWeight.bold,
-                foreground: Paint()
-                  ..shader = const LinearGradient(
-                    colors: <Color>[
-                      Color(0xFF00C6FF),
-                      Color(0xFF0072FF),
-                    ],
-                  ).createShader(const Rect.fromLTWH(0.0, 0.0, 200.0, 70.0)),
-              ),
-            ),
-            const SizedBox(height: 10),
-            const Text(
-              'Salud Mental',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.w600,
-                color: Colors.black87,
-              ),
-            ),
-          ],
-        ),
-      ),
+        // Home
+        AppRoutes.home: (context) =>  HomeScreen(),
+        AppRoutes.settings: (context) =>  SettingsScreen(),
+        AppRoutes.help: (context) =>  HelpScreen(),
+
+        // Registro Emocional
+        AppRoutes.emotionHome: (context) =>  EmotionRegisterScreen(),
+        AppRoutes.chat: (context) =>  ChatScreen(),
+        AppRoutes.trafficLight: (context) => TrafficLightScreen(),
+        AppRoutes.advice: (context) =>  AdviceScreen(),
+        AppRoutes.check: (context) =>  CheckScreen(),
+
+        // Mi Progreso
+        AppRoutes.progress: (context) =>  ProgressScreen(),
+      },
     );
   }
 }
