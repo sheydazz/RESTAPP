@@ -43,8 +43,23 @@ class MyApp extends StatelessWidget {
         // Registro Emocional
         AppRoutes.emotionHome: (context) =>  EmotionRegisterScreen(),
         AppRoutes.chat: (context) =>  ChatScreen(),
-        AppRoutes.trafficLight: (context) => TrafficLightScreen(),
-        AppRoutes.advice: (context) =>  AdviceScreen(),
+        AppRoutes.trafficLight: (context) {
+          final args = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+          return TrafficLightScreen(
+            estado: args["estado"],
+            mensaje: args["mensaje"],
+            botonTexto: args["botonTexto"],
+          );
+        },
+
+        AppRoutes.advice: (context) {
+          final args = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>?;
+          return AdviceScreen(
+            userName: args?["userName"] ?? "Usuario",
+            adviceTitle: args?["adviceTitle"] ?? "Consejo",
+            message: args?["message"] ?? "consejo personalizado.",
+          );
+        },
         AppRoutes.check: (context) =>  CheckScreen(),
 
         // Mi Progreso
