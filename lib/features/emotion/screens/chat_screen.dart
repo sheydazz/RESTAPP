@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rest/features/emotion/screens/emotionregister_screen.dart';
 import '../../emotion/screens/check_screen.dart';
 
 class ChatScreen extends StatefulWidget {
@@ -239,7 +240,7 @@ class _ChatScreenState extends State<ChatScreen> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => const CheckScreen()),
+                                builder: (context) => EmotionRegisterScreen()),
                           );
                         },
                         child: Container(
