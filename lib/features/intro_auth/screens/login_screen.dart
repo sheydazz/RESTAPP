@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'register_screen.dart';
-
+import 'package:rest/core/routes/app_routes.dart';
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
 
@@ -55,7 +55,9 @@ class LoginScreen extends StatelessWidget {
 
               const SizedBox(height: 50),
 
-              _buildRadialButton(text: 'INGRESAR', onPressed: () {}),
+              _buildRadialButton(text: 'INGRESAR', onPressed: () {
+                Navigator.pushNamed(context, AppRoutes.mainApp);
+              }),
 
               const SizedBox(height: 10),
 

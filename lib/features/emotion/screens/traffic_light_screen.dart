@@ -201,11 +201,10 @@ class TrafficLightScreen extends StatelessWidget {
                     onPressed: () {
                       switch (estado) {
                         case "excelente":
-                          Navigator.pushNamed(context, AppRoutes.check);
+                          Navigator.of(context, rootNavigator: true).pushNamed(AppRoutes.check);
                           break;
                         case "alerta-amarillo":
-                          Navigator.pushNamed(
-                            context,
+                          Navigator.of(context, rootNavigator: true).pushNamed(
                             AppRoutes.advice,
                             arguments: {
                               "userName": "Mari",
@@ -215,10 +214,9 @@ class TrafficLightScreen extends StatelessWidget {
                           );
                           break;
                         case "alerta-rojo":
-                          Navigator.pushNamed(context, AppRoutes.help);
+                          Navigator.of(context, rootNavigator: true).pushNamed(AppRoutes.help);
                           break;
                         default:
-                        // Si no hay un estado válido
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
                               content: Text("Estado no reconocido"),
