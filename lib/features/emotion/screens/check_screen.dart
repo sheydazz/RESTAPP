@@ -173,12 +173,21 @@ class _CheckScreenState extends State<CheckScreen> {
                   // Título
                   Expanded(
                     child: Text(
-                      "Analicemos tu día",
+                      "¡Cuéntame\nsobre tu día¡",
                       style: TextStyle(
-                        fontSize: 30,
-                        fontWeight: FontWeight.normal,
-                        color: Color(0xFF2196F3),
-                        fontFamily: 'Fredoka One',
+                        fontFamily: 'Fredoka',
+                        fontSize: 35,
+                        height: 0.9,
+                        fontWeight: FontWeight.bold,
+                        foreground: Paint()
+                          ..shader = LinearGradient(
+                            colors: [
+                              Color(0xFF7DFDFE), // Celeste
+                              Color(0xFF2196F3), // Azul
+                            ],
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                          ).createShader(Rect.fromLTWH(0, 0, 250, 60)),
                       ),
                     ),
                   ),
@@ -202,21 +211,21 @@ class _CheckScreenState extends State<CheckScreen> {
                       width: double.infinity,
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
-                        color: Color(0xFFE3F2FD),
+                        color: Colors.transparent,
                         borderRadius: BorderRadius.only(
                           topLeft: Radius.circular(13),
                           topRight: Radius.circular(13),
                         ),
                       ),
                       child: Text(
-                        "Preguntas de Evaluación Emocional",
+                        "Test Personal Diario",
                         style: TextStyle(
-                          fontSize: 18,
+                          fontSize: 20,
                           fontWeight: FontWeight.bold,
                           color: Colors.black87,
                           fontFamily: 'Freeman',
                         ),
-                        textAlign: TextAlign.center,
+                        textAlign: TextAlign.left,
                       ),
                     ),
 
@@ -231,14 +240,14 @@ class _CheckScreenState extends State<CheckScreen> {
                               width: double.infinity,
                               padding: const EdgeInsets.all(12),
                               decoration: BoxDecoration(
-                                color: Color(0xFF87CEEB),
+                                color: Color(0xFFBDF6FD),
                                 borderRadius: BorderRadius.circular(8),
                               ),
                               child: Text(
                                 "¿Cómo describirías tu estado de ánimo general durante la última semana?",
                                 style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w600,
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w900, // Más bold
                                   color: Colors.black87,
                                   fontFamily: 'Freeman',
                                 ),
@@ -264,7 +273,7 @@ class _CheckScreenState extends State<CheckScreen> {
                                     width: double.infinity,
                                     padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                                     decoration: BoxDecoration(
-                                      color: isSelected ? Color(0xFFFFC107) : Color(0xFF87CEEB),
+                                      color: isSelected ? Color(0xFFFFC107) : Color(0xFFBDF6FD),
                                       borderRadius: BorderRadius.circular(20),
                                     ),
                                     child: Row(
@@ -295,7 +304,7 @@ class _CheckScreenState extends State<CheckScreen> {
                                           opcion["text"],
                                           style: TextStyle(
                                             fontSize: 15,
-                                            fontWeight: FontWeight.normal,
+                                            fontWeight: FontWeight.w900, // Más bold
                                             color: Colors.black87,
                                             fontFamily: 'Freeman',
                                           ),
@@ -305,7 +314,7 @@ class _CheckScreenState extends State<CheckScreen> {
                                   ),
                                 ),
                               );
-                            }),
+                          }),
 
                             SizedBox(height: 16),
 
@@ -314,14 +323,14 @@ class _CheckScreenState extends State<CheckScreen> {
                               width: double.infinity,
                               padding: const EdgeInsets.all(12),
                               decoration: BoxDecoration(
-                                color: Color(0xFF87CEEB),
+                                color: Color(0xFFBDF6FD),
                                 borderRadius: BorderRadius.circular(8),
                               ),
                               child: Text(
                                 "¿Has experimentado dificultades para dormir en los últimos días?",
                                 style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w600,
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w900, // Más bold
                                   color: Colors.black87,
                                   fontFamily: 'Freeman',
                                 ),
@@ -347,7 +356,7 @@ class _CheckScreenState extends State<CheckScreen> {
                                     width: double.infinity,
                                     padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                                     decoration: BoxDecoration(
-                                      color: isSelected ? Color(0xFFFFC107) : Color(0xFF87CEEB),
+                                      color: isSelected ? Color(0xFFFFC107) : Color(0xFFBDF6FD),
                                       borderRadius: BorderRadius.circular(20),
                                     ),
                                     child: Row(
@@ -378,7 +387,7 @@ class _CheckScreenState extends State<CheckScreen> {
                                           opcion["text"],
                                           style: TextStyle(
                                             fontSize: 15,
-                                            fontWeight: FontWeight.normal,
+                                            fontWeight: FontWeight.w900, // Más bold
                                             color: Colors.black87,
                                             fontFamily: 'Freeman',
                                           ),
@@ -388,7 +397,7 @@ class _CheckScreenState extends State<CheckScreen> {
                                   ),
                                 ),
                               );
-                            }),
+                         }),
 
                             SizedBox(height: 16),
 
@@ -397,14 +406,14 @@ class _CheckScreenState extends State<CheckScreen> {
                               width: double.infinity,
                               padding: const EdgeInsets.all(12),
                               decoration: BoxDecoration(
-                                color: Color(0xFF87CEEB),
+                                color: Color(0xFFBDF6FD),
                                 borderRadius: BorderRadius.circular(8),
                               ),
                               child: Text(
                                 "¿Te has sentido capaz de concentrarte en tus actividades diarias?",
                                 style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w600,
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w900, // Más bold
                                   color: Colors.black87,
                                   fontFamily: 'Freeman',
                                 ),
@@ -430,7 +439,7 @@ class _CheckScreenState extends State<CheckScreen> {
                                     width: double.infinity,
                                     padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                                     decoration: BoxDecoration(
-                                      color: isSelected ? Color(0xFFFFC107) : Color(0xFF87CEEB),
+                                      color: isSelected ? Color(0xFFFFC107) : Color(0xFFBDF6FD),
                                       borderRadius: BorderRadius.circular(20),
                                     ),
                                     child: Row(
@@ -461,7 +470,7 @@ class _CheckScreenState extends State<CheckScreen> {
                                           opcion["text"],
                                           style: TextStyle(
                                             fontSize: 15,
-                                            fontWeight: FontWeight.normal,
+                                            fontWeight: FontWeight.w900, // Más bold
                                             color: Colors.black87,
                                             fontFamily: 'Freeman',
                                           ),
@@ -484,23 +493,40 @@ class _CheckScreenState extends State<CheckScreen> {
             // Botón guardar
             Container(
               margin: const EdgeInsets.all(20),
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Color(0xFF2196F3),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(25),
+              child: Center(
+                child: Container(
+                  padding: EdgeInsets.symmetric(horizontal: 32, vertical: 8),
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [
+                        Color(0xFF2196F3), // Azul izquierdo
+                        Color(0xFF3973D1), // Azul derecho (más oscuro)
+                      ],
+                      begin: Alignment.centerLeft,
+                      end: Alignment.centerRight,
+                    ),
+                    borderRadius: BorderRadius.circular(32),
                   ),
-                  padding: EdgeInsets.symmetric(horizontal: 40, vertical: 15),
-                  elevation: 3,
-                ),
-                onPressed: _guardarRespuestas,
-                child: Text(
-                  "GUARDAR",
-                  style: TextStyle(
-                    fontSize: 30,
-                    fontWeight: FontWeight.normal,
-                    color: Colors.white,
-                    fontFamily: 'Fredoka One',
+                  child: TextButton(
+                    onPressed: _guardarRespuestas,
+                    style: TextButton.styleFrom(
+                      padding: EdgeInsets.zero,
+                      minimumSize: Size(0, 0),
+                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(32),
+                      ),
+                    ),
+                    child: Text(
+                      "GUARDAR",
+                      style: TextStyle(
+                        fontFamily: 'Fredoka',
+                        fontSize: 30,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                        letterSpacing: 3.0,
+                      ),
+                    ),
                   ),
                 ),
               ),

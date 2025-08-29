@@ -44,7 +44,7 @@ dev_dependencies:
   # activated in the `analysis_options.yaml` file located at the root of your
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
-  flutter_lints: ^6.0.0
+  flutter_lints: ^5.0.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -73,10 +73,16 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  # fonts:
-  #   - family: Schyler
-  #     fonts:
-  #       - asset: fonts/Schyler-Regular.ttf
+  fonts:
+   - family: Fredoka
+     fonts:
+       - asset: fonts/Fredoka-Regular.ttf
+       - asset: fonts/Fredoka_Condensed-Bold.ttf
+       - asset: fonts/Fredoka_Condensed-Light.ttf
+       - asset: fonts/Fredoka_Condensed-Medium.ttf
+       - asset: fonts/Fredoka-Bold.ttf
+       - asset: fonts/Fredoka-SemiBold.ttf
+       - asset: fonts/Fredoka_SemiExpanded-Bold.ttf
   #       - asset: fonts/Schyler-Italic.ttf
   #         style: italic
   #   - family: Trajan Pro
