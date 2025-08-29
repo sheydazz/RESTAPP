@@ -61,7 +61,15 @@ class MainScreen extends StatelessWidget {
                   ),
                   Spacer(),
                   // Iconos derecha
-                  Container(
+                  InkWell( // Envuelve el Container con InkWell
+                    onTap: () {
+                    // Navega a SettingsScreen cuando se presiona el ícono
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => SettingsScreen()),
+                      );
+                   },
+                  child: Container(
                     width: 40,
                     height: 40,
                     decoration: BoxDecoration(
@@ -74,8 +82,17 @@ class MainScreen extends StatelessWidget {
                       size: 20,
                     ),
                   ),
+                  ),
                   SizedBox(width: 8),
-                  Container(
+                  InkWell( // Envuelve el Container con InkWell
+                    onTap: () {
+                    // Navega a HelpScreen cuando se presiona el ícono
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => HelpScreen()),
+                      );
+                   },
+                  child: Container(
                     width: 40,
                     height: 40,
                     decoration: BoxDecoration(
@@ -88,10 +105,10 @@ class MainScreen extends StatelessWidget {
                       size: 20,
                     ),
                   ),
+                  ),
                 ],
               ),
             ),
-
             SizedBox(height: 20),
 
             // Botón principal "¿Quieres hablar conmigo?"
