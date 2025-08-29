@@ -1,67 +1,69 @@
-
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'settings_screen.dart';
+import 'help_screen.dart';
 
 void main() {
   runApp(HomeScreen());
 }
-
 class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Chat',
+      title: 'Chat Médico',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.blue,
-        fontFamily: 'Roboto',
+        scaffoldBackgroundColor: Colors.white,
+        fontFamily: 'Fredoka',
       ),
-      home: ChatHomePage(),
-      debugShowCheckedModeBanner: false,
+      home: MainScreen(),
     );
   }
 }
-
-class ChatHomePage extends StatelessWidget {
+class MainScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[50],
+      backgroundColor: Colors.white,
       body: SafeArea(
         child: Column(
           children: [
-            // Header con avatar y botones
+            // Header
             Container(
-              padding: EdgeInsets.all(20),
+              padding: EdgeInsets.all(16),
               child: Row(
                 children: [
-                  // Avatar de Mari
+                  // Avatar Mari
                   Container(
-                    width: 60,
-                    height: 60,
+                    width: 50,
+                    height: 50,
                     decoration: BoxDecoration(
                       color: Color(0xFF87CEEB),
                       shape: BoxShape.circle,
                     ),
-                    child: Icon(
-                      Icons.face,
-                      color: Colors.white,
-                      size: 30,
+                    child: Center(
+                      child: Text(
+                        '👋',
+                        style: TextStyle(fontSize: 24),
+                      ),
                     ),
                   ),
                   SizedBox(width: 12),
-                  // Texto ¡Hola! Mari
+                  // Texto "¡Hola! Mari"
                   Text(
-                    '¡Hola Amigo',
+                    '¡Hola! Mari',
                     style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.w600,
-                      color: Color(0xFF2196F3),
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFF2E86AB),
                     ),
                   ),
                   Spacer(),
-                  // Iconos de configuración
+                  // Iconos derecha
                   Container(
-                    width: 45,
-                    height: 45,
+                    width: 40,
+                    height: 40,
                     decoration: BoxDecoration(
                       color: Color(0xFF87CEEB),
                       shape: BoxShape.circle,
@@ -69,21 +71,21 @@ class ChatHomePage extends StatelessWidget {
                     child: Icon(
                       Icons.settings,
                       color: Colors.white,
-                      size: 24,
+                      size: 20,
                     ),
                   ),
-                  SizedBox(width: 10),
+                  SizedBox(width: 8),
                   Container(
-                    width: 45,
-                    height: 45,
+                    width: 40,
+                    height: 40,
                     decoration: BoxDecoration(
-                      color: Color(0xFF4CAF50),
+                      color: Color(0xFF87CEEB),
                       shape: BoxShape.circle,
                     ),
                     child: Icon(
-                      Icons.info_outline,
+                      Icons.person,
                       color: Colors.white,
-                      size: 24,
+                      size: 20,
                     ),
                   ),
                 ],
@@ -92,48 +94,53 @@ class ChatHomePage extends StatelessWidget {
 
             SizedBox(height: 20),
 
-            // Mensaje principal
+            // Botón principal "¿Quieres hablar conmigo?"
             Container(
               margin: EdgeInsets.symmetric(horizontal: 20),
-              padding: EdgeInsets.all(25),
+              padding: EdgeInsets.symmetric(vertical: 20, horizontal: 30),
               decoration: BoxDecoration(
                 color: Color(0xFF87CEEB),
                 borderRadius: BorderRadius.circular(25),
-              ),
-              child: Text(
-                '¿Quieres hablar conmigo?',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.white,
+                border: Border.all(
+                  color: Colors.black,
+                  width: 0.5,
                 ),
-                textAlign: TextAlign.center,
+              ),
+              child: Center(
+                child: Text(
+                  '¿Quieres hablar\nconmigo?',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 40,
+                    fontWeight: FontWeight.bold,
+                    height: 1.2,
+                  ),
+                ),
               ),
             ),
 
             SizedBox(height: 20),
 
-            // Botón Escoger un tema
+            // Botón "ESCOGER UN TEMA"
             Container(
               margin: EdgeInsets.symmetric(horizontal: 20),
-              child: ElevatedButton(
-                onPressed: () {
-                  // Acción del botón
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Color(0xFF2196F3),
-                  padding: EdgeInsets.symmetric(vertical: 15, horizontal: 30),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(25),
-                  ),
+              padding: EdgeInsets.symmetric(vertical: 15, horizontal: 40),
+              decoration: BoxDecoration(
+                color: Color(0xFF3588CC),
+                borderRadius: BorderRadius.circular(25),
+                border: Border.all(
+                  color: Colors.black,
+                  width: 0.5,
                 ),
+              ),
+              child: Center(
                 child: Text(
                   'ESCOGER UN TEMA',
                   style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
                     color: Colors.white,
-                    letterSpacing: 0.5,
+                    fontSize: 27,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
@@ -143,7 +150,7 @@ class ChatHomePage extends StatelessWidget {
 
             // Sección "Mis últimas sesiones"
             Container(
-              margin: EdgeInsets.symmetric(horizontal: 20),
+              margin: EdgeInsets.symmetric(horizontal: 25),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -151,27 +158,22 @@ class ChatHomePage extends StatelessWidget {
                     'Mis últimas sesiones',
                     style: TextStyle(
                       fontSize: 16,
-                      fontWeight: FontWeight.w500,
+                      fontWeight: FontWeight.bold,
                       color: Colors.black87,
                     ),
                   ),
-                  TextButton(
-                    onPressed: () {
-                      // Ver todas
-                    },
-                    child: Text(
-                      'Ver todas',
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Color(0xFF2196F3),
-                      ),
+                  Text(
+                    'Ver todas',
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Color(0xFF2E86AB),
                     ),
                   ),
                 ],
               ),
             ),
 
-            SizedBox(height: 15),
+            SizedBox(height: 20),
 
             // Cards de sesiones
             Container(
@@ -181,64 +183,60 @@ class ChatHomePage extends StatelessWidget {
                   // Card Conversaciones
                   Expanded(
                     child: Container(
-                      padding: EdgeInsets.all(20),
+                      padding: EdgeInsets.all(16),
                       decoration: BoxDecoration(
                         color: Colors.white,
-                        borderRadius: BorderRadius.circular(20),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.05),
-                            blurRadius: 10,
-                            offset: Offset(0, 2),
-                          ),
-                        ],
+                        border: Border.all(
+                          color: Colors.grey,
+                          width: 0.5,
+                        ),
+                        borderRadius: BorderRadius.circular(15),
                       ),
                       child: Column(
                         children: [
                           Container(
                             width: 60,
-                            height: 60,
+                            height: 75,
                             decoration: BoxDecoration(
-                              color: Color(0xFF4CAF50),
+                              color: Color(0xFF87CEEB),
                               shape: BoxShape.circle,
                             ),
-                            child: Icon(
-                              Icons.chat_bubble,
-                              color: Colors.white,
-                              size: 28,
+                            child: Center(
+                              child: Icon(
+                                Icons.person_2,
+                                color: Color(0xFFFFD93D),
+                                size: 30,
+                              ),
                             ),
                           ),
-                          SizedBox(height: 15),
+                          SizedBox(height: 12),
                           Text(
                             'Conversaciones',
                             style: TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.w500,
                               color: Colors.black87,
+                              height: 1.2
                             ),
-                            textAlign: TextAlign.center,
                           ),
                         ],
                       ),
                     ),
                   ),
 
-                  SizedBox(width: 15),
+                  SizedBox(width: 16),
 
-                  // Card Progreso de las Actividades
+                  // Card Progreso de las Actividad
                   Expanded(
                     child: Container(
-                      padding: EdgeInsets.all(20),
+                      padding: EdgeInsets.all(16),
                       decoration: BoxDecoration(
                         color: Colors.white,
-                        borderRadius: BorderRadius.circular(20),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.05),
-                            blurRadius: 10,
-                            offset: Offset(0, 2),
-                          ),
-                        ],
+                        border: Border.all(
+                          color: Colors.grey,
+                          width: 0.5,
+                        ),
+                        borderRadius: BorderRadius.circular(15),
                       ),
                       child: Column(
                         children: [
@@ -249,21 +247,24 @@ class ChatHomePage extends StatelessWidget {
                               color: Color(0xFF87CEEB),
                               shape: BoxShape.circle,
                             ),
-                            child: Icon(
-                              Icons.emoji_events,
-                              color: Colors.white,
-                              size: 28,
+                            child: Center(
+                              child: Icon(
+                                Icons.emoji_events,
+                                color: Color(0xFFFFD93D),
+                                size: 30,
+                              ),
                             ),
                           ),
-                          SizedBox(height: 15),
+                          SizedBox(height: 12),
                           Text(
-                            'Progreso de las Actividades',
+                            'Progreso de las\nActividad',
+                            textAlign: TextAlign.center,
                             style: TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.w500,
                               color: Colors.black87,
+                              height: 1.2,
                             ),
-                            textAlign: TextAlign.center,
                           ),
                         ],
                       ),
@@ -275,31 +276,33 @@ class ChatHomePage extends StatelessWidget {
 
             Spacer(),
 
-            // Bottom Navigation Bar
+            // Bottom Navigation
             Container(
-              margin: EdgeInsets.all(20),
+              height: 70,
               decoration: BoxDecoration(
-                color: Color(0xFF2196F3),
-                borderRadius: BorderRadius.circular(25),
+                color: Color(0xFF2E86AB),
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(20),
+                  topRight: Radius.circular(20),
+                ),
               ),
-              child: BottomNavigationBar(
-                backgroundColor: Colors.transparent,
-                elevation: 0,
-                type: BottomNavigationBarType.fixed,
-                selectedItemColor: Colors.white,
-                unselectedItemColor: Colors.white70,
-                items: [
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.home, size: 28),
-                    label: '',
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Icon(
+                    Icons.home,
+                    color: Colors.white,
+                    size: 30,
                   ),
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.bar_chart, size: 28),
-                    label: '',
+                  Icon(
+                    Icons.refresh,
+                    color: Color(0xFF87CEEB),
+                    size: 30,
                   ),
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.person, size: 28),
-                    label: '',
+                  Icon(
+                    Icons.person,
+                    color: Colors.white,
+                    size: 30,
                   ),
                 ],
               ),
@@ -309,4 +312,4 @@ class ChatHomePage extends StatelessWidget {
       ),
     );
   }
-}
+  }
