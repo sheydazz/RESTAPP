@@ -90,16 +90,18 @@ class LoginScreen extends StatelessWidget {
                 ],
               ),
 
-              const SizedBox(height: 30),
+              const SizedBox(height: 15),
 
               Text(
                 '¿Eres nueva/o?',
                 style: GoogleFonts.fredoka(
-                  fontSize: 14,
+                  fontSize: 20,
                   fontWeight: FontWeight.bold,
                   color: Colors.black54,
                 ),
               ),
+
+              const SizedBox(height: 15),
 
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -107,7 +109,7 @@ class LoginScreen extends StatelessWidget {
                   Text(
                     'Bienvenidos a ',
                     style: GoogleFonts.fredoka(
-                      fontSize: 16,
+                      fontSize: 25,
                       fontWeight: FontWeight.bold,
                       color: Colors.black87,
                     ),
@@ -124,7 +126,7 @@ class LoginScreen extends StatelessWidget {
                     child: Text(
                       'REST',
                       style: GoogleFonts.fredoka(
-                        fontSize: 16,
+                        fontSize: 25,
                         fontWeight: FontWeight.bold,
                         color: Colors.white,
                       ),
@@ -133,7 +135,7 @@ class LoginScreen extends StatelessWidget {
                 ],
               ),
 
-              const SizedBox(height: 10),
+              const SizedBox(height: 20),
 
               SizedBox(
                 width: MediaQuery.of(context).size.width * 0.6,
