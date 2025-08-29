@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'register_screen.dart'; // ← Importación relativa correcta
+import 'register_screen.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -143,7 +143,7 @@ class LoginScreen extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => RegisterScreen(),
+                        builder: (context) => const RegisterScreen(),
                       ),
                     );
                   },
@@ -205,6 +205,24 @@ class LoginScreen extends StatelessWidget {
                 hintStyle: GoogleFonts.fredoka(
                   color: Colors.black38,
                   fontWeight: FontWeight.bold,
+                ),
+                suffixIcon: Padding(
+                  padding: const EdgeInsets.only(right: 20),
+                  child: Container(
+                    width: 28,
+                    height: 28,
+                    decoration: const BoxDecoration(
+                      color: Color(0xFF3709EC),
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Center(
+                      child: Icon(
+                        Icons.check,
+                        color: Colors.white,
+                        size: 18,
+                      ),
+                    ),
+                  ),
                 ),
                 contentPadding:
                 const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
