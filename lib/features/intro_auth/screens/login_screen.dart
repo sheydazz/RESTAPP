@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../../core/routes/app_routes.dart'; 
+import 'package:google_fonts/google_fonts.dart';
+import 'register_screen.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -7,109 +8,311 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(24.0),
-        child: Center(
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                // Logo
-                Text(
-                  "REST",
-                  style: TextStyle(
-                    fontSize: 40,
-                    fontWeight: FontWeight.bold,
-                    foreground: Paint()
-                      ..shader = const LinearGradient(
-                        colors: [Colors.blue, Colors.purple],
-                      ).createShader(Rect.fromLTWH(0, 0, 200, 70)),
-                  ),
+      backgroundColor: Colors.white,
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              const SizedBox(height: 40),
+
+              Text(
+                'REST',
+                style: GoogleFonts.fredoka(
+                  fontSize: 36,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
+                  letterSpacing: 1.5,
                 ),
-                const SizedBox(height: 8),
-                const Text("Salud Mental", style: TextStyle(fontSize: 16)),
+              ),
 
-                const SizedBox(height: 32),
+              const SizedBox(height: 4),
 
-                // Usuario
-                TextField(
-                  decoration: InputDecoration(
-                    labelText: "Usuario o correo",
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(20),
+              Text(
+                'Salud Mental',
+                style: GoogleFonts.fredoka(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black87,
+                ),
+              ),
+
+              const SizedBox(height: 40),
+
+              _buildInputField(
+                label: 'USUARIO O CORREO INSTITUCIONAL',
+                hint: 'Example@correo.com',
+              ),
+
+              const SizedBox(height: 32),
+
+              _buildInputField(
+                label: 'CONTRASEÑA',
+                hint: '••••••••',
+                obscure: true,
+              ),
+
+              const SizedBox(height: 50),
+
+              _buildRadialButton(text: 'INGRESAR', onPressed: () {}),
+
+              const SizedBox(height: 10),
+
+              Column(
+                children: [
+                  TextButton(
+                    onPressed: () {},
+                    child: RichText(
+                      text: TextSpan(
+                        style: GoogleFonts.fredoka(
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        children: const [
+                          TextSpan(
+                            text: '¿Se te olvidó? ',
+                            style: TextStyle(color: Colors.black),
+                          ),
+                          TextSpan(
+                            text: 'Recuperar',
+                            style: TextStyle(color: Color(0xFF2B13B2)),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-                const SizedBox(height: 16),
+                  const Divider(
+                    color: Colors.grey,
+                    thickness: 1,
+                    height: 30,
+                  ),
+                ],
+              ),
 
-                // Contraseña
-                TextField(
-                  obscureText: true,
-                  decoration: InputDecoration(
-                    labelText: "Contraseña",
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(20),
+              const SizedBox(height: 15),
+
+              Text(
+                '¿Eres nueva/o?',
+                style: GoogleFonts.fredoka(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black54,
+                ),
+              ),
+
+              const SizedBox(height: 15),
+
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'Bienvenidos a ',
+                    style: GoogleFonts.fredoka(
+                      fontSize: 25,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black87,
                     ),
                   ),
-                ),
-                const SizedBox(height: 24),
-
-                // Botón ingresar
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 80, vertical: 16),
-                    backgroundColor: Colors.blue,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30),
+                  ShaderMask(
+                    shaderCallback: (bounds) => const LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                        Color(0xFFAB07D8),
+                        Color(0xFF1579EC),
+                      ],
+                    ).createShader(bounds),
+                    child: Text(
+                      'REST',
+                      style: GoogleFonts.fredoka(
+                        fontSize: 25,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
                     ),
                   ),
+                ],
+              ),
+
+              const SizedBox(height: 20),
+
+              SizedBox(
+                width: MediaQuery.of(context).size.width * 0.6,
+                child: _buildRadialJoinButton(
+                  text: 'UNIRME',
                   onPressed: () {
-                    Navigator.pushNamed(context, AppRoutes.mainApp);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const RegisterScreen(),
+                      ),
+                    );
                   },
-                  child: const Text(
-                    "INGRESAR",
-                    style: TextStyle(fontSize: 18, color: Colors.white),
-                  ),
                 ),
+              ),
 
-                const SizedBox(height: 16),
-                const Text("¿Se te olvidó? Recuperar",
-                    style: TextStyle(color: Colors.blue)),
+              const SizedBox(height: 20),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 
-                const SizedBox(height: 24),
-                const Divider(),
-                const SizedBox(height: 24),
-
-                // Texto bienvenida
-                const Text("¿Eres nueva/o?"),
-                const SizedBox(height: 8),
-                const Text(
-                  "Bienvenido a REST",
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(height: 16),
-
-                // Botón unirme
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 80, vertical: 16),
-                    backgroundColor: Colors.purple,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                  ),
-                  onPressed: () {
-                    Navigator.pushNamed(context, AppRoutes.register);
-                  },
-                  child: const Text(
-                    "UNIRME",
-                    style: TextStyle(fontSize: 18, color: Colors.white),
-                  ),
-                ),
+  Widget _buildInputField({
+    required String label,
+    required String hint,
+    bool obscure = false,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label,
+          style: GoogleFonts.fredoka(
+            fontSize: 16,
+            color: Colors.black87,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        const SizedBox(height: 8),
+        Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(30),
+            gradient: const LinearGradient(
+              colors: [
+                Color(0xFFADD8E6),
+                Color(0xFF3A5AFF),
+                Color(0xFF8C4EFF),
               ],
+              begin: Alignment.centerLeft,
+              end: Alignment.centerRight,
             ),
+          ),
+          padding: const EdgeInsets.all(2.5),
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(28),
+            ),
+            child: TextField(
+              obscureText: obscure,
+              style: GoogleFonts.fredoka(
+                color: Colors.black87,
+                fontWeight: FontWeight.bold,
+              ),
+              decoration: InputDecoration(
+                hintText: hint,
+                hintStyle: GoogleFonts.fredoka(
+                  color: Colors.black38,
+                  fontWeight: FontWeight.bold,
+                ),
+                suffixIcon: Padding(
+                  padding: const EdgeInsets.only(right: 20),
+                  child: Container(
+                    width: 28,
+                    height: 28,
+                    decoration: const BoxDecoration(
+                      color: Color(0xFF3709EC),
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Center(
+                      child: Icon(
+                        Icons.check,
+                        color: Colors.white,
+                        size: 18,
+                      ),
+                    ),
+                  ),
+                ),
+                contentPadding:
+                const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(28),
+                  borderSide: BorderSide.none,
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildRadialButton({
+    required String text,
+    required VoidCallback onPressed,
+  }) {
+    final gradient = const RadialGradient(
+      center: Alignment.center,
+      radius: 1.2,
+      colors: [
+        Color(0xFF5CCFC0),
+        Color(0xFF2981C1),
+      ],
+    );
+
+    return Container(
+      width: double.infinity,
+      height: 65,
+      decoration: BoxDecoration(
+        gradient: gradient,
+        borderRadius: BorderRadius.circular(50),
+      ),
+      child: ElevatedButton(
+        onPressed: onPressed,
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Colors.transparent,
+          shadowColor: Colors.transparent,
+          padding: EdgeInsets.zero,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
+        ),
+        child: Text(
+          text,
+          style: GoogleFonts.fredoka(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+            fontSize: 35,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildRadialJoinButton({
+    required String text,
+    required VoidCallback onPressed,
+  }) {
+    final gradient = const RadialGradient(
+      center: Alignment.center,
+      radius: 1.2,
+      colors: [
+        Color(0xFF5CCFC0),
+        Color(0xFF2981C1),
+      ],
+    );
+
+    return Container(
+      height: 65,
+      decoration: BoxDecoration(
+        gradient: gradient,
+        borderRadius: BorderRadius.circular(50),
+      ),
+      child: ElevatedButton(
+        onPressed: onPressed,
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Colors.transparent,
+          shadowColor: Colors.transparent,
+          padding: EdgeInsets.zero,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
+        ),
+        child: Text(
+          text,
+          style: GoogleFonts.fredoka(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+            fontSize: 35,
           ),
         ),
       ),
