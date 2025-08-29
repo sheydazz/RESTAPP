@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'register_screen.dart'; // ← Importación relativa correcta
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -16,7 +17,6 @@ class LoginScreen extends StatelessWidget {
             children: [
               const SizedBox(height: 40),
 
-              // Título principal "REST"
               Text(
                 'REST',
                 style: GoogleFonts.fredoka(
@@ -29,7 +29,6 @@ class LoginScreen extends StatelessWidget {
 
               const SizedBox(height: 4),
 
-              // Subtítulo "Salud Mental"
               Text(
                 'Salud Mental',
                 style: GoogleFonts.fredoka(
@@ -41,7 +40,6 @@ class LoginScreen extends StatelessWidget {
 
               const SizedBox(height: 40),
 
-              // Campo de usuario/correo
               _buildInputField(
                 label: 'USUARIO O CORREO INSTITUCIONAL',
                 hint: 'Example@correo.com',
@@ -49,7 +47,6 @@ class LoginScreen extends StatelessWidget {
 
               const SizedBox(height: 32),
 
-              // Campo de contraseña
               _buildInputField(
                 label: 'CONTRASEÑA',
                 hint: '••••••••',
@@ -58,12 +55,10 @@ class LoginScreen extends StatelessWidget {
 
               const SizedBox(height: 50),
 
-              // Botón de ingreso con estilo radial
               _buildRadialButton(text: 'INGRESAR', onPressed: () {}),
 
               const SizedBox(height: 10),
 
-              // Enlace para recuperar contraseña con línea divisoria
               Column(
                 children: [
                   TextButton(
@@ -95,28 +90,24 @@ class LoginScreen extends StatelessWidget {
                 ],
               ),
 
-              const SizedBox(height: 10),
+              const SizedBox(height: 30),
 
-              // Mensaje de bienvenida
               Text(
                 '¿Eres nueva/o?',
                 style: GoogleFonts.fredoka(
-                  fontSize: 20,
+                  fontSize: 14,
                   fontWeight: FontWeight.bold,
                   color: Colors.black54,
                 ),
               ),
 
-              const SizedBox(height: 15),
-
-              // Texto con degradado en "REST"
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
                     'Bienvenidos a ',
                     style: GoogleFonts.fredoka(
-                      fontSize: 25,
+                      fontSize: 16,
                       fontWeight: FontWeight.bold,
                       color: Colors.black87,
                     ),
@@ -133,7 +124,7 @@ class LoginScreen extends StatelessWidget {
                     child: Text(
                       'REST',
                       style: GoogleFonts.fredoka(
-                        fontSize: 25,
+                        fontSize: 16,
                         fontWeight: FontWeight.bold,
                         color: Colors.white,
                       ),
@@ -142,12 +133,21 @@ class LoginScreen extends StatelessWidget {
                 ],
               ),
 
-              const SizedBox(height: 20),
+              const SizedBox(height: 10),
 
-              // Botón UNIRME con ancho reducido
               SizedBox(
                 width: MediaQuery.of(context).size.width * 0.6,
-                child: _buildRadialJoinButton(text: 'UNIRME', onPressed: () {}),
+                child: _buildRadialJoinButton(
+                  text: 'UNIRME',
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => RegisterScreen(),
+                      ),
+                    );
+                  },
+                ),
               ),
 
               const SizedBox(height: 20),
@@ -158,7 +158,6 @@ class LoginScreen extends StatelessWidget {
     );
   }
 
-  /// Campo de texto con borde degradado e ícono de validación alineado a la derecha
   Widget _buildInputField({
     required String label,
     required String hint,
@@ -189,7 +188,7 @@ class LoginScreen extends StatelessWidget {
               end: Alignment.centerRight,
             ),
           ),
-          padding: const EdgeInsets.all(2.8),
+          padding: const EdgeInsets.all(2.5),
           child: Container(
             decoration: BoxDecoration(
               color: Colors.white,
@@ -207,24 +206,6 @@ class LoginScreen extends StatelessWidget {
                   color: Colors.black38,
                   fontWeight: FontWeight.bold,
                 ),
-                suffixIcon: Padding(
-                  padding: const EdgeInsets.only(right: 20),
-                  child: Container(
-                    width: 28,
-                    height: 28,
-                    decoration: const BoxDecoration(
-                      color: Color(0xFF3709EC),
-                      shape: BoxShape.circle,
-                    ),
-                    child: const Center(
-                      child: Icon(
-                        Icons.check,
-                        color: Colors.white,
-                        size: 18,
-                      ),
-                    ),
-                  ),
-                ),
                 contentPadding:
                 const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
                 border: OutlineInputBorder(
@@ -239,7 +220,6 @@ class LoginScreen extends StatelessWidget {
     );
   }
 
-  /// Botón INGRESAR con fondo radial
   Widget _buildRadialButton({
     required String text,
     required VoidCallback onPressed,
@@ -280,7 +260,6 @@ class LoginScreen extends StatelessWidget {
     );
   }
 
-  /// Botón UNIRME con fondo radial y ancho reducido
   Widget _buildRadialJoinButton({
     required String text,
     required VoidCallback onPressed,
@@ -320,4 +299,3 @@ class LoginScreen extends StatelessWidget {
     );
   }
 }
-
