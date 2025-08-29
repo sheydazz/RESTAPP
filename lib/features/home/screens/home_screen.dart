@@ -207,13 +207,24 @@ class MainScreen extends StatelessWidget {
                           color: Colors.grey,
                           width: 0.5,
                         ),
-                        borderRadius: BorderRadius.circular(15),
+                        borderRadius: BorderRadius.circular(30),
                       ),
                       child: Column(
+
                         children: [
+                          Text(
+                            'Conversaciones',
+                            style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w500,
+                                color: Colors.black87,
+                                height: 1.2
+                            ),
+                          ),
+                          SizedBox(height: 12),
                           Container(
-                            width: 60,
-                            height: 75,
+                            width: 90,
+                            height: 95,
                             decoration: BoxDecoration(
                               color: Color(0xFF87CEEB),
                               shape: BoxShape.circle,
@@ -227,15 +238,7 @@ class MainScreen extends StatelessWidget {
                             ),
                           ),
                           SizedBox(height: 12),
-                          Text(
-                            'Conversaciones',
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w500,
-                              color: Colors.black87,
-                              height: 1.2
-                            ),
-                          ),
+
                         ],
                       ),
                     ),
@@ -253,13 +256,24 @@ class MainScreen extends StatelessWidget {
                           color: Colors.grey,
                           width: 0.5,
                         ),
-                        borderRadius: BorderRadius.circular(15),
+                        borderRadius: BorderRadius.circular(30),
                       ),
                       child: Column(
                         children: [
-                          Container(
-                            width: 60,
-                            height: 60,
+                          Text(
+                            'Progreso de las\nActividades',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                              color: Colors.black87,
+                              height: 1.2,
+                            ),
+                          ),
+                          SizedBox(height: 12),
+                          Container( // Circulo del icono
+                            width: 100,
+                            height: 90,
                             decoration: BoxDecoration(
                               color: Color(0xFF87CEEB),
                               shape: BoxShape.circle,
@@ -272,17 +286,6 @@ class MainScreen extends StatelessWidget {
                               ),
                             ),
                           ),
-                          SizedBox(height: 12),
-                          Text(
-                            'Progreso de las\nActividad',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w500,
-                              color: Colors.black87,
-                              height: 1.2,
-                            ),
-                          ),
                         ],
                       ),
                     ),
@@ -293,37 +296,6 @@ class MainScreen extends StatelessWidget {
 
             Spacer(),
 
-            // Bottom Navigation
-            Container(
-              height: 70,
-              decoration: BoxDecoration(
-                color: Color(0xFF2E86AB),
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(20),
-                  topRight: Radius.circular(20),
-                ),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Icon(
-                    Icons.home,
-                    color: Colors.white,
-                    size: 30,
-                  ),
-                  Icon(
-                    Icons.refresh,
-                    color: Color(0xFF87CEEB),
-                    size: 30,
-                  ),
-                  Icon(
-                    Icons.person,
-                    color: Colors.white,
-                    size: 30,
-                  ),
-                ],
-              ),
-            ),
           ],
         ),
       ),
