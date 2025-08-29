@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'settings_screen.dart';
 import 'help_screen.dart';
+import 'package:rest/features/emotion/screens/chat_screen.dart';
 
 void main() {
   runApp(HomeScreen());
@@ -61,77 +62,87 @@ class MainScreen extends StatelessWidget {
                   ),
                   Spacer(),
                   // Iconos derecha
-                  InkWell( // Envuelve el Container con InkWell
+                  InkWell(
                     onTap: () {
-                    // Navega a SettingsScreen cuando se presiona el ícono
+                      // Navega a SettingsScreen cuando se presiona el ícono
                       Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) => SettingsScreen()),
                       );
-                   },
-                  child: Container(
-                    width: 40,
-                    height: 40,
-                    decoration: BoxDecoration(
-                      color: Color(0xFF87CEEB),
-                      shape: BoxShape.circle,
+                    },
+                    child: Container(
+                      width: 40,
+                      height: 40,
+                      decoration: BoxDecoration(
+                        color: Color(0xFF87CEEB),
+                        shape: BoxShape.circle,
+                      ),
+                      child: Icon(
+                        Icons.settings,
+                        color: Colors.white,
+                        size: 20,
+                      ),
                     ),
-                    child: Icon(
-                      Icons.settings,
-                      color: Colors.white,
-                      size: 20,
-                    ),
-                  ),
                   ),
                   SizedBox(width: 8),
                   InkWell( // Envuelve el Container con InkWell
                     onTap: () {
-                    // Navega a HelpScreen cuando se presiona el ícono
+                      // Navega a HelpScreen cuando se presiona el ícono
                       Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) => HelpScreen()),
                       );
-                   },
-                  child: Container(
-                    width: 40,
-                    height: 40,
-                    decoration: BoxDecoration(
-                      color: Color(0xFF87CEEB),
-                      shape: BoxShape.circle,
+                    },
+                    child: Container(
+                      width: 40,
+                      height: 40,
+                      decoration: BoxDecoration(
+                        color: Color(0xFF87CEEB),
+                        shape: BoxShape.circle,
+                      ),
+                      child: Icon(
+                        Icons.person,
+                        color: Colors.white,
+                        size: 20,
+                      ),
                     ),
-                    child: Icon(
-                      Icons.person,
-                      color: Colors.white,
-                      size: 20,
-                    ),
-                  ),
                   ),
                 ],
               ),
             ),
             SizedBox(height: 20),
 
-            // Botón principal "¿Quieres hablar conmigo?"
-            Container(
-              margin: EdgeInsets.symmetric(horizontal: 20),
-              padding: EdgeInsets.symmetric(vertical: 20, horizontal: 30),
-              decoration: BoxDecoration(
-                color: Color(0xFF87CEEB),
-                borderRadius: BorderRadius.circular(25),
-                border: Border.all(
-                  color: Colors.black,
-                  width: 0.5,
+            InkWell( // Envuelve el Container con InkWell
+              onTap: () {
+                // Navega a HelpScreen cuando se presiona el ícono
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => ChatScreen()),
+                );
+              },
+              // Botón principal "¿Quieres hablar conmigo?"
+
+              child: Container(
+                margin: EdgeInsets.symmetric(horizontal: 20),
+                padding: EdgeInsets.symmetric(vertical: 20, horizontal: 30),
+                decoration: BoxDecoration(
+                  color: Color(0xFF87CEEB),
+                  borderRadius: BorderRadius.circular(25),
+                  border: Border.all(
+                    color: Colors.black,
+                    width: 0.5,
+                  ),
                 ),
-              ),
-              child: Center(
-                child: Text(
-                  '¿Quieres hablar\nconmigo?',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 40,
-                    fontWeight: FontWeight.bold,
-                    height: 1.2,
+                child: Center(
+                  child: Text(
+                    '¿Quieres hablar\nconmigo?',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 40,
+                      fontWeight: FontWeight.bold,
+                      height: 1.2,
+                    ),
                   ),
                 ),
               ),
@@ -301,4 +312,4 @@ class MainScreen extends StatelessWidget {
       ),
     );
   }
-  }
+}
