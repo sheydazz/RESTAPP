@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'settings_screen.dart';
 import 'help_screen.dart';
+import 'package:rest/features/emotion/screens/chat_screen.dart';
 
 void main() {
   runApp(HomeScreen());
@@ -61,7 +62,7 @@ class MainScreen extends StatelessWidget {
                   ),
                   Spacer(),
                   // Iconos derecha
-                  InkWell( // Envuelve el Container con InkWell
+                  InkWell(
                     onTap: () {
                       // Navega a SettingsScreen cuando se presiona el ícono
                       Navigator.push(
@@ -110,39 +111,41 @@ class MainScreen extends StatelessWidget {
               ),
             ),
             SizedBox(height: 20),
+
             InkWell( // Envuelve el Container con InkWell
               onTap: () {
                 // Navega a HelpScreen cuando se presiona el ícono
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => HelpScreen()),
+                  MaterialPageRoute(builder: (context) => ChatScreen()),
                 );
               },
-            // Botón principal "¿Quieres hablar conmigo?"
-            child: Container(
-              margin: EdgeInsets.symmetric(horizontal: 20),
-              padding: EdgeInsets.symmetric(vertical: 20, horizontal: 30),
-              decoration: BoxDecoration(
-                color: Color(0xFF87CEEB),
-                borderRadius: BorderRadius.circular(25),
-                border: Border.all(
-                  color: Colors.black,
-                  width: 0.5,
+              // Botón principal "¿Quieres hablar conmigo?"
+
+              child: Container(
+                margin: EdgeInsets.symmetric(horizontal: 20),
+                padding: EdgeInsets.symmetric(vertical: 20, horizontal: 30),
+                decoration: BoxDecoration(
+                  color: Color(0xFF87CEEB),
+                  borderRadius: BorderRadius.circular(25),
+                  border: Border.all(
+                    color: Colors.black,
+                    width: 0.5,
+                  ),
                 ),
-              ),
-              child: Center(
-                child: Text(
-                  '¿Quieres hablar\nconmigo?',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 40,
-                    fontWeight: FontWeight.bold,
-                    height: 1.2,
+                child: Center(
+                  child: Text(
+                    '¿Quieres hablar\nconmigo?',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 40,
+                      fontWeight: FontWeight.bold,
+                      height: 1.2,
+                    ),
                   ),
                 ),
               ),
-            ),
             ),
 
             SizedBox(height: 20),
