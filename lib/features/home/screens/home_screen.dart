@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'settings_screen.dart';
 import 'help_screen.dart';
-import 'package:rest/features/emotion/screens/chat_screen.dart';
 
 void main() {
   runApp(HomeScreen());
@@ -62,66 +61,64 @@ class MainScreen extends StatelessWidget {
                   ),
                   Spacer(),
                   // Iconos derecha
-                  InkWell(
+                  InkWell( // Envuelve el Container con InkWell
                     onTap: () {
-                    // Navega a SettingsScreen cuando se presiona el ícono
+                      // Navega a SettingsScreen cuando se presiona el ícono
                       Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) => SettingsScreen()),
                       );
-                   },
-                  child: Container(
-                    width: 40,
-                    height: 40,
-                    decoration: BoxDecoration(
-                      color: Color(0xFF87CEEB),
-                      shape: BoxShape.circle,
+                    },
+                    child: Container(
+                      width: 40,
+                      height: 40,
+                      decoration: BoxDecoration(
+                        color: Color(0xFF87CEEB),
+                        shape: BoxShape.circle,
+                      ),
+                      child: Icon(
+                        Icons.settings,
+                        color: Colors.white,
+                        size: 20,
+                      ),
                     ),
-                    child: Icon(
-                      Icons.settings,
-                      color: Colors.white,
-                      size: 20,
-                    ),
-                  ),
                   ),
                   SizedBox(width: 8),
                   InkWell( // Envuelve el Container con InkWell
                     onTap: () {
-                    // Navega a HelpScreen cuando se presiona el ícono
+                      // Navega a HelpScreen cuando se presiona el ícono
                       Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) => HelpScreen()),
                       );
-                   },
-                  child: Container(
-                    width: 40,
-                    height: 40,
-                    decoration: BoxDecoration(
-                      color: Color(0xFF87CEEB),
-                      shape: BoxShape.circle,
+                    },
+                    child: Container(
+                      width: 40,
+                      height: 40,
+                      decoration: BoxDecoration(
+                        color: Color(0xFF87CEEB),
+                        shape: BoxShape.circle,
+                      ),
+                      child: Icon(
+                        Icons.person,
+                        color: Colors.white,
+                        size: 20,
+                      ),
                     ),
-                    child: Icon(
-                      Icons.person,
-                      color: Colors.white,
-                      size: 20,
-                    ),
-                  ),
                   ),
                 ],
               ),
             ),
             SizedBox(height: 20),
-
-      InkWell( // Envuelve el Container con InkWell
-        onTap: () {
-          // Navega a HelpScreen cuando se presiona el ícono
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => ChatScreen()),
-          );
-        },
+            InkWell( // Envuelve el Container con InkWell
+              onTap: () {
+                // Navega a HelpScreen cuando se presiona el ícono
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => HelpScreen()),
+                );
+              },
             // Botón principal "¿Quieres hablar conmigo?"
-
             child: Container(
               margin: EdgeInsets.symmetric(horizontal: 20),
               padding: EdgeInsets.symmetric(vertical: 20, horizontal: 30),
@@ -146,7 +143,7 @@ class MainScreen extends StatelessWidget {
                 ),
               ),
             ),
-      ),
+            ),
 
             SizedBox(height: 20),
 
@@ -312,4 +309,4 @@ class MainScreen extends StatelessWidget {
       ),
     );
   }
-  }
+}
