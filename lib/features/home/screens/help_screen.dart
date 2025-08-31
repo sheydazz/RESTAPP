@@ -25,7 +25,7 @@ class _LoadingScreenState extends State<HelpScreen>
     )..repeat(reverse: true);
 
     // Simular carga y navegar de vuelta
-    Future.delayed(const Duration(seconds: 3), () {
+    Future.delayed(const Duration(seconds: 10), () {
       if (mounted) {
         Navigator.pop(context);
       }
@@ -80,94 +80,17 @@ class _LoadingScreenState extends State<HelpScreen>
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   // Animated Character
-                  AnimatedBuilder(
-                    animation: _pulseController,
-                    builder: (context, child) {
-                      return Transform.scale(
-                        scale: 1.0 + (_pulseController.value * 0.1),
-                        child: Container(
-                          width: 200,
-                          height: 200,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            gradient: RadialGradient(
-                              colors: [
-                                const Color(0xFF4FC3F7).withOpacity(0.3),
-                                const Color(0xFF29B6F6).withOpacity(0.1),
-                              ],
-                            ),
-                          ),
-                          child: Center(
-                            child: Container(
-                              width: 120,
-                              height: 120,
-                              decoration: const BoxDecoration(
-                                gradient: LinearGradient(
-                                  colors: [Color(0xFF4FC3F7), Color(0xFF29B6F6)],
-                                  begin: Alignment.topLeft,
-                                  end: Alignment.bottomRight,
-                                ),
-                                shape: BoxShape.circle,
-                              ),
-                              child: Stack(
-                                children: [
-                                  // Face
-                                  const Center(
-                                    child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: [
-                                        Row(
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                          children: [
-                                            Icon(
-                                              Icons.circle,
-                                              color: Colors.white,
-                                              size: 8,
-                                            ),
-                                            SizedBox(width: 20),
-                                            Icon(
-                                              Icons.circle,
-                                              color: Colors.white,
-                                              size: 8,
-                                            ),
-                                          ],
-                                        ),
-                                        SizedBox(height: 8),
-                                        Icon(
-                                          Icons.favorite,
-                                          color: Colors.white,
-                                          size: 16,
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  // Medical Hat
-                                  Positioned(
-                                    top: 10,
-                                    left: 30,
-                                    right: 30,
-                                    child: Container(
-                                      height: 25,
-                                      decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        borderRadius: BorderRadius.circular(15),
-                                      ),
-                                      child: const Center(
-                                        child: Icon(
-                                          Icons.add,
-                                          color: Color(0xFFE91E63),
-                                          size: 16,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      );
-                    },
+                  Container(
+                    width: 300,
+                    height: 220,
+                    child: ClipOval(
+                      child: Image.asset(
+                        "assets/images/helprest.jpg",
+                        width: 200,
+                        height: 200,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
                   ),
 
                   const SizedBox(height: 40),
