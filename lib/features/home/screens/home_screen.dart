@@ -37,18 +37,17 @@ class MainScreen extends StatelessWidget {
                 children: [
                   // Avatar Mari
                   Container(
-                    width: 50,
-                    height: 50,
+                    width: 100,
+                    height: 60,
                     decoration: BoxDecoration(
                       color: Color(0xFF87CEEB),
                       shape: BoxShape.circle,
-                    ),
-                    child: Center(
-                      child: Text(
-                        '👋',
-                        style: TextStyle(fontSize: 24),
+                      image: DecorationImage(
+                        image: AssetImage('assets/images/normalrest.jpg'),
+                        fit: BoxFit.cover,
                       ),
                     ),
+
                   ),
                   SizedBox(width: 12),
                   // Texto "¡Hola! Mari"
@@ -77,10 +76,12 @@ class MainScreen extends StatelessWidget {
                         color: Color(0xFF87CEEB),
                         shape: BoxShape.circle,
                       ),
-                      child: Icon(
-                        Icons.settings,
-                        color: Colors.white,
-                        size: 20,
+                      child: Padding(
+                        padding: EdgeInsets.all(6.0), // Añade espacio alrededor de la imagen
+                        child: Image.asset(
+                          'assets/images/config.png',
+                          fit: BoxFit.cover, // La imagen cubrirá el área después del padding
+                        ),
                       ),
                     ),
                   ),
@@ -100,15 +101,24 @@ class MainScreen extends StatelessWidget {
                         color: Color(0xFF87CEEB),
                         shape: BoxShape.circle,
                       ),
-                      child: Icon(
-                        Icons.person,
-                        color: Colors.white,
-                        size: 20,
+                      child: Padding(
+                        padding: EdgeInsets.all(6.0), // Añade espacio alrededor de la imagen
+                        child: Image.asset(
+                          'assets/images/salvavidas.png',
+                          fit: BoxFit.cover, // La imagen cubrirá el área después del padding
+                        ),
                       ),
                     ),
                   ),
                 ],
               ),
+            ),
+            Divider( // <--- AÑADE EL DIVIDER AQUÍ
+              color: Colors.grey[400], // Color opcional
+              thickness: 3,           // Grosor opcional
+              height: 0,             // Espacio vertical total opcional
+              indent: 23,             // Margen izquierdo opcional
+              endIndent: 23,          // Margen derecho opcional
             ),
             SizedBox(height: 20),
 
@@ -127,12 +137,13 @@ class MainScreen extends StatelessWidget {
                 padding: EdgeInsets.symmetric(vertical: 20, horizontal: 30),
                 decoration: BoxDecoration(
                   color: Color(0xFF87CEEB),
-                  borderRadius: BorderRadius.circular(25),
+                  borderRadius: BorderRadius.circular(45),
                   border: Border.all(
                     color: Colors.black,
                     width: 0.5,
                   ),
                 ),
+
                 child: Center(
                   child: Text(
                     '¿Quieres hablar\nconmigo?',
@@ -155,8 +166,15 @@ class MainScreen extends StatelessWidget {
               margin: EdgeInsets.symmetric(horizontal: 20),
               padding: EdgeInsets.symmetric(vertical: 15, horizontal: 40),
               decoration: BoxDecoration(
-                color: Color(0xFF3588CC),
-                borderRadius: BorderRadius.circular(25),
+                gradient: const LinearGradient(
+                  colors: [
+                    Color(0xFF0BBDAC), // centro
+                    Color(0xFF6110E8), // bordes
+                  ],
+                  begin: Alignment.centerLeft,
+                  end: Alignment.centerRight,
+                ),
+                borderRadius: BorderRadius.circular(35),
                 border: Border.all(
                   color: Colors.black,
                   width: 0.5,
@@ -185,7 +203,7 @@ class MainScreen extends StatelessWidget {
                   Text(
                     'Mis últimas sesiones',
                     style: TextStyle(
-                      fontSize: 16,
+                      fontSize: 22,
                       fontWeight: FontWeight.bold,
                       color: Colors.black87,
                     ),
@@ -193,7 +211,7 @@ class MainScreen extends StatelessWidget {
                   Text(
                     'Ver todas',
                     style: TextStyle(
-                      fontSize: 14,
+                      fontSize: 16,
                       color: Color(0xFF2E86AB),
                     ),
                   ),
