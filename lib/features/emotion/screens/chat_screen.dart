@@ -87,14 +87,6 @@ class _ChatScreenState extends State<ChatScreen> {
                       width: 80,
                       height: 80,
                       decoration: BoxDecoration(
-                        gradient: RadialGradient(
-                          colors: [
-                            Color(0xFF7DFDFE),
-                            Color(0xFF4ECDC4),
-                            Color(0xFF00B4D8),
-                          ],
-                          stops: [0.0, 0.6, 1.0],
-                        ),
                         shape: BoxShape.circle,
                         border: Border.all(color: Color(0xFF4ECDC4), width: 4),
                         boxShadow: [
@@ -104,50 +96,10 @@ class _ChatScreenState extends State<ChatScreen> {
                             offset: Offset(0, 2),
                           ),
                         ],
-                      ),
-                      child: Stack(
-                        children: [
-                          // Ojos
-                          Positioned(
-                            top: 22,
-                            left: 20,
-                            child: _eye(),
-                          ),
-                          Positioned(
-                            top: 22,
-                            right: 20,
-                            child: _eye(),
-                          ),
-                          // Sonrisa
-                          Positioned(
-                            bottom: 18,
-                            left: 20,
-                            right: 20,
-                            child: Container(
-                              height: 16,
-                              decoration: BoxDecoration(
-                                border: Border(
-                                  bottom: BorderSide(
-                                    color: Colors.white,
-                                    width: 4,
-                                  ),
-                                ),
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                            ),
-                          ),
-                          // Mejillas
-                          Positioned(
-                            top: 35,
-                            left: 8,
-                            child: _cheek(),
-                          ),
-                          Positioned(
-                            top: 35,
-                            right: 8,
-                            child: _cheek(),
-                          ),
-                        ],
+                        image: DecorationImage(
+                          image: AssetImage('assets/images/normalrest.jpg'), // Asegúrate de tener la imagen en esta ruta
+                          fit: BoxFit.cover,
+                        ),
                       ),
                     ),
                   ),
