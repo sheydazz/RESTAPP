@@ -267,8 +267,6 @@ class ProgressScreen extends StatelessWidget {
   }
 }
 
-/// Widget auxiliar que carga SVG o raster automáticamente.
-/// Usado para todos los íconos, incluido el diario (dairy.svg).
 class _AssetIcon extends StatelessWidget {
   final String path;
   final double size;
