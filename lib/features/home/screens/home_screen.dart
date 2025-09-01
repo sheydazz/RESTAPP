@@ -113,16 +113,16 @@ class MainScreen extends StatelessWidget {
                 ],
               ),
             ),
-            Divider( // <--- AÑADE EL DIVIDER AQUÍ
-              color: Colors.grey[400], // Color opcional
-              thickness: 3,           // Grosor opcional
-              height: 0,             // Espacio vertical total opcional
-              indent: 23,             // Margen izquierdo opcional
-              endIndent: 23,          // Margen derecho opcional
+            Divider(
+              color: Colors.grey[400],
+              thickness: 3,
+              height: 0,
+              indent: 23,
+              endIndent: 23,
             ),
             SizedBox(height: 20),
 
-            InkWell( // Envuelve el Container con InkWell
+            InkWell( // Se envuelve el Container con InkWell
               onTap: () {
                 // Navega a HelpScreen cuando se presiona el ícono
                 Navigator.push(
@@ -250,24 +250,19 @@ class MainScreen extends StatelessWidget {
                                 height: 1.2
                             ),
                           ),
-                          SizedBox(height: 12),
+                          SizedBox(height: 23),
                           Container(
                             width: 90,
                             height: 95,
                             decoration: BoxDecoration(
                               color: Color(0xFF87CEEB),
                               shape: BoxShape.circle,
-                            ),
-                            child: Center(
-                              child: Icon(
-                                Icons.person_2,
-                                color: Color(0xFFFFD93D),
-                                size: 30,
+                              image: DecorationImage(
+                                image: AssetImage('assets/images/conversaciones.png'),
+                                fit: BoxFit.cover,
                               ),
                             ),
                           ),
-                          SizedBox(height: 12),
-
                         ],
                       ),
                     ),
@@ -306,12 +301,9 @@ class MainScreen extends StatelessWidget {
                             decoration: BoxDecoration(
                               color: Color(0xFF87CEEB),
                               shape: BoxShape.circle,
-                            ),
-                            child: Center(
-                              child: Icon(
-                                Icons.emoji_events,
-                                color: Color(0xFFFFD93D),
-                                size: 30,
+                              image: DecorationImage(
+                                image: AssetImage('assets/images/medalla.png'),
+                                fit: BoxFit.cover,
                               ),
                             ),
                           ),
