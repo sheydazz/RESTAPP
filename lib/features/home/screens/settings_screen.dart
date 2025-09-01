@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'gradient_text.dart';
 
 
 class SettingsScreen extends StatelessWidget {
@@ -8,18 +8,54 @@ class SettingsScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: const Color(0xFFF8FAFB),
       appBar: AppBar(
+        titleSpacing: 0, // Reducido para mejor control del espaciado
         backgroundColor: Colors.white,
         elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Color(0xFF2E3A59)),
-          onPressed: () => Navigator.pop(context),
+        leadingWidth: 70, // Ancho específico para el leading
+        leading: Center( // Centra verticalmente el botón
+          child: Container(
+            margin: const EdgeInsets.only(left: 20), // Margen desde la izquierda
+            child: InkWell(
+              onTap: () => Navigator.pop(context),
+              customBorder: CircleBorder(),
+              child: Container(
+                padding: const EdgeInsets.all(6),
+                decoration: BoxDecoration(
+                  color: Color(0xFF08B1DD),
+                  shape: BoxShape.circle,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.1),
+                      blurRadius: 3,
+                      offset: Offset(0, 1),
+                    ),
+                  ],
+                ),
+                child: Icon(
+                  Icons.arrow_back,
+                  color: Colors.white,
+                  size: 25,
+                ),
+              ),
+            ),
+          ),
         ),
-        title: const Text(
-          'Configuración',
-          style: TextStyle(
-            color: Color(0xFF2E3A59),
-            fontWeight: FontWeight.w600,
-            fontSize: 20,
+        title: Container(
+          margin: const EdgeInsets.only(left: 10), // Pequeño margen para separar del botón
+          child: GradientText(
+            'Configuración',
+            style: TextStyle(
+              fontWeight: FontWeight.w600,
+              fontSize: 30,
+            ),
+            gradient: LinearGradient(
+              colors: [
+                Color(0xFF0AF3FF),
+                Color(0xFF0419FF),
+              ],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
           ),
         ),
         centerTitle: false,
@@ -109,14 +145,18 @@ class SettingsScreen extends StatelessWidget {
 
   Widget _buildConfigItem(String title, IconData icon, VoidCallback onTap, {bool hasSwitch = false}) {
     return Container(
-      margin: const EdgeInsets.only(bottom: 12),
+      margin: const EdgeInsets.only(bottom: 8),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(15),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: const Color(0xFFE0E7FF).withOpacity(0.8),
+          width: 1.5,
+        ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 10,
+            color: Colors.black.withOpacity(0.03),
+            blurRadius: 8,
             offset: const Offset(0, 2),
           ),
         ],
@@ -124,15 +164,15 @@ class SettingsScreen extends StatelessWidget {
       child: Material(
         color: Colors.transparent,
         child: InkWell(
-          borderRadius: BorderRadius.circular(15),
+          borderRadius: BorderRadius.circular(12),
           onTap: hasSwitch ? null : onTap,
           child: Padding(
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.all(12),
             child: Row(
               children: [
                 Container(
-                  width: 40,
-                  height: 40,
+                  width: 32,
+                  height: 32,
                   decoration: BoxDecoration(
                     color: const Color(0xFF4FC3F7).withOpacity(0.1),
                     shape: BoxShape.circle,
@@ -140,31 +180,34 @@ class SettingsScreen extends StatelessWidget {
                   child: Icon(
                     icon,
                     color: const Color(0xFF4FC3F7),
-                    size: 20,
+                    size: 16,
                   ),
                 ),
-                const SizedBox(width: 16),
+                const SizedBox(width: 12),
                 Expanded(
                   child: Text(
                     title,
                     style: const TextStyle(
-                      fontSize: 16,
+                      fontSize: 14,
                       fontWeight: FontWeight.w500,
                       color: Color(0xFF2E3A59),
                     ),
                   ),
                 ),
                 if (hasSwitch)
-                  Switch(
-                    value: false,
-                    onChanged: (value) {},
-                    activeColor: const Color(0xFF4FC3F7),
+                  Transform.scale(
+                    scale: 0.8,
+                    child: Switch(
+                      value: false,
+                      onChanged: (value) {},
+                      activeColor: const Color(0xFF4FC3F7),
+                    ),
                   )
                 else
                   const Icon(
                     Icons.chevron_right,
                     color: Color(0xFF9E9E9E),
-                    size: 20,
+                    size: 28,
                   ),
               ],
             ),
