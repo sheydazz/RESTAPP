@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'gradient_text.dart';
+import '../../home/screens/gradient_text.dart';
 
 
 class SettingsScreen extends StatelessWidget {
