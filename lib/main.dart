@@ -4,7 +4,7 @@ import 'features/intro_auth/screens/intro_screen.dart';
 import 'features/intro_auth/screens/login_screen.dart';
 import 'features/intro_auth/screens/register_screen.dart';
 import 'features/home/screens/home_screen.dart';
-import 'features/home/screens/settings_screen.dart';
+import 'features/settings/screens/settings_screen.dart';
 import 'features/home/screens/help_screen.dart';
 import 'features/emotion/screens/emotionregister_screen.dart';
 import 'features/emotion/screens/chat_screen.dart';
