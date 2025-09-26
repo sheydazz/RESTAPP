@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import '../../home/screens/gradient_text.dart';
-
+import 'language_screen.dart';
+import 'feedback_screen.dart';
+import 'profile_screen.dart'; // Importar la pantalla de perfil
 
 class SettingsScreen extends StatelessWidget {
   @override
@@ -68,7 +70,13 @@ class SettingsScreen extends StatelessWidget {
             children: [
               _buildSectionTitle('Cuenta'),
               const SizedBox(height: 15),
-              _buildConfigItem('Perfil', Icons.person_outline, () {}),
+              _buildConfigItem('Perfil', Icons.person_outline, () {
+                // Navegar a la pantalla de perfil
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => ProfileScreen()),
+                );
+              }),
               _buildConfigItem('Plan Actual', Icons.diamond_outlined, () {}),
               _buildConfigItem('Referidos', Icons.group_outlined, () {}),
               _buildConfigItem('Código de regalo', Icons.card_giftcard_outlined, () {}),
@@ -79,13 +87,24 @@ class SettingsScreen extends StatelessWidget {
               _buildConfigItem('Modo oscuro', Icons.dark_mode_outlined, () {}, hasSwitch: true),
               _buildConfigItem('Recordatorios', Icons.notifications_outlined, () {}),
               _buildConfigItem('Pin de seguridad', Icons.lock_outlined, () {}),
-              _buildConfigItem('Idioma', Icons.language_outlined, () {}),
+              _buildConfigItem('Idioma', Icons.language_outlined, () {
+                // Navegar a la pantalla de idioma
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => LanguageScreen()),
+                );
+              }),
 
               const SizedBox(height: 30),
               _buildSectionTitle('Soporte'),
               const SizedBox(height: 15),
               _buildConfigItem('Reportar falla técnica', Icons.bug_report_outlined, () {}),
-              _buildConfigItem('Enviar feedback', Icons.feedback_outlined, () {}),
+              _buildConfigItem('Enviar feedback', Icons.feedback_outlined, () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => FeedbackScreen()),
+                );
+              }),
               _buildConfigItem('Código de conducta', Icons.gavel_outlined, () {}),
               _buildConfigItem('Aviso de privacidad', Icons.privacy_tip_outlined, () {}),
               _buildConfigItem('Términos y condiciones', Icons.description_outlined, () {}),
@@ -109,7 +128,10 @@ class SettingsScreen extends StatelessWidget {
                   color: Colors.transparent,
                   child: InkWell(
                     borderRadius: BorderRadius.circular(15),
-                    onTap: () {},
+                    onTap: () {
+                      // Aquí puedes agregar lógica para cerrar sesión
+                      _showLogoutDialog(context);
+                    },
                     child: const Center(
                       child: Text(
                         'CERRAR SESIÓN',
@@ -214,6 +236,58 @@ class SettingsScreen extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+
+  void _showLogoutDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15),
+          ),
+          title: Text(
+            '¿Cerrar sesión?',
+            style: TextStyle(
+              fontWeight: FontWeight.w600,
+              color: Color(0xFF2E3A59),
+            ),
+          ),
+          content: Text(
+            '¿Estás seguro de que quieres cerrar sesión?',
+            style: TextStyle(
+              color: Color(0xFF2E3A59),
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: Text(
+                'Cancelar',
+                style: TextStyle(
+                  color: Color(0xFF4FC3F7),
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                // Aquí puedes agregar la lógica para cerrar sesión
+                // Por ejemplo: navegar a la pantalla de login
+              },
+              child: Text(
+                'Cerrar sesión',
+                style: TextStyle(
+                  color: Color(0xFFE91E63),
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }
