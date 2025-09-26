@@ -3,6 +3,10 @@ import '../../home/screens/gradient_text.dart';
 import 'language_screen.dart';
 import 'feedback_screen.dart';
 import 'profile_screen.dart'; // Importar la pantalla de perfil
+import 'fail_report_screen.dart'; // Importar la pantalla de reporte de fallas
+import 'terms_screen.dart'; // Importar la pantalla de términos
+import 'privacity_screen.dart'; // Importar la pantalla de privacidad
+import 'behaviour_code_screen.dart'; // Importar la pantalla de código de conducta
 
 class SettingsScreen extends StatelessWidget {
   @override
@@ -98,16 +102,36 @@ class SettingsScreen extends StatelessWidget {
               const SizedBox(height: 30),
               _buildSectionTitle('Soporte'),
               const SizedBox(height: 15),
-              _buildConfigItem('Reportar falla técnica', Icons.bug_report_outlined, () {}),
+              _buildConfigItem('Reportar falla técnica', Icons.bug_report_outlined, () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => FailReportScreen()),
+                );
+              }),
               _buildConfigItem('Enviar feedback', Icons.feedback_outlined, () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => FeedbackScreen()),
                 );
               }),
-              _buildConfigItem('Código de conducta', Icons.gavel_outlined, () {}),
-              _buildConfigItem('Aviso de privacidad', Icons.privacy_tip_outlined, () {}),
-              _buildConfigItem('Términos y condiciones', Icons.description_outlined, () {}),
+              _buildConfigItem('Código de conducta', Icons.gavel_outlined, () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => BehaviourCodeScreen()),
+                );
+              }),
+              _buildConfigItem('Aviso de privacidad', Icons.privacy_tip_outlined, () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => PrivacityScreen()),
+                );
+              }),
+              _buildConfigItem('Términos y condiciones', Icons.description_outlined, () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => TermsScreen()),
+                );
+              }),
 
               const SizedBox(height: 40),
               Container(
