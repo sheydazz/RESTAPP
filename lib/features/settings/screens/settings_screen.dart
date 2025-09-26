@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../home/screens/gradient_text.dart';
 import 'language_screen.dart';
+import 'feedback_screen.dart';
 import 'profile_screen.dart'; // Importar la pantalla de perfil
 
 class SettingsScreen extends StatelessWidget {
@@ -98,7 +99,12 @@ class SettingsScreen extends StatelessWidget {
               _buildSectionTitle('Soporte'),
               const SizedBox(height: 15),
               _buildConfigItem('Reportar falla técnica', Icons.bug_report_outlined, () {}),
-              _buildConfigItem('Enviar feedback', Icons.feedback_outlined, () {}),
+              _buildConfigItem('Enviar feedback', Icons.feedback_outlined, () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => FeedbackScreen()),
+                );
+              }),
               _buildConfigItem('Código de conducta', Icons.gavel_outlined, () {}),
               _buildConfigItem('Aviso de privacidad', Icons.privacy_tip_outlined, () {}),
               _buildConfigItem('Términos y condiciones', Icons.description_outlined, () {}),
