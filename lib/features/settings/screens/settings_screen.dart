@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../home/screens/gradient_text.dart';
+import 'language_screen.dart';
 import 'profile_screen.dart'; // Importar la pantalla de perfil
 
 class SettingsScreen extends StatelessWidget {
@@ -85,7 +86,13 @@ class SettingsScreen extends StatelessWidget {
               _buildConfigItem('Modo oscuro', Icons.dark_mode_outlined, () {}, hasSwitch: true),
               _buildConfigItem('Recordatorios', Icons.notifications_outlined, () {}),
               _buildConfigItem('Pin de seguridad', Icons.lock_outlined, () {}),
-              _buildConfigItem('Idioma', Icons.language_outlined, () {}),
+              _buildConfigItem('Idioma', Icons.language_outlined, () {
+                // Navegar a la pantalla de idioma
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => LanguageScreen()),
+                );
+              }),
 
               const SizedBox(height: 30),
               _buildSectionTitle('Soporte'),
