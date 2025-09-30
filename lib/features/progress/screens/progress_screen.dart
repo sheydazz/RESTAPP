@@ -14,25 +14,21 @@ class ProgressScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Header
+
                 _buildHeader(context),
                 const SizedBox(height: 20),
 
-                // Registro Emocional
                 _buildRegistroEmocional(),
                 const SizedBox(height: 24),
 
-                // Mis actividades diarias
                 _buildActividadesDiarias(),
                 const SizedBox(height: 24),
 
-                // Mi diario
                 _buildMiDiario(context),
                 const SizedBox(height: 24),
 
-                // Mis técnicas de relajación
                 _buildTecnicasRelajacion(),
-                const SizedBox(height: 80), // Espacio para la barra de navegación
+                const SizedBox(height: 80),
               ],
             ),
           ),
