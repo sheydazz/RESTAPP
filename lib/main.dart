@@ -15,6 +15,10 @@ import 'features/progress/screens/progress_screen.dart';
 import 'features/navigation/main_app.dart';
 import 'features/progress/screens/globalprogress_screen.dart';
 import 'features/progress/screens/myprogress_screen.dart';
+import 'features/progress/screens/mi_diario_screen.dart';
+import 'features/progress/screens/mis_capitulos_screen.dart';
+import 'features/progress/screens/capitulo_detalle_screen.dart';
+
 void main() {
   runApp(const MyApp());
 }
@@ -66,6 +70,18 @@ class MyApp extends StatelessWidget {
         // Mi Progreso
         AppRoutes.globalprogress: (context) =>  GlobalProgressScreen(),
         AppRoutes.progress: (context) =>  MyProgressScreen(),
+        AppRoutes.progress: (context) =>  ProgressScreen(),
+        AppRoutes.miDiario: (context) => const MiDiarioScreen(),
+        AppRoutes.misCapitulos: (context) => const MisCapitulosScreen(),
+
+        AppRoutes.capituloDetalle: (context) {
+          final args = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>?;
+          return CapituloDetalleScreen(
+            titulo: args?['titulo'],
+            descripcion: args?['descripcion'],
+            fecha: args?['fecha'],
+          );
+        },
       },
     );
   }
