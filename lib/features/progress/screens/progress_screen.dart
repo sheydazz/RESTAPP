@@ -79,7 +79,7 @@ class ProgressScreen extends StatelessWidget {
           ),
           child: Center(
             child: Image.asset(
-              'assets/images/white_gear.jpg',
+              'assets/images/white_gear.png',
               width: 24,
               height: 24,
               errorBuilder: (context, error, stackTrace) {
@@ -94,12 +94,12 @@ class ProgressScreen extends StatelessWidget {
           width: 40,
           height: 40,
           decoration: BoxDecoration(
-            color: const Color(0xFFFF6B6B),
+            color: const Color(0xFF7DD3E8),
             shape: BoxShape.circle,
           ),
           child: Center(
             child: Image.asset(
-              'assets/images/float.jpg',
+              'assets/images/float.png',
               width: 24,
               height: 24,
               errorBuilder: (context, error, stackTrace) {
@@ -115,13 +115,13 @@ class ProgressScreen extends StatelessWidget {
   Widget _buildRegistroEmocional() {
     final diasSemana = ['LUNES', 'MARTES', 'MIÉRCOLES', 'JUEVES', 'VIERNES', 'SÁBADO', 'DOMINGO'];
     final iconos = [
-      'assets/images/goodrest.jpg',
-      'assets/images/goodrest.jpg',
-      'assets/images/goodrest.jpg',
-      'assets/images/goodrest.jpg',
-      'assets/images/yellowrest.jpg',
-      'assets/images/yellowrest.jpg',
-      'assets/images/sadrest.jpg',
+      'assets/images/green_face.png',
+      'assets/images/pink_face.png',
+      'assets/images/yellowrest.png',
+      'assets/images/green_face.png',
+      'assets/images/pink_face.png',
+      'assets/images/yellowrest.png',
+      'assets/images/green_face.png',
     ];
 
     return Container(
@@ -293,7 +293,7 @@ class ProgressScreen extends StatelessWidget {
             child: Row(
               children: [
                 Image.asset(
-                  'assets/images/dairy.jpg',
+                  'assets/images/dairy.png',
                   width: 60,
                   height: 60,
                   errorBuilder: (context, error, stackTrace) {
@@ -327,11 +327,11 @@ class ProgressScreen extends StatelessWidget {
 
   Widget _buildTecnicasRelajacion() {
     final tecnicas = [
-      {'nombre': 'Yoga', 'icono': 'assets/images/yoga.jpg'},
-      {'nombre': 'Chistes', 'icono': 'assets/images/chistes.jpg'},
-      {'nombre': 'Juegos', 'icono': 'assets/images/juegos.jpg'},
-      {'nombre': 'Escuchar\nMusica', 'icono': 'assets/images/musica.jpg'},
-      {'nombre': 'Actividad\nFísica', 'icono': 'assets/images/gym.jpg'},
+      {'nombre': 'Yoga', 'icono': 'assets/images/yoga.png'},
+      {'nombre': 'Chistes', 'icono': 'assets/images/chistes.png'},
+      {'nombre': 'Juegos', 'icono': 'assets/images/juegos.png'},
+      {'nombre': 'Escuchar\nMusica', 'icono': 'assets/images/musica.png'},
+      {'nombre': 'Actividad\nFísica', 'icono': 'assets/images/gym.png'},
     ];
 
     return Column(
