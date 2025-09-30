@@ -1,293 +1,413 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 class ProgressScreen extends StatelessWidget {
-  ProgressScreen({super.key});
-
-  final List<Map<String, String>> weekData = [
-    {"day": "Lunes", "icon": "assets/images/pink_face.svg"},
-    {"day": "Martes", "icon": "assets/images/green_face.svg"},
-    {"day": "Miércoles", "icon": "assets/images/pink_face.svg"},
-    {"day": "Jueves", "icon": "assets/images/yellow_face.svg"},
-    {"day": "Viernes", "icon": "assets/images/green_face.svg"},
-    {"day": "Sábado", "icon": "assets/images/pink_face.svg"},
-    {"day": "Domingo", "icon": "assets/images/yellow_face.svg"},
-  ];
-
-  final List<String> activities = [
-    "Juega un rato",
-    "Desahógate en el gimnasio",
-    "Habla con una persona",
-    "Sal a correr con música",
-  ];
-
-  final List<Map<String, String>> relaxTechniques = [
-    {"name": "Yoga", "icon": "assets/images/yoga.svg"},
-    {"name": "Chistes", "icon": "assets/images/chistes.svg"},
-    {"name": "Juegos", "icon": "assets/images/juegos.svg"},
-    {"name": "Escuchar Musica", "icon": "assets/images/musica.svg"},
-    {"name": "Actividad Física", "icon": "assets/images/gym.svg"},
-  ];
-
+  const ProgressScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    const purpleBorder = Color(0xFFB64CF6);
-    const lightBlue = Color(0xFFE9F7FF);
-
     return Scaffold(
+      backgroundColor: Colors.white,
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // HEADER (3 íconos SVG)
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    children: [
-                      const CircleAvatar(
-                        radius: 28,
-                        backgroundImage: AssetImage("assets/images/goodrest.jpg"),
-                      ),
-                      const SizedBox(width: 8),
-                      Text(
-                        "¡Hola! Mari",
-                        style: TextStyle(
-                          fontSize: 22,
-                          fontWeight: FontWeight.w800,
-                          color: Colors.blue.shade600,
-                        ),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    children: const [
-                      _AssetIcon("assets/images/white_gear.svg", size: 30),
-                      SizedBox(width: 12),
-                      _AssetIcon("assets/images/float.svg", size: 30),
-                      SizedBox(width: 12),
-                      _AssetIcon("assets/images/chistes.svg", size: 30), // ícono decorativo
-                    ],
-                  )
-                ],
-              ),
-              const SizedBox(height: 14),
-              Container(height: 2, color: Colors.blue.shade200.withOpacity(.6)),
-              const SizedBox(height: 16),
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Header
+                _buildHeader(),
+                const SizedBox(height: 20),
 
-              // REGISTRO EMOCIONAL
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.fromLTRB(16, 14, 16, 16),
-                decoration: BoxDecoration(
-                  color: const Color(0xFFCCE6FF),
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Column(
-                  children: [
-                    Text(
-                      "REGISTRO EMOCIONAL",
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w800,
-                        color: Colors.purple.shade700,
-                        letterSpacing: .5,
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: weekData.map((d) {
-                        return Column(
-                          children: [
-                            _AssetIcon(d["icon"]!, size: 28),
-                            const SizedBox(height: 6),
-                            Text(
-                              d["day"]!.substring(0, 3).toUpperCase(),
-                              style: const TextStyle(
-                                fontSize: 11,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                          ],
-                        );
-                      }).toList(),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 18),
+                // Registro Emocional
+                _buildRegistroEmocional(),
+                const SizedBox(height: 24),
 
-              const Text(
-                "Mis actividades diarias",
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800),
-              ),
-              const SizedBox(height: 10),
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  border: Border.all(color: purpleBorder, width: 2),
-                  borderRadius: BorderRadius.circular(18),
-                ),
-                child: Column(
-                  children: List.generate(activities.length, (i) {
-                    return Container(
-                      margin: const EdgeInsets.symmetric(vertical: 6),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Flexible(
-                            child: Text(
-                              "${i + 1}. ${activities[i]}",
-                              style: const TextStyle(
-                                fontSize: 15,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                          ),
-                          Row(
-                            children: const [
-                              Icon(Icons.star, size: 20, color: Colors.orange),
-                              SizedBox(width: 2),
-                              Icon(Icons.star, size: 20, color: Colors.orange),
-                            ],
-                          )
-                        ],
-                      ),
-                    );
-                  }),
-                ),
-              ),
-              const SizedBox(height: 6),
-              Align(
-                alignment: Alignment.centerRight,
-                child: TextButton(
-                  onPressed: () {},
-                  style: TextButton.styleFrom(
-                    padding: EdgeInsets.zero,
-                    minimumSize: Size.zero,
-                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                  ),
-                  child: const Text(
-                    "Ver todas",
-                    style: TextStyle(
-                      color: Color(0xFF2E98FF),
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 8),
+                // Mis actividades diarias
+                _buildActividadesDiarias(),
+                const SizedBox(height: 24),
 
-              // MI DIARIO  (SVG corregido)
-              const Text(
-                "Mi diario",
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800),
-              ),
-              const SizedBox(height: 10),
-              Center(
-                child: Container(
-                  padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 16),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    border: Border.all(color: purpleBorder, width: 2),
-                    borderRadius: BorderRadius.circular(18),
-                  ),
-                  child: Column(
-                    children: [
-                      const _AssetIcon("assets/images/dairy.svg", size: 90),
-                      const SizedBox(height: 8),
-                      const Text(
-                        "¡Escribe aquí todas las cosas importantes de tu día!",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(fontSize: 13.5, fontWeight: FontWeight.w700),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              const SizedBox(height: 16),
+                // Mi diario
+                _buildMiDiario(),
+                const SizedBox(height: 24),
 
-              // TÉCNICAS DE RELAJACIÓN
-              const Text(
-                "Mis técnicas de relajación",
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800),
-              ),
-              const SizedBox(height: 10),
-              Container(
-                padding: const EdgeInsets.all(14),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  border: Border.all(color: purpleBorder, width: 2),
-                  borderRadius: BorderRadius.circular(18),
-                ),
-                child: GridView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: relaxTechniques.length,
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    mainAxisSpacing: 14,
-                    crossAxisSpacing: 14,
-                    childAspectRatio: 1.15,
-                  ),
-                  itemBuilder: (context, index) {
-                    final t = relaxTechniques[index];
-                    return Container(
-                      decoration: BoxDecoration(
-                        color: lightBlue,
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          _AssetIcon(t["icon"]!, size: 56),
-                          const SizedBox(height: 8),
-                          Text(
-                            t["name"]!,
-                            style: const TextStyle(fontWeight: FontWeight.w800),
-                          ),
-                        ],
-                      ),
-                    );
-                  },
-                ),
-              ),
-              const SizedBox(height: 24),
-            ],
+                // Mis técnicas de relajación
+                _buildTecnicasRelajacion(),
+                const SizedBox(height: 80), // Espacio para la barra de navegación
+              ],
+            ),
           ),
         ),
       ),
     );
   }
-}
 
-class _AssetIcon extends StatelessWidget {
-  final String path;
-  final double size;
+  Widget _buildHeader() {
+    return Row(
+      children: [
+        // Avatar
+        Container(
+          width: 50,
+          height: 50,
+          decoration: BoxDecoration(
+            color: const Color(0xFF7DD3E8),
+            shape: BoxShape.circle,
+          ),
+          child: ClipOval(
+            child: Image.asset(
+              'assets/images/normalrest.jpg',
+              fit: BoxFit.cover,
+              errorBuilder: (context, error, stackTrace) {
+                return const Icon(Icons.person, color: Colors.white, size: 30);
+              },
+            ),
+          ),
+        ),
+        const SizedBox(width: 12),
+        const Text(
+          '¡Hola! Mari',
+          style: TextStyle(
+            fontSize: 22,
+            fontWeight: FontWeight.bold,
+            color: Color(0xFF7DD3E8),
+            fontFamily: 'Fredoka',
+          ),
+        ),
+        const Spacer(),
+        // Configuración
+        Container(
+          width: 40,
+          height: 40,
+          decoration: BoxDecoration(
+            color: const Color(0xFF7DD3E8),
+            shape: BoxShape.circle,
+          ),
+          child: Center(
+            child: Image.asset(
+              'assets/images/white_gear.jpg',
+              width: 24,
+              height: 24,
+              errorBuilder: (context, error, stackTrace) {
+                return const Icon(Icons.settings, color: Colors.white, size: 24);
+              },
+            ),
+          ),
+        ),
+        const SizedBox(width: 8),
+        // Salvavidas
+        Container(
+          width: 40,
+          height: 40,
+          decoration: BoxDecoration(
+            color: const Color(0xFF7DD3E8),
+            shape: BoxShape.circle,
+          ),
+          child: Center(
+            child: Image.asset(
+              'assets/images/float.jpg',
+              width: 24,
+              height: 24,
+              errorBuilder: (context, error, stackTrace) {
+                return const Icon(Icons.help_outline, color: Colors.white, size: 24);
+              },
+            ),
+          ),
+        ),
+      ],
+    );
+  }
 
-  const _AssetIcon(this.path, {this.size = 28});
+  Widget _buildRegistroEmocional() {
+    final diasSemana = ['LUNES', 'MARTES', 'MIÉRCOLES', 'JUEVES', 'VIERNES', 'SÁBADO', 'DOMINGO'];
+    final iconos = [
+      'assets/images/goodrest.jpg',
+      'assets/images/goodrest.jpg',
+      'assets/images/goodrest.jpg',
+      'assets/images/goodrest.jpg',
+      'assets/images/yellowrest.jpg',
+      'assets/images/yellowrest.jpg',
+      'assets/images/sadrest.jpg',
+    ];
 
-  @override
-  Widget build(BuildContext context) {
-    if (path.toLowerCase().endsWith('.svg')) {
-      return SvgPicture.asset(
-        path,
-        width: size,
-        height: size,
-        fit: BoxFit.contain,
-      );
-    }
-    return Image.asset(
-      path,
-      width: size,
-      height: size,
-      fit: BoxFit.contain,
+    return Container(
+      width: double.infinity,
+      decoration: BoxDecoration(
+        color: const Color(0xFFB3E5F5),
+        borderRadius: BorderRadius.circular(16),
+      ),
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        children: [
+          const Text(
+            'Registro Emocional',
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+              fontFamily: 'Fredoka',
+            ),
+          ),
+          const SizedBox(height: 16),
+          Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: List.generate(7, (index) {
+                return Column(
+                  children: [
+                    Text(
+                      diasSemana[index],
+                      style: const TextStyle(
+                        fontSize: 9,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.black87,
+                        fontFamily: 'Fredoka',
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Container(
+                      width: 32,
+                      height: 32,
+                      child: Image.asset(
+                        iconos[index],
+                        fit: BoxFit.contain,
+                        errorBuilder: (context, error, stackTrace) {
+                          return Container(
+                            decoration: BoxDecoration(
+                              color: Colors.yellow,
+                              shape: BoxShape.circle,
+                            ),
+                            child: const Icon(Icons.face, size: 20),
+                          );
+                        },
+                      ),
+                    ),
+                  ],
+                );
+              }),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildActividadesDiarias() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          'Mis actividades diarias',
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+            color: Colors.black,
+            fontFamily: 'Fredoka',
+          ),
+        ),
+        const SizedBox(height: 12),
+        Container(
+          width: double.infinity,
+          decoration: BoxDecoration(
+            border: Border.all(color: const Color(0xFF7DD3E8), width: 2),
+            borderRadius: BorderRadius.circular(16),
+          ),
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _buildActividadItem('1. Juega un rato', true),
+              _buildActividadItem('2. Desahógate en el gimnasio', false),
+              _buildActividadItem('3. Habla con una persona', false),
+              _buildActividadItem('4. Sal a correr con música', true),
+            ],
+          ),
+        ),
+        const SizedBox(height: 8),
+        Align(
+          alignment: Alignment.centerRight,
+          child: Text(
+            'Ver todas',
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.bold,
+              color: Colors.black87,
+              fontFamily: 'Fredoka',
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildActividadItem(String texto, bool completada) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8),
+      child: Row(
+        children: [
+          Expanded(
+            child: Text(
+              texto,
+              style: const TextStyle(
+                fontSize: 14,
+                color: Colors.black87,
+                fontFamily: 'Fredoka',
+              ),
+            ),
+          ),
+          if (completada)
+            const Icon(
+              Icons.star,
+              color: Color(0xFFFFA726),
+              size: 20,
+            ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildMiDiario() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          'Mi diario',
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+            color: Colors.black,
+            fontFamily: 'Fredoka',
+          ),
+        ),
+        const SizedBox(height: 12),
+        Container(
+          width: double.infinity,
+          decoration: BoxDecoration(
+            border: Border.all(color: const Color(0xFF7DD3E8), width: 2),
+            borderRadius: BorderRadius.circular(16),
+          ),
+          padding: const EdgeInsets.all(16),
+          child: Row(
+            children: [
+              Image.asset(
+                'assets/images/dairy.jpg',
+                width: 60,
+                height: 60,
+                errorBuilder: (context, error, stackTrace) {
+                  return Container(
+                    width: 60,
+                    height: 60,
+                    color: Colors.brown,
+                    child: const Icon(Icons.book, color: Colors.white),
+                  );
+                },
+              ),
+              const SizedBox(width: 16),
+              const Expanded(
+                child: Text(
+                  'Escribe aquí todas las cosas importantes de tu día',
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: Colors.black87,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'Fredoka',
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildTecnicasRelajacion() {
+    final tecnicas = [
+      {'nombre': 'Yoga', 'icono': 'assets/images/yoga.jpg'},
+      {'nombre': 'Chistes', 'icono': 'assets/images/chistes.jpg'},
+      {'nombre': 'Juegos', 'icono': 'assets/images/juegos.jpg'},
+      {'nombre': 'Escuchar\nMusica', 'icono': 'assets/images/musica.jpg'},
+      {'nombre': 'Actividad\nFísica', 'icono': 'assets/images/gym.jpg'},
+    ];
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          'Mis técnicas de relajación',
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+            color: Colors.black,
+            fontFamily: 'Fredoka',
+          ),
+        ),
+        const SizedBox(height: 12),
+        Container(
+          width: double.infinity,
+          decoration: BoxDecoration(
+            border: Border.all(color: const Color(0xFF7DD3E8), width: 2),
+            borderRadius: BorderRadius.circular(16),
+          ),
+          padding: const EdgeInsets.all(16),
+          child: Wrap(
+            spacing: 12,
+            runSpacing: 12,
+            children: List.generate(tecnicas.length, (index) {
+              return _buildTecnicaCard(
+                tecnicas[index]['nombre']!,
+                tecnicas[index]['icono']!,
+              );
+            }),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildTecnicaCard(String nombre, String iconPath) {
+    return Container(
+      width: 100,
+      height: 100,
+      decoration: BoxDecoration(
+        color: const Color(0xFFE3F2FD),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Image.asset(
+            iconPath,
+            width: 50,
+            height: 50,
+            errorBuilder: (context, error, stackTrace) {
+              return Container(
+                width: 50,
+                height: 50,
+                decoration: BoxDecoration(
+                  color: Colors.blue,
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: const Icon(Icons.image, color: Colors.white),
+              );
+            },
+          ),
+          const SizedBox(height: 8),
+          Text(
+            nombre,
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.w600,
+              color: Colors.black87,
+              fontFamily: 'Fredoka',
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
