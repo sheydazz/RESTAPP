@@ -15,7 +15,7 @@ class ProgressScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // Header
-                _buildHeader(),
+                _buildHeader(context),
                 const SizedBox(height: 20),
 
                 // Registro Emocional
@@ -27,7 +27,7 @@ class ProgressScreen extends StatelessWidget {
                 const SizedBox(height: 24),
 
                 // Mi diario
-                _buildMiDiario(),
+                _buildMiDiario(context),
                 const SizedBox(height: 24),
 
                 // Mis técnicas de relajación
@@ -41,7 +41,7 @@ class ProgressScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildHeader() {
+  Widget _buildHeader(BuildContext context) {
     return Row(
       children: [
         // Avatar
@@ -98,7 +98,7 @@ class ProgressScreen extends StatelessWidget {
           width: 40,
           height: 40,
           decoration: BoxDecoration(
-            color: const Color(0xFF7DD3E8),
+            color: const Color(0xFFFF6B6B),
             shape: BoxShape.circle,
           ),
           child: Center(
@@ -140,7 +140,7 @@ class ProgressScreen extends StatelessWidget {
           const Text(
             'Registro Emocional',
             style: TextStyle(
-              fontSize: 20,
+              fontSize: 18,
               fontWeight: FontWeight.bold,
               color: Colors.white,
               fontFamily: 'Fredoka',
@@ -233,7 +233,7 @@ class ProgressScreen extends StatelessWidget {
             'Ver todas',
             style: TextStyle(
               fontSize: 14,
-              fontWeight: FontWeight.bold,
+              fontWeight: FontWeight.w600,
               color: Colors.black87,
               fontFamily: 'Fredoka',
             ),
@@ -269,7 +269,7 @@ class ProgressScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildMiDiario() {
+  Widget _buildMiDiario(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -283,41 +283,46 @@ class ProgressScreen extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 12),
-        Container(
-          width: double.infinity,
-          decoration: BoxDecoration(
-            border: Border.all(color: const Color(0xFF7DD3E8), width: 2),
-            borderRadius: BorderRadius.circular(16),
-          ),
-          padding: const EdgeInsets.all(16),
-          child: Row(
-            children: [
-              Image.asset(
-                'assets/images/dairy.jpg',
-                width: 60,
-                height: 60,
-                errorBuilder: (context, error, stackTrace) {
-                  return Container(
-                    width: 60,
-                    height: 60,
-                    color: Colors.brown,
-                    child: const Icon(Icons.book, color: Colors.white),
-                  );
-                },
-              ),
-              const SizedBox(width: 16),
-              const Expanded(
-                child: Text(
-                  'Escribe aquí todas las cosas importantes de tu día',
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: Colors.black87,
-                    fontWeight: FontWeight.bold,
-                    fontFamily: 'Fredoka',
+        GestureDetector(
+          onTap: () {
+            Navigator.pushNamed(context, '/mi-diario');
+          },
+          child: Container(
+            width: double.infinity,
+            decoration: BoxDecoration(
+              border: Border.all(color: const Color(0xFF7DD3E8), width: 2),
+              borderRadius: BorderRadius.circular(16),
+            ),
+            padding: const EdgeInsets.all(16),
+            child: Row(
+              children: [
+                Image.asset(
+                  'assets/images/dairy.jpg',
+                  width: 60,
+                  height: 60,
+                  errorBuilder: (context, error, stackTrace) {
+                    return Container(
+                      width: 60,
+                      height: 60,
+                      color: Colors.brown,
+                      child: const Icon(Icons.book, color: Colors.white),
+                    );
+                  },
+                ),
+                const SizedBox(width: 16),
+                const Expanded(
+                  child: Text(
+                    'Escribe aquí todas las cosas importantes de tu día',
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.black87,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'Fredoka',
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ],
