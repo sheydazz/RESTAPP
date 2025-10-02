@@ -23,30 +23,44 @@ class _RegisterScreenState extends State<RegisterScreen> {
             children: [
               const SizedBox(height: 20),
 
-              // Título con degradado y alineado a la derecha
-              Align(
-                alignment: Alignment.centerRight,
-                child: ShaderMask(
-                  shaderCallback: (bounds) => const LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [
-                      Color(0xFF0419FF),
-                      Color(0xFF0AF3FF),
-                    ],
-                  ).createShader(bounds),
-                  child: Text(
-                    '¡Háblame de ti!',
-                    style: GoogleFonts.fredoka(
-                      fontSize: 32,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
+              // Imagen + Título en una fila
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Container(
+                    width: 100,
+                    height: 100,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12),
+                      image: const DecorationImage(
+                        image: AssetImage('assets/images/normalrest.jpg'),
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
-                ),
-              ),
 
-              const SizedBox(height: 30),
+                  Expanded(
+                    child: ShaderMask(
+                      shaderCallback: (bounds) => const LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [
+                          Color(0xFF0419FF),
+                          Color(0xFF0AF3FF),
+                        ],
+                      ).createShader(bounds),
+                      child: Text(
+                        '¡Háblame de ti!',
+                        style: GoogleFonts.fredoka(
+                          fontSize: 32,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
 
               _buildInputField(label: '¿Cómo quieres que te llame?', hint: 'Tu nombre'),
               const SizedBox(height: 20),
@@ -60,7 +74,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
               const SizedBox(height: 30),
 
-              // Checkbox + texto dinámico
               Row(
                 children: [
                   Checkbox(
@@ -116,7 +129,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 
-  /// Campo de texto con borde degradado e ícono de check
   Widget _buildInputField({
     required String label,
     required String hint,
@@ -197,7 +209,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 
-  /// Botón GUARDAR con fondo radial igual al de UNIRME
   Widget _buildRadialButton({
     required String text,
     required VoidCallback onPressed,
