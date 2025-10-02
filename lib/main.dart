@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'core/routes/app_routes.dart';
+import 'features/intro_auth/screens/how_you_found_screen.dart';
 import 'features/intro_auth/screens/intro_screen.dart';
 import 'features/intro_auth/screens/login_screen.dart';
 import 'features/intro_auth/screens/register_screen.dart';
@@ -31,6 +32,7 @@ class MyApp extends StatelessWidget {
         AppRoutes.intro: (context) =>  IntroScreen(),
         AppRoutes.login: (context) =>  LoginScreen(),
         AppRoutes.register: (context) =>  RegisterScreen(),
+        AppRoutes.howYouFound: (context) =>  HowYouFoundScreen(),
 
         // Main App
         AppRoutes.mainApp: (context) =>  MainApp(),

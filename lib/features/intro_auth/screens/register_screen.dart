@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'how_you_found_screen.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -115,7 +116,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   child: _buildRadialButton(
                     text: 'GUARDAR',
                     onPressed: () {
-                      // Acción al guardar
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const HowYouFoundScreen(),
+                        ),
+                      );
                     },
                   ),
                 ),
