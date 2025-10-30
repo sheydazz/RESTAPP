@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../core/routes/app_routes.dart';
 
 class ProgressScreen extends StatelessWidget {
   const ProgressScreen({super.key});
@@ -14,20 +15,15 @@ class ProgressScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-
                 _buildHeader(context),
                 const SizedBox(height: 20),
-
                 _buildRegistroEmocional(),
                 const SizedBox(height: 24),
-
                 _buildActividadesDiarias(),
                 const SizedBox(height: 24),
-
                 _buildMiDiario(context),
                 const SizedBox(height: 24),
-
-                _buildTecnicasRelajacion(),
+                _buildTecnicasRelajacion(context), // 👈 con navegación corregida
                 const SizedBox(height: 80),
               ],
             ),
@@ -37,83 +33,125 @@ class ProgressScreen extends StatelessWidget {
     );
   }
 
+  // ---------------- HEADER ----------------
   Widget _buildHeader(BuildContext context) {
-    return Row(
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Avatar
-        Container(
-          width: 50,
-          height: 50,
-          decoration: BoxDecoration(
-            color: const Color(0xFF7DD3E8),
-            shape: BoxShape.circle,
-          ),
-          child: ClipOval(
-            child: Image.asset(
-              'assets/images/normalrest.jpg',
-              fit: BoxFit.cover,
-              errorBuilder: (context, error, stackTrace) {
-                return const Icon(Icons.person, color: Colors.white, size: 30);
-              },
+        Row(
+          children: [
+            // Avatar
+            Container(
+              width: 100,
+              height: 60,
+              decoration: BoxDecoration(
+                color: const Color(0xFF87CEEB),
+                shape: BoxShape.circle,
+                image: const DecorationImage(
+                  image: AssetImage('assets/images/normalrest.jpg'),
+                  fit: BoxFit.cover,
+                ),
+              ),
             ),
-          ),
-        ),
-        const SizedBox(width: 12),
-        const Text(
-          '¡Hola! Mari',
-          style: TextStyle(
-            fontSize: 22,
-            fontWeight: FontWeight.bold,
-            color: Color(0xFF7DD3E8),
-            fontFamily: 'Fredoka',
-          ),
-        ),
-        const Spacer(),
-        // Configuración
-        Container(
-          width: 40,
-          height: 40,
-          decoration: BoxDecoration(
-            color: const Color(0xFF7DD3E8),
-            shape: BoxShape.circle,
-          ),
-          child: Center(
-            child: Image.asset(
-              'assets/images/white_gear.png',
-              width: 24,
-              height: 24,
-              errorBuilder: (context, error, stackTrace) {
-                return const Icon(Icons.settings, color: Colors.white, size: 24);
-              },
+            const SizedBox(width: 12),
+            const Text(
+              '¡Hola! Mari',
+              style: TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+                color: Color(0xFF7DD3E8),
+                fontFamily: 'Fredoka',
+              ),
             ),
-          ),
-        ),
-        const SizedBox(width: 8),
-        // Salvavidas
-        Container(
-          width: 40,
-          height: 40,
-          decoration: BoxDecoration(
-            color: const Color(0xFF7DD3E8),
-            shape: BoxShape.circle,
-          ),
-          child: Center(
-            child: Image.asset(
-              'assets/images/float.png',
-              width: 24,
-              height: 24,
-              errorBuilder: (context, error, stackTrace) {
-                return const Icon(Icons.help_outline, color: Colors.white, size: 24);
-              },
+            const Spacer(),
+            // Configuración
+            Container(
+              width: 40,
+              height: 40,
+              decoration: const BoxDecoration(
+                color: Color(0xFF7DD3E8),
+                shape: BoxShape.circle,
+              ),
+              child: Center(
+                child: Image.asset(
+                  'assets/images/white_gear.png',
+                  width: 24,
+                  height: 24,
+                  errorBuilder: (context, error, stackTrace) {
+                    return const Icon(Icons.settings, color: Colors.white, size: 24);
+                  },
+                ),
+              ),
             ),
-          ),
+            const SizedBox(width: 8),
+            // Salvavidas
+            Container(
+              width: 40,
+              height: 40,
+              decoration: const BoxDecoration(
+                color: Color(0xFF7DD3E8),
+                shape: BoxShape.circle,
+              ),
+              child: Center(
+                child: Image.asset(
+                  'assets/images/float.png',
+                  width: 24,
+                  height: 24,
+                  errorBuilder: (context, error, stackTrace) {
+                    return const Icon(Icons.help_outline, color: Colors.white, size: 24);
+                  },
+                ),
+              ),
+            ),
+          ],
+        ),
+
+        // 🔹 Línea divisoria (la que pediste)
+        const SizedBox(height: 8),
+        Divider(
+          color: Colors.grey[400],
+          thickness: 3,
+          height: 0,
+          indent: 23,
+          endIndent: 23,
         ),
       ],
     );
   }
 
+
+  Widget _buildCircleIcon(String asset, IconData fallback) {
+    return Container(
+      width: 40,
+      height: 40,
+      decoration: const BoxDecoration(
+        color: Color(0xFF7DD3E8),
+        shape: BoxShape.circle,
+      ),
+      child: Center(
+        child: Image.asset(
+          asset,
+          width: 24,
+          height: 24,
+          errorBuilder: (context, error, stackTrace) {
+            return Icon(fallback, color: Colors.white, size: 24);
+          },
+        ),
+      ),
+    );
+  }
+
+  // ---------------- REGISTRO EMOCIONAL ----------------
   Widget _buildRegistroEmocional() {
-    final diasSemana = ['LUNES', 'MARTES', 'MIÉRCOLES', 'JUEVES', 'VIERNES', 'SÁBADO', 'DOMINGO'];
+    final diasSemana = [
+      'LUNES',
+      'MARTES',
+      'MIÉRCOLES',
+      'JUEVES',
+      'VIERNES',
+      'SÁBADO',
+      'DOMINGO'
+    ];
     final iconos = [
       'assets/images/green_face.png',
       'assets/images/pink_face.png',
@@ -130,19 +168,19 @@ class ProgressScreen extends StatelessWidget {
         color: const Color(0xFFB3E5F5),
         borderRadius: BorderRadius.circular(16),
       ),
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(24),
       child: Column(
         children: [
           const Text(
             'Registro Emocional',
             style: TextStyle(
-              fontSize: 18,
+              fontSize: 24,
               fontWeight: FontWeight.bold,
               color: Colors.white,
               fontFamily: 'Fredoka',
             ),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 10),
           Container(
             decoration: BoxDecoration(
               color: Colors.white,
@@ -164,22 +202,11 @@ class ProgressScreen extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 8),
-                    Container(
+                    Image.asset(
+                      iconos[index],
                       width: 32,
                       height: 32,
-                      child: Image.asset(
-                        iconos[index],
-                        fit: BoxFit.contain,
-                        errorBuilder: (context, error, stackTrace) {
-                          return Container(
-                            decoration: BoxDecoration(
-                              color: Colors.yellow,
-                              shape: BoxShape.circle,
-                            ),
-                            child: const Icon(Icons.face, size: 20),
-                          );
-                        },
-                      ),
+                      fit: BoxFit.contain,
                     ),
                   ],
                 );
@@ -191,6 +218,7 @@ class ProgressScreen extends StatelessWidget {
     );
   }
 
+  // ---------------- ACTIVIDADES DIARIAS ----------------
   Widget _buildActividadesDiarias() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -198,7 +226,7 @@ class ProgressScreen extends StatelessWidget {
         const Text(
           'Mis actividades diarias',
           style: TextStyle(
-            fontSize: 20,
+            fontSize: 24,
             fontWeight: FontWeight.bold,
             color: Colors.black,
             fontFamily: 'Fredoka',
@@ -254,17 +282,17 @@ class ProgressScreen extends StatelessWidget {
               ),
             ),
           ),
-          if (completada)
-            const Icon(
-              Icons.star,
-              color: Color(0xFFFFA726),
-              size: 20,
-            ),
+          Icon(
+            Icons.star,
+            color: completada ? const Color(0xFFFFA726) : Colors.grey,
+            size: 20,
+          ),
         ],
       ),
     );
   }
 
+  // ---------------- MI DIARIO ----------------
   Widget _buildMiDiario(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -272,7 +300,7 @@ class ProgressScreen extends StatelessWidget {
         const Text(
           'Mi diario',
           style: TextStyle(
-            fontSize: 20,
+            fontSize: 24,
             fontWeight: FontWeight.bold,
             color: Colors.black,
             fontFamily: 'Fredoka',
@@ -281,7 +309,7 @@ class ProgressScreen extends StatelessWidget {
         const SizedBox(height: 12),
         GestureDetector(
           onTap: () {
-            Navigator.pushNamed(context, '/mi-diario');
+            Navigator.pushNamed(context, AppRoutes.miDiario);
           },
           child: Container(
             width: double.infinity,
@@ -293,24 +321,16 @@ class ProgressScreen extends StatelessWidget {
             child: Row(
               children: [
                 Image.asset(
-                  'assets/images/dairy.png',
-                  width: 60,
-                  height: 60,
-                  errorBuilder: (context, error, stackTrace) {
-                    return Container(
-                      width: 60,
-                      height: 60,
-                      color: Colors.brown,
-                      child: const Icon(Icons.book, color: Colors.white),
-                    );
-                  },
+                  'assets/images/dairy.jpg',
+                  width: 110,
+                  height: 90,
                 ),
                 const SizedBox(width: 16),
                 const Expanded(
                   child: Text(
                     'Escribe aquí todas las cosas importantes de tu día',
                     style: TextStyle(
-                      fontSize: 14,
+                      fontSize: 15,
                       color: Colors.black87,
                       fontWeight: FontWeight.bold,
                       fontFamily: 'Fredoka',
@@ -325,12 +345,13 @@ class ProgressScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildTecnicasRelajacion() {
+  // ---------------- TÉCNICAS DE RELAJACIÓN ----------------
+  Widget _buildTecnicasRelajacion(BuildContext context) {
     final tecnicas = [
       {'nombre': 'Yoga', 'icono': 'assets/images/yoga.png'},
       {'nombre': 'Chistes', 'icono': 'assets/images/chistes.png'},
       {'nombre': 'Juegos', 'icono': 'assets/images/juegos.png'},
-      {'nombre': 'Escuchar\nMusica', 'icono': 'assets/images/musica.png'},
+      {'nombre': 'Escuchar\nMúsica', 'icono': 'assets/images/musica.png'},
       {'nombre': 'Actividad\nFísica', 'icono': 'assets/images/gym.png'},
     ];
 
@@ -340,7 +361,7 @@ class ProgressScreen extends StatelessWidget {
         const Text(
           'Mis técnicas de relajación',
           style: TextStyle(
-            fontSize: 20,
+            fontSize: 24,
             fontWeight: FontWeight.bold,
             color: Colors.black,
             fontFamily: 'Fredoka',
@@ -355,12 +376,18 @@ class ProgressScreen extends StatelessWidget {
           ),
           padding: const EdgeInsets.all(16),
           child: Wrap(
-            spacing: 12,
+            spacing: 40,
             runSpacing: 12,
             children: List.generate(tecnicas.length, (index) {
-              return _buildTecnicaCard(
-                tecnicas[index]['nombre']!,
-                tecnicas[index]['icono']!,
+              final tecnica = tecnicas[index];
+              return GestureDetector(
+                onTap: () {
+                  Navigator.pushNamed(context, AppRoutes.misTecnicas); // 👈 ahora usa rutas nombradas
+                },
+                child: _buildTecnicaCard(
+                  tecnica['nombre']!,
+                  tecnica['icono']!,
+                ),
               );
             }),
           ),
@@ -371,8 +398,8 @@ class ProgressScreen extends StatelessWidget {
 
   Widget _buildTecnicaCard(String nombre, String iconPath) {
     return Container(
-      width: 100,
-      height: 100,
+      width: 140,
+      height: 140,
       decoration: BoxDecoration(
         color: const Color(0xFFE3F2FD),
         borderRadius: BorderRadius.circular(12),
@@ -382,26 +409,16 @@ class ProgressScreen extends StatelessWidget {
         children: [
           Image.asset(
             iconPath,
-            width: 50,
-            height: 50,
-            errorBuilder: (context, error, stackTrace) {
-              return Container(
-                width: 50,
-                height: 50,
-                decoration: BoxDecoration(
-                  color: Colors.blue,
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: const Icon(Icons.image, color: Colors.white),
-              );
-            },
+            width: 90,
+            height: 70,
+            fit: BoxFit.contain,
           ),
           const SizedBox(height: 8),
           Text(
             nombre,
             textAlign: TextAlign.center,
             style: const TextStyle(
-              fontSize: 12,
+              fontSize: 15,
               fontWeight: FontWeight.w600,
               color: Colors.black87,
               fontFamily: 'Fredoka',
