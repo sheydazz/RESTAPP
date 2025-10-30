@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../help/screens/help_screen.dart';
 import '../../settings/screens/settings_screen.dart';
+import 'help_screen.dart';
+import 'activities_screen.dart';
 import 'package:rest/features/emotion/screens/chat_screen.dart';
 import 'conversations_screen.dart';
 
@@ -125,7 +127,7 @@ class MainScreen extends StatelessWidget {
 
             InkWell( // Se envuelve el Container con InkWell
               onTap: () {
-                // Navega a HelpScreen cuando se presiona el ícono
+                // Navega a ChatScreen cuando se presiona el botón
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => ChatScreen()),
@@ -280,44 +282,53 @@ class MainScreen extends StatelessWidget {
 
                   SizedBox(width: 16),
 
-                  // Card Progreso de las Actividad
+                  // Card Progreso de las Actividad - CON NAVEGACIÓN
                   Expanded(
-                    child: Container(
-                      padding: EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        border: Border.all(
-                          color: Colors.grey,
-                          width: 0.5,
-                        ),
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                      child: Column(
-                        children: [
-                          Text(
-                            'Progreso de las\nActividades',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w500,
-                              color: Colors.black87,
-                              height: 1.2,
-                            ),
+                    child: InkWell(
+                      onTap: () {
+                        // Navega a ActivitiesScreen cuando se presiona la card
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => ActivitiesScreen()),
+                        );
+                      },
+                      child: Container(
+                        padding: EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          border: Border.all(
+                            color: Colors.grey,
+                            width: 0.5,
                           ),
-                          SizedBox(height: 12),
-                          Container( // Circulo del icono
-                            width: 100,
-                            height: 90,
-                            decoration: BoxDecoration(
-                              color: Color(0xFF87CEEB),
-                              shape: BoxShape.circle,
-                              image: DecorationImage(
-                                image: AssetImage('assets/images/medalla.png'),
-                                fit: BoxFit.cover,
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                        child: Column(
+                          children: [
+                            Text(
+                              'Progreso de las\nActividades',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w500,
+                                color: Colors.black87,
+                                height: 1.2,
                               ),
                             ),
-                          ),
-                        ],
+                            SizedBox(height: 12),
+                            Container( // Circulo del icono
+                              width: 100,
+                              height: 90,
+                              decoration: BoxDecoration(
+                                color: Color(0xFF87CEEB),
+                                shape: BoxShape.circle,
+                                image: DecorationImage(
+                                  image: AssetImage('assets/images/medalla.png'),
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                     ),
