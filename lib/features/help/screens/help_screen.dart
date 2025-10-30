@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'cancelhelp_screen.dart';
+
 // Pantalla de Carga
 class HelpScreen extends StatefulWidget {
   @override
@@ -62,7 +64,7 @@ class _LoadingScreenState extends State<HelpScreen>
                       border: Border.all(color: const Color(0xFFE91E63), width: 1),
                     ),
                     child: GestureDetector(
-                      onTap: () => Navigator.pop(context),
+                      onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => CancelHelpScreen())),
                       child: const Text(
                         'Cancelar',
                         style: TextStyle(
