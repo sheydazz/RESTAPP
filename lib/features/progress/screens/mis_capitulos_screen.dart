@@ -1,36 +1,32 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class MisCapitulosScreen extends StatelessWidget {
   const MisCapitulosScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    // test
+    final gradient = const RadialGradient(
+      center: Alignment.center,
+      radius: 1.2,
+      colors: [Color(0xFF5CCFC0), Color(0xFF2981C1)],
+    );
+
     final capitulos = [
       {
         'titulo': 'Me duele',
-        'descripcion': 'Puede esté pasando en mis días normales...',
+        'descripcion': 'Puede que esté pasando en mis días normales...',
         'fecha': '10/03/2025',
       },
       {
-        'titulo': 'Me duele',
-        'descripcion': 'Puede esté pasando en mis días normales...',
-        'fecha': '10/03/2025',
+        'titulo': 'Me siento raro',
+        'descripcion': 'A veces me cuesta concentrarme...',
+        'fecha': '15/03/2025',
       },
       {
-        'titulo': 'Me duele',
-        'descripcion': 'Puede esté pasando en mis días normales...',
-        'fecha': '10/03/2025',
-      },
-      {
-        'titulo': 'Me duele',
-        'descripcion': 'Puede esté pasando en mis días normales...',
-        'fecha': '10/03/2025',
-      },
-      {
-        'titulo': 'Me duele',
-        'descripcion': 'Puede esté pasando en mis días normales...',
-        'fecha': '10/03/2025',
+        'titulo': 'Tristeza',
+        'descripcion': 'Hoy fue un día difícil...',
+        'fecha': '20/03/2025',
       },
     ];
 
@@ -39,20 +35,21 @@ class MisCapitulosScreen extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
-            // cabezs
+            // header
             Padding(
               padding: const EdgeInsets.all(20),
               child: Column(
                 children: [
                   Row(
                     children: [
+
                       GestureDetector(
                         onTap: () => Navigator.pop(context),
                         child: Container(
                           width: 40,
                           height: 40,
                           decoration: BoxDecoration(
-                            color: const Color(0xFF7DD3E8),
+                            gradient: gradient,
                             shape: BoxShape.circle,
                           ),
                           child: const Icon(
@@ -63,27 +60,37 @@ class MisCapitulosScreen extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(width: 16),
-                      const Text(
-                        'Mis Capítulos',
-                        style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                          color: Color(0xFF7DD3E8),
-                          fontFamily: 'Fredoka',
+
+
+                      ShaderMask(
+                        shaderCallback: (bounds) =>
+                            gradient.createShader(bounds),
+                        child: Text(
+                          'Mis Capítulos',
+                          style: GoogleFonts.fredoka(
+                            fontSize: 26,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
                         ),
                       ),
                     ],
                   ),
-                  const SizedBox(height: 16),
-                  Container(
-                    height: 1,
-                    color: const Color(0xFFE0E0E0),
+
+                  // divisor
+                  const SizedBox(height: 20),
+                  Divider(
+                    color: Colors.grey[400],
+                    thickness: 3,
+                    height: 0,
+                    indent: 23,
+                    endIndent: 23,
                   ),
                 ],
               ),
             ),
 
-            // caps
+            // 🔹 LISTA DE CAPÍTULOS
             Expanded(
               child: capitulos.isEmpty
                   ? Center(
@@ -120,11 +127,13 @@ class MisCapitulosScreen extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 itemCount: capitulos.length,
                 itemBuilder: (context, index) {
+                  final capitulo = capitulos[index];
                   return _buildCapituloCard(
                     context,
-                    capitulos[index]['titulo']!,
-                    capitulos[index]['descripcion']!,
-                    capitulos[index]['fecha']!,
+                    capitulo['titulo']!,
+                    capitulo['descripcion']!,
+                    capitulo['fecha']!,
+                    gradient,
                   );
                 },
               ),
@@ -140,6 +149,7 @@ class MisCapitulosScreen extends StatelessWidget {
       String titulo,
       String descripcion,
       String fecha,
+      RadialGradient gradient,
       ) {
     return GestureDetector(
       onTap: () {
@@ -155,58 +165,64 @@ class MisCapitulosScreen extends StatelessWidget {
       },
       child: Container(
         margin: const EdgeInsets.only(bottom: 16),
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(2), // gradiente
         decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(
-            color: const Color(0xFF7DD3E8),
-            width: 2,
-          ),
+          gradient: gradient,
+          borderRadius: BorderRadius.circular(18),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.05),
+              color: Colors.black.withOpacity(0.08),
               blurRadius: 4,
               offset: const Offset(0, 2),
             ),
           ],
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              titulo,
-              style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: Colors.black87,
-                fontFamily: 'Fredoka',
+        child: Container(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(16),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // title
+              Text(
+                titulo,
+                style: GoogleFonts.fredoka(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black87,
+                ),
               ),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              descripcion,
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.bold,
-                color: Colors.black87,
-                fontFamily: 'Fredoka',
-                height: 1.3,
+              const SizedBox(height: 8),
+
+              // descrip
+              Text(
+                descripcion,
+                style: GoogleFonts.fredoka(
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black87,
+                  height: 1.3,
+                ),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
               ),
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-            ),
-            const SizedBox(height: 12),
-            Text(
-              fecha,
-              style: TextStyle(
-                fontSize: 12,
-                color: Colors.black87,
-                fontWeight: FontWeight.bold,
-                fontFamily: 'Fredoka',
+
+              const SizedBox(height: 12),
+
+              // date
+              Text(
+                fecha,
+                style: GoogleFonts.fredoka(
+                  fontSize: 12,
+                  color: Colors.black87,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

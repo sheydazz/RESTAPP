@@ -33,7 +33,7 @@ class ProgressScreen extends StatelessWidget {
     );
   }
 
-  // ---------------- HEADER ----------------
+  // header
   Widget _buildHeader(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -64,7 +64,7 @@ class ProgressScreen extends StatelessWidget {
               ),
             ),
             const Spacer(),
-            // Configuración
+            // confi
             Container(
               width: 40,
               height: 40,
@@ -84,7 +84,7 @@ class ProgressScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 8),
-            // Salvavidas
+            // salvavidads
             Container(
               width: 40,
               height: 40,
@@ -106,7 +106,7 @@ class ProgressScreen extends StatelessWidget {
           ],
         ),
 
-        // 🔹 Línea divisoria (la que pediste)
+        // divisor
         const SizedBox(height: 20),
         Divider(
           color: Colors.grey[400],
@@ -141,7 +141,7 @@ class ProgressScreen extends StatelessWidget {
     );
   }
 
-  // ---------------- REGISTRO EMOCIONAL ----------------
+  // semana emocional
   Widget _buildRegistroEmocional() {
     final diasSemana = [
       'LUNES',
@@ -218,7 +218,7 @@ class ProgressScreen extends StatelessWidget {
     );
   }
 
-  // ---------------- ACTIVIDADES DIARIAS ----------------
+  // actividades diarias
   Widget _buildActividadesDiarias() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -257,7 +257,7 @@ class ProgressScreen extends StatelessWidget {
             'Ver todas',
             style: TextStyle(
               fontSize: 14,
-              fontWeight: FontWeight.w600,
+              fontWeight: FontWeight.bold,
               color: Colors.black87,
               fontFamily: 'Fredoka',
             ),
@@ -277,6 +277,7 @@ class ProgressScreen extends StatelessWidget {
               texto,
               style: const TextStyle(
                 fontSize: 14,
+                fontWeight: FontWeight.bold,
                 color: Colors.black87,
                 fontFamily: 'Fredoka',
               ),
@@ -292,7 +293,7 @@ class ProgressScreen extends StatelessWidget {
     );
   }
 
-  // ---------------- MI DIARIO ----------------
+  // diario
   Widget _buildMiDiario(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -351,8 +352,8 @@ class ProgressScreen extends StatelessWidget {
       {'nombre': 'Yoga', 'icono': 'assets/images/yoga.png'},
       {'nombre': 'Chistes', 'icono': 'assets/images/chistes.png'},
       {'nombre': 'Juegos', 'icono': 'assets/images/juegos.png'},
-      {'nombre': 'Escuchar\nMúsica', 'icono': 'assets/images/musica.png'},
-      {'nombre': 'Actividad\nFísica', 'icono': 'assets/images/gym.png'},
+      {'nombre': 'Escuchar Música', 'icono': 'assets/images/musica.png'},
+      {'nombre': 'Actividad Física', 'icono': 'assets/images/gym.png'},
     ];
 
     return Column(
@@ -368,26 +369,29 @@ class ProgressScreen extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 12),
+
+        // Cuadro centrado con GridView
         Container(
           width: double.infinity,
+          padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
             border: Border.all(color: const Color(0xFF7DD3E8), width: 2),
             borderRadius: BorderRadius.circular(16),
           ),
-          padding: const EdgeInsets.all(16),
-          child: Wrap(
-            spacing: 40,
-            runSpacing: 12,
+          child: GridView.count(
+            crossAxisCount: 2,
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            mainAxisSpacing: 16,
+            crossAxisSpacing: 16,
+            childAspectRatio: 1,
             children: List.generate(tecnicas.length, (index) {
               final tecnica = tecnicas[index];
               return GestureDetector(
                 onTap: () {
-                  Navigator.pushNamed(context, AppRoutes.misTecnicas); // 👈 ahora usa rutas nombradas
+                  Navigator.pushNamed(context, AppRoutes.misTecnicas);
                 },
-                child: _buildTecnicaCard(
-                  tecnica['nombre']!,
-                  tecnica['icono']!,
-                ),
+                child: _buildTecnicaCard(tecnica['nombre']!, tecnica['icono']!),
               );
             }),
           ),
@@ -398,33 +402,43 @@ class ProgressScreen extends StatelessWidget {
 
   Widget _buildTecnicaCard(String nombre, String iconPath) {
     return Container(
-      width: 140,
-      height: 140,
       decoration: BoxDecoration(
-        color: const Color(0xFFE3F2FD),
+        color: const Color(0xFFCCF0FF),
         borderRadius: BorderRadius.circular(12),
       ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Image.asset(
-            iconPath,
-            width: 90,
-            height: 70,
-            fit: BoxFit.contain,
-          ),
-          const SizedBox(height: 8),
-          Text(
-            nombre,
-            textAlign: TextAlign.center,
-            style: const TextStyle(
-              fontSize: 15,
-              fontWeight: FontWeight.w600,
-              color: Colors.black87,
-              fontFamily: 'Fredoka',
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Expanded(
+              flex: 6,
+              child: Image.asset(
+                iconPath,
+                fit: BoxFit.contain,
+                errorBuilder: (context, error, stackTrace) => const Icon(
+                  Icons.image_not_supported,
+                  color: Colors.grey,
+                  size: 40,
+                ),
+              ),
             ),
-          ),
-        ],
+            const SizedBox(height: 8),
+            Expanded(
+              flex: 3,
+              child: Text(
+                nombre,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  fontFamily: 'Fredoka',
+                  fontSize: 15,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black87,
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class MiDiarioScreen extends StatefulWidget {
   const MiDiarioScreen({super.key});
@@ -10,6 +11,12 @@ class MiDiarioScreen extends StatefulWidget {
 class _MiDiarioScreenState extends State<MiDiarioScreen> {
   final TextEditingController _tituloController = TextEditingController();
   final TextEditingController _descripcionController = TextEditingController();
+
+  final _gradient = const RadialGradient(
+    center: Alignment.center,
+    radius: 1.2,
+    colors: [Color(0xFF5CCFC0), Color(0xFF2981C1)],
+  );
 
   @override
   void dispose() {
@@ -31,13 +38,14 @@ class _MiDiarioScreenState extends State<MiDiarioScreen> {
               // Header
               Row(
                 children: [
+                  // Botón cerrar con gradiente
                   GestureDetector(
                     onTap: () => Navigator.pop(context),
                     child: Container(
                       width: 40,
                       height: 40,
                       decoration: BoxDecoration(
-                        color: const Color(0xFF7DD3E8),
+                        gradient: _gradient,
                         shape: BoxShape.circle,
                       ),
                       child: const Icon(
@@ -48,18 +56,30 @@ class _MiDiarioScreenState extends State<MiDiarioScreen> {
                     ),
                   ),
                   const SizedBox(width: 16),
-                  const Text(
-                    'Mi Diario',
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFF7DD3E8),
-                      fontFamily: 'Fredoka',
+
+                  // Texto con gradiente “Mi Diario”
+                  ShaderMask(
+                    shaderCallback: (bounds) => _gradient.createShader(bounds),
+                    child: Text(
+                      'Mi Diario',
+                      style: GoogleFonts.fredoka(
+                        fontSize: 26,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white, // se pinta con el ShaderMask
+                      ),
                     ),
                   ),
                 ],
               ),
-              const SizedBox(height: 24),
+              const SizedBox(height: 20),
+              Divider(
+                color: Colors.grey[400],
+                thickness: 3,
+                height: 0,
+                indent: 23,
+                endIndent: 23,
+              ),
+              const SizedBox(height: 8),
 
               // Mensaje de advertencia
               Container(
@@ -79,12 +99,11 @@ class _MiDiarioScreenState extends State<MiDiarioScreen> {
                     const SizedBox(width: 8),
                     Expanded(
                       child: Text(
-                        'Recuerda que este espacio, es solo tuyo, nadie va poder leer tus Notas. Es totalmente privado, tus pensamientos y tu.',
-                        style: TextStyle(
-                          fontSize: 13,
+                        'Recuerda que este espacio es solo tuyo. Nadie puede leer tus notas; es totalmente privado: tus pensamientos y tú.',
+                        style: GoogleFonts.fredoka(
+                          fontSize: 15,
                           color: Colors.black87,
                           fontWeight: FontWeight.bold,
-                          fontFamily: 'Fredoka',
                           height: 1.3,
                         ),
                       ),
@@ -94,69 +113,69 @@ class _MiDiarioScreenState extends State<MiDiarioScreen> {
               ),
               const SizedBox(height: 24),
 
-              // Formulario
+              // Formulario con borde de gradiente
               Expanded(
                 child: Container(
                   decoration: BoxDecoration(
-                    border: Border.all(
-                      color: const Color(0xFF7DD3E8),
-                      width: 2,
-                    ),
                     borderRadius: BorderRadius.circular(20),
+                    gradient: _gradient,
                   ),
-                  padding: const EdgeInsets.all(16),
-                  child: Column(
-                    children: [
-                      // titulo
-                      TextField(
-                        controller: _tituloController,
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontFamily: 'Fredoka',
-                          color: Colors.black87,
-                          fontWeight: FontWeight.bold,
-                        ),
-                        decoration: InputDecoration(
-                          hintText: 'Titulo......',
-                          hintStyle: TextStyle(
-                            color: Colors.grey[400],
-                            fontFamily: 'Fredoka',
-                          ),
-                          border: InputBorder.none,
-                          contentPadding: EdgeInsets.zero,
-                        ),
-                      ),
-                      const Divider(
-                        color: Color(0xFFE0E0E0),
-                        thickness: 1,
-                      ),
-                      const SizedBox(height: 8),
-
-                      // descrpion
-                      Expanded(
-                        child: TextField(
-                          controller: _descripcionController,
-                          maxLines: null,
-                          expands: true,
-                          textAlignVertical: TextAlignVertical.top,
-                          style: const TextStyle(
-                            fontSize: 14,
-                            fontFamily: 'Fredoka',
+                  padding: const EdgeInsets.all(2),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(18),
+                    ),
+                    padding: const EdgeInsets.all(16),
+                    child: Column(
+                      children: [
+                        // Campo título
+                        TextField(
+                          controller: _tituloController,
+                          style: GoogleFonts.fredoka(
+                            fontSize: 16,
                             color: Colors.black87,
                             fontWeight: FontWeight.bold,
                           ),
                           decoration: InputDecoration(
-                            hintText: 'Descripción......',
-                            hintStyle: TextStyle(
+                            hintText: 'Título...',
+                            hintStyle: GoogleFonts.fredoka(
                               color: Colors.grey[400],
-                              fontFamily: 'Fredoka',
                             ),
                             border: InputBorder.none,
                             contentPadding: EdgeInsets.zero,
                           ),
                         ),
-                      ),
-                    ],
+                        const Divider(
+                          color: Color(0xFFE0E0E0),
+                          thickness: 1,
+                        ),
+                        const SizedBox(height: 8),
+
+                        // Campo descripción
+                        Expanded(
+                          child: TextField(
+                            controller: _descripcionController,
+                            maxLines: null,
+                            expands: true,
+                            textAlignVertical: TextAlignVertical.top,
+                            style: GoogleFonts.fredoka(
+                              fontSize: 14,
+                              color: Colors.black87,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            decoration: InputDecoration(
+                              hintText: 'Descripción...',
+                              hintStyle: GoogleFonts.fredoka(
+                                color: Colors.grey[400],
+                              ),
+                              border: InputBorder.none,
+                              contentPadding: EdgeInsets.zero,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -165,38 +184,44 @@ class _MiDiarioScreenState extends State<MiDiarioScreen> {
               // Botones
               Row(
                 children: [
+                  // Botón “Ver mis capítulos” con gradiente
                   Expanded(
-                    child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.pushNamed(context, '/mis-capitulos');
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF7DD3E8),
-                        foregroundColor: Colors.white,
-                        padding: const EdgeInsets.symmetric(vertical: 14),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(25),
-                        ),
-                        elevation: 0,
+                    child: Container(
+                      height: 52,
+                      decoration: BoxDecoration(
+                        gradient: _gradient,
+                        borderRadius: BorderRadius.circular(25),
                       ),
-                      child: const Text(
-                        'Ver mis Capítulos',
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold,
-                          fontFamily: 'Fredoka',
+                      child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.pushNamed(context, '/mis-capitulos');
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.transparent,
+                          shadowColor: Colors.transparent,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(25),
+                          ),
+                        ),
+                        child: Text(
+                          'Ver mis Capítulos',
+                          style: GoogleFonts.fredoka(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 15,
+                          ),
                         ),
                       ),
                     ),
                   ),
                   const SizedBox(width: 12),
+
+                  // Botón “Guardar” (verde, sin cambios)
                   Expanded(
                     child: ElevatedButton(
                       onPressed: () {
-                        // test guardar
                         if (_tituloController.text.isNotEmpty ||
                             _descripcionController.text.isNotEmpty) {
-                          // test
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
                               content: Text('Entrada guardada'),
@@ -215,12 +240,12 @@ class _MiDiarioScreenState extends State<MiDiarioScreen> {
                         ),
                         elevation: 0,
                       ),
-                      child: const Text(
+                      child: Text(
                         'Guardar',
-                        style: TextStyle(
+                        style: GoogleFonts.fredoka(
                           fontSize: 15,
                           fontWeight: FontWeight.bold,
-                          fontFamily: 'Fredoka',
+                          color: Colors.white,
                         ),
                       ),
                     ),

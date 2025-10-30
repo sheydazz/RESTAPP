@@ -4,14 +4,21 @@ import '../../../core/routes/app_routes.dart';
 class MisTecnicasScreen extends StatelessWidget {
   const MisTecnicasScreen({super.key});
 
+  // Gradiente principal
+  LinearGradient get _gradient => const LinearGradient(
+    colors: [Color(0xFF5CCFC0), Color(0xFF2981C1)],
+    begin: Alignment.centerLeft,
+    end: Alignment.centerRight,
+  );
+
   @override
   Widget build(BuildContext context) {
     final tecnicas = [
       {'nombre': 'Yoga', 'icono': 'assets/images/yoga.png'},
       {'nombre': 'Chistes', 'icono': 'assets/images/chistes.png'},
       {'nombre': 'Juegos', 'icono': 'assets/images/juegos.png'},
-      {'nombre': 'Escuchar Musica', 'icono': 'assets/images/musica.png'},
-      {'nombre': 'Actividad Fisica', 'icono': 'assets/images/gym.png'},
+      {'nombre': 'Escuchar Música', 'icono': 'assets/images/musica.png'},
+      {'nombre': 'Actividad Física', 'icono': 'assets/images/gym.png'},
     ];
 
     return Scaffold(
@@ -22,7 +29,7 @@ class MisTecnicasScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // 🔹 Botón "X" para cerrar
+              // Botón "X" con gradiente
               Align(
                 alignment: Alignment.topLeft,
                 child: GestureDetector(
@@ -30,9 +37,9 @@ class MisTecnicasScreen extends StatelessWidget {
                   child: Container(
                     width: 36,
                     height: 36,
-                    decoration: const BoxDecoration(
-                      color: Color(0xFF7DD3E8),
+                    decoration: BoxDecoration(
                       shape: BoxShape.circle,
+                      gradient: _gradient,
                     ),
                     child: const Icon(Icons.close, color: Colors.white, size: 24),
                   ),
@@ -41,23 +48,25 @@ class MisTecnicasScreen extends StatelessWidget {
 
               const SizedBox(height: 8),
 
-              // 🔹 Título centrado
-              const Center(
-                child: Text(
-                  'Mis Técnicas de\nRelajación',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontFamily: 'Fredoka',
-                    fontSize: 34,
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xFF2D9CDB),
+              // Título con texto degradado
+              Center(
+                child: ShaderMask(
+                  shaderCallback: (bounds) => _gradient.createShader(bounds),
+                  child: const Text(
+                    'Mis Técnicas de\nRelajación',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontFamily: 'Fredoka',
+                      fontSize: 34,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
                   ),
                 ),
               ),
 
               const SizedBox(height: 12),
 
-              // 🔹 Subtítulo con estrella
               const Padding(
                 padding: EdgeInsets.only(left: 4),
                 child: Text(
@@ -73,24 +82,30 @@ class MisTecnicasScreen extends StatelessWidget {
 
               const SizedBox(height: 20),
 
-              // 🔹 Cuadro principal con borde y esquinas redondeadas
+              // Cuadro principal con borde degradado
               Expanded(
                 child: Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
-                    border: Border.all(color: const Color(0xFF2D9CDB), width: 1.5),
                     borderRadius: BorderRadius.circular(16),
+                    gradient: _gradient,
                   ),
-                  child: GridView.count(
-                    crossAxisCount: 2,
-                    mainAxisSpacing: 16,
-                    crossAxisSpacing: 16,
-                    childAspectRatio: 1,
-                    children: List.generate(tecnicas.length, (index) {
-                      final tecnica = tecnicas[index];
-                      return _buildTecnicaCard(tecnica['nombre']!, tecnica['icono']!);
-                    }),
+                  padding: const EdgeInsets.all(2),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(14),
+                    ),
+                    padding: const EdgeInsets.all(16),
+                    child: GridView.count(
+                      crossAxisCount: 2,
+                      mainAxisSpacing: 16,
+                      crossAxisSpacing: 16,
+                      childAspectRatio: 1,
+                      children: List.generate(tecnicas.length, (index) {
+                        final tecnica = tecnicas[index];
+                        return _buildTecnicaCard(tecnica['nombre']!, tecnica['icono']!);
+                      }),
+                    ),
                   ),
                 ),
               ),
@@ -101,10 +116,11 @@ class MisTecnicasScreen extends StatelessWidget {
     );
   }
 
+  // Tarjeta individual sin borde y con color azul #CCF0FF
   Widget _buildTecnicaCard(String nombre, String iconPath) {
     return Container(
       decoration: BoxDecoration(
-        color: const Color(0xFFE3F2FD),
+        color: const Color(0xFFCCF0FF),
         borderRadius: BorderRadius.circular(12),
       ),
       child: Padding(
@@ -134,7 +150,7 @@ class MisTecnicasScreen extends StatelessWidget {
                   fontFamily: 'Fredoka',
                   fontSize: 15,
                   fontWeight: FontWeight.bold,
-                  color: Colors.black,
+                  color: Colors.black87,
                 ),
               ),
             ),
