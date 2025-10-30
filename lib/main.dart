@@ -6,7 +6,6 @@ import 'features/intro_auth/screens/login_screen.dart';
 import 'features/intro_auth/screens/register_screen.dart';
 import 'features/home/screens/home_screen.dart';
 import 'features/settings/screens/settings_screen.dart';
-import 'features/home/screens/help_screen.dart';
 import 'features/emotion/screens/emotionregister_screen.dart';
 import 'features/emotion/screens/chat_screen.dart';
 import 'features/emotion/screens/traffic_light_screen.dart';
@@ -14,7 +13,8 @@ import 'features/emotion/screens/advice_screen.dart';
 import 'features/emotion/screens/check_screen.dart';
 import 'features/progress/screens/progress_screen.dart';
 import 'features/navigation/main_app.dart';
-
+import 'features/progress/screens/globalprogress_screen.dart';
+import 'features/progress/screens/myprogress_screen.dart';
 void main() {
   runApp(const MyApp());
 }
@@ -40,7 +40,6 @@ class MyApp extends StatelessWidget {
         // Home
         AppRoutes.home: (context) =>  HomeScreen(),
         AppRoutes.settings: (context) =>  SettingsScreen(),
-        AppRoutes.help: (context) =>  HelpScreen(),
 
         // Registro Emocional
         AppRoutes.emotionHome: (context) =>  EmotionRegisterScreen(),
@@ -65,7 +64,8 @@ class MyApp extends StatelessWidget {
         AppRoutes.check: (context) =>  CheckScreen(),
 
         // Mi Progreso
-        AppRoutes.progress: (context) =>  ProgressScreen(),
+        AppRoutes.globalprogress: (context) =>  GlobalProgressScreen(),
+        AppRoutes.progress: (context) =>  MyProgressScreen(),
       },
     );
   }
