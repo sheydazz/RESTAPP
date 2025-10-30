@@ -23,7 +23,7 @@ class ProgressScreen extends StatelessWidget {
                 const SizedBox(height: 24),
                 _buildMiDiario(context),
                 const SizedBox(height: 24),
-                _buildTecnicasRelajacion(context), // 👈 con navegación corregida
+                _buildTecnicasRelajacion(context),
                 const SizedBox(height: 80),
               ],
             ),
@@ -107,7 +107,7 @@ class ProgressScreen extends StatelessWidget {
         ),
 
         // 🔹 Línea divisoria (la que pediste)
-        const SizedBox(height: 8),
+        const SizedBox(height: 20),
         Divider(
           color: Colors.grey[400],
           thickness: 3,
