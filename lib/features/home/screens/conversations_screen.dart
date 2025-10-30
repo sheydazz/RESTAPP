@@ -37,6 +37,7 @@ class ConversacionesScreen extends StatelessWidget {
                 ),
               ),
             ),
+
           ),
         ),
         title: Container(
@@ -59,6 +60,7 @@ class ConversacionesScreen extends StatelessWidget {
         ),
         centerTitle: false,
       ),
+
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(20),
