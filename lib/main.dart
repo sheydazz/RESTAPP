@@ -18,6 +18,9 @@ import 'features/progress/screens/myprogress_screen.dart';
 import 'features/progress/screens/mi_diario_screen.dart';
 import 'features/progress/screens/mis_capitulos_screen.dart';
 import 'features/progress/screens/capitulo_detalle_screen.dart';
+import 'features/progress/screens/my_relaxation_techniques.dart';
+
+
 
 void main() {
   runApp(const MyApp());
@@ -73,8 +76,10 @@ class MyApp extends StatelessWidget {
         AppRoutes.progress: (context) =>  ProgressScreen(),
         AppRoutes.miDiario: (context) => const MiDiarioScreen(),
         AppRoutes.misCapitulos: (context) => const MisCapitulosScreen(),
+        AppRoutes.misTecnicas: (context) => const MisTecnicasScreen(),
 
-        AppRoutes.capituloDetalle: (context) {
+
+    AppRoutes.capituloDetalle: (context) {
           final args = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>?;
           return CapituloDetalleScreen(
             titulo: args?['titulo'],
