@@ -229,7 +229,14 @@ class MainScreen extends StatelessWidget {
                 children: [
                   // Card Conversaciones
                   Expanded(
-
+                    child: InkWell(
+                      onTap: () {
+                      // Navega a SettingsScreen cuando se presiona el ícono
+                      Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => ConversacionesScreen()),
+                      );
+                    },
                     child: Container(
                       padding: EdgeInsets.all(16),
                       decoration: BoxDecoration(
@@ -268,20 +275,13 @@ class MainScreen extends StatelessWidget {
                         ],
                       ),
                     ),
+                    ),
                   ),
 
                   SizedBox(width: 16),
 
                   // Card Progreso de las Actividad
                   Expanded(
-                    child: InkWell(
-                      onTap: () {
-                        // Navega a SettingsScreen cuando se presiona el ícono
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => ConversacionesScreen()),
-                        );
-                      },
                     child: Container(
                       padding: EdgeInsets.all(16),
                       decoration: BoxDecoration(
@@ -321,7 +321,6 @@ class MainScreen extends StatelessWidget {
                       ),
                     ),
                     ),
-                  ),
                 ],
               ),
             ),
