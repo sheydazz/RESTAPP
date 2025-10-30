@@ -29,4 +29,9 @@ class AppRoutes {
   static const progress = '/progress';
   static const diary = '/myprogress';
   static const globalprogress = '/globalprogress';
+  static const String miDiario = '/mi-diario';
+  static const String misCapitulos = '/mis-capitulos';
+  static const String capituloDetalle = '/capitulo-detalle';
+  static const misTecnicas = '/mis_tecnicas';
+
 }

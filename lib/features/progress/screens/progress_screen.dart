@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../core/routes/app_routes.dart';
 
 class ProgressScreen extends StatelessWidget {
   const ProgressScreen({super.key});
@@ -14,25 +15,16 @@ class ProgressScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Header
-                _buildHeader(),
+                _buildHeader(context),
                 const SizedBox(height: 20),
-
-                // Registro Emocional
                 _buildRegistroEmocional(),
                 const SizedBox(height: 24),
-
-                // Mis actividades diarias
                 _buildActividadesDiarias(),
                 const SizedBox(height: 24),
-
-                // Mi diario
-                _buildMiDiario(),
+                _buildMiDiario(context),
                 const SizedBox(height: 24),
-
-                // Mis técnicas de relajación
-                _buildTecnicasRelajacion(),
-                const SizedBox(height: 80), // Espacio para la barra de navegación
+                _buildTecnicasRelajacion(context),
+                const SizedBox(height: 80),
               ],
             ),
           ),
@@ -41,91 +33,133 @@ class ProgressScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildHeader() {
-    return Row(
+  // header
+  Widget _buildHeader(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Avatar
-        Container(
-          width: 50,
-          height: 50,
-          decoration: BoxDecoration(
-            color: const Color(0xFF7DD3E8),
-            shape: BoxShape.circle,
-          ),
-          child: ClipOval(
-            child: Image.asset(
-              'assets/images/normalrest.jpg',
-              fit: BoxFit.cover,
-              errorBuilder: (context, error, stackTrace) {
-                return const Icon(Icons.person, color: Colors.white, size: 30);
-              },
+        Row(
+          children: [
+            // Avatar
+            Container(
+              width: 100,
+              height: 60,
+              decoration: BoxDecoration(
+                color: const Color(0xFF87CEEB),
+                shape: BoxShape.circle,
+                image: const DecorationImage(
+                  image: AssetImage('assets/images/normalrest.jpg'),
+                  fit: BoxFit.cover,
+                ),
+              ),
             ),
-          ),
-        ),
-        const SizedBox(width: 12),
-        const Text(
-          '¡Hola! Mari',
-          style: TextStyle(
-            fontSize: 22,
-            fontWeight: FontWeight.bold,
-            color: Color(0xFF7DD3E8),
-            fontFamily: 'Fredoka',
-          ),
-        ),
-        const Spacer(),
-        // Configuración
-        Container(
-          width: 40,
-          height: 40,
-          decoration: BoxDecoration(
-            color: const Color(0xFF7DD3E8),
-            shape: BoxShape.circle,
-          ),
-          child: Center(
-            child: Image.asset(
-              'assets/images/white_gear.jpg',
-              width: 24,
-              height: 24,
-              errorBuilder: (context, error, stackTrace) {
-                return const Icon(Icons.settings, color: Colors.white, size: 24);
-              },
+            const SizedBox(width: 12),
+            const Text(
+              '¡Hola! Mari',
+              style: TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+                color: Color(0xFF7DD3E8),
+                fontFamily: 'Fredoka',
+              ),
             ),
-          ),
-        ),
-        const SizedBox(width: 8),
-        // Salvavidas
-        Container(
-          width: 40,
-          height: 40,
-          decoration: BoxDecoration(
-            color: const Color(0xFF7DD3E8),
-            shape: BoxShape.circle,
-          ),
-          child: Center(
-            child: Image.asset(
-              'assets/images/float.jpg',
-              width: 24,
-              height: 24,
-              errorBuilder: (context, error, stackTrace) {
-                return const Icon(Icons.help_outline, color: Colors.white, size: 24);
-              },
+            const Spacer(),
+            // confi
+            Container(
+              width: 40,
+              height: 40,
+              decoration: const BoxDecoration(
+                color: Color(0xFF7DD3E8),
+                shape: BoxShape.circle,
+              ),
+              child: Center(
+                child: Image.asset(
+                  'assets/images/white_gear.png',
+                  width: 24,
+                  height: 24,
+                  errorBuilder: (context, error, stackTrace) {
+                    return const Icon(Icons.settings, color: Colors.white, size: 24);
+                  },
+                ),
+              ),
             ),
-          ),
+            const SizedBox(width: 8),
+            // salvavidads
+            Container(
+              width: 40,
+              height: 40,
+              decoration: const BoxDecoration(
+                color: Color(0xFF7DD3E8),
+                shape: BoxShape.circle,
+              ),
+              child: Center(
+                child: Image.asset(
+                  'assets/images/float.png',
+                  width: 24,
+                  height: 24,
+                  errorBuilder: (context, error, stackTrace) {
+                    return const Icon(Icons.help_outline, color: Colors.white, size: 24);
+                  },
+                ),
+              ),
+            ),
+          ],
+        ),
+
+        // divisor
+        const SizedBox(height: 20),
+        Divider(
+          color: Colors.grey[400],
+          thickness: 3,
+          height: 0,
+          indent: 23,
+          endIndent: 23,
         ),
       ],
     );
   }
 
+
+  Widget _buildCircleIcon(String asset, IconData fallback) {
+    return Container(
+      width: 40,
+      height: 40,
+      decoration: const BoxDecoration(
+        color: Color(0xFF7DD3E8),
+        shape: BoxShape.circle,
+      ),
+      child: Center(
+        child: Image.asset(
+          asset,
+          width: 24,
+          height: 24,
+          errorBuilder: (context, error, stackTrace) {
+            return Icon(fallback, color: Colors.white, size: 24);
+          },
+        ),
+      ),
+    );
+  }
+
+  // semana emocional
   Widget _buildRegistroEmocional() {
-    final diasSemana = ['LUNES', 'MARTES', 'MIÉRCOLES', 'JUEVES', 'VIERNES', 'SÁBADO', 'DOMINGO'];
+    final diasSemana = [
+      'LUNES',
+      'MARTES',
+      'MIÉRCOLES',
+      'JUEVES',
+      'VIERNES',
+      'SÁBADO',
+      'DOMINGO'
+    ];
     final iconos = [
-      'assets/images/goodrest.jpg',
-      'assets/images/goodrest.jpg',
-      'assets/images/goodrest.jpg',
-      'assets/images/goodrest.jpg',
-      'assets/images/yellowrest.jpg',
-      'assets/images/yellowrest.jpg',
-      'assets/images/sadrest.jpg',
+      'assets/images/green_face.png',
+      'assets/images/pink_face.png',
+      'assets/images/yellowrest.png',
+      'assets/images/green_face.png',
+      'assets/images/pink_face.png',
+      'assets/images/yellowrest.png',
+      'assets/images/green_face.png',
     ];
 
     return Container(
@@ -134,19 +168,19 @@ class ProgressScreen extends StatelessWidget {
         color: const Color(0xFFB3E5F5),
         borderRadius: BorderRadius.circular(16),
       ),
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(24),
       child: Column(
         children: [
           const Text(
             'Registro Emocional',
             style: TextStyle(
-              fontSize: 20,
+              fontSize: 24,
               fontWeight: FontWeight.bold,
               color: Colors.white,
               fontFamily: 'Fredoka',
             ),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 10),
           Container(
             decoration: BoxDecoration(
               color: Colors.white,
@@ -168,22 +202,11 @@ class ProgressScreen extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 8),
-                    Container(
+                    Image.asset(
+                      iconos[index],
                       width: 32,
                       height: 32,
-                      child: Image.asset(
-                        iconos[index],
-                        fit: BoxFit.contain,
-                        errorBuilder: (context, error, stackTrace) {
-                          return Container(
-                            decoration: BoxDecoration(
-                              color: Colors.yellow,
-                              shape: BoxShape.circle,
-                            ),
-                            child: const Icon(Icons.face, size: 20),
-                          );
-                        },
-                      ),
+                      fit: BoxFit.contain,
                     ),
                   ],
                 );
@@ -195,6 +218,7 @@ class ProgressScreen extends StatelessWidget {
     );
   }
 
+  // actividades diarias
   Widget _buildActividadesDiarias() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -202,7 +226,7 @@ class ProgressScreen extends StatelessWidget {
         const Text(
           'Mis actividades diarias',
           style: TextStyle(
-            fontSize: 20,
+            fontSize: 24,
             fontWeight: FontWeight.bold,
             color: Colors.black,
             fontFamily: 'Fredoka',
@@ -253,84 +277,83 @@ class ProgressScreen extends StatelessWidget {
               texto,
               style: const TextStyle(
                 fontSize: 14,
+                fontWeight: FontWeight.bold,
                 color: Colors.black87,
                 fontFamily: 'Fredoka',
               ),
             ),
           ),
-          if (completada)
-            const Icon(
-              Icons.star,
-              color: Color(0xFFFFA726),
-              size: 20,
-            ),
+          Icon(
+            Icons.star,
+            color: completada ? const Color(0xFFFFA726) : Colors.grey,
+            size: 20,
+          ),
         ],
       ),
     );
   }
 
-  Widget _buildMiDiario() {
+  // diario
+  Widget _buildMiDiario(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const Text(
           'Mi diario',
           style: TextStyle(
-            fontSize: 20,
+            fontSize: 24,
             fontWeight: FontWeight.bold,
             color: Colors.black,
             fontFamily: 'Fredoka',
           ),
         ),
         const SizedBox(height: 12),
-        Container(
-          width: double.infinity,
-          decoration: BoxDecoration(
-            border: Border.all(color: const Color(0xFF7DD3E8), width: 2),
-            borderRadius: BorderRadius.circular(16),
-          ),
-          padding: const EdgeInsets.all(16),
-          child: Row(
-            children: [
-              Image.asset(
-                'assets/images/dairy.jpg',
-                width: 60,
-                height: 60,
-                errorBuilder: (context, error, stackTrace) {
-                  return Container(
-                    width: 60,
-                    height: 60,
-                    color: Colors.brown,
-                    child: const Icon(Icons.book, color: Colors.white),
-                  );
-                },
-              ),
-              const SizedBox(width: 16),
-              const Expanded(
-                child: Text(
-                  'Escribe aquí todas las cosas importantes de tu día',
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: Colors.black87,
-                    fontWeight: FontWeight.bold,
-                    fontFamily: 'Fredoka',
+        GestureDetector(
+          onTap: () {
+            Navigator.pushNamed(context, AppRoutes.miDiario);
+          },
+          child: Container(
+            width: double.infinity,
+            decoration: BoxDecoration(
+              border: Border.all(color: const Color(0xFF7DD3E8), width: 2),
+              borderRadius: BorderRadius.circular(16),
+            ),
+            padding: const EdgeInsets.all(16),
+            child: Row(
+              children: [
+                Image.asset(
+                  'assets/images/dairy.jpg',
+                  width: 110,
+                  height: 90,
+                ),
+                const SizedBox(width: 16),
+                const Expanded(
+                  child: Text(
+                    'Escribe aquí todas las cosas importantes de tu día',
+                    style: TextStyle(
+                      fontSize: 15,
+                      color: Colors.black87,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'Fredoka',
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ],
     );
   }
 
-  Widget _buildTecnicasRelajacion() {
+  // ---------------- TÉCNICAS DE RELAJACIÓN ----------------
+  Widget _buildTecnicasRelajacion(BuildContext context) {
     final tecnicas = [
-      {'nombre': 'Yoga', 'icono': 'assets/images/yoga.jpg'},
-      {'nombre': 'Chistes', 'icono': 'assets/images/chistes.jpg'},
-      {'nombre': 'Juegos', 'icono': 'assets/images/juegos.jpg'},
-      {'nombre': 'Escuchar\nMusica', 'icono': 'assets/images/musica.jpg'},
-      {'nombre': 'Actividad\nFísica', 'icono': 'assets/images/gym.jpg'},
+      {'nombre': 'Yoga', 'icono': 'assets/images/yoga.png'},
+      {'nombre': 'Chistes', 'icono': 'assets/images/chistes.png'},
+      {'nombre': 'Juegos', 'icono': 'assets/images/juegos.png'},
+      {'nombre': 'Escuchar Música', 'icono': 'assets/images/musica.png'},
+      {'nombre': 'Actividad Física', 'icono': 'assets/images/gym.png'},
     ];
 
     return Column(
@@ -339,27 +362,36 @@ class ProgressScreen extends StatelessWidget {
         const Text(
           'Mis técnicas de relajación',
           style: TextStyle(
-            fontSize: 20,
+            fontSize: 24,
             fontWeight: FontWeight.bold,
             color: Colors.black,
             fontFamily: 'Fredoka',
           ),
         ),
         const SizedBox(height: 12),
+
+        // Cuadro centrado con GridView
         Container(
           width: double.infinity,
+          padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
             border: Border.all(color: const Color(0xFF7DD3E8), width: 2),
             borderRadius: BorderRadius.circular(16),
           ),
-          padding: const EdgeInsets.all(16),
-          child: Wrap(
-            spacing: 12,
-            runSpacing: 12,
+          child: GridView.count(
+            crossAxisCount: 2,
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            mainAxisSpacing: 16,
+            crossAxisSpacing: 16,
+            childAspectRatio: 1,
             children: List.generate(tecnicas.length, (index) {
-              return _buildTecnicaCard(
-                tecnicas[index]['nombre']!,
-                tecnicas[index]['icono']!,
+              final tecnica = tecnicas[index];
+              return GestureDetector(
+                onTap: () {
+                  Navigator.pushNamed(context, AppRoutes.misTecnicas);
+                },
+                child: _buildTecnicaCard(tecnica['nombre']!, tecnica['icono']!),
               );
             }),
           ),
@@ -370,43 +402,43 @@ class ProgressScreen extends StatelessWidget {
 
   Widget _buildTecnicaCard(String nombre, String iconPath) {
     return Container(
-      width: 100,
-      height: 100,
       decoration: BoxDecoration(
-        color: const Color(0xFFE3F2FD),
+        color: const Color(0xFFCCF0FF),
         borderRadius: BorderRadius.circular(12),
       ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Image.asset(
-            iconPath,
-            width: 50,
-            height: 50,
-            errorBuilder: (context, error, stackTrace) {
-              return Container(
-                width: 50,
-                height: 50,
-                decoration: BoxDecoration(
-                  color: Colors.blue,
-                  borderRadius: BorderRadius.circular(8),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Expanded(
+              flex: 6,
+              child: Image.asset(
+                iconPath,
+                fit: BoxFit.contain,
+                errorBuilder: (context, error, stackTrace) => const Icon(
+                  Icons.image_not_supported,
+                  color: Colors.grey,
+                  size: 40,
                 ),
-                child: const Icon(Icons.image, color: Colors.white),
-              );
-            },
-          ),
-          const SizedBox(height: 8),
-          Text(
-            nombre,
-            textAlign: TextAlign.center,
-            style: const TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.w600,
-              color: Colors.black87,
-              fontFamily: 'Fredoka',
+              ),
             ),
-          ),
-        ],
+            const SizedBox(height: 8),
+            Expanded(
+              flex: 3,
+              child: Text(
+                nombre,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  fontFamily: 'Fredoka',
+                  fontSize: 15,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black87,
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
