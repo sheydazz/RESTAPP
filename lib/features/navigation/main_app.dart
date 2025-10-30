@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../home/screens/home_screen.dart';
 import '../emotion/screens/emotionregister_screen.dart';
 import '../progress/screens/progress_screen.dart';
-
+import '../progress/screens/myprogress_screen.dart';
 
 class MainApp extends StatefulWidget {
   const MainApp({super.key});
@@ -15,14 +15,9 @@ class _MainAppState extends State<MainApp> {
   int _currentIndex = 0;
 
   final List<Widget> _screens = [
-    HomeScreen(),
-    // TrafficLightScreen(
-    //   estado: "excelente", // excelente" "alerta-amarillo", "alerta-rojo"
-    //   mensaje: "sigue asi ",
-    //   botonTexto: "consejo",
-    // ), // 🏠 Inicio
-    EmotionRegisterScreen(), // 😊 Registro emocional
+    HomeScreen(), 
     ProgressScreen(), // 📊 Progreso
+    MyProgressScreen(),
   ];
 
   @override

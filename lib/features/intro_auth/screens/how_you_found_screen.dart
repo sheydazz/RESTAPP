@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:rest/core/routes/app_routes.dart'; // Asegúrate de tener esta ruta definida
 
 class HowYouFoundScreen extends StatefulWidget {
   const HowYouFoundScreen({super.key});
@@ -23,7 +24,7 @@ class _HowYouFoundScreenState extends State<HowYouFoundScreen> {
     return Scaffold(
       backgroundColor: const Color(0xFFFFFFFF),
       body: SafeArea(
-        child: SingleChildScrollView( // ← Solución al overflow
+        child: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 20),
             child: Column(
@@ -31,7 +32,6 @@ class _HowYouFoundScreenState extends State<HowYouFoundScreen> {
               children: [
                 const SizedBox(height: 10),
 
-                // Título + Imagen + Estrellas + Subtítulo agrupados
                 Column(
                   children: [
                     ShaderMask(
@@ -55,50 +55,19 @@ class _HowYouFoundScreenState extends State<HowYouFoundScreen> {
 
                     const SizedBox(height: 8),
 
-                    // Muñequito con estrellas
                     SizedBox(
                       width: 230,
                       height: 230,
                       child: Stack(
                         children: [
-                          Center(
-                            child: Image.asset('assets/images/rest.png'),
-                          ),
-                          Positioned(
-                            top: 10,
-                            left: 0,
-                            child: Image.asset('assets/images/star.png', width: 30),
-                          ),
-                          Positioned(
-                            top: 0,
-                            right: 50,
-                            child: Image.asset('assets/images/star.png', width: 20),
-                          ),
-                          Positioned(
-                            top: 0,
-                            left: 50,
-                            child: Image.asset('assets/images/star.png', width: 25),
-                          ),
-                          Positioned(
-                            top: 0,
-                            right: 0,
-                            child: Image.asset('assets/images/star.png', width: 35),
-                          ),
-                          Positioned(
-                            bottom: 10,
-                            left: 0,
-                            child: Image.asset('assets/images/star.png', width: 18),
-                          ),
-                          Positioned(
-                            bottom: 0,
-                            right: 0,
-                            child: Image.asset('assets/images/star.png', width: 22),
-                          ),
-                          Positioned(
-                            bottom: 0,
-                            right: 20,
-                            child: Image.asset('assets/images/star.png', width: 28),
-                          ),
+                          Center(child: Image.asset('assets/images/rest.png')),
+                          Positioned(top: 10, left: 0, child: Image.asset('assets/images/star.png', width: 30)),
+                          Positioned(top: 0, right: 50, child: Image.asset('assets/images/star.png', width: 20)),
+                          Positioned(top: 0, left: 50, child: Image.asset('assets/images/star.png', width: 25)),
+                          Positioned(top: 0, right: 0, child: Image.asset('assets/images/star.png', width: 35)),
+                          Positioned(bottom: 10, left: 0, child: Image.asset('assets/images/star.png', width: 18)),
+                          Positioned(bottom: 0, right: 0, child: Image.asset('assets/images/star.png', width: 22)),
+                          Positioned(bottom: 0, right: 20, child: Image.asset('assets/images/star.png', width: 28)),
                         ],
                       ),
                     ),
@@ -129,7 +98,6 @@ class _HowYouFoundScreenState extends State<HowYouFoundScreen> {
 
                 const SizedBox(height: 12),
 
-                // Opciones como botones
                 ...options.map((option) => Padding(
                   padding: const EdgeInsets.symmetric(vertical: 6.0),
                   child: GestureDetector(
@@ -140,8 +108,7 @@ class _HowYouFoundScreenState extends State<HowYouFoundScreen> {
                     },
                     child: Container(
                       width: double.infinity,
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 14, horizontal: 20),
+                      padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 20),
                       decoration: BoxDecoration(
                         color: selectedOption == option
                             ? const Color(0xFF5CCFC0)
@@ -168,7 +135,6 @@ class _HowYouFoundScreenState extends State<HowYouFoundScreen> {
 
                 const SizedBox(height: 30),
 
-                // Botón "Siguiente" con degradado radial y texto grande
                 Container(
                   width: 345,
                   height: 52,
@@ -186,7 +152,7 @@ class _HowYouFoundScreenState extends State<HowYouFoundScreen> {
                   child: ElevatedButton(
                     onPressed: selectedOption != null
                         ? () {
-                      // Acción al continuar
+                      Navigator.pushNamed(context, AppRoutes.mainApp);
                     }
                         : null,
                     style: ElevatedButton.styleFrom(

@@ -11,8 +11,13 @@ class AppRoutes {
   // Home
   static const home = '/home';
   static const settings = '/settings';
-  static const help = '/help'; // Salvavidas
+  
+  //ayuda salavidas
+  static const cancelhelp = '/cancelhelp';
+  static const help = '/help'; 
 
+  //relax
+  static const relax = '/relax';
   // Registro Emocional
   static const emotionHome = '/emotionregister';
   static const chat = '/chat';
@@ -22,4 +27,6 @@ class AppRoutes {
 
   // Mi Progreso
   static const progress = '/progress';
+  static const diary = '/myprogress';
+  static const globalprogress = '/globalprogress';
 }
