@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import '../../help/screens/help_screen.dart';
 import '../../settings/screens/settings_screen.dart';
 import 'package:rest/features/emotion/screens/chat_screen.dart';
+import 'conversations_screen.dart';
 
 void main() {
   runApp(HomeScreen());
@@ -228,6 +229,7 @@ class MainScreen extends StatelessWidget {
                 children: [
                   // Card Conversaciones
                   Expanded(
+
                     child: Container(
                       padding: EdgeInsets.all(16),
                       decoration: BoxDecoration(
@@ -272,6 +274,14 @@ class MainScreen extends StatelessWidget {
 
                   // Card Progreso de las Actividad
                   Expanded(
+                    child: InkWell(
+                      onTap: () {
+                        // Navega a SettingsScreen cuando se presiona el ícono
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => ConversacionesScreen()),
+                        );
+                      },
                     child: Container(
                       padding: EdgeInsets.all(16),
                       decoration: BoxDecoration(
@@ -309,6 +319,7 @@ class MainScreen extends StatelessWidget {
                           ),
                         ],
                       ),
+                    ),
                     ),
                   ),
                 ],
