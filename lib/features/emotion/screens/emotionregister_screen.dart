@@ -42,9 +42,9 @@ class _CheckScreenState extends State<EmotionRegisterScreen> {
       context,
       MaterialPageRoute(
         builder: (context) => const TrafficLightScreen(
-          estado: "alerta-rojo", // "excelente", "alerta-amarillo", "alerta-rojo"
-          mensaje: "au estas a tiempo",
-          botonTexto: "ayuda",
+          estado: "excelente", // "excelente", "alerta-amarillo", "alerta-rojo"
+          mensaje: "Sigue asi",
+          botonTexto: "ok",
         ),
       ),
     );
