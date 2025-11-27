@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:rest/features/progress/screens/globalprogress_screen.dart';
 import '../../settings/screens/settings_screen.dart';
 import '../../help/screens/help_screen.dart';
-import 'progress_screen.dart';
 
 class MyProgressScreen extends StatelessWidget {
   const MyProgressScreen({super.key});
@@ -16,14 +15,14 @@ class MyProgressScreen extends StatelessWidget {
           children: [
             // Header
             Container(
-              padding: EdgeInsets.all(16),
+              padding: const EdgeInsets.all(16),
               child: Row(
                 children: [
                   // Avatar Mari
                   Container(
                     width: 100,
                     height: 60,
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                       color: Color(0xFF87CEEB),
                       shape: BoxShape.circle,
                       image: DecorationImage(
@@ -31,11 +30,10 @@ class MyProgressScreen extends StatelessWidget {
                         fit: BoxFit.cover,
                       ),
                     ),
-
                   ),
-                  SizedBox(width: 12),
+                  const SizedBox(width: 12),
                   // Texto "¡Hola! Mari"
-                  Text(
+                  const Text(
                     '¡Hola! Mari',
                     style: TextStyle(
                       fontSize: 20,
@@ -43,53 +41,58 @@ class MyProgressScreen extends StatelessWidget {
                       color: Color(0xFF2E86AB),
                     ),
                   ),
-                  Spacer(),
-                  // Iconos derecha
+                  const Spacer(),
+                  // Icono configuración (clickeable)
                   InkWell(
                     onTap: () {
-                      // Navega a SettingsScreen cuando se presiona el ícono
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => SettingsScreen()),
+                        MaterialPageRoute(
+                          builder: (context) => SettingsScreen(), // 👈 SIN const
+                        ),
                       );
                     },
+                    borderRadius: BorderRadius.circular(20),
                     child: Container(
                       width: 40,
                       height: 40,
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                         color: Color(0xFF87CEEB),
                         shape: BoxShape.circle,
                       ),
                       child: Padding(
-                        padding: EdgeInsets.all(6.0), // Añade espacio alrededor de la imagen
+                        padding: const EdgeInsets.all(6.0),
                         child: Image.asset(
                           'assets/images/config.png',
-                          fit: BoxFit.cover, // La imagen cubrirá el área después del padding
+                          fit: BoxFit.cover,
                         ),
                       ),
                     ),
                   ),
-                  SizedBox(width: 8),
-                  InkWell( // Envuelve el Container con InkWell
+                  const SizedBox(width: 8),
+                  // Icono ayuda (clickeable)
+                  InkWell(
                     onTap: () {
-                      // Navega a HelpScreen cuando se presiona el ícono
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => HelpScreen()),
+                        MaterialPageRoute(
+                          builder: (context) => HelpScreen(), // 👈 SIN const
+                        ),
                       );
                     },
+                    borderRadius: BorderRadius.circular(20),
                     child: Container(
                       width: 40,
                       height: 40,
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                         color: Color(0xFF87CEEB),
                         shape: BoxShape.circle,
                       ),
                       child: Padding(
-                        padding: EdgeInsets.all(6.0), // Añade espacio alrededor de la imagen
+                        padding: const EdgeInsets.all(6.0),
                         child: Image.asset(
                           'assets/images/salvavidas.png',
-                          fit: BoxFit.cover, // La imagen cubrirá el área después del padding
+                          fit: BoxFit.cover,
                         ),
                       ),
                     ),
@@ -104,63 +107,104 @@ class MyProgressScreen extends StatelessWidget {
               indent: 23,
               endIndent: 23,
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
 
             // 🔹 Texto principal
             const Padding(
-              padding: EdgeInsets.all(16.0),
-              child: Text(
-                "He trabajado 3 días en mí",
-                style: TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold,
+              padding: EdgeInsets.symmetric(horizontal: 16.0),
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  "He trabajado 3 días en mí",
+                  style: TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
             ),
 
-            // 🔹 Streak con días
-            InkWell(
-              onTap: () {
-                // Navega a ProgressScreen (GlobalProgress) cuando se presiona el contenedor de la racha
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => GlobalProgressScreen()),
-                );
-              },
-              child: Container(
-                margin: const EdgeInsets.symmetric(horizontal: 16),
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.lightBlue, width: 2),
-                  borderRadius: BorderRadius.circular(15),
-                ),
-                child: Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: const [
-                        _DayItem(day: "Lunes", active: true),
-                        _DayItem(day: "Martes"),
-                        _DayItem(day: "Miércoles"),
-                        _DayItem(day: "Jueves"),
-                        _DayItem(day: "Viernes", active: true),
-                        _DayItem(day: "Sábado"),
-                        _DayItem(day: "Domingo", active: true),
+            const SizedBox(height: 12),
+
+            // 🔹 Botón de racha (CLARAMENTE clickeable)
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: Material(
+                color: const Color(0xFFE3F4FF),
+                borderRadius: BorderRadius.circular(16),
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(16),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => GlobalProgressScreen(), // 👈 SIN const
+                      ),
+                    );
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.all(16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // Fila título + icono fuego + flecha
+                        Row(
+                          children: const [
+                            Icon(
+                              Icons.local_fire_department,
+                              color: Colors.orange,
+                            ),
+                            SizedBox(width: 8),
+                            Text(
+                              "Mi racha de bienestar",
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Spacer(),
+                            Icon(
+                              Icons.arrow_forward_ios,
+                              size: 16,
+                              color: Colors.black54,
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 12),
+                        // Días
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: const [
+                            _DayItem(day: "Lunes", active: true),
+                            _DayItem(day: "Martes"),
+                            _DayItem(day: "Miércoles"),
+                            _DayItem(day: "Jueves"),
+                            _DayItem(day: "Viernes", active: true),
+                            _DayItem(day: "Sábado"),
+                            _DayItem(day: "Domingo", active: true),
+                          ],
+                        ),
+                        const SizedBox(height: 8),
+                        const Center(
+                          child: Text(
+                            "Toca aquí para ver tu progreso detallado",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 13,
+                              color: Colors.black87,
+                            ),
+                          ),
+                        ),
                       ],
                     ),
-                    const SizedBox(height: 8),
-                    const Text(
-                      "¡Mantén la racha para ganar premios!",
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                  ],
+                  ),
                 ),
               ),
             ),
 
             const SizedBox(height: 20),
 
-            // 🔹 Cards de análisis
+            // 🔹 Cards de análisis (NO clickeables, estilo más neutro)
             const Expanded(
               child: SingleChildScrollView(
                 child: Column(
@@ -168,17 +212,17 @@ class MyProgressScreen extends StatelessWidget {
                     _InfoCard(
                       title: "Estado de ánimo más frecuente",
                       content:
-                          "No se ha registrado ningún estado de ánimo hasta el momento",
+                      "No se ha registrado ningún estado de ánimo hasta el momento.",
                     ),
                     _InfoCard(
                       title: "Emociones más frecuentes",
                       content:
-                          "No se han registrado emociones de tus sesiones más frecuentes",
+                      "No se han registrado emociones de tus sesiones más frecuentes.",
                     ),
                     _InfoCard(
                       title: "Evolución del estado de ánimo",
                       content:
-                          "No se han registrado estados de ánimo en el periodo seleccionado",
+                      "No se han registrado estados de ánimo en el periodo seleccionado.",
                     ),
                   ],
                 ),
@@ -202,9 +246,10 @@ class _DayItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        active
-            ? const Text("🔥", style: TextStyle(fontSize: 24))
-            : const Text("○", style: TextStyle(fontSize: 24)),
+        Text(
+          active ? "🔥" : "○",
+          style: const TextStyle(fontSize: 24),
+        ),
         const SizedBox(height: 4),
         Text(
           day,
@@ -215,7 +260,7 @@ class _DayItem extends StatelessWidget {
   }
 }
 
-// 🔹 Componente Card Info
+// 🔹 Componente Card Info (no clickeable, visualmente más "lectura")
 class _InfoCard extends StatelessWidget {
   final String title;
   final String content;
@@ -228,19 +273,27 @@ class _InfoCard extends StatelessWidget {
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        border: Border.all(color: Colors.lightBlue, width: 1.5),
+        color: Colors.grey[100],
+        border: Border.all(color: Colors.grey.shade300, width: 1.2),
         borderRadius: BorderRadius.circular(15),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(title,
-              style:
-                  const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+          Text(
+            title,
+            style: const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
           const SizedBox(height: 6),
           Text(
             content,
-            style: const TextStyle(fontSize: 14, color: Colors.black87),
+            style: const TextStyle(
+              fontSize: 14,
+              color: Colors.black87,
+            ),
           ),
         ],
       ),
