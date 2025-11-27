@@ -15,9 +15,9 @@ class _MainAppState extends State<MainApp> {
   int _currentIndex = 0;
 
   final List<Widget> _screens = [
-    HomeScreen(),
-    ProgressScreen(), // 📊 Progreso
-    MyProgressScreen(),
+    HomeScreen(),        // 🏠 Inicio
+    ProgressScreen(),    // 😊 Emociones / Progreso
+    MyProgressScreen(),  // 🔥 Racha
   ];
 
   @override
@@ -60,16 +60,16 @@ class CustomBottomNavBar extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          _buildItem(Icons.home, 0, context),
-          _buildItem(Icons.pie_chart, 1, context),
-          _buildItem(Icons.person, 2, context),
+          _buildItem(Icons.home, 0, context),                   // 🏠 Inicio
+          _buildItem(Icons.emoji_emotions, 1, context),         // 😊 Emociones / Progreso
+          _buildItem(Icons.local_fire_department, 2, context),  // 🔥 Racha
         ],
       ),
     );
   }
 
   Widget _buildItem(IconData icon, int index, BuildContext context) {
-    bool isActive = index == currentIndex;
+    final bool isActive = index == currentIndex;
 
     return GestureDetector(
       onTap: () => onTap(index),
