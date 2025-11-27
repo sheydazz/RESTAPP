@@ -1,6 +1,7 @@
-// emotionregister_screen.dart (Preguntas de evaluación emocional)
+// emotionregister_screen.dart (Versión mejorada con diseño amigable)
 import 'package:flutter/material.dart';
 import 'package:rest/features/emotion/screens/traffic_light_screen.dart';
+
 class EmotionRegisterScreen extends StatefulWidget {
   const EmotionRegisterScreen({super.key});
 
@@ -14,27 +15,102 @@ class _CheckScreenState extends State<EmotionRegisterScreen> {
   int? concentracionSelected;
 
   final List<Map<String, dynamic>> estadosAnimo = [
-    {"text": "Muy Positivo", "color": Color(0xFFFFC107), "selected": false},
-    {"text": "Generalmente Positivo", "color": Color(0xFF87CEEB), "selected": false},
-    {"text": "Neutral", "color": Color(0xFF87CEEB), "selected": false},
-    {"text": "Algo Negativo", "color": Color(0xFF87CEEB), "selected": false},
-    {"text": "Muy Negativo", "color": Color(0xFF87CEEB), "selected": false},
+    {
+      "text": "Muy Positivo",
+      "emoji": "😄",
+      "color": Color(0xFF4CAF50), // Verde
+      "icon": Icons.sentiment_very_satisfied,
+    },
+    {
+      "text": "Generalmente Positivo",
+      "emoji": "🙂",
+      "color": Color(0xFF8BC34A), // Verde claro
+      "icon": Icons.sentiment_satisfied,
+    },
+    {
+      "text": "Neutral",
+      "emoji": "😐",
+      "color": Color(0xFFFFB74D), // Naranja suave
+      "icon": Icons.sentiment_neutral,
+    },
+    {
+      "text": "Algo Negativo",
+      "emoji": "😟",
+      "color": Color(0xFFFF9800), // Naranja
+      "icon": Icons.sentiment_dissatisfied,
+    },
+    {
+      "text": "Muy Negativo",
+      "emoji": "😢",
+      "color": Color(0xFFF44336), // Rojo
+      "icon": Icons.sentiment_very_dissatisfied,
+    },
   ];
 
   final List<Map<String, dynamic>> opcionesDormir = [
-    {"text": "No, duermo perfectamente", "color": Color(0xFF87CEEB), "selected": false},
-    {"text": "Ocasionalmente", "color": Color(0xFF87CEEB), "selected": false},
-    {"text": "Con cierta frecuencia", "color": Color(0xFFFFC107), "selected": false},
-    {"text": "Casi todas las noches", "color": Color(0xFF87CEEB), "selected": false},
-    {"text": "Todas las noches", "color": Color(0xFF87CEEB), "selected": false},
+    {
+      "text": "No, duermo perfectamente",
+      "emoji": "😴",
+      "color": Color(0xFF4CAF50), // Verde
+      "icon": Icons.bedtime,
+    },
+    {
+      "text": "Ocasionalmente",
+      "emoji": "😪",
+      "color": Color(0xFF8BC34A), // Verde claro
+      "icon": Icons.nights_stay,
+    },
+    {
+      "text": "Con cierta frecuencia",
+      "emoji": "😓",
+      "color": Color(0xFFFFB74D), // Naranja suave
+      "icon": Icons.dark_mode,
+    },
+    {
+      "text": "Casi todas las noches",
+      "emoji": "😫",
+      "color": Color(0xFFFF9800), // Naranja
+      "icon": Icons.mode_night,
+    },
+    {
+      "text": "Todas las noches",
+      "emoji": "😩",
+      "color": Color(0xFFF44336), // Rojo
+      "icon": Icons.nightlight_round,
+    },
   ];
 
   final List<Map<String, dynamic>> concentracionOpciones = [
-    {"text": "Sí, sin problemas", "color": Color(0xFF87CEEB), "selected": false},
-    {"text": "Generalmente sí", "color": Color(0xFF87CEEB), "selected": false},
-    {"text": "A veces tengo dificultades", "color": Color(0xFF87CEEB), "selected": false},
-    {"text": "Frecuentemente me cuesta", "color": Color(0xFF87CEEB), "selected": false},
-    {"text": "No logro concentrarme", "color": Color(0xFF87CEEB), "selected": false},
+    {
+      "text": "Sí, sin problemas",
+      "emoji": "🎯",
+      "color": Color(0xFF4CAF50), // Verde
+      "icon": Icons.psychology,
+    },
+    {
+      "text": "Generalmente sí",
+      "emoji": "👍",
+      "color": Color(0xFF8BC34A), // Verde claro
+      "icon": Icons.thumb_up,
+    },
+    {
+      "text": "A veces tengo dificultades",
+      "emoji": "🤔",
+      "color": Color(0xFFFFB74D), // Naranja suave
+      "icon": Icons.help_outline,
+    },
+    {
+      "text": "Frecuentemente me cuesta",
+      "emoji": "😵",
+      "color": Color(0xFFFF9800), // Naranja
+      "icon": Icons.blur_on,
+    },
+    {
+      "text": "No logro concentrarme",
+      "emoji": "🌀",
+      "color": Color(0xFFF44336), // Rojo
+      "icon": Icons.crisis_alert,
+    },
   ];
 
   void _guardarRespuestas() {
@@ -42,7 +118,7 @@ class _CheckScreenState extends State<EmotionRegisterScreen> {
       context,
       MaterialPageRoute(
         builder: (context) => const TrafficLightScreen(
-          estado: "excelente", // "excelente", "alerta-amarillo", "alerta-rojo"
+          estado: "excelente",
           mensaje: "Sigue asi",
           botonTexto: "ok",
         ),
@@ -53,19 +129,26 @@ class _CheckScreenState extends State<EmotionRegisterScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Color(0xFFF5F9FF), // Fondo suave azul claro
       body: SafeArea(
         child: Column(
           children: [
             // Header con logo y título
             Container(
               padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [Color(0xFFE3F2FD), Color(0xFFFFFFFF)],
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                ),
+              ),
               child: Row(
                 children: [
-                  // Logo igual al del chat
+                  // Logo
                   Container(
-                    width: 80,
-                    height: 80,
+                    width: 70,
+                    height: 70,
                     decoration: BoxDecoration(
                       gradient: RadialGradient(
                         colors: [
@@ -76,7 +159,7 @@ class _CheckScreenState extends State<EmotionRegisterScreen> {
                         stops: [0.0, 0.6, 1.0],
                       ),
                       shape: BoxShape.circle,
-                      border: Border.all(color: Color(0xFF4ECDC4), width: 4),
+                      border: Border.all(color: Color(0xFF4ECDC4), width: 3),
                       boxShadow: [
                         BoxShadow(
                           color: Color(0xFF4ECDC4).withOpacity(0.3),
@@ -88,8 +171,8 @@ class _CheckScreenState extends State<EmotionRegisterScreen> {
                     child: ClipOval(
                       child: Image.asset(
                         'assets/images/normalrest.jpg',
-                        width: 80,
-                        height: 80,
+                        width: 70,
+                        height: 70,
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -97,23 +180,52 @@ class _CheckScreenState extends State<EmotionRegisterScreen> {
                   const SizedBox(width: 15),
                   // Título
                   Expanded(
-                    child: Text(
-                      "¡Cuéntame\nsobre tu día¡",
-                      style: TextStyle(
-                        fontFamily: 'Fredoka',
-                        fontSize: 35,
-                        height: 0.9,
-                        fontWeight: FontWeight.bold,
-                        foreground: Paint()
-                          ..shader = LinearGradient(
-                            colors: [
-                              Color(0xFF7DFDFE), // Celeste
-                              Color(0xFF2196F3), // Azul
-                            ],
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
-                          ).createShader(Rect.fromLTWH(0, 0, 250, 60)),
-                      ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "¡Cuéntame",
+                          style: TextStyle(
+                            fontFamily: 'Fredoka',
+                            fontSize: 28,
+                            height: 1.0,
+                            fontWeight: FontWeight.bold,
+                            foreground: Paint()
+                              ..shader = LinearGradient(
+                                colors: [
+                                  Color(0xFF7DFDFE),
+                                  Color(0xFF2196F3),
+                                ],
+                              ).createShader(Rect.fromLTWH(0, 0, 200, 30)),
+                          ),
+                        ),
+                        Text(
+                          "sobre tu día!",
+                          style: TextStyle(
+                            fontFamily: 'Fredoka',
+                            fontSize: 28,
+                            height: 1.0,
+                            fontWeight: FontWeight.bold,
+                            foreground: Paint()
+                              ..shader = LinearGradient(
+                                colors: [
+                                  Color(0xFF7DFDFE),
+                                  Color(0xFF2196F3),
+                                ],
+                              ).createShader(Rect.fromLTWH(0, 0, 200, 30)),
+                          ),
+                        ),
+                        SizedBox(height: 8),
+                        Text(
+                          "Test Personal Diario",
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black87,
+                            fontFamily: 'Freeman',
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ],
@@ -122,294 +234,62 @@ class _CheckScreenState extends State<EmotionRegisterScreen> {
 
             // Contenido principal
             Expanded(
-              child: Container(
-                margin: const EdgeInsets.symmetric(horizontal: 20),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(15),
-                  border: Border.all(color: Color(0xFF2196F3), width: 2),
-                ),
+              child: SingleChildScrollView(
+                padding: EdgeInsets.symmetric(horizontal: 20),
                 child: Column(
                   children: [
-                    // Título del formulario
-                    Container(
-                      width: double.infinity,
-                      padding: const EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                        color: Colors.transparent,
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(13),
-                          topRight: Radius.circular(13),
-                        ),
-                      ),
-                      child: Text(
-                        "Test Personal Diario",
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black87,
-                          fontFamily: 'Freeman',
-                        ),
-                        textAlign: TextAlign.left,
-                      ),
+                    SizedBox(height: 16),
+
+                    // Card - Pregunta 1: Estado de ánimo
+                    _buildQuestionCard(
+                      icon: Icons.favorite,
+                      iconColor: Color(0xFFE91E63),
+                      title: "¿Cómo te has sentido?",
+                      subtitle: "Tu estado de ánimo durante la última semana",
+                      options: estadosAnimo,
+                      selectedIndex: estadoAnimoSelected,
+                      onSelect: (index) {
+                        setState(() {
+                          estadoAnimoSelected = index;
+                        });
+                      },
                     ),
 
-                    Expanded(
-                      child: SingleChildScrollView(
-                        padding: EdgeInsets.all(16),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            // Pregunta 1
-                            Container(
-                              width: double.infinity,
-                              padding: const EdgeInsets.all(12),
-                              decoration: BoxDecoration(
-                                color: Color(0xFFBDF6FD),
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: Text(
-                                "¿Cómo describirías tu estado de ánimo general durante la última semana?",
-                                style: TextStyle(
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.w900, // Más bold
-                                  color: Colors.black87,
-                                  fontFamily: 'Freeman',
-                                ),
-                              ),
-                            ),
-                            SizedBox(height: 12),
+                    SizedBox(height: 20),
 
-                            // Opciones estado de ánimo
-                            ...estadosAnimo.asMap().entries.map((entry) {
-                              int index = entry.key;
-                              Map<String, dynamic> opcion = entry.value;
-                              bool isSelected = estadoAnimoSelected == index;
-
-                              return Container(
-                                margin: const EdgeInsets.only(bottom: 8),
-                                child: InkWell(
-                                  onTap: () {
-                                    setState(() {
-                                      estadoAnimoSelected = index;
-                                    });
-                                  },
-                                  child: Container(
-                                    width: double.infinity,
-                                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                                    decoration: BoxDecoration(
-                                      color: isSelected ? Color(0xFFFFC107) : Color(0xFFBDF6FD),
-                                      borderRadius: BorderRadius.circular(20),
-                                    ),
-                                    child: Row(
-                                      children: [
-                                        Container(
-                                          width: 20,
-                                          height: 20,
-                                          decoration: BoxDecoration(
-                                            color: Colors.white,
-                                            shape: BoxShape.circle,
-                                            border: Border.all(color: Colors.grey[400]!, width: 1),
-                                          ),
-                                          child: isSelected
-                                              ? Center(
-                                            child: Container(
-                                              width: 10,
-                                              height: 10,
-                                              decoration: BoxDecoration(
-                                                color: Color(0xFFFFC107),
-                                                shape: BoxShape.circle,
-                                              ),
-                                            ),
-                                          )
-                                              : null,
-                                        ),
-                                        SizedBox(width: 12),
-                                        Text(
-                                          opcion["text"],
-                                          style: TextStyle(
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.w900, // Más bold
-                                            color: Colors.black87,
-                                            fontFamily: 'Freeman',
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              );
-                            }),
-
-                            SizedBox(height: 16),
-
-                            // Pregunta 2
-                            Container(
-                              width: double.infinity,
-                              padding: const EdgeInsets.all(12),
-                              decoration: BoxDecoration(
-                                color: Color(0xFFBDF6FD),
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: Text(
-                                "¿Has experimentado dificultades para dormir en los últimos días?",
-                                style: TextStyle(
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.w900, // Más bold
-                                  color: Colors.black87,
-                                  fontFamily: 'Freeman',
-                                ),
-                              ),
-                            ),
-                            SizedBox(height: 12),
-
-                            // Opciones dormir
-                            ...opcionesDormir.asMap().entries.map((entry) {
-                              int index = entry.key;
-                              Map<String, dynamic> opcion = entry.value;
-                              bool isSelected = dificultadesDormirSelected == index;
-
-                              return Container(
-                                margin: const EdgeInsets.only(bottom: 8),
-                                child: InkWell(
-                                  onTap: () {
-                                    setState(() {
-                                      dificultadesDormirSelected = index;
-                                    });
-                                  },
-                                  child: Container(
-                                    width: double.infinity,
-                                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                                    decoration: BoxDecoration(
-                                      color: isSelected ? Color(0xFFFFC107) : Color(0xFFBDF6FD),
-                                      borderRadius: BorderRadius.circular(20),
-                                    ),
-                                    child: Row(
-                                      children: [
-                                        Container(
-                                          width: 20,
-                                          height: 20,
-                                          decoration: BoxDecoration(
-                                            color: Colors.white,
-                                            shape: BoxShape.circle,
-                                            border: Border.all(color: Colors.grey[400]!, width: 1),
-                                          ),
-                                          child: isSelected
-                                              ? Center(
-                                            child: Container(
-                                              width: 10,
-                                              height: 10,
-                                              decoration: BoxDecoration(
-                                                color: Color(0xFFFFC107),
-                                                shape: BoxShape.circle,
-                                              ),
-                                            ),
-                                          )
-                                              : null,
-                                        ),
-                                        SizedBox(width: 12),
-                                        Text(
-                                          opcion["text"],
-                                          style: TextStyle(
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.w900, // Más bold
-                                            color: Colors.black87,
-                                            fontFamily: 'Freeman',
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              );
-                            }),
-
-                            SizedBox(height: 16),
-
-                            // Pregunta 3
-                            Container(
-                              width: double.infinity,
-                              padding: const EdgeInsets.all(12),
-                              decoration: BoxDecoration(
-                                color: Color(0xFFBDF6FD),
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: Text(
-                                "¿Te has sentido capaz de concentrarte en tus actividades diarias?",
-                                style: TextStyle(
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.w900, // Más bold
-                                  color: Colors.black87,
-                                  fontFamily: 'Freeman',
-                                ),
-                              ),
-                            ),
-                            SizedBox(height: 12),
-
-                            // Opciones concentración
-                            ...concentracionOpciones.asMap().entries.map((entry) {
-                              int index = entry.key;
-                              Map<String, dynamic> opcion = entry.value;
-                              bool isSelected = concentracionSelected == index;
-
-                              return Container(
-                                margin: const EdgeInsets.only(bottom: 8),
-                                child: InkWell(
-                                  onTap: () {
-                                    setState(() {
-                                      concentracionSelected = index;
-                                    });
-                                  },
-                                  child: Container(
-                                    width: double.infinity,
-                                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                                    decoration: BoxDecoration(
-                                      color: isSelected ? Color(0xFFFFC107) : Color(0xFFBDF6FD),
-                                      borderRadius: BorderRadius.circular(20),
-                                    ),
-                                    child: Row(
-                                      children: [
-                                        Container(
-                                          width: 20,
-                                          height: 20,
-                                          decoration: BoxDecoration(
-                                            color: Colors.white,
-                                            shape: BoxShape.circle,
-                                            border: Border.all(color: Colors.grey[400]!, width: 1),
-                                          ),
-                                          child: isSelected
-                                              ? Center(
-                                            child: Container(
-                                              width: 10,
-                                              height: 10,
-                                              decoration: BoxDecoration(
-                                                color: Color(0xFFFFC107),
-                                                shape: BoxShape.circle,
-                                              ),
-                                            ),
-                                          )
-                                              : null,
-                                        ),
-                                        SizedBox(width: 12),
-                                        Text(
-                                          opcion["text"],
-                                          style: TextStyle(
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.w900, // Más bold
-                                            color: Colors.black87,
-                                            fontFamily: 'Freeman',
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              );
-                            }),
-                          ],
-                        ),
-                      ),
+                    // Card - Pregunta 2: Sueño
+                    _buildQuestionCard(
+                      icon: Icons.hotel,
+                      iconColor: Color(0xFF673AB7),
+                      title: "¿Cómo has dormido?",
+                      subtitle: "Dificultades para dormir en los últimos días",
+                      options: opcionesDormir,
+                      selectedIndex: dificultadesDormirSelected,
+                      onSelect: (index) {
+                        setState(() {
+                          dificultadesDormirSelected = index;
+                        });
+                      },
                     ),
+
+                    SizedBox(height: 20),
+
+                    // Card - Pregunta 3: Concentración
+                    _buildQuestionCard(
+                      icon: Icons.lightbulb,
+                      iconColor: Color(0xFFFF9800),
+                      title: "¿Puedes concentrarte?",
+                      subtitle: "Tu capacidad en actividades diarias",
+                      options: concentracionOpciones,
+                      selectedIndex: concentracionSelected,
+                      onSelect: (index) {
+                        setState(() {
+                          concentracionSelected = index;
+                        });
+                      },
+                    ),
+
+                    SizedBox(height: 20),
                   ],
                 ),
               ),
@@ -419,31 +299,37 @@ class _CheckScreenState extends State<EmotionRegisterScreen> {
             Container(
               margin: const EdgeInsets.all(20),
               child: Center(
-                child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 32, vertical: 8),
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [
-                        Color(0xFF2196F3), // Azul izquierdo
-                        Color(0xFF3973D1), // Azul derecho (más oscuro)
-                      ],
-                      begin: Alignment.centerLeft,
-                      end: Alignment.centerRight,
-                    ),
-                    borderRadius: BorderRadius.circular(32),
-                  ),
-                  child: TextButton(
-                    onPressed: _guardarRespuestas,
-                    style: TextButton.styleFrom(
-                      padding: EdgeInsets.zero,
-                      minimumSize: Size(0, 0),
-                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(32),
+                child: InkWell( // ⬅️ Utilizamos InkWell para manejar el 'tap'
+                  onTap: (estadoAnimoSelected != null &&
+                      dificultadesDormirSelected != null &&
+                      concentracionSelected != null)
+                      ? _guardarRespuestas
+                      : null, // Si es nulo, el botón está deshabilitado
+                  borderRadius: BorderRadius.circular(32), // Para que el efecto de 'tap' coincida
+                  child: Container( // ⬅️ Este Container contiene el diseño (Degradado y Texto)
+                    padding: EdgeInsets.symmetric(horizontal: 32, vertical: 12), // Mayor padding vertical para mejor área de clic
+                    decoration: BoxDecoration(
+                      // ⬅️ El Degradado se aplica directamente al Container
+                      gradient: LinearGradient(
+                        colors: (estadoAnimoSelected != null &&
+                            dificultadesDormirSelected != null &&
+                            concentracionSelected != null)
+                            ? [
+                          Color(0xFF2196F3), // Azul izquierdo
+                          Color(0xFF3973D1), // Azul derecho (más oscuro)
+                        ]
+                            : [ // ⬅️ Colores cuando el botón está deshabilitado (opcional)
+                          Colors.grey[400]!,
+                          Colors.grey[600]!,
+                        ],
+                        begin: Alignment.centerLeft,
+                        end: Alignment.centerRight,
                       ),
+                      borderRadius: BorderRadius.circular(32),
                     ),
-                    child: Text(
+                    child: Text( // ⬅️ El Texto es el hijo directo del Container
                       "GUARDAR",
+                      textAlign: TextAlign.center,
                       style: TextStyle(
                         fontFamily: 'Fredoka',
                         fontSize: 30,
@@ -455,9 +341,192 @@ class _CheckScreenState extends State<EmotionRegisterScreen> {
                   ),
                 ),
               ),
-            ),
+            )
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildQuestionCard({
+    required IconData icon,
+    required Color iconColor,
+    required String title,
+    required String subtitle,
+    required List<Map<String, dynamic>> options,
+    required int? selectedIndex,
+    required Function(int) onSelect,
+  }) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.08),
+            blurRadius: 15,
+            offset: Offset(0, 5),
+          ),
+        ],
+      ),
+      child: Column(
+        children: [
+          // Header de la pregunta
+          Container(
+            padding: EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [
+                  iconColor.withOpacity(0.1),
+                  iconColor.withOpacity(0.05),
+                ],
+              ),
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(20),
+                topRight: Radius.circular(20),
+              ),
+            ),
+            child: Row(
+              children: [
+                Container(
+                  padding: EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: iconColor.withOpacity(0.15),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Icon(icon, color: iconColor, size: 28),
+                ),
+                SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        title,
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black87,
+                          fontFamily: 'Freeman',
+                        ),
+                      ),
+                      SizedBox(height: 2),
+                      Text(
+                        subtitle,
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Colors.black54,
+                          fontFamily: 'Freeman',
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          // Opciones
+          Padding(
+            padding: EdgeInsets.all(12),
+            child: Column(
+              children: options.asMap().entries.map((entry) {
+                int index = entry.key;
+                Map<String, dynamic> opcion = entry.value;
+                bool isSelected = selectedIndex == index;
+
+                return Container(
+                  margin: EdgeInsets.only(bottom: 8),
+                  child: Material(
+                    color: Colors.transparent,
+                    child: InkWell(
+                      onTap: () => onSelect(index),
+                      borderRadius: BorderRadius.circular(15),
+                      child: Ink(
+                        decoration: BoxDecoration(
+                          gradient: isSelected
+                              ? LinearGradient(
+                            colors: [
+                              opcion["color"],
+                              opcion["color"].withOpacity(0.8),
+                            ],
+                          )
+                              : null,
+                          color: isSelected ? null : Color(0xFFF5F9FF),
+                          borderRadius: BorderRadius.circular(15),
+                          border: Border.all(
+                            color: isSelected
+                                ? opcion["color"]
+                                : Colors.grey[300]!,
+                            width: 2,
+                          ),
+                        ),
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 16, vertical: 14),
+                          child: Row(
+                            children: [
+                              // Emoji/Icono
+                              Container(
+                                width: 40,
+                                height: 40,
+                                decoration: BoxDecoration(
+                                  color: isSelected
+                                      ? Colors.white.withOpacity(0.3)
+                                      : opcion["color"].withOpacity(0.15),
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    opcion["emoji"],
+                                    style: TextStyle(fontSize: 22),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(width: 12),
+
+                              // Texto
+                              Expanded(
+                                child: Text(
+                                  opcion["text"],
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: isSelected
+                                        ? FontWeight.bold
+                                        : FontWeight.w600,
+                                    color: isSelected
+                                        ? Colors.white
+                                        : Colors.black87,
+                                    fontFamily: 'Freeman',
+                                  ),
+                                ),
+                              ),
+
+                              // Check indicator
+                              if (isSelected)
+                                Container(
+                                  padding: EdgeInsets.all(4),
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: Icon(
+                                    Icons.check,
+                                    color: opcion["color"],
+                                    size: 18,
+                                  ),
+                                ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                );
+              }).toList(),
+            ),
+          ),
+        ],
       ),
     );
   }

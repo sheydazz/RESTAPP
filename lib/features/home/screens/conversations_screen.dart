@@ -4,7 +4,7 @@ import 'gradient_text.dart';
 class ConversacionesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return Scaffold( 
       backgroundColor: const Color(0xFFF8FAFB),
       appBar: AppBar(
         titleSpacing: 0,
