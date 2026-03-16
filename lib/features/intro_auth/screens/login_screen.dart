@@ -1,10 +1,125 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'register_screen.dart';
-import 'package:rest/core/routes/app_routes.dart';
+import 'package:rest/core/services/auth_service.dart';
+import 'package:rest/core/services/user_session.dart';
+import 'package:rest/core/services/emotion_service.dart';
+import 'package:rest/features/emotion/screens/emotionregister_screen.dart';
+import 'package:rest/features/emotion/screens/check_screen.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
+
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+  final _authService = AuthService();
+  final _emotionService = EmotionService();
+
+  bool _isLoading = false;
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _handleLogin() async {
+    final correo = _emailController.text.trim();
+    final contrasena = _passwordController.text.trim();
+
+    if (correo.isEmpty || contrasena.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Ingresa correo y contraseña')),
+      );
+      return;
+    }
+
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      final response = await _authService.login(
+        correo: correo,
+        contrasena: contrasena,
+      );
+
+      // Extraer un posible nombre desde la respuesta o usar el correo
+      String nombre = correo.split('@').first;
+      if (response['nombres'] is String) {
+        nombre = response['nombres'];
+      } else if (response['user'] is Map &&
+          (response['user'] as Map)['nombres'] is String) {
+        nombre = (response['user'] as Map)['nombres'] as String;
+      }
+
+      UserSession.currentUserName = nombre;
+
+      print('LOGIN PARSED → response keys: ${response.keys.toList()}');
+
+      // Guardar token e id de usuario si vienen en la respuesta
+      final dynamic token =
+          response['token'] ??
+          response['accessToken'] ??
+          response['jwt'] ??
+          (response['data'] is Map ? (response['data'] as Map)['token'] : null);
+
+      print('LOGIN PARSED → token type: ${token.runtimeType}, value: $token');
+
+      if (token is String && token.isNotEmpty) {
+        UserSession.authToken = token;
+      }
+
+      final dynamic user =
+          response['user'] ?? (response['data'] is Map ? (response['data'] as Map)['user'] : null);
+
+      print('LOGIN PARSED → user type: ${user.runtimeType}, value: $user');
+
+      if (user is Map && user['id'] is int) {
+        UserSession.userId = user['id'] as int;
+      } else if (response['id'] is int) {
+        UserSession.userId = response['id'] as int;
+      }
+
+      print('LOGIN SESSION → authToken=${UserSession.authToken != null ? 'SET' : 'NULL'}, userId=${UserSession.userId}');
+
+      if (!mounted) return;
+
+      // Verificar si ya hizo el registro emocional hoy
+      bool yaHizoRegistroHoy = false;
+      try {
+        yaHizoRegistroHoy = await _emotionService.existeRegistroEmocionalHoy();
+      } catch (_) {
+        // Si falla (403, sin conexión, etc.) asumimos que no lo ha hecho
+        yaHizoRegistroHoy = false;
+      }
+      if (!mounted) return;
+
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) =>
+              yaHizoRegistroHoy ? const CheckScreen() : const EmotionRegisterScreen(),
+        ),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(e.toString())),
+      );
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,6 +146,7 @@ class LoginScreen extends StatelessWidget {
                 ),
 
                 _buildInputField(
+                  controller: _emailController,
                   label: 'USUARIO O CORREO INSTITUCIONAL',
                   hint: 'Example@correo.com',
                 ),
@@ -38,18 +154,16 @@ class LoginScreen extends StatelessWidget {
                 const SizedBox(height: 32),
 
                 _buildInputField(
+                  controller: _passwordController,
                   label: 'CONTRASEÑA',
                   hint: '••••••••',
                   obscure: true,
                 ),
-
                 const SizedBox(height: 50),
 
                 _buildRadialButton(
-                  text: 'INGRESAR',
-                  onPressed: () {
-                    Navigator.pushNamed(context, AppRoutes.mainApp);
-                  },
+                  text: _isLoading ? 'CARGANDO...' : 'INGRESAR',
+                  onPressed: _isLoading ? null : () => _handleLogin(),
                 ),
 
                 const SizedBox(height: 10),
@@ -150,6 +264,7 @@ class LoginScreen extends StatelessWidget {
   }
 
   Widget _buildInputField({
+    required TextEditingController controller,
     required String label,
     required String hint,
     bool obscure = false,
@@ -182,6 +297,7 @@ class LoginScreen extends StatelessWidget {
               borderRadius: BorderRadius.circular(28),
             ),
             child: TextField(
+              controller: controller,
               obscureText: obscure,
               style: GoogleFonts.fredoka(
                 color: Colors.black87,
@@ -225,7 +341,7 @@ class LoginScreen extends StatelessWidget {
 
   Widget _buildRadialButton({
     required String text,
-    required VoidCallback onPressed,
+    required VoidCallback? onPressed,
   }) {
     final gradient = const RadialGradient(
       center: Alignment.center,
