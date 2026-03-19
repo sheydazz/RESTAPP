@@ -1,7 +1,8 @@
 // emotionregister_screen.dart (Preguntas de evaluación emocional)
 import 'package:flutter/material.dart';
+import 'package:rest/core/routes/app_routes.dart';
 import 'package:rest/core/services/emotion_service.dart';
-import 'package:rest/features/emotion/screens/check_screen.dart';
+import 'package:rest/features/emotion/utils/emotion_calculator.dart';
 
 class EmotionRegisterScreen extends StatefulWidget {
   const EmotionRegisterScreen({super.key});
@@ -21,9 +22,9 @@ class _CheckScreenState extends State<EmotionRegisterScreen> {
   final List<String> _facesAssets = const [
     'assets/images/sadrest.jpg',
     'assets/images/yellowrest.jpg',
-    'assets/images/yellow_face.jpg',
+    'assets/images/normalrest.jpg',
     'assets/images/goodrest.jpg',
-    'assets/images/kingrest.jpg',
+    'assets/images/smilerest.jpg',
   ];
 
   @override
@@ -81,9 +82,14 @@ class _CheckScreenState extends State<EmotionRegisterScreen> {
       await _emotionService.enviarRegistroEmocional(respuestas: respuestas);
 
       if (!mounted) return;
-      Navigator.pushReplacement(
+      final resultado = EmotionCalculator.calcularEstado(
+        preguntas: _preguntas,
+        opcionSeleccionadaPorPregunta: _opcionSeleccionadaPorPregunta,
+      );
+      Navigator.pushReplacementNamed(
         context,
-        MaterialPageRoute(builder: (context) => const CheckScreen()),
+        AppRoutes.trafficLight,
+        arguments: resultado,
       );
     } catch (e) {
       if (!mounted) return;

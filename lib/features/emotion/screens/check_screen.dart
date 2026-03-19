@@ -1,7 +1,83 @@
 import 'package:flutter/material.dart';
 import 'package:rest/core/routes/app_routes.dart';
-class CheckScreen extends StatelessWidget {
-  const CheckScreen({super.key});
+import 'package:rest/core/services/emotion_service.dart';
+
+/// Mapea promedio emocional (0-4) a asset de cara.
+String _promedioToAsset(num? promedio) {
+  if (promedio == null) return 'assets/images/normalrest.jpg';
+  if (promedio < 1.5) return 'assets/images/sadrest.jpg';
+  if (promedio < 2.5) return 'assets/images/yellowrest.jpg';
+  if (promedio < 3.5) return 'assets/images/goodrest.jpg';
+  return 'assets/images/kingrest.jpg';
+}
+
+String _promedioToEmoji(num? promedio) {
+  if (promedio == null) return '😐';
+  if (promedio < 1.5) return '😢';
+  if (promedio < 2.5) return '😐';
+  if (promedio < 3.5) return '😊';
+  return '😄';
+}
+
+const List<String> _nombresDias = [
+  'LUN', 'MAR', 'MIÉ', 'JUE', 'VIE', 'SÁB', 'DOM',
+];
+
+class CheckScreen extends StatefulWidget {
+  /// Promedio emocional del día actual (0-4). Se usa cuando viene del flujo de registro
+  /// para mostrar la carita aunque el API aún no devuelva los datos.
+  final double? promedioHoy;
+
+  const CheckScreen({super.key, this.promedioHoy});
+
+  @override
+  State<CheckScreen> createState() => _CheckScreenState();
+}
+
+class _CheckScreenState extends State<CheckScreen> {
+  final EmotionService _emotionService = EmotionService();
+  bool _isLoading = true;
+  String? _error;
+  List<Map<String, dynamic>> _calendario = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _cargarCalendario();
+  }
+
+  Future<void> _cargarCalendario() async {
+    setState(() {
+      _isLoading = true;
+      _error = null;
+    });
+
+    try {
+      final hoy = DateTime.now();
+      // Lunes a Domingo de la semana actual
+      final lunes = hoy.subtract(Duration(days: hoy.weekday - 1));
+      final domingo = lunes.add(const Duration(days: 6));
+      final inicio = DateTime(lunes.year, lunes.month, lunes.day);
+      final fin = DateTime(domingo.year, domingo.month, domingo.day);
+
+      final datos = await _emotionService.fetchCalendarioEmocional(
+        inicio: inicio,
+        fin: fin,
+      );
+
+      if (!mounted) return;
+      setState(() {
+        _calendario = datos;
+        _isLoading = false;
+      });
+    } catch (e) {
+      if (!mounted) return;
+      setState(() {
+        _error = e.toString();
+        _isLoading = false;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,59 +105,44 @@ class CheckScreen extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                // Logo principal con corona
+                // Logo principal
                 Container(
                   width: 250,
                   height: 200,
-                  child: Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      // Círculo principal con gradiente
-                      Container(
-                        width: 400,
-                        height: 400,
-                        child: ClipOval(
-                          child: Image.asset(
-                            "assets/images/kingrest.jpg",
-                            width: 200,
-                            height: 200,
-                            fit: BoxFit.cover,
-                            errorBuilder: (context, error, stackTrace) {
-                              // Fallback: emoji feliz con corona
-                              return Container(
-                                decoration: const BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  gradient: LinearGradient(
-                                    colors: [Color(0xFF4DD0E1), Color(0xFF26C6DA)],
-                                    begin: Alignment.topCenter,
-                                    end: Alignment.bottomCenter,
-                                  ),
-                                ),
-                                child: const Center(
-                                  child: Text(
-                                    '😊',
-                                    style: TextStyle(fontSize: 80),
-                                  ),
-                                ),
-                              );
-                            },
+                  child: ClipOval(
+                    child: Image.asset(
+                      "assets/images/kingrest.jpg",
+                      width: 200,
+                      height: 200,
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) {
+                        return Container(
+                          decoration: const BoxDecoration(
+                            shape: BoxShape.circle,
+                            gradient: LinearGradient(
+                              colors: [Color(0xFF4DD0E1), Color(0xFF26C6DA)],
+                              begin: Alignment.topCenter,
+                              end: Alignment.bottomCenter,
+                            ),
                           ),
-                        ),
-                      ),
-                    ],
+                          child: const Center(
+                            child: Text('😊', style: TextStyle(fontSize: 80)),
+                          ),
+                        );
+                      },
+                    ),
                   ),
                 ),
 
                 const SizedBox(height: 20),
 
-                // Título "¡Ok Listo!" con gradiente de colores
                 ShaderMask(
                   shaderCallback: (bounds) => const LinearGradient(
                     colors: [
-                      Color(0xFFE91E63), // Rosa
-                      Color(0xFFFF5722), // Naranja
-                      Color(0xFFFF9800), // Amarillo-naranja
-                      Color(0xFFFFEB3B), // Amarillo
+                      Color(0xFFE91E63),
+                      Color(0xFFFF5722),
+                      Color(0xFFFF9800),
+                      Color(0xFFFFEB3B),
                     ],
                     begin: Alignment.centerLeft,
                     end: Alignment.centerRight,
@@ -113,10 +174,7 @@ class CheckScreen extends StatelessWidget {
                   decoration: BoxDecoration(
                     color: const Color(0xFF9ADDFF),
                     borderRadius: BorderRadius.circular(25),
-                    border: Border.all(
-                      color: Colors.black,
-                      width: 1,
-                    ),
+                    border: Border.all(color: Colors.black, width: 1),
                     boxShadow: [
                       BoxShadow(
                         color: const Color(0xFF4FC3F7).withOpacity(0.4),
@@ -128,7 +186,6 @@ class CheckScreen extends StatelessWidget {
                   ),
                   child: Column(
                     children: [
-                      // Título del registro
                       const Text(
                         "REGISTRO EMOCIONAL",
                         style: TextStyle(
@@ -161,10 +218,7 @@ class CheckScreen extends StatelessWidget {
                           ],
                         ),
                       ),
-
                       const SizedBox(height: 15),
-
-                      // Subtítulo "HISTORIAL SEMANAL"
                       const Text(
                         "HISTORIAL SEMANAL",
                         style: TextStyle(
@@ -175,65 +229,14 @@ class CheckScreen extends StatelessWidget {
                           fontStyle: FontStyle.italic,
                         ),
                       ),
-
                       const SizedBox(height: 15),
-
-                      // Contenedor de días de la semana
-                      Container(
-                        padding: const EdgeInsets.all(12),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(20),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.1),
-                              blurRadius: 5,
-                              spreadRadius: 1,
-                              offset: const Offset(0, 2),
-                            )
-                          ],
-                        ),
-                        child: Column(
-                          children: [
-                            // Días de la semana
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                _buildDayLabel("LUNES"),
-                                _buildDayLabel("MARTES"),
-                                _buildDayLabel("MIÉRCOLES"),
-                                _buildDayLabel("JUEVES"),
-                                _buildDayLabel("VIERNES"),
-                                _buildDayLabel("SÁBADO"),
-                                _buildDayLabel("DOMINGO"),
-                              ],
-                            ),
-
-                            const SizedBox(height: 6),
-
-                            // Emojis/Imágenes de estados emocionales
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                _buildEmotionIcon("assets/images/sadrest.jpg", "😐"),
-                                _buildEmotionIcon("assets/images/goodrest.jpg", "😊"),
-                                _buildEmotionIcon("assets/images/yellowrest.jpg", "😄"),
-                                _buildEmotionIcon("assets/images/yellowrest.jpg", "😐"),
-                                _buildEmotionIcon("assets/images/goodrest.jpg", "😞"),
-                                _buildEmotionIcon("assets/images/yellowrest.jpg", "😞"),
-                                _buildEmotionIcon("assets/images/goodrest.jpg", "😊"),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
+                      _buildCalendarioContent(),
                     ],
                   ),
                 ),
 
                 const SizedBox(height: 30),
 
-                // Botón "LISTO"
                 Container(
                   width: 200,
                   height: 60,
@@ -241,18 +244,18 @@ class CheckScreen extends StatelessWidget {
                     borderRadius: BorderRadius.circular(28),
                     gradient: const RadialGradient(
                       colors: [
-                        Color(0xFF0BBDAC), // centro
-                        Color(0xFF6110E8), // bordes
+                        Color(0xFF0BBDAC),
+                        Color(0xFF6110E8),
                       ],
-                      center: Alignment.center, // desde el centro
-                      radius: 3.5, // qué tan rápido se expande el gradiente
+                      center: Alignment.center,
+                      radius: 3.5,
                     ),
                     boxShadow: [
                       BoxShadow(
-                        color: Color(0xFF0BBDAC).withOpacity(0.4),
+                        color: const Color(0xFF0BBDAC).withOpacity(0.4),
                         blurRadius: 12,
                         spreadRadius: 1,
-                        offset: Offset(0, 4),
+                        offset: const Offset(0, 4),
                       ),
                     ],
                   ),
@@ -265,13 +268,12 @@ class CheckScreen extends StatelessWidget {
                         borderRadius: BorderRadius.circular(28),
                       ),
                     ),
-                    onPressed: (){
+                    onPressed: () {
                       Navigator.pushNamed(context, AppRoutes.mainApp);
-                    } ,
-
-                    child: Text(
-                     "LISTO",
-                      style: const TextStyle(
+                    },
+                    child: const Text(
+                      "LISTO",
+                      style: TextStyle(
                         fontSize: 28,
                         fontWeight: FontWeight.bold,
                         letterSpacing: 1.1,
@@ -279,9 +281,7 @@ class CheckScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-                )
-
-
+                ),
               ],
             ),
           ),
@@ -290,14 +290,205 @@ class CheckScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildDayLabel(String day) {
+  Widget _buildCalendarioContent() {
+    if (_isLoading) {
+      return const Padding(
+        padding: EdgeInsets.all(24),
+        child: CircularProgressIndicator(),
+      );
+    }
+
+    if (_error != null) {
+      return Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          children: [
+            Text(
+              'No se pudo cargar el historial.',
+              style: TextStyle(fontSize: 14, color: Colors.red[700]),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 8),
+            TextButton(
+              onPressed: _cargarCalendario,
+              child: const Text('Reintentar'),
+            ),
+          ],
+        ),
+      );
+    }
+
+    // Mapa fecha -> promedio (YYYY-MM-DD normalizado)
+    final Map<String, num> datosPorFecha = {};
+    for (final item in _calendario) {
+      final fechaStr = (item['fecha'] ?? item['dia'] ?? '').toString();
+      if (fechaStr.isEmpty) continue;
+      final fechaNorm = _normalizarFecha(fechaStr);
+      if (fechaNorm == null) continue;
+      final p = _parsePromedio(
+        item['promedio'] ?? item['promedio_emocional'] ?? item['valor'] ?? item['score'],
+      );
+      if (p != null) datosPorFecha[fechaNorm] = p;
+    }
+
+    // Si viene del flujo de registro, usar promedioHoy para hoy (asegura que se muestre la carita)
+    final promedioHoy = widget.promedioHoy;
+    if (promedioHoy != null) {
+      final hoy = DateTime.now();
+      final hoyStr = _formatFechaYyyyMmDd(hoy);
+      datosPorFecha[hoyStr] = promedioHoy;
+    }
+
+    // Lunes a Domingo de la semana actual
+    final hoy = DateTime.now();
+    final lunes = hoy.subtract(Duration(days: hoy.weekday - 1));
+    final diasSemana = List.generate(7, (i) => lunes.add(Duration(days: i)));
+
     return Container(
-      width: 30,
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.1),
+            blurRadius: 5,
+            spreadRadius: 1,
+            offset: const Offset(0, 2),
+          )
+        ],
+      ),
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: diasSemana.map((fecha) {
+          final fechaStr = _formatFechaYyyyMmDd(fecha);
+          final diaNombre = _nombresDias[fecha.weekday - 1];
+          final hoyNormalizado = DateTime(hoy.year, hoy.month, hoy.day);
+          final fechaNormalizada = DateTime(fecha.year, fecha.month, fecha.day);
+          final esFuturo = fechaNormalizada.isAfter(hoyNormalizado);
+          final tieneDatos = datosPorFecha.containsKey(fechaStr);
+
+          Widget icono;
+          if (esFuturo) {
+            icono = _buildPendienteIcon();
+          } else if (tieneDatos) {
+            final promedio = datosPorFecha[fechaStr]!;
+            icono = _buildEmotionIcon(
+              _promedioToAsset(promedio),
+              _promedioToEmoji(promedio),
+            );
+          } else {
+            icono = _buildNoLlenoIcon();
+          }
+
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 4),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                _buildDayLabel(diaNombre),
+                const SizedBox(height: 6),
+                icono,
+              ],
+            ),
+          );
+        }).toList(),
+        ),
+      ),
+    );
+  }
+
+  /// Normaliza fecha del API a YYYY-MM-DD
+  String? _normalizarFecha(String s) {
+    if (s.isEmpty) return null;
+    final trimmed = s.trim();
+    if (trimmed.length >= 10) {
+      final sub = trimmed.substring(0, 10);
+      final parts = sub.split(RegExp(r'[-/T]'));
+      if (parts.length >= 3) {
+        int? y, m, d;
+        if (parts[0].length == 4) {
+          y = int.tryParse(parts[0]);
+          m = int.tryParse(parts[1]);
+          d = int.tryParse(parts[2]);
+        } else if (parts[2].length == 4) {
+          d = int.tryParse(parts[0]);
+          m = int.tryParse(parts[1]);
+          y = int.tryParse(parts[2]);
+        }
+        if (y != null && m != null && d != null) {
+          return '${y.toString().padLeft(4, '0')}-${m.toString().padLeft(2, '0')}-${d.toString().padLeft(2, '0')}';
+        }
+      }
+    }
+    return trimmed;
+  }
+
+  String _formatFechaYyyyMmDd(DateTime d) {
+    final dd = d.day.toString().padLeft(2, '0');
+    final mm = d.month.toString().padLeft(2, '0');
+    return '${d.year}-$mm-$dd';
+  }
+
+  /// Rayita para días pasados sin registro
+  Widget _buildNoLlenoIcon() {
+    return Container(
+      width: 36,
+      height: 36,
+      alignment: Alignment.center,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: Colors.grey[200],
+        border: Border.all(color: Colors.grey[400]!, width: 1),
+      ),
+      child: Container(
+        width: 20,
+        height: 2,
+        color: Colors.grey[500],
+      ),
+    );
+  }
+
+  /// Bolita para días pendientes (futuros)
+  Widget _buildPendienteIcon() {
+    return Container(
+      width: 36,
+      height: 36,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: Colors.grey[200],
+        border: Border.all(color: const Color(0xFF0277BD), width: 2),
+      ),
+      child: Center(
+        child: Container(
+          width: 8,
+          height: 8,
+          decoration: const BoxDecoration(
+            shape: BoxShape.circle,
+            color: Color(0xFF0277BD),
+          ),
+        ),
+      ),
+    );
+  }
+
+  num? _parsePromedio(dynamic v) {
+    if (v == null) return null;
+    if (v is num) return v;
+    if (v is String) return num.tryParse(v);
+    return null;
+  }
+
+  Widget _buildDayLabel(String day) {
+    return SizedBox(
+      width: 36,
       child: Text(
         day,
         textAlign: TextAlign.center,
         style: const TextStyle(
-          fontSize: 6,
+          fontSize: 10,
           fontWeight: FontWeight.w600,
           color: Color(0xFF424242),
           letterSpacing: 0.2,
@@ -310,8 +501,8 @@ class CheckScreen extends StatelessWidget {
 
   Widget _buildEmotionIcon(String imagePath, String fallbackEmoji) {
     return Container(
-      width: 30,
-      height: 30,
+      width: 36,
+      height: 36,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         color: Colors.grey[100],
@@ -332,10 +523,7 @@ class CheckScreen extends StatelessWidget {
           fit: BoxFit.cover,
           errorBuilder: (context, error, stackTrace) {
             return Center(
-              child: Text(
-                fallbackEmoji,
-                style: const TextStyle(fontSize: 24),
-              ),
+              child: Text(fallbackEmoji, style: const TextStyle(fontSize: 20)),
             );
           },
         ),

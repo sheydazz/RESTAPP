@@ -5,11 +5,13 @@ class TrafficLightScreen extends StatelessWidget {
   final String estado; // "excelente", "alerta-amarillo", "alerta-rojo"
   final String mensaje;
   final String botonTexto;
+  final double? promedioHoy; // Para pasar a CheckScreen y mostrar la carita del día
   const TrafficLightScreen({
     super.key,
     required this.estado,
     required this.mensaje,
     required this.botonTexto,
+    this.promedioHoy,
   });
 
   @override
@@ -199,9 +201,13 @@ class TrafficLightScreen extends StatelessWidget {
                       ),
                     ),
                     onPressed: () {
+                      final argsCheck = promedioHoy != null ? {"promedioHoy": promedioHoy} : null;
                       switch (estado) {
                         case "excelente":
-                          Navigator.of(context, rootNavigator: true).pushNamed(AppRoutes.check);
+                          Navigator.of(context, rootNavigator: true).pushNamed(
+                            AppRoutes.check,
+                            arguments: argsCheck,
+                          );
                           break;
                         case "alerta-amarillo":
                           Navigator.of(context, rootNavigator: true).pushNamed(
@@ -209,7 +215,8 @@ class TrafficLightScreen extends StatelessWidget {
                             arguments: {
                               "userName": "Mari",
                               "adviceTitle": "Respira y\nRelájate",
-                              "message": "Ejercicios de respiración para calmarte..."
+                              "message": "Ejercicios de respiración para calmarte...",
+                              "promedioHoy": promedioHoy,
                             },
                           );
                           break;

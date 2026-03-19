@@ -4,6 +4,8 @@ import 'features/intro_auth/screens/how_you_found_screen.dart';
 import 'features/intro_auth/screens/intro_screen.dart';
 import 'features/intro_auth/screens/login_screen.dart';
 import 'features/intro_auth/screens/register_screen.dart';
+import 'features/help/screens/cancelhelp_screen.dart';
+import 'features/help/screens/help_screen.dart';
 import 'features/home/screens/home_screen.dart';
 import 'features/settings/screens/settings_screen.dart';
 import 'features/emotion/screens/emotionregister_screen.dart';
@@ -48,27 +50,37 @@ class MyApp extends StatelessWidget {
         AppRoutes.home: (context) =>  HomeScreen(),
         AppRoutes.settings: (context) =>  SettingsScreen(),
 
+        // Ayuda
+        AppRoutes.help: (context) =>  HelpScreen(),
+        AppRoutes.cancelhelp: (context) =>  CancelHelpScreen(),
+
         // Registro Emocional
         AppRoutes.emotionHome: (context) =>  EmotionRegisterScreen(),
         AppRoutes.chat: (context) =>  ChatScreen(),
         AppRoutes.trafficLight: (context) {
-          final args = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+          final args = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
           return TrafficLightScreen(
-            estado: args["estado"],
-            mensaje: args["mensaje"],
-            botonTexto: args["botonTexto"],
+            estado: args?["estado"] ?? "excelente",
+            mensaje: args?["mensaje"] ?? "¡Qué bien te sientes hoy!",
+            botonTexto: args?["botonTexto"] ?? "Continuar",
+            promedioHoy: (args?["promedio"] is num) ? (args!["promedio"] as num).toDouble() : null,
           );
         },
 
         AppRoutes.advice: (context) {
-          final args = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>?;
+          final args = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
           return AdviceScreen(
             userName: args?["userName"] ?? "Usuario",
             adviceTitle: args?["adviceTitle"] ?? "Consejo",
             message: args?["message"] ?? "consejo personalizado.",
+            promedioHoy: (args?["promedioHoy"] is num) ? (args!["promedioHoy"] as num).toDouble() : null,
           );
         },
-        AppRoutes.check: (context) =>  CheckScreen(),
+        AppRoutes.check: (context) {
+          final args = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+          final promedioHoy = (args?["promedioHoy"] is num) ? (args!["promedioHoy"] as num).toDouble() : null;
+          return CheckScreen(promedioHoy: promedioHoy);
+        },
 
         // Mi Progreso
         AppRoutes.globalprogress: (context) =>  GlobalProgressScreen(),

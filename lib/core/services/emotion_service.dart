@@ -15,6 +15,59 @@ class EmotionService {
     return '$dd-$mm-$yyyy';
   }
 
+  /// Formato YYYY-MM-DD para el endpoint de calendario
+  String _formatFechaYyyyMmDd(DateTime date) {
+    final dd = date.day.toString().padLeft(2, '0');
+    final mm = date.month.toString().padLeft(2, '0');
+    final yyyy = date.year.toString();
+    return '$yyyy-$mm-$dd';
+  }
+
+  /// Obtiene el calendario con promedio emocional por día.
+  /// [inicio] y [fin] en formato YYYY-MM-DD.
+  /// Retorna una lista de mapas con fecha y promedio (ej: {"fecha": "2025-03-18", "promedio": 3.2}).
+  Future<List<Map<String, dynamic>>> fetchCalendarioEmocional({
+    required DateTime inicio,
+    required DateTime fin,
+  }) async {
+    final token = UserSession.authToken;
+    if (token == null || token.isEmpty) {
+      throw Exception('No hay token de autenticación. Inicia sesión de nuevo.');
+    }
+
+    final inicioStr = _formatFechaYyyyMmDd(inicio);
+    final finStr = _formatFechaYyyyMmDd(fin);
+    final uri = Uri.parse(
+      '$_baseUrl/api/registro-emocional/calendario?inicio=$inicioStr&fin=$finStr',
+    );
+
+    final response = await http.get(
+      uri,
+      headers: {
+        'Authorization': 'Bearer $token',
+      },
+    );
+
+    if (response.statusCode >= 200 && response.statusCode < 300) {
+      final data = jsonDecode(response.body);
+      if (data is List) {
+        return List<Map<String, dynamic>>.from(
+          data.map((e) => e is Map ? Map<String, dynamic>.from(e) : <String, dynamic>{}),
+        );
+      }
+      if (data is Map && data['data'] is List) {
+        return List<Map<String, dynamic>>.from(
+          (data['data'] as List).map((e) =>
+              e is Map ? Map<String, dynamic>.from(e) : <String, dynamic>{}),
+        );
+      }
+      return [];
+    }
+    throw Exception(
+      'Error al cargar calendario (${response.statusCode}): ${response.body}',
+    );
+  }
+
   Future<List<dynamic>> fetchPreguntas() async {
     final token = UserSession.authToken;
     final uri = Uri.parse('$_baseUrl/api/registro-emocional/preguntas');
@@ -73,11 +126,27 @@ class EmotionService {
       },
     );
 
-    if (response.statusCode >= 200 && response.statusCode < 300) {
-      return true;
-    }
+    print('EXISTE_REGISTRO → status=${response.statusCode}, body=${response.body}');
+
     if (response.statusCode == 404) {
       return false;
+    }
+    if (response.statusCode >= 200 && response.statusCode < 300) {
+      final body = response.body.trim();
+      if (body.isEmpty || body == '{}' || body == '[]') {
+        return false;
+      }
+      try {
+        final data = jsonDecode(response.body);
+        if (data == null) return false;
+        if (data is Map && data['existe'] == false) return false;
+        // El backend devuelve data.registro_del_dia: false cuando no hay registro
+        final inner = data is Map ? data['data'] : null;
+        if (inner is Map && inner['registro_del_dia'] == false) {
+          return false;
+        }
+      } catch (_) {}
+      return true;
     }
 
     // Otros errores sí deben reportarse (ej. 401, 500)

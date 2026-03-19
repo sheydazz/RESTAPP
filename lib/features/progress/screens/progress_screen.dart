@@ -155,10 +155,10 @@ class ProgressScreen extends StatelessWidget {
     final iconos = [
       'assets/images/green_face.png',
       'assets/images/pink_face.png',
-      'assets/images/yellowrest.png',
+      'assets/images/yellowrest.jpg',
       'assets/images/green_face.png',
       'assets/images/pink_face.png',
-      'assets/images/yellowrest.png',
+      'assets/images/yellowrest.jpg',
       'assets/images/green_face.png',
     ];
 

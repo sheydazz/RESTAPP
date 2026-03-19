@@ -76,15 +76,33 @@ class _LoginScreenState extends State<LoginScreen> {
         UserSession.authToken = token;
       }
 
-      final dynamic user =
-          response['user'] ?? (response['data'] is Map ? (response['data'] as Map)['user'] : null);
+      // El login puede devolver user/usuario en distintos formatos (el del login viene mal)
+      final dynamic user = response['user'] ??
+          response['usuario'] ??
+          (response['data'] is Map ? (response['data'] as Map)['user'] : null) ??
+          (response['data'] is Map ? (response['data'] as Map)['usuario'] : null);
 
       print('LOGIN PARSED → user type: ${user.runtimeType}, value: $user');
 
-      if (user is Map && user['id'] is int) {
-        UserSession.userId = user['id'] as int;
-      } else if (response['id'] is int) {
-        UserSession.userId = response['id'] as int;
+      if (user is Map) {
+        final id = user['id'];
+        if (id is int) {
+          UserSession.userId = id;
+        } else if (id is num) {
+          UserSession.userId = id.toInt();
+        } else if (id is String) {
+          UserSession.userId = int.tryParse(id);
+        }
+      }
+      if (UserSession.userId == null && response['id'] != null) {
+        final id = response['id'];
+        if (id is int) {
+          UserSession.userId = id;
+        } else if (id is num) {
+          UserSession.userId = id.toInt();
+        } else if (id is String) {
+          UserSession.userId = int.tryParse(id);
+        }
       }
 
       print('LOGIN SESSION → authToken=${UserSession.authToken != null ? 'SET' : 'NULL'}, userId=${UserSession.userId}');
@@ -94,9 +112,10 @@ class _LoginScreenState extends State<LoginScreen> {
       // Verificar si ya hizo el registro emocional hoy
       bool yaHizoRegistroHoy = false;
       try {
-        yaHizoRegistroHoy = await _emotionService.existeRegistroEmocionalHoy();
+        if (UserSession.userId != null) {
+          yaHizoRegistroHoy = await _emotionService.existeRegistroEmocionalHoy();
+        }
       } catch (_) {
-        // Si falla (403, sin conexión, etc.) asumimos que no lo ha hecho
         yaHizoRegistroHoy = false;
       }
       if (!mounted) return;
