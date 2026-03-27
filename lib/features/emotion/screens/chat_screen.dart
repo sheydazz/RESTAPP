@@ -188,11 +188,9 @@ class _ChatScreenState extends State<ChatScreen> {
                       right: 16,
                       child: GestureDetector(
                         onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => EmotionRegisterScreen()),
-                          );
+                          // Ahora solo cerramos el chat y volvemos atrás,
+                          // el registro emocional se hace al inicio tras el login.
+                          Navigator.pop(context);
                         },
                         child: Container(
                           padding: const EdgeInsets.symmetric(

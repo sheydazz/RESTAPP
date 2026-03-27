@@ -4,12 +4,14 @@ class AdviceScreen extends StatelessWidget {
   final String userName;
   final String adviceTitle;
   final String message;
+  final double? promedioHoy;
 
   const AdviceScreen({
     Key? key,
     required this.userName,
     required this.adviceTitle,
     required this.message,
+    this.promedioHoy,
   }) : super(key: key);
 
   @override
@@ -178,7 +180,8 @@ class AdviceScreen extends StatelessWidget {
                   ),
 
                   onPressed: () {
-                    Navigator.pushNamed(context, AppRoutes.mainApp);
+                    final args = promedioHoy != null ? {"promedioHoy": promedioHoy} : null;
+                    Navigator.pushReplacementNamed(context, AppRoutes.check, arguments: args);
                   },
                   child: Text(
                 "LISTO",

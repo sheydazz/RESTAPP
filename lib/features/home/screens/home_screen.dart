@@ -5,6 +5,7 @@ import '../../settings/screens/settings_screen.dart';
 import 'activities_screen.dart';
 import 'package:rest/features/emotion/screens/chat_screen.dart';
 import 'conversations_screen.dart';
+import 'package:rest/core/services/user_session.dart';
 
 void main() {
   runApp(HomeScreen());
@@ -52,9 +53,9 @@ class MainScreen extends StatelessWidget {
 
                   ),
                   SizedBox(width: 12),
-                  // Texto "¡Hola! Mari"
+                  // Texto "¡Hola! <nombre>"
                   Text(
-                    '¡Hola! Mari',
+                    '¡Hola! ${UserSession.displayName}',
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
@@ -164,36 +165,7 @@ class MainScreen extends StatelessWidget {
             SizedBox(height: 20),
 
             // Botón "ESCOGER UN TEMA"
-            Container(
-              margin: EdgeInsets.symmetric(horizontal: 20),
-              padding: EdgeInsets.symmetric(vertical: 15, horizontal: 40),
-              decoration: BoxDecoration(
-                gradient: const LinearGradient(
-                  colors: [
-                    Color(0xFF0BBDAC), // centro
-                    Color(0xFF6110E8), // bordes
-                  ],
-                  begin: Alignment.centerLeft,
-                  end: Alignment.centerRight,
-                ),
-                borderRadius: BorderRadius.circular(35),
-                border: Border.all(
-                  color: Colors.black,
-                  width: 0.5,
-                ),
-              ),
-              child: Center(
-                child: Text(
-                  'ESCOGER UN TEMA',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 27,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ),
-
+          
             SizedBox(height: 40),
 
             // Sección "Mis últimas sesiones"

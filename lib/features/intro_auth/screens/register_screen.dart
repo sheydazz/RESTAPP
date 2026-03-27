@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'how_you_found_screen.dart';
+import 'package:rest/core/services/auth_service.dart';
+import 'package:rest/core/services/user_session.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -10,7 +12,151 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
-  bool wantsToChangePassword = false;
+  final _nombreController = TextEditingController();
+  final _apellidoController = TextEditingController();
+  final _edadController = TextEditingController();
+  final _ciudadController = TextEditingController();
+  final _carreraController = TextEditingController();
+  final _semestresController = TextEditingController();
+  final _correoController = TextEditingController();
+  final _passwordController = TextEditingController();
+  final _telefonoController = TextEditingController();
+
+  final _authService = AuthService();
+  bool _isLoading = false;
+
+  @override
+  void dispose() {
+    _nombreController.dispose();
+    _apellidoController.dispose();
+    _edadController.dispose();
+    _ciudadController.dispose();
+    _carreraController.dispose();
+    _semestresController.dispose();
+    _correoController.dispose();
+    _passwordController.dispose();
+    _telefonoController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _handleRegister() async {
+    final nombres = _nombreController.text.trim();
+    final apellidos = _apellidoController.text.trim();
+    final correo = _correoController.text.trim();
+    final contrasena = _passwordController.text.trim();
+    final ciudad = _ciudadController.text.trim();
+    final telefono = _telefonoController.text.trim();
+    final edadText = _edadController.text.trim();
+    final edad = int.tryParse(edadText);
+
+    if (nombres.isEmpty ||
+        apellidos.isEmpty ||
+        correo.isEmpty ||
+        contrasena.isEmpty ||
+        ciudad.isEmpty ||
+        telefono.isEmpty ||
+        edad == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            'Completa nombre, apellido, correo, contraseña, ciudad, teléfono y una edad válida',
+          ),
+        ),
+      );
+      return;
+    }
+
+    // Validar formato de correo
+    final emailRegExp =
+        RegExp(r'^[\w\.-]+@([\w-]+\.)+[\w-]{2,4}$', caseSensitive: false);
+    if (!emailRegExp.hasMatch(correo)) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Ingresa un correo válido'),
+        ),
+      );
+      return;
+    }
+
+    // Validar longitud de contraseña (> 8 caracteres)
+    if (contrasena.length <= 8) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('La contraseña debe tener más de 8 caracteres'),
+        ),
+      );
+      return;
+    }
+
+    // Validar teléfono: solo dígitos y más de 6
+    final phoneRegExp = RegExp(r'^\d+$');
+    if (!phoneRegExp.hasMatch(telefono) || telefono.length <= 6) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content:
+              Text('El teléfono debe tener solo números y más de 6 dígitos'),
+        ),
+      );
+      return;
+    }
+
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      final response = await _authService.register(
+        correo: correo,
+        contrasena: contrasena,
+        nombres: nombres,
+        apellidos: apellidos,
+        telefono: telefono,
+        ciudad: ciudad,
+        edad: edad,
+      );
+
+      UserSession.currentUserName = nombres;
+
+      // Guardar token y userId directamente del registro (el del login viene mal)
+      final dynamic token =
+          response['token'] ??
+          response['accessToken'] ??
+          response['jwt'] ??
+          (response['data'] is Map ? (response['data'] as Map)['token'] : null);
+      if (token is String && token.isNotEmpty) {
+        UserSession.authToken = token;
+      }
+
+      final dynamic user =
+          response['user'] ??
+          (response['data'] is Map ? (response['data'] as Map)['user'] : null);
+      if (user is Map && user['id'] is int) {
+        UserSession.userId = user['id'] as int;
+      } else if (response['id'] is int) {
+        UserSession.userId = response['id'] as int;
+      }
+
+      print('REGISTER SESSION → token=${UserSession.authToken != null ? 'SET' : 'NULL'}, userId=${UserSession.userId}');
+
+      if (!mounted) return;
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const HowYouFoundScreen(),
+        ),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(e.toString())),
+      );
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -63,50 +209,63 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ],
               ),
 
-              _buildInputField(label: '¿Cómo quieres que te llame?', hint: 'Tu nombre'),
+              _buildInputField(
+                controller: _nombreController,
+                label: '¿Cómo quieres que te llame?',
+                hint: 'Tu nombre',
+              ),
               const SizedBox(height: 20),
-              _buildInputField(label: '¿Cuántos años tienes?', hint: 'Edad'),
+              _buildInputField(
+                controller: _edadController,
+                label: '¿Cuántos años tienes?',
+                hint: 'Edad',
+              ),
               const SizedBox(height: 20),
-              _buildInputField(label: '¿De qué ciudad eres?', hint: 'Ciudad'),
+              _buildInputField(
+                controller: _ciudadController,
+                label: '¿De qué ciudad eres?',
+                hint: 'Ciudad',
+              ),
               const SizedBox(height: 20),
-              _buildInputField(label: '¿Cuál es tu carrera?', hint: 'Ej. Psicología'),
+              _buildInputField(
+                controller: _carreraController,
+                label: '¿Cuál es tu carrera?',
+                hint: 'Ej. Psicología',
+              ),
               const SizedBox(height: 20),
-              _buildInputField(label: '¿Qué semestres cursas?', hint: 'Ej. 3 y 4'),
-
-              const SizedBox(height: 30),
-
-              Row(
-                children: [
-                  Checkbox(
-                    value: wantsToChangePassword,
-                    activeColor: const Color(0xFF3709EC),
-                    onChanged: (value) {
-                      setState(() {
-                        wantsToChangePassword = value!;
-                      });
-                    },
-                  ),
-                  Text(
-                    '¿Quieres cambiar tu contraseña?',
-                    style: GoogleFonts.fredoka(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: wantsToChangePassword
-                          ? Colors.black87
-                          : Colors.grey,
-                    ),
-                  ),
-                ],
+              _buildInputField(
+                controller: _semestresController,
+                label: '¿Qué semestres cursas?',
+                hint: 'Ej. 3 y 4',
               ),
 
-              const SizedBox(height: 10),
+              const SizedBox(height: 20),
+              _buildInputField(
+                controller: _telefonoController,
+                label: 'Teléfono',
+                hint: '3001234567',
+              ),
 
-              if (wantsToChangePassword)
-                _buildInputField(
-                  label: 'Nueva contraseña',
-                  hint: '••••••••',
-                  obscure: true,
-                ),
+              const SizedBox(height: 20),
+              _buildInputField(
+                controller: _apellidoController,
+                label: 'Apellidos',
+                hint: 'Tus apellidos',
+              ),
+
+              const SizedBox(height: 20),
+              _buildInputField(
+                controller: _correoController,
+                label: 'Correo institucional',
+                hint: 'example@correo.com',
+              ),
+              const SizedBox(height: 20),
+              _buildInputField(
+                controller: _passwordController,
+                label: 'Contraseña',
+                hint: '••••••••',
+                obscure: true,
+              ),
 
               const SizedBox(height: 40),
 
@@ -114,15 +273,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 child: SizedBox(
                   width: MediaQuery.of(context).size.width * 0.6,
                   child: _buildRadialButton(
-                    text: 'GUARDAR',
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const HowYouFoundScreen(),
-                        ),
-                      );
-                    },
+                    text: _isLoading ? 'GUARDANDO...' : 'GUARDAR',
+                    onPressed: _isLoading ? null : () => _handleRegister(),
                   ),
                 ),
               ),
@@ -136,6 +288,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   Widget _buildInputField({
+    required TextEditingController controller,
     required String label,
     required String hint,
     bool obscure = false,
@@ -172,6 +325,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               borderRadius: BorderRadius.circular(28),
             ),
             child: TextField(
+              controller: controller,
               obscureText: obscure,
               style: GoogleFonts.fredoka(
                 color: Colors.black87,
@@ -217,7 +371,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   Widget _buildRadialButton({
     required String text,
-    required VoidCallback onPressed,
+    required VoidCallback? onPressed,
   }) {
     final gradient = const RadialGradient(
       center: Alignment.center,

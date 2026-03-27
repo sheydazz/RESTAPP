@@ -7,6 +7,8 @@ import 'fail_report_screen.dart'; // Importar la pantalla de reporte de fallas
 import 'terms_screen.dart'; // Importar la pantalla de términos
 import 'privacity_screen.dart'; // Importar la pantalla de privacidad
 import 'behaviour_code_screen.dart'; // Importar la pantalla de código de conducta
+import 'package:rest/core/routes/app_routes.dart';
+import 'package:rest/core/services/user_session.dart';
 
 class SettingsScreen extends StatelessWidget {
   @override
@@ -66,10 +68,12 @@ class SettingsScreen extends StatelessWidget {
         ),
         centerTitle: false,
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(20),
-          child: Column(
+      body: SafeArea(
+        top: false,
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               _buildSectionTitle('Cuenta'),
@@ -153,7 +157,6 @@ class SettingsScreen extends StatelessWidget {
                   child: InkWell(
                     borderRadius: BorderRadius.circular(15),
                     onTap: () {
-                      // Aquí puedes agregar lógica para cerrar sesión
                       _showLogoutDialog(context);
                     },
                     child: const Center(
@@ -175,7 +178,7 @@ class SettingsScreen extends StatelessWidget {
           ),
         ),
       ),
-    );
+    ));
   }
 
   Widget _buildSectionTitle(String title) {
@@ -298,8 +301,14 @@ class SettingsScreen extends StatelessWidget {
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
-                // Aquí puedes agregar la lógica para cerrar sesión
-                // Por ejemplo: navegar a la pantalla de login
+                // Limpiar datos de sesión en memoria
+                UserSession.currentUserName = null;
+
+                // Navegar a la pantalla de login y limpiar el stack
+                Navigator.of(context).pushNamedAndRemoveUntil(
+                  AppRoutes.login,
+                  (route) => false,
+                );
               },
               child: Text(
                 'Cerrar sesión',

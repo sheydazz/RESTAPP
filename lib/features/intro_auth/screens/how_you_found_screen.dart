@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:rest/core/routes/app_routes.dart'; // Asegúrate de tener esta ruta definida
+import 'package:rest/core/services/user_session.dart';
+import 'package:rest/features/emotion/screens/emotionregister_screen.dart';
+import 'login_screen.dart';
 
 class HowYouFoundScreen extends StatefulWidget {
   const HowYouFoundScreen({super.key});
@@ -18,6 +20,24 @@ class _HowYouFoundScreenState extends State<HowYouFoundScreen> {
     'Por Universidad',
     'Por otras cosas...',
   ];
+
+  void _continuar() {
+    if (selectedOption == null) return;
+
+    // El token y userId ya vienen guardados desde RegisterScreen
+    if (UserSession.authToken != null && UserSession.userId != null) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (_) => const EmotionRegisterScreen()),
+      );
+    } else {
+      // Si por alguna razón no hay sesión, ir a login
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (_) => const LoginScreen()),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -150,11 +170,7 @@ class _HowYouFoundScreenState extends State<HowYouFoundScreen> {
                     borderRadius: BorderRadius.all(Radius.circular(30)),
                   ),
                   child: ElevatedButton(
-                    onPressed: selectedOption != null
-                        ? () {
-                      Navigator.pushNamed(context, AppRoutes.mainApp);
-                    }
-                        : null,
+                    onPressed: selectedOption != null ? _continuar : null,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.transparent,
                       shadowColor: Colors.transparent,
