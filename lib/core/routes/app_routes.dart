@@ -11,10 +11,10 @@ class AppRoutes {
   // Home
   static const home = '/home';
   static const settings = '/settings';
-  
+
   //ayuda salavidas
   static const cancelhelp = '/cancelhelp';
-  static const help = '/help'; 
+  static const help = '/help';
 
   //relax
   static const relax = '/relax';
@@ -33,5 +33,4 @@ class AppRoutes {
   static const String misCapitulos = '/mis-capitulos';
   static const String capituloDetalle = '/capitulo-detalle';
   static const misTecnicas = '/mis_tecnicas';
-
 }

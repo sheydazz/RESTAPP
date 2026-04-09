@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../core/routes/app_routes.dart';
+import '../../../core/services/user_session.dart';
 
 class ProgressScreen extends StatelessWidget {
   const ProgressScreen({super.key});
@@ -54,9 +55,9 @@ class ProgressScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 12),
-            const Text(
-              '¡Hola! Mari',
-              style: TextStyle(
+            Text(
+              '¡Hola! ${UserSession.displayName}',
+              style: const TextStyle(
                 fontSize: 22,
                 fontWeight: FontWeight.bold,
                 color: Color(0xFF7DD3E8),
@@ -78,7 +79,11 @@ class ProgressScreen extends StatelessWidget {
                   width: 24,
                   height: 24,
                   errorBuilder: (context, error, stackTrace) {
-                    return const Icon(Icons.settings, color: Colors.white, size: 24);
+                    return const Icon(
+                      Icons.settings,
+                      color: Colors.white,
+                      size: 24,
+                    );
                   },
                 ),
               ),
@@ -98,7 +103,11 @@ class ProgressScreen extends StatelessWidget {
                   width: 24,
                   height: 24,
                   errorBuilder: (context, error, stackTrace) {
-                    return const Icon(Icons.help_outline, color: Colors.white, size: 24);
+                    return const Icon(
+                      Icons.help_outline,
+                      color: Colors.white,
+                      size: 24,
+                    );
                   },
                 ),
               ),
@@ -119,28 +128,6 @@ class ProgressScreen extends StatelessWidget {
     );
   }
 
-
-  Widget _buildCircleIcon(String asset, IconData fallback) {
-    return Container(
-      width: 40,
-      height: 40,
-      decoration: const BoxDecoration(
-        color: Color(0xFF7DD3E8),
-        shape: BoxShape.circle,
-      ),
-      child: Center(
-        child: Image.asset(
-          asset,
-          width: 24,
-          height: 24,
-          errorBuilder: (context, error, stackTrace) {
-            return Icon(fallback, color: Colors.white, size: 24);
-          },
-        ),
-      ),
-    );
-  }
-
   // semana emocional
   Widget _buildRegistroEmocional() {
     final diasSemana = [
@@ -150,7 +137,7 @@ class ProgressScreen extends StatelessWidget {
       'JUEVES',
       'VIERNES',
       'SÁBADO',
-      'DOMINGO'
+      'DOMINGO',
     ];
     final iconos = [
       'assets/images/green_face.png',
@@ -321,11 +308,7 @@ class ProgressScreen extends StatelessWidget {
             padding: const EdgeInsets.all(16),
             child: Row(
               children: [
-                Image.asset(
-                  'assets/images/dairy.jpg',
-                  width: 110,
-                  height: 90,
-                ),
+                Image.asset('assets/images/dairy.jpg', width: 110, height: 90),
                 const SizedBox(width: 16),
                 const Expanded(
                   child: Text(

@@ -6,7 +6,7 @@ import 'user_session.dart';
 
 class EmotionService {
   // Mismo backend que AuthService
-  static const String _baseUrl = 'http://190.143.117.179:8080';
+  static const String _baseUrl = 'http://localhost:3000';
 
   String _formatFechaDdMmYyyy(DateTime date) {
     final dd = date.day.toString().padLeft(2, '0');
@@ -43,22 +43,26 @@ class EmotionService {
 
     final response = await http.get(
       uri,
-      headers: {
-        'Authorization': 'Bearer $token',
-      },
+      headers: {'Authorization': 'Bearer $token'},
     );
 
     if (response.statusCode >= 200 && response.statusCode < 300) {
       final data = jsonDecode(response.body);
+      print('🔄 EmotionService - Respuesta cruda del API: ${response.body}');
       if (data is List) {
         return List<Map<String, dynamic>>.from(
-          data.map((e) => e is Map ? Map<String, dynamic>.from(e) : <String, dynamic>{}),
+          data.map(
+            (e) =>
+                e is Map ? Map<String, dynamic>.from(e) : <String, dynamic>{},
+          ),
         );
       }
       if (data is Map && data['data'] is List) {
         return List<Map<String, dynamic>>.from(
-          (data['data'] as List).map((e) =>
-              e is Map ? Map<String, dynamic>.from(e) : <String, dynamic>{}),
+          (data['data'] as List).map(
+            (e) =>
+                e is Map ? Map<String, dynamic>.from(e) : <String, dynamic>{},
+          ),
         );
       }
       return [];
@@ -121,12 +125,12 @@ class EmotionService {
 
     final response = await http.get(
       uri,
-      headers: {
-        'Authorization': 'Bearer $token',
-      },
+      headers: {'Authorization': 'Bearer $token'},
     );
 
-    print('EXISTE_REGISTRO → status=${response.statusCode}, body=${response.body}');
+    print(
+      'EXISTE_REGISTRO → status=${response.statusCode}, body=${response.body}',
+    );
 
     if (response.statusCode == 404) {
       return false;
@@ -164,11 +168,15 @@ class EmotionService {
     if (userId == null) {
       throw Exception('No se encontró el usuario en sesión.');
     }
-    return existeRegistroEmocionalEnFecha(usuarioId: userId, fecha: DateTime.now());
+    return existeRegistroEmocionalEnFecha(
+      usuarioId: userId,
+      fecha: DateTime.now(),
+    );
   }
 
-  Future<void> enviarRegistroEmocional(
-      {required List<Map<String, int>> respuestas}) async {
+  Future<void> enviarRegistroEmocional({
+    required List<Map<String, int>> respuestas,
+  }) async {
     final token = UserSession.authToken;
     final userId = UserSession.userId;
 
@@ -181,10 +189,7 @@ class EmotionService {
 
     final uri = Uri.parse('$_baseUrl/api/registro-emocional');
 
-    final payload = {
-      'usuario_id': userId,
-      'respuestas': respuestas,
-    };
+    final payload = {'usuario_id': userId, 'respuestas': respuestas};
 
     final response = await http.post(
       uri,
@@ -200,4 +205,3 @@ class EmotionService {
     }
   }
 }
-

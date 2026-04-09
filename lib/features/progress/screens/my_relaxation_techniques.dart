@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../../../core/routes/app_routes.dart';
 
 class MisTecnicasScreen extends StatelessWidget {
   const MisTecnicasScreen({super.key});
@@ -41,7 +40,11 @@ class MisTecnicasScreen extends StatelessWidget {
                       shape: BoxShape.circle,
                       gradient: _gradient,
                     ),
-                    child: const Icon(Icons.close, color: Colors.white, size: 24),
+                    child: const Icon(
+                      Icons.close,
+                      color: Colors.white,
+                      size: 24,
+                    ),
                   ),
                 ),
               ),
@@ -103,7 +106,10 @@ class MisTecnicasScreen extends StatelessWidget {
                       childAspectRatio: 1,
                       children: List.generate(tecnicas.length, (index) {
                         final tecnica = tecnicas[index];
-                        return _buildTecnicaCard(tecnica['nombre']!, tecnica['icono']!);
+                        return _buildTecnicaCard(
+                          tecnica['nombre']!,
+                          tecnica['icono']!,
+                        );
                       }),
                     ),
                   ),

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:rest/features/emotion/screens/emotionregister_screen.dart';
 
 class ChatScreen extends StatefulWidget {
   @override
@@ -13,32 +12,7 @@ class _ChatScreenState extends State<ChatScreen> {
   List<ChatMessage> messages = [
     ChatMessage(
       text:
-      "¡Hola! Soy Noa, me gustaría que me cuentes un poco más sobre ti, ¿cómo te sientes hoy? ¿Cómo te gustaría que me diría que te nombrará?",
-      isUser: false,
-    ),
-    ChatMessage(
-      text:
-      "¡Hola! Soy Mari, realmente hoy me siento un poco desanimada, las cosas no se han dado bien, el trabajo, la familia....",
-      isUser: true,
-    ),
-    ChatMessage(
-      text:
-      "Gracias por confiar en mí, Mari. Siento mucho que estás pasando por un momento complicado. A veces todo se junta y puede ser abrumador, pero hablarlo ya es un paso importante.",
-      isUser: false,
-    ),
-    ChatMessage(
-      text:
-      "¿Te gustaría contarme un poco más sobre lo que te está afectando? Estoy aquí para escucharte sin juzgar",
-      isUser: false,
-    ),
-    ChatMessage(
-      text:
-      "Sí, la verdad es que últimamente siento que hago todo lo posible, pero nada sale como espero. Me esfuerzo en el trabajo, en casa, pero no veo resultados, y eso me hace sentir agotada y sin ánimos.",
-      isUser: true,
-    ),
-    ChatMessage(
-      text:
-      "Es completamente válido sentirse así, Mari. Lo que estás viviendo suena realmente difícil, y es normal sentirse cansada cuando sientes que estás dando todo de ti.",
+          "¡Hola! Soy Noa, me gustaría que me cuentes un poco más sobre ti, ¿cómo te sientes hoy?",
       isUser: false,
     ),
   ];
@@ -46,10 +20,7 @@ class _ChatScreenState extends State<ChatScreen> {
   void _sendMessage() {
     if (_messageController.text.trim().isNotEmpty) {
       setState(() {
-        messages.add(ChatMessage(
-          text: _messageController.text,
-          isUser: true,
-        ));
+        messages.add(ChatMessage(text: _messageController.text, isUser: true));
       });
       _messageController.clear();
       _scrollToBottom();
@@ -97,7 +68,9 @@ class _ChatScreenState extends State<ChatScreen> {
                           ),
                         ],
                         image: DecorationImage(
-                          image: AssetImage('assets/images/normalrest.jpg'), // Asegúrate de tener la imagen en esta ruta
+                          image: AssetImage(
+                            'assets/images/normalrest.jpg',
+                          ), // Asegúrate de tener la imagen en esta ruta
                           fit: BoxFit.cover,
                         ),
                       ),
@@ -166,14 +139,21 @@ class _ChatScreenState extends State<ChatScreen> {
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(30),
-                  border: Border.all(color: Color(0xFF153E75), width: 4), // Azul marino
+                  border: Border.all(
+                    color: Color(0xFF153E75),
+                    width: 4,
+                  ), // Azul marino
                 ),
                 child: Stack(
                   children: [
                     // Lista de mensajes
                     Padding(
                       padding: EdgeInsets.only(
-                          top: 60, left: 20, right: 20, bottom: 20),
+                        top: 60,
+                        left: 20,
+                        right: 20,
+                        bottom: 20,
+                      ),
                       child: ListView.builder(
                         controller: _scrollController,
                         itemCount: messages.length,
@@ -194,7 +174,9 @@ class _ChatScreenState extends State<ChatScreen> {
                         },
                         child: Container(
                           padding: const EdgeInsets.symmetric(
-                              horizontal: 16, vertical: 10),
+                            horizontal: 16,
+                            vertical: 10,
+                          ),
                           decoration: BoxDecoration(
                             color: Color(0xFF4CAF50),
                             borderRadius: BorderRadius.circular(25),
@@ -202,8 +184,7 @@ class _ChatScreenState extends State<ChatScreen> {
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              Icon(Icons.pause,
-                                  color: Colors.black, size: 18),
+                              Icon(Icons.pause, color: Colors.black, size: 18),
                               SizedBox(width: 6),
                               Text(
                                 "Detener",
@@ -243,9 +224,14 @@ class _ChatScreenState extends State<ChatScreen> {
                         borderRadius: BorderRadius.circular(30),
                       ),
                       child: Padding(
-                        padding: EdgeInsets.all(3), // Grosor del borde degradado
+                        padding: EdgeInsets.all(
+                          3,
+                        ), // Grosor del borde degradado
                         child: Container(
-                          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 20,
+                            vertical: 16,
+                          ),
                           decoration: BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(27),
@@ -274,12 +260,15 @@ class _ChatScreenState extends State<ChatScreen> {
                   ),
                   SizedBox(width: 12),
                   GestureDetector(
-                    onTap: _sendMessage, // <-- Hacer funcional el botón de enviar
+                    onTap:
+                        _sendMessage, // <-- Hacer funcional el botón de enviar
                     child: Container(
                       width: 55,
                       height: 55,
                       decoration: BoxDecoration(
-                        color: Color(0xFF3B2C5E), // Azul marino con toque morado
+                        color: Color(
+                          0xFF3B2C5E,
+                        ), // Azul marino con toque morado
                         shape: BoxShape.circle,
                       ),
                       child: Center(
@@ -289,7 +278,10 @@ class _ChatScreenState extends State<ChatScreen> {
                           decoration: BoxDecoration(
                             color: Colors.transparent, // Sin relleno
                             shape: BoxShape.circle,
-                            border: Border.all(color: Colors.white, width: 3), // Solo borde blanco
+                            border: Border.all(
+                              color: Colors.white,
+                              width: 3,
+                            ), // Solo borde blanco
                           ),
                           child: Center(
                             child: Icon(
@@ -307,38 +299,6 @@ class _ChatScreenState extends State<ChatScreen> {
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  Widget _eye() {
-    return Container(
-      width: 10,
-      height: 10,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        shape: BoxShape.circle,
-      ),
-      child: Center(
-        child: Container(
-          width: 6,
-          height: 6,
-          decoration: BoxDecoration(
-            color: Colors.black,
-            shape: BoxShape.circle,
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _cheek() {
-    return Container(
-      width: 8,
-      height: 8,
-      decoration: BoxDecoration(
-        color: Color(0xFFFF9AA2).withOpacity(0.6),
-        shape: BoxShape.circle,
       ),
     );
   }
@@ -361,8 +321,9 @@ class ChatBubble extends StatelessWidget {
     return Container(
       margin: EdgeInsets.only(bottom: 16),
       child: Row(
-        mainAxisAlignment:
-        message.isUser ? MainAxisAlignment.end : MainAxisAlignment.start,
+        mainAxisAlignment: message.isUser
+            ? MainAxisAlignment.end
+            : MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Message bubble
@@ -371,7 +332,9 @@ class ChatBubble extends StatelessWidget {
               padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               decoration: BoxDecoration(
                 color: message.isUser
-                    ? Color(0xFF64B5F6).withOpacity(0.85) // Usuario: azul claro menos transparente
+                    ? Color(0xFF64B5F6).withOpacity(
+                        0.85,
+                      ) // Usuario: azul claro menos transparente
                     : Color(0xFFB3E5FC), // Receptor: azul más claro
                 borderRadius: BorderRadius.circular(20),
               ),

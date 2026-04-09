@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:rest/features/progress/screens/globalprogress_screen.dart';
 import '../../settings/screens/settings_screen.dart';
 import '../../help/screens/help_screen.dart';
-import 'progress_screen.dart';
+import '../../../core/services/user_session.dart';
 
 class MyProgressScreen extends StatelessWidget {
   const MyProgressScreen({super.key});
@@ -31,12 +31,11 @@ class MyProgressScreen extends StatelessWidget {
                         fit: BoxFit.cover,
                       ),
                     ),
-
                   ),
                   SizedBox(width: 12),
-                  // Texto "¡Hola! Mari"
+                  // Texto "¡Hola! [Nombre del usuario]"
                   Text(
-                    '¡Hola! Mari',
+                    '¡Hola! ${UserSession.displayName}',
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
@@ -50,7 +49,9 @@ class MyProgressScreen extends StatelessWidget {
                       // Navega a SettingsScreen cuando se presiona el ícono
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => SettingsScreen()),
+                        MaterialPageRoute(
+                          builder: (context) => SettingsScreen(),
+                        ),
                       );
                     },
                     child: Container(
@@ -61,16 +62,20 @@ class MyProgressScreen extends StatelessWidget {
                         shape: BoxShape.circle,
                       ),
                       child: Padding(
-                        padding: EdgeInsets.all(6.0), // Añade espacio alrededor de la imagen
+                        padding: EdgeInsets.all(
+                          6.0,
+                        ), // Añade espacio alrededor de la imagen
                         child: Image.asset(
                           'assets/images/config.png',
-                          fit: BoxFit.cover, // La imagen cubrirá el área después del padding
+                          fit: BoxFit
+                              .cover, // La imagen cubrirá el área después del padding
                         ),
                       ),
                     ),
                   ),
                   SizedBox(width: 8),
-                  InkWell( // Envuelve el Container con InkWell
+                  InkWell(
+                    // Envuelve el Container con InkWell
                     onTap: () {
                       // Navega a HelpScreen cuando se presiona el ícono
                       Navigator.push(
@@ -86,10 +91,13 @@ class MyProgressScreen extends StatelessWidget {
                         shape: BoxShape.circle,
                       ),
                       child: Padding(
-                        padding: EdgeInsets.all(6.0), // Añade espacio alrededor de la imagen
+                        padding: EdgeInsets.all(
+                          6.0,
+                        ), // Añade espacio alrededor de la imagen
                         child: Image.asset(
                           'assets/images/salvavidas.png',
-                          fit: BoxFit.cover, // La imagen cubrirá el área después del padding
+                          fit: BoxFit
+                              .cover, // La imagen cubrirá el área después del padding
                         ),
                       ),
                     ),
@@ -111,10 +119,7 @@ class MyProgressScreen extends StatelessWidget {
               padding: EdgeInsets.all(16.0),
               child: Text(
                 "He trabajado 3 días en mí",
-                style: TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold,
-                ),
+                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
               ),
             ),
 
@@ -124,7 +129,9 @@ class MyProgressScreen extends StatelessWidget {
                 // Navega a ProgressScreen (GlobalProgress) cuando se presiona el contenedor de la racha
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => GlobalProgressScreen()),
+                  MaterialPageRoute(
+                    builder: (context) => GlobalProgressScreen(),
+                  ),
                 );
               },
               child: Container(
@@ -206,10 +213,7 @@ class _DayItem extends StatelessWidget {
             ? const Text("🔥", style: TextStyle(fontSize: 24))
             : const Text("○", style: TextStyle(fontSize: 24)),
         const SizedBox(height: 4),
-        Text(
-          day,
-          style: const TextStyle(fontSize: 12),
-        ),
+        Text(day, style: const TextStyle(fontSize: 12)),
       ],
     );
   }
@@ -234,9 +238,10 @@ class _InfoCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(title,
-              style:
-                  const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+          Text(
+            title,
+            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          ),
           const SizedBox(height: 6),
           Text(
             content,

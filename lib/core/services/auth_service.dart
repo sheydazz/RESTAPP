@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class AuthService {
-  static const String _baseUrl = 'http://190.143.117.179:8080';
+  static const String _baseUrl = 'http://localhost:3000';
 
   Future<Map<String, dynamic>> login({
     required String correo,
@@ -12,7 +12,7 @@ class AuthService {
     final uri = Uri.parse('$_baseUrl/api/auth/login');
 
     final payload = {
-      'correo': correo,
+      'correo': correo.toLowerCase().trim(),
       'contrasena': contrasena,
     };
 
@@ -21,9 +21,7 @@ class AuthService {
 
     final response = await http.post(
       uri,
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers: {'Content-Type': 'application/json'},
       body: jsonEncode(payload),
     );
 
@@ -60,7 +58,7 @@ class AuthService {
     final uri = Uri.parse('$_baseUrl/api/auth/register');
 
     final payload = {
-      'correo': correo,
+      'correo': correo.toLowerCase().trim(),
       'contrasena': contrasena,
       'nombres': nombres,
       'apellidos': apellidos,
@@ -74,9 +72,7 @@ class AuthService {
 
     final response = await http.post(
       uri,
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers: {'Content-Type': 'application/json'},
       body: jsonEncode(payload),
     );
 
@@ -101,4 +97,3 @@ class AuthService {
     }
   }
 }
-

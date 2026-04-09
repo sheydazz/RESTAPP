@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:rest/core/services/user_session.dart';
 import 'package:rest/features/emotion/screens/emotionregister_screen.dart';
+import 'package:rest/features/navigation/main_app.dart';
 import 'login_screen.dart';
 
 class HowYouFoundScreen extends StatefulWidget {
@@ -26,10 +27,20 @@ class _HowYouFoundScreenState extends State<HowYouFoundScreen> {
 
     // El token y userId ya vienen guardados desde RegisterScreen
     if (UserSession.authToken != null && UserSession.userId != null) {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (_) => const EmotionRegisterScreen()),
-      );
+      // Validar si el usuario puede hacer el test hoy (solo una vez al día)
+      if (UserSession.canDoTestToday()) {
+        // Mostrar EmotionRegisterScreen si puede hacer el test
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (_) => const EmotionRegisterScreen()),
+        );
+      } else {
+        // Si ya hizo el test hoy, ir a MainApp
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (_) => const MainApp()),
+        );
+      }
     } else {
       // Si por alguna razón no hay sesión, ir a login
       Navigator.pushReplacement(
@@ -58,10 +69,7 @@ class _HowYouFoundScreenState extends State<HowYouFoundScreen> {
                       shaderCallback: (bounds) => const LinearGradient(
                         begin: Alignment.centerLeft,
                         end: Alignment.centerRight,
-                        colors: [
-                          Color(0xFFCA0AFF),
-                          Color(0xFF1298FF),
-                        ],
+                        colors: [Color(0xFFCA0AFF), Color(0xFF1298FF)],
                       ).createShader(bounds),
                       child: Text(
                         '¡Perfecto!',
@@ -81,13 +89,62 @@ class _HowYouFoundScreenState extends State<HowYouFoundScreen> {
                       child: Stack(
                         children: [
                           Center(child: Image.asset('assets/images/rest.png')),
-                          Positioned(top: 10, left: 0, child: Image.asset('assets/images/star.png', width: 30)),
-                          Positioned(top: 0, right: 50, child: Image.asset('assets/images/star.png', width: 20)),
-                          Positioned(top: 0, left: 50, child: Image.asset('assets/images/star.png', width: 25)),
-                          Positioned(top: 0, right: 0, child: Image.asset('assets/images/star.png', width: 35)),
-                          Positioned(bottom: 10, left: 0, child: Image.asset('assets/images/star.png', width: 18)),
-                          Positioned(bottom: 0, right: 0, child: Image.asset('assets/images/star.png', width: 22)),
-                          Positioned(bottom: 0, right: 20, child: Image.asset('assets/images/star.png', width: 28)),
+                          Positioned(
+                            top: 10,
+                            left: 0,
+                            child: Image.asset(
+                              'assets/images/star.png',
+                              width: 30,
+                            ),
+                          ),
+                          Positioned(
+                            top: 0,
+                            right: 50,
+                            child: Image.asset(
+                              'assets/images/star.png',
+                              width: 20,
+                            ),
+                          ),
+                          Positioned(
+                            top: 0,
+                            left: 50,
+                            child: Image.asset(
+                              'assets/images/star.png',
+                              width: 25,
+                            ),
+                          ),
+                          Positioned(
+                            top: 0,
+                            right: 0,
+                            child: Image.asset(
+                              'assets/images/star.png',
+                              width: 35,
+                            ),
+                          ),
+                          Positioned(
+                            bottom: 10,
+                            left: 0,
+                            child: Image.asset(
+                              'assets/images/star.png',
+                              width: 18,
+                            ),
+                          ),
+                          Positioned(
+                            bottom: 0,
+                            right: 0,
+                            child: Image.asset(
+                              'assets/images/star.png',
+                              width: 22,
+                            ),
+                          ),
+                          Positioned(
+                            bottom: 0,
+                            right: 20,
+                            child: Image.asset(
+                              'assets/images/star.png',
+                              width: 28,
+                            ),
+                          ),
                         ],
                       ),
                     ),
@@ -118,40 +175,45 @@ class _HowYouFoundScreenState extends State<HowYouFoundScreen> {
 
                 const SizedBox(height: 12),
 
-                ...options.map((option) => Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 6.0),
-                  child: GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        selectedOption = option;
-                      });
-                    },
-                    child: Container(
-                      width: double.infinity,
-                      padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 20),
-                      decoration: BoxDecoration(
-                        color: selectedOption == option
-                            ? const Color(0xFF5CCFC0)
-                            : Colors.white,
-                        borderRadius: BorderRadius.circular(30),
-                        border: Border.all(
-                          color: const Color(0xFF5CCFC0),
-                          width: 2,
+                ...options.map(
+                  (option) => Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 6.0),
+                    child: GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          selectedOption = option;
+                        });
+                      },
+                      child: Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 14,
+                          horizontal: 20,
                         ),
-                      ),
-                      child: Text(
-                        option,
-                        style: GoogleFonts.fredoka(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
+                        decoration: BoxDecoration(
                           color: selectedOption == option
-                              ? Colors.white
-                              : const Color(0xFF2981C1),
+                              ? const Color(0xFF5CCFC0)
+                              : Colors.white,
+                          borderRadius: BorderRadius.circular(30),
+                          border: Border.all(
+                            color: const Color(0xFF5CCFC0),
+                            width: 2,
+                          ),
+                        ),
+                        child: Text(
+                          option,
+                          style: GoogleFonts.fredoka(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: selectedOption == option
+                                ? Colors.white
+                                : const Color(0xFF2981C1),
+                          ),
                         ),
                       ),
                     ),
                   ),
-                )),
+                ),
 
                 const SizedBox(height: 30),
 
@@ -162,10 +224,7 @@ class _HowYouFoundScreenState extends State<HowYouFoundScreen> {
                     gradient: RadialGradient(
                       center: Alignment.centerLeft,
                       radius: 2.5,
-                      colors: [
-                        Color(0xFF0BBDAC),
-                        Color(0xFF3667CA),
-                      ],
+                      colors: [Color(0xFF0BBDAC), Color(0xFF3667CA)],
                     ),
                     borderRadius: BorderRadius.all(Radius.circular(30)),
                   ),

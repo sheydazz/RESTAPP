@@ -1,26 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:rest/core/routes/app_routes.dart';
 import 'package:rest/core/services/emotion_service.dart';
-
-/// Mapea promedio emocional (0-4) a asset de cara.
-String _promedioToAsset(num? promedio) {
-  if (promedio == null) return 'assets/images/normalrest.jpg';
-  if (promedio < 1.5) return 'assets/images/sadrest.jpg';
-  if (promedio < 2.5) return 'assets/images/yellowrest.jpg';
-  if (promedio < 3.5) return 'assets/images/goodrest.jpg';
-  return 'assets/images/kingrest.jpg';
-}
-
-String _promedioToEmoji(num? promedio) {
-  if (promedio == null) return '😐';
-  if (promedio < 1.5) return '😢';
-  if (promedio < 2.5) return '😐';
-  if (promedio < 3.5) return '😊';
-  return '😄';
-}
+import 'package:rest/features/emotion/utils/emotion_calculator.dart';
 
 const List<String> _nombresDias = [
-  'LUN', 'MAR', 'MIÉ', 'JUE', 'VIE', 'SÁB', 'DOM',
+  'LUN',
+  'MAR',
+  'MIÉ',
+  'JUE',
+  'VIE',
+  'SÁB',
+  'DOM',
 ];
 
 class CheckScreen extends StatefulWidget {
@@ -65,6 +55,12 @@ class _CheckScreenState extends State<CheckScreen> {
         fin: fin,
       );
 
+      // DEBUG: Ver qué datos recibimos del API
+      print('✅ CheckScreen - Datos del API calendario: $datos');
+      for (final item in datos) {
+        print('   - Día: ${item['fecha']}, promedio: ${item['promedio']}');
+      }
+
       if (!mounted) return;
       setState(() {
         _calendario = datos;
@@ -97,7 +93,7 @@ class _CheckScreenState extends State<CheckScreen> {
                 blurRadius: 20,
                 spreadRadius: 4,
                 offset: const Offset(0, 8),
-              )
+              ),
             ],
           ),
           child: Padding(
@@ -181,7 +177,7 @@ class _CheckScreenState extends State<CheckScreen> {
                         blurRadius: 10,
                         spreadRadius: 2,
                         offset: const Offset(0, 4),
-                      )
+                      ),
                     ],
                   ),
                   child: Column(
@@ -243,10 +239,7 @@ class _CheckScreenState extends State<CheckScreen> {
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(28),
                     gradient: const RadialGradient(
-                      colors: [
-                        Color(0xFF0BBDAC),
-                        Color(0xFF6110E8),
-                      ],
+                      colors: [Color(0xFF0BBDAC), Color(0xFF6110E8)],
                       center: Alignment.center,
                       radius: 3.5,
                     ),
@@ -269,7 +262,10 @@ class _CheckScreenState extends State<CheckScreen> {
                       ),
                     ),
                     onPressed: () {
-                      Navigator.pushNamed(context, AppRoutes.mainApp);
+                      Navigator.pushReplacementNamed(
+                        context,
+                        AppRoutes.mainApp,
+                      );
                     },
                     child: const Text(
                       "LISTO",
@@ -326,10 +322,16 @@ class _CheckScreenState extends State<CheckScreen> {
       final fechaNorm = _normalizarFecha(fechaStr);
       if (fechaNorm == null) continue;
       final p = _parsePromedio(
-        item['promedio'] ?? item['promedio_emocional'] ?? item['valor'] ?? item['score'],
+        item['promedio'] ??
+            item['promedio_emocional'] ??
+            item['valor'] ??
+            item['score'],
       );
       if (p != null) datosPorFecha[fechaNorm] = p;
     }
+
+    print('📅 CheckScreen - Mapa datosPorFecha: $datosPorFecha');
+    print('📅 CheckScreen - Total items en _calendario: ${_calendario.length}');
 
     // Si viene del flujo de registro, usar promedioHoy para hoy (asegura que se muestre la carita)
     final promedioHoy = widget.promedioHoy;
@@ -355,7 +357,7 @@ class _CheckScreenState extends State<CheckScreen> {
             blurRadius: 5,
             spreadRadius: 1,
             offset: const Offset(0, 2),
-          )
+          ),
         ],
       ),
       child: SingleChildScrollView(
@@ -363,38 +365,41 @@ class _CheckScreenState extends State<CheckScreen> {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: diasSemana.map((fecha) {
-          final fechaStr = _formatFechaYyyyMmDd(fecha);
-          final diaNombre = _nombresDias[fecha.weekday - 1];
-          final hoyNormalizado = DateTime(hoy.year, hoy.month, hoy.day);
-          final fechaNormalizada = DateTime(fecha.year, fecha.month, fecha.day);
-          final esFuturo = fechaNormalizada.isAfter(hoyNormalizado);
-          final tieneDatos = datosPorFecha.containsKey(fechaStr);
-
-          Widget icono;
-          if (esFuturo) {
-            icono = _buildPendienteIcon();
-          } else if (tieneDatos) {
-            final promedio = datosPorFecha[fechaStr]!;
-            icono = _buildEmotionIcon(
-              _promedioToAsset(promedio),
-              _promedioToEmoji(promedio),
+            final fechaStr = _formatFechaYyyyMmDd(fecha);
+            final diaNombre = _nombresDias[fecha.weekday - 1];
+            final hoyNormalizado = DateTime(hoy.year, hoy.month, hoy.day);
+            final fechaNormalizada = DateTime(
+              fecha.year,
+              fecha.month,
+              fecha.day,
             );
-          } else {
-            icono = _buildNoLlenoIcon();
-          }
+            final esFuturo = fechaNormalizada.isAfter(hoyNormalizado);
+            final tieneDatos = datosPorFecha.containsKey(fechaStr);
 
-          return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 4),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                _buildDayLabel(diaNombre),
-                const SizedBox(height: 6),
-                icono,
-              ],
-            ),
-          );
-        }).toList(),
+            Widget icono;
+            if (esFuturo) {
+              icono = _buildPendienteIcon();
+            } else if (tieneDatos) {
+              final promedio = datosPorFecha[fechaStr]!;
+              // Determinar estado emocional según el promedio
+              final estado = _calcularEstadoDelPromedio(promedio);
+              icono = _buildEstadoCircle(estado, promedio);
+            } else {
+              icono = _buildNoLlenoIcon();
+            }
+
+            return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 4),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  _buildDayLabel(diaNombre),
+                  const SizedBox(height: 6),
+                  icono,
+                ],
+              ),
+            );
+          }).toList(),
         ),
       ),
     );
@@ -443,11 +448,7 @@ class _CheckScreenState extends State<CheckScreen> {
         color: Colors.grey[200],
         border: Border.all(color: Colors.grey[400]!, width: 1),
       ),
-      child: Container(
-        width: 20,
-        height: 2,
-        color: Colors.grey[500],
-      ),
+      child: Container(width: 20, height: 2, color: Colors.grey[500]),
     );
   }
 
@@ -499,31 +500,78 @@ class _CheckScreenState extends State<CheckScreen> {
     );
   }
 
-  Widget _buildEmotionIcon(String imagePath, String fallbackEmoji) {
+  /// Calcula el estado emocional basado en el promedio (4 niveles)
+  String _calcularEstadoDelPromedio(num promedio) {
+    if (promedio >= 3.3) {
+      return EmotionCalculator.EXCELENTE; // verde
+    } else if (promedio >= 2.2) {
+      return EmotionCalculator.NORMAL; // azul
+    } else if (promedio >= 1.0) {
+      return EmotionCalculator.ALERTA_AMARILLO; // amarillo
+    } else {
+      return EmotionCalculator.CRITICO; // rojo
+    }
+  }
+
+  /// Construye un círculo de color según el estado emocional con IMAGEN adentro
+  Widget _buildEstadoCircle(String estado, num promedio) {
+    // Imágenes según el estado
+    String imagenAsset;
+    Color colorFondo;
+
+    switch (estado) {
+      case 'excelente':
+        colorFondo = const Color(0xFF08D557); // Verde
+        imagenAsset = 'assets/images/green_face.png';
+        break;
+      case 'normal':
+        colorFondo = const Color(0xFF2196F3); // Azul
+        imagenAsset = 'assets/images/rest.png';
+        break;
+      case 'alerta-amarillo':
+        colorFondo = const Color(0xFFFF9800); // Amarillo/Naranja
+        imagenAsset = 'assets/images/yellowrest.jpg';
+        break;
+      case 'critico':
+        colorFondo = const Color(0xFFE91E63); // Rojo/Rosa
+        imagenAsset = 'assets/images/pink_face.jpg';
+        break;
+      default:
+        colorFondo = Colors.grey[300]!;
+        imagenAsset = 'assets/images/normalrest.jpg';
+    }
+
     return Container(
-      width: 36,
-      height: 36,
+      width: 50,
+      height: 50,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        color: Colors.grey[100],
+        gradient: LinearGradient(
+          colors: [colorFondo, colorFondo.withOpacity(0.7)],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
-            blurRadius: 3,
-            spreadRadius: 1,
-            offset: const Offset(0, 1),
-          )
+            color: colorFondo.withOpacity(0.4),
+            blurRadius: 8,
+            spreadRadius: 2,
+            offset: const Offset(0, 2),
+          ),
         ],
+        border: Border.all(color: Colors.white, width: 2),
       ),
       child: ClipOval(
         child: Image.asset(
-          imagePath,
-          width: 40,
-          height: 40,
+          imagenAsset,
+          width: 50,
+          height: 50,
           fit: BoxFit.cover,
           errorBuilder: (context, error, stackTrace) {
-            return Center(
-              child: Text(fallbackEmoji, style: const TextStyle(fontSize: 20)),
+            // Fallback color si la imagen no existe
+            return Container(
+              color: colorFondo,
+              child: Center(child: Text('😊', style: TextStyle(fontSize: 20))),
             );
           },
         ),
