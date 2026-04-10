@@ -4,6 +4,7 @@ class AppRoutes {
   static const login = '/login';
   static const register = '/register';
   static const howYouFound = '/how_you_found';
+  static const forgotPassword = '/forgot-password';
 
   // Main App (con Bottom Navigation)
   static const mainApp = '/main';

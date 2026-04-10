@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
+import 'package:rest/core/config/api_config.dart';
 
 import 'user_session.dart';
 
@@ -69,7 +70,7 @@ class ChatStopFeedback {
 }
 
 class ChatService {
-  static const String _baseUrl = 'http://190.143.117.179:8080';
+  static String get _baseUrl => ApiConfig.baseUrl;
 
   Map<String, String> _headers() {
     final token = UserSession.authToken;

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'register_screen.dart';
 import 'package:rest/core/services/auth_service.dart';
+import 'package:rest/core/routes/app_routes.dart';
 import 'package:rest/core/services/user_session.dart';
 import 'package:rest/features/emotion/screens/emotionregister_screen.dart';
 import 'package:rest/features/navigation/main_app.dart';
@@ -197,7 +198,9 @@ class _LoginScreenState extends State<LoginScreen> {
                 Column(
                   children: [
                     TextButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.pushNamed(context, AppRoutes.forgotPassword);
+                      },
                       child: RichText(
                         text: TextSpan(
                           style: GoogleFonts.fredoka(
