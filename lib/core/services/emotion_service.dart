@@ -6,7 +6,7 @@ import 'user_session.dart';
 
 class EmotionService {
   // Mismo backend que AuthService
-  static const String _baseUrl = 'http://localhost:3000';
+  static const String _baseUrl = 'http://190.143.117.179:8080';
 
   String _formatFechaDdMmYyyy(DateTime date) {
     final dd = date.day.toString().padLeft(2, '0');

@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class AuthService {
-  static const String _baseUrl = 'http://localhost:3000';
+  static const String _baseUrl = 'http://190.143.117.179:8080';
 
   Future<Map<String, dynamic>> login({
     required String correo,

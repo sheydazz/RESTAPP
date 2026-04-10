@@ -109,7 +109,7 @@ class RewardsCatalogSummary {
 }
 
 class ProgressService {
-  static const String _baseUrl = 'http://localhost:3000';
+  static const String _baseUrl = 'http://190.143.117.179:8080';
 
   Map<String, String> _authHeaders({bool withJson = false}) {
     final token = UserSession.authToken;
