@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class   RelaxScreen extends StatelessWidget {
+class RelaxScreen extends StatelessWidget {
   const RelaxScreen({super.key});
 
   @override
@@ -24,7 +24,11 @@ class   RelaxScreen extends StatelessWidget {
                   onPressed: () {
                     Navigator.pop(context);
                   },
-                  icon: Icon(Icons.close, size: width * 0.08, color: Colors.blue),
+                  icon: Icon(
+                    Icons.close,
+                    size: width * 0.08,
+                    color: Colors.blue,
+                  ),
                 ),
               ),
               SizedBox(height: height * 0.01),
@@ -46,10 +50,7 @@ class   RelaxScreen extends StatelessWidget {
               // Subtítulo con estrellita
               Row(
                 children: [
-                  Text(
-                    "⭐ ",
-                    style: TextStyle(fontSize: width * 0.06),
-                  ),
+                  Text("⭐ ", style: TextStyle(fontSize: width * 0.06)),
                   Expanded(
                     child: Text(
                       "Lo importante es mantener la calma y hacer algo que disfrutes",
@@ -86,7 +87,7 @@ class   RelaxScreen extends StatelessWidget {
                         titulo: "Chistes",
                       ),
                       _CardTecnica(
-                        imagen: "assets/images/juegos.png",
+                        imagen: "assets/images/Play.png",
                         titulo: "Juegos",
                       ),
                       _CardTecnica(
@@ -94,7 +95,7 @@ class   RelaxScreen extends StatelessWidget {
                         titulo: "Escuchar\nMusica",
                       ),
                       _CardTecnica(
-                        imagen: "assets/images/actividad.png",
+                        imagen: "assets/images/gym.png",
                         titulo: "Actividad\nFísica",
                       ),
                     ],
@@ -113,10 +114,7 @@ class _CardTecnica extends StatelessWidget {
   final String imagen;
   final String titulo;
 
-  const _CardTecnica({
-    required this.imagen,
-    required this.titulo,
-  });
+  const _CardTecnica({required this.imagen, required this.titulo});
 
   @override
   Widget build(BuildContext context) {

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:rest/core/routes/app_routes.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 /// Pantalla de confirmación cuando el registro emocional se guarda correctamente.
 /// Aparece después de completar el test y antes del semáforo emocional.
@@ -45,14 +46,45 @@ class _EmotionSavedScreenState extends State<EmotionSavedScreen>
           CurvedAnimation(parent: _slideController, curve: Curves.easeOutCubic),
         );
 
-    // Navegar al traffic light después de 2.5 segundos
-    Future.delayed(const Duration(milliseconds: 2500), () {
+    // Navegar a WhatsApp después de 10 segundos
+    Future.delayed(const Duration(seconds: 10), () async {
       if (mounted) {
-        Navigator.pushReplacementNamed(
-          context,
-          AppRoutes.trafficLight,
-          arguments: widget.resultado,
-        );
+        // Número de WhatsApp del psicólogo - CONFIGURA AQUÍ TU NÚMERO
+        const String psychologistPhone =
+            '+573015460169'; // Sin espacios para WhatsApp
+        const String message =
+            'Hola, he enviado una solicitud de ayuda desde REST.';
+
+        // Crear URL de WhatsApp
+        final String whatsappUrl =
+            'https://wa.me/$psychologistPhone?text=${Uri.encodeComponent(message)}';
+
+        try {
+          if (await canLaunchUrl(Uri.parse(whatsappUrl))) {
+            await launchUrl(
+              Uri.parse(whatsappUrl),
+              mode: LaunchMode.externalApplication,
+            );
+            // Cerrar la pantalla después de abrir WhatsApp
+            if (mounted) {
+              Navigator.pop(context);
+            }
+          } else {
+            // Si no se puede abrir WhatsApp, ir al traffic light como fallback
+            Navigator.pushReplacementNamed(
+              context,
+              AppRoutes.trafficLight,
+              arguments: widget.resultado,
+            );
+          }
+        } catch (e) {
+          // En caso de error, ir al traffic light
+          Navigator.pushReplacementNamed(
+            context,
+            AppRoutes.trafficLight,
+            arguments: widget.resultado,
+          );
+        }
       }
     });
   }

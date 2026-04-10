@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:rest/core/services/user_session.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'cancelhelp_screen.dart';
 
 // Pantalla de Carga
@@ -12,6 +13,7 @@ class _LoadingScreenState extends State<HelpScreen>
     with TickerProviderStateMixin {
   late AnimationController _controller;
   late AnimationController _pulseController;
+  int _remainingSeconds = 10;
 
   @override
   void initState() {
@@ -26,12 +28,51 @@ class _LoadingScreenState extends State<HelpScreen>
       vsync: this,
     )..repeat(reverse: true);
 
-    // Navegar de vuelta después de 5 segundos
-    Future.delayed(const Duration(seconds: 5), () {
+    // Timer que cuente hacia atrás 10 segundos
+    _startCountdown();
+  }
+
+  void _startCountdown() {
+    Future.forEach<int>(List.generate(10, (i) => 10 - i), (second) async {
+      await Future.delayed(const Duration(seconds: 1));
       if (mounted) {
-        Navigator.pop(context);
+        setState(() {
+          _remainingSeconds = second;
+        });
+      }
+      return;
+    }).then((_) {
+      // Cuando llegue a 0, abrir WhatsApp
+      if (mounted) {
+        _openWhatsApp();
       }
     });
+  }
+
+  Future<void> _openWhatsApp() async {
+    const String psychologistPhone = '+573015460169';
+    const String message =
+        'Hola, he enviado una solicitud de ayuda desde REST.';
+    final String whatsappUrl =
+        'https://wa.me/$psychologistPhone?text=${Uri.encodeComponent(message)}';
+
+    try {
+      if (await canLaunchUrl(Uri.parse(whatsappUrl))) {
+        await launchUrl(
+          Uri.parse(whatsappUrl),
+          mode: LaunchMode.externalApplication,
+        );
+        // Regresar al Home después de abrir WhatsApp
+        if (mounted) {
+          Navigator.of(context).popUntil((route) => route.isFirst);
+        }
+      }
+    } catch (e) {
+      // Si hay error, regresa al home
+      if (mounted) {
+        Navigator.of(context).popUntil((route) => route.isFirst);
+      }
+    }
   }
 
   @override
@@ -87,7 +128,7 @@ class _LoadingScreenState extends State<HelpScreen>
                     ),
                   ),
                   GestureDetector(
-                    onTap: () => Navigator.push(
+                    onTap: () => Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
                         builder: (context) => CancelHelpScreen(),
@@ -235,6 +276,48 @@ class _LoadingScreenState extends State<HelpScreen>
                               color: Color(0xFF1BD77C),
                               letterSpacing: 0.8,
                               height: 1.4,
+                            ),
+                          ),
+                          const SizedBox(height: 24),
+                          // Timer visible
+                          Container(
+                            width: 120,
+                            height: 120,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              gradient: const LinearGradient(
+                                colors: [Color(0xFF1BD77C), Color(0xFF4CAF50)],
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                              ),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: const Color(
+                                    0xFF1BD77C,
+                                  ).withOpacity(0.3),
+                                  blurRadius: 20,
+                                  spreadRadius: 5,
+                                ),
+                              ],
+                            ),
+                            child: Center(
+                              child: Text(
+                                '$_remainingSeconds',
+                                style: const TextStyle(
+                                  fontSize: 64,
+                                  fontWeight: FontWeight.w900,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 16),
+                          const Text(
+                            'Abriendo WhatsApp...',
+                            style: TextStyle(
+                              fontSize: 13,
+                              fontWeight: FontWeight.w500,
+                              color: Colors.black54,
                             ),
                           ),
                           const SizedBox(height: 16),

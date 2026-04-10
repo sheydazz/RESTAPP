@@ -49,22 +49,38 @@ class EmotionService {
     if (response.statusCode >= 200 && response.statusCode < 300) {
       final data = jsonDecode(response.body);
       print('🔄 EmotionService - Respuesta cruda del API: ${response.body}');
+
+      List<Map<String, dynamic>> parseList(List input) {
+        return List<Map<String, dynamic>>.from(
+          input.map(
+            (e) =>
+                e is Map ? Map<String, dynamic>.from(e) : <String, dynamic>{},
+          ),
+        );
+      }
+
       if (data is List) {
-        return List<Map<String, dynamic>>.from(
-          data.map(
-            (e) =>
-                e is Map ? Map<String, dynamic>.from(e) : <String, dynamic>{},
-          ),
-        );
+        return parseList(data);
       }
+
       if (data is Map && data['data'] is List) {
-        return List<Map<String, dynamic>>.from(
-          (data['data'] as List).map(
-            (e) =>
-                e is Map ? Map<String, dynamic>.from(e) : <String, dynamic>{},
-          ),
-        );
+        return parseList(data['data'] as List);
       }
+
+      // Algunos entornos devuelven data como mapa indexado por fecha.
+      if (data is Map && data['data'] is Map) {
+        final mapped = <Map<String, dynamic>>[];
+        final dataMap = Map<String, dynamic>.from(data['data'] as Map);
+        dataMap.forEach((key, value) {
+          if (value is Map) {
+            final row = Map<String, dynamic>.from(value);
+            row.putIfAbsent('fecha', () => key);
+            mapped.add(row);
+          }
+        });
+        return mapped;
+      }
+
       return [];
     }
     throw Exception(
