@@ -10,6 +10,7 @@ import 'package:rest/core/services/user_session.dart';
 void main() {
   runApp(HomeScreen());
 }
+
 class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -25,6 +26,7 @@ class HomeScreen extends StatelessWidget {
     );
   }
 }
+
 class MainScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -50,7 +52,6 @@ class MainScreen extends StatelessWidget {
                         fit: BoxFit.cover,
                       ),
                     ),
-
                   ),
                   SizedBox(width: 12),
                   // Texto "¡Hola! <nombre>"
@@ -69,7 +70,9 @@ class MainScreen extends StatelessWidget {
                       // Navega a SettingsScreen cuando se presiona el ícono
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => SettingsScreen()),
+                        MaterialPageRoute(
+                          builder: (context) => SettingsScreen(),
+                        ),
                       );
                     },
                     child: Container(
@@ -80,16 +83,20 @@ class MainScreen extends StatelessWidget {
                         shape: BoxShape.circle,
                       ),
                       child: Padding(
-                        padding: EdgeInsets.all(6.0), // Añade espacio alrededor de la imagen
+                        padding: EdgeInsets.all(
+                          6.0,
+                        ), // Añade espacio alrededor de la imagen
                         child: Image.asset(
                           'assets/images/config.png',
-                          fit: BoxFit.cover, // La imagen cubrirá el área después del padding
+                          fit: BoxFit
+                              .cover, // La imagen cubrirá el área después del padding
                         ),
                       ),
                     ),
                   ),
                   SizedBox(width: 8),
-                  InkWell( // Envuelve el Container con InkWell
+                  InkWell(
+                    // Envuelve el Container con InkWell
                     onTap: () {
                       // Navega a HelpScreen cuando se presiona el ícono
                       Navigator.push(
@@ -105,10 +112,13 @@ class MainScreen extends StatelessWidget {
                         shape: BoxShape.circle,
                       ),
                       child: Padding(
-                        padding: EdgeInsets.all(6.0), // Añade espacio alrededor de la imagen
+                        padding: EdgeInsets.all(
+                          6.0,
+                        ), // Añade espacio alrededor de la imagen
                         child: Image.asset(
                           'assets/images/salvavidas.png',
-                          fit: BoxFit.cover, // La imagen cubrirá el área después del padding
+                          fit: BoxFit
+                              .cover, // La imagen cubrirá el área después del padding
                         ),
                       ),
                     ),
@@ -125,26 +135,24 @@ class MainScreen extends StatelessWidget {
             ),
             SizedBox(height: 20),
 
-            InkWell( // Se envuelve el Container con InkWell
+            InkWell(
+              // Se envuelve el Container con InkWell
               onTap: () {
                 // Navega a ChatScreen cuando se presiona el botón
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => ChatScreen()),
+                  MaterialPageRoute(builder: (context) => const ChatScreen()),
                 );
               },
-              // Botón principal "¿Quieres hablar conmigo?"
 
+              // Botón principal "¿Quieres hablar conmigo?"
               child: Container(
                 margin: EdgeInsets.symmetric(horizontal: 20),
                 padding: EdgeInsets.symmetric(vertical: 20, horizontal: 30),
                 decoration: BoxDecoration(
                   color: Color(0xFF87CEEB),
                   borderRadius: BorderRadius.circular(45),
-                  border: Border.all(
-                    color: Colors.black,
-                    width: 0.5,
-                  ),
+                  border: Border.all(color: Colors.black, width: 0.5),
                 ),
 
                 child: Center(
@@ -165,7 +173,6 @@ class MainScreen extends StatelessWidget {
             SizedBox(height: 20),
 
             // Botón "ESCOGER UN TEMA"
-          
             SizedBox(height: 40),
 
             // Sección "Mis últimas sesiones"
@@ -182,11 +189,18 @@ class MainScreen extends StatelessWidget {
                       color: Colors.black87,
                     ),
                   ),
-                  Text(
-                    'Ver todas',
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Color(0xFF2E86AB),
+                  InkWell(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const ConversacionesScreen(),
+                        ),
+                      );
+                    },
+                    child: Text(
+                      'Ver todas',
+                      style: TextStyle(fontSize: 16, color: Color(0xFF2E86AB)),
                     ),
                   ),
                 ],
@@ -204,50 +218,50 @@ class MainScreen extends StatelessWidget {
                   Expanded(
                     child: InkWell(
                       onTap: () {
-                      // Navega a SettingsScreen cuando se presiona el ícono
-                      Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => ConversacionesScreen()),
-                      );
-                    },
-                    child: Container(
-                      padding: EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        border: Border.all(
-                          color: Colors.grey,
-                          width: 0.5,
+                        // Navega a SettingsScreen cuando se presiona el ícono
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const ConversacionesScreen(),
+                          ),
+                        );
+                      },
+                      child: Container(
+                        padding: EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          border: Border.all(color: Colors.grey, width: 0.5),
+                          borderRadius: BorderRadius.circular(30),
                         ),
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                      child: Column(
-
-                        children: [
-                          Text(
-                            'Conversaciones',
-                            style: TextStyle(
+                        child: Column(
+                          children: [
+                            Text(
+                              'Conversaciones',
+                              style: TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w500,
                                 color: Colors.black87,
-                                height: 1.2
-                            ),
-                          ),
-                          SizedBox(height: 23),
-                          Container(
-                            width: 90,
-                            height: 95,
-                            decoration: BoxDecoration(
-                              color: Color(0xFF87CEEB),
-                              shape: BoxShape.circle,
-                              image: DecorationImage(
-                                image: AssetImage('assets/images/conversaciones.png'),
-                                fit: BoxFit.cover,
+                                height: 1.2,
                               ),
                             ),
-                          ),
-                        ],
+                            SizedBox(height: 23),
+                            Container(
+                              width: 90,
+                              height: 95,
+                              decoration: BoxDecoration(
+                                color: Color(0xFF87CEEB),
+                                shape: BoxShape.circle,
+                                image: DecorationImage(
+                                  image: AssetImage(
+                                    'assets/images/conversaciones.png',
+                                  ),
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
                     ),
                   ),
 
@@ -260,17 +274,16 @@ class MainScreen extends StatelessWidget {
                         // Navega a ActivitiesScreen cuando se presiona la card
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => ActivitiesScreen()),
+                          MaterialPageRoute(
+                            builder: (context) => const ActivitiesScreen(),
+                          ),
                         );
                       },
                       child: Container(
                         padding: EdgeInsets.all(16),
                         decoration: BoxDecoration(
                           color: Colors.white,
-                          border: Border.all(
-                            color: Colors.grey,
-                            width: 0.5,
-                          ),
+                          border: Border.all(color: Colors.grey, width: 0.5),
                           borderRadius: BorderRadius.circular(30),
                         ),
                         child: Column(
@@ -286,14 +299,17 @@ class MainScreen extends StatelessWidget {
                               ),
                             ),
                             SizedBox(height: 12),
-                            Container( // Circulo del icono
+                            Container(
+                              // Circulo del icono
                               width: 100,
                               height: 90,
                               decoration: BoxDecoration(
                                 color: Color(0xFF87CEEB),
                                 shape: BoxShape.circle,
                                 image: DecorationImage(
-                                  image: AssetImage('assets/images/medalla.png'),
+                                  image: AssetImage(
+                                    'assets/images/medalla.png',
+                                  ),
                                   fit: BoxFit.cover,
                                 ),
                               ),
@@ -302,13 +318,12 @@ class MainScreen extends StatelessWidget {
                         ),
                       ),
                     ),
-                    ),
+                  ),
                 ],
               ),
             ),
 
             Spacer(),
-
           ],
         ),
       ),

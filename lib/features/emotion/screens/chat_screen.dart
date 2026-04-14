@@ -1,59 +1,325 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
-import 'package:rest/features/emotion/screens/emotionregister_screen.dart';
+import 'package:rest/core/services/chat_service.dart';
+import 'package:rest/core/services/user_session.dart';
+import 'package:rest/features/help/screens/help_screen.dart';
 
 class ChatScreen extends StatefulWidget {
+  const ChatScreen({super.key, this.initialChatId});
+
+  final int? initialChatId;
+
   @override
-  _ChatScreenState createState() => _ChatScreenState();
+  State<ChatScreen> createState() => _ChatScreenState();
 }
 
 class _ChatScreenState extends State<ChatScreen> {
   final TextEditingController _messageController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
+  final ChatService _chatService = ChatService();
 
-  List<ChatMessage> messages = [
-    ChatMessage(
-      text:
-      "¡Hola! Soy Noa, me gustaría que me cuentes un poco más sobre ti, ¿cómo te sientes hoy? ¿Cómo te gustaría que me diría que te nombrará?",
-      isUser: false,
-    ),
-    ChatMessage(
-      text:
-      "¡Hola! Soy Mari, realmente hoy me siento un poco desanimada, las cosas no se han dado bien, el trabajo, la familia....",
-      isUser: true,
-    ),
-    ChatMessage(
-      text:
-      "Gracias por confiar en mí, Mari. Siento mucho que estás pasando por un momento complicado. A veces todo se junta y puede ser abrumador, pero hablarlo ya es un paso importante.",
-      isUser: false,
-    ),
-    ChatMessage(
-      text:
-      "¿Te gustaría contarme un poco más sobre lo que te está afectando? Estoy aquí para escucharte sin juzgar",
-      isUser: false,
-    ),
-    ChatMessage(
-      text:
-      "Sí, la verdad es que últimamente siento que hago todo lo posible, pero nada sale como espero. Me esfuerzo en el trabajo, en casa, pero no veo resultados, y eso me hace sentir agotada y sin ánimos.",
-      isUser: true,
-    ),
-    ChatMessage(
-      text:
-      "Es completamente válido sentirse así, Mari. Lo que estás viviendo suena realmente difícil, y es normal sentirse cansada cuando sientes que estás dando todo de ti.",
-      isUser: false,
-    ),
-  ];
+  bool _sending = false;
+  bool _loadingHistory = true;
 
-  void _sendMessage() {
-    if (_messageController.text.trim().isNotEmpty) {
+  final List<ChatMessage> _messages = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _bootstrapChat();
+  }
+
+  @override
+  void dispose() {
+    _messageController.dispose();
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _bootstrapChat() async {
+    setState(() {
+      _loadingHistory = true;
+    });
+
+    try {
+      final selectedChatId = widget.initialChatId;
+
+      if (selectedChatId != null && selectedChatId > 0) {
+        final historialMensajes = await _chatService.fetchMensajesChat(
+          selectedChatId,
+        );
+        if (!mounted) return;
+        setState(() {
+          _messages
+            ..clear()
+            ..addAll(
+              historialMensajes
+                  .map((m) => ChatMessage(text: m.text, isUser: m.isUser))
+                  .toList(),
+            );
+        });
+
+        if (_messages.isEmpty) {
+          await _pushAnimatedWelcome();
+        }
+
+        return;
+      }
+
+      final historial = await _chatService.fetchHistorialIA();
+      final ChatSessionSummary? active = historial
+          .cast<ChatSessionSummary?>()
+          .firstWhere((h) => h != null && h.isActive, orElse: () => null);
+
+      if (active != null && active.chatId > 0 && active.totalMensajes > 0) {
+        final historialMensajes = await _chatService.fetchMensajesChat(
+          active.chatId,
+        );
+        if (!mounted) return;
+        setState(() {
+          _messages
+            ..clear()
+            ..addAll(
+              historialMensajes
+                  .map((m) => ChatMessage(text: m.text, isUser: m.isUser))
+                  .toList(),
+            );
+        });
+      } else {
+        await _pushAnimatedWelcome();
+      }
+    } catch (_) {
+      await _pushAnimatedWelcome();
+    } finally {
+      if (!mounted) return;
       setState(() {
-        messages.add(ChatMessage(
-          text: _messageController.text,
-          isUser: true,
-        ));
+        _loadingHistory = false;
       });
-      _messageController.clear();
       _scrollToBottom();
     }
+  }
+
+  Future<void> _pushAnimatedWelcome() async {
+    await Future<void>.delayed(const Duration(milliseconds: 240));
+    if (!mounted) return;
+    setState(() {
+      _messages
+        ..clear()
+        ..add(
+          ChatMessage(
+            text:
+                '¡Hola! Soy NOA. Me alegra hablar contigo. ¿Cómo te has sentido hoy?',
+            isUser: false,
+            animateOnBuild: true,
+          ),
+        );
+    });
+  }
+
+  Future<void> _sendMessage() async {
+    if (_sending) {
+      return;
+    }
+
+    final texto = _messageController.text.trim();
+    if (texto.isEmpty) {
+      return;
+    }
+
+    setState(() {
+      _sending = true;
+      _messages.add(ChatMessage(text: texto, isUser: true));
+      _messages.add(const ChatMessage(text: '', isUser: false, isTyping: true));
+    });
+    _messageController.clear();
+    _scrollToBottom();
+
+    final contexto = _buildConversationContext();
+
+    try {
+      final result = await _chatService.enviarMensajeNOA(
+        mensaje: texto,
+        contexto: contexto,
+      );
+
+      if (!mounted) {
+        return;
+      }
+
+      setState(() {
+        _removeTypingBubble();
+        _messages.add(ChatMessage(text: result.respuesta, isUser: false));
+      });
+
+      _scrollToBottom();
+
+      if (result.requiereSalvavidas) {
+        final aviso =
+            result.mensajeSistema ??
+            'Detectamos una situacion delicada. Te conectaremos con Salvavidas.';
+
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(aviso),
+              backgroundColor: Colors.redAccent,
+              duration: const Duration(seconds: 4),
+            ),
+          );
+
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => HelpScreen()),
+          );
+        }
+      }
+    } catch (e) {
+      if (!mounted) {
+        return;
+      }
+
+      setState(() {
+        _removeTypingBubble();
+        _messages.add(
+          ChatMessage(
+            text:
+                'No pude responder ahora mismo. Intenta otra vez en unos segundos.',
+            isUser: false,
+          ),
+        );
+      });
+      _scrollToBottom();
+    } finally {
+      if (mounted) {
+        setState(() {
+          _sending = false;
+        });
+      }
+    }
+  }
+
+  String _buildConversationContext() {
+    final recientes = _messages
+        .where((m) => !m.isTyping)
+        .take(_messages.length)
+        .toList();
+
+    final ultimos = recientes.length > 6
+        ? recientes.sublist(recientes.length - 6)
+        : recientes;
+
+    final historial = ultimos
+        .map((m) => '${m.isUser ? 'Usuario' : 'NOA'}: ${m.text}')
+        .join(' | ');
+
+    return 'Usuario: ${UserSession.displayName}. Objetivo NOA: amigo virtual cercano, conversacion natural, apoyo emocional y cotidiano. Mantener continuidad con este historial: $historial';
+  }
+
+  void _removeTypingBubble() {
+    _messages.removeWhere((m) => m.isTyping);
+  }
+
+  Future<void> _onStopChatPressed() async {
+    try {
+      final feedback = await _chatService.detenerSesionIA();
+      if (!mounted) return;
+      await _showFeedbackSheet(feedback);
+    } catch (_) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('No se pudo finalizar la sesion en este momento.'),
+          backgroundColor: Colors.redAccent,
+        ),
+      );
+    }
+  }
+
+  Future<void> _showFeedbackSheet(ChatStopFeedback feedback) async {
+    await showModalBottomSheet<void>(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) {
+        return Container(
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+          ),
+          padding: const EdgeInsets.fromLTRB(20, 18, 20, 28),
+          child: SafeArea(
+            top: false,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Center(
+                  child: Text(
+                    'Retroalimentacion de NOA',
+                    style: TextStyle(
+                      fontFamily: 'Fredoka',
+                      fontWeight: FontWeight.bold,
+                      fontSize: 22,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 14),
+                Text(
+                  feedback.retroalimentacion,
+                  style: const TextStyle(
+                    fontFamily: 'Fredoka',
+                    fontSize: 15,
+                    color: Color(0xFF37474F),
+                  ),
+                ),
+                const SizedBox(height: 12),
+                const Text(
+                  'Consejos para ti',
+                  style: TextStyle(
+                    fontFamily: 'Fredoka',
+                    fontWeight: FontWeight.w800,
+                    color: Color(0xFF1565C0),
+                  ),
+                ),
+                const SizedBox(height: 8),
+                ...feedback.consejos.map(
+                  (c) => Padding(
+                    padding: const EdgeInsets.only(bottom: 6),
+                    child: Text(
+                      '• $c',
+                      style: const TextStyle(
+                        fontFamily: 'Fredoka',
+                        color: Color(0xFF455A64),
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 16),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                      Navigator.pop(this.context);
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF1565C0),
+                      foregroundColor: Colors.white,
+                      textStyle: const TextStyle(
+                        fontFamily: 'Fredoka',
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    child: const Text('Volver al inicio'),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
   }
 
   void _scrollToBottom() {
@@ -97,7 +363,9 @@ class _ChatScreenState extends State<ChatScreen> {
                           ),
                         ],
                         image: DecorationImage(
-                          image: AssetImage('assets/images/normalrest.jpg'), // Asegúrate de tener la imagen en esta ruta
+                          image: AssetImage(
+                            'assets/images/normalrest.jpg',
+                          ), // Asegúrate de tener la imagen en esta ruta
                           fit: BoxFit.cover,
                         ),
                       ),
@@ -166,35 +434,42 @@ class _ChatScreenState extends State<ChatScreen> {
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(30),
-                  border: Border.all(color: Color(0xFF153E75), width: 4), // Azul marino
+                  border: Border.all(
+                    color: Color(0xFF153E75),
+                    width: 4,
+                  ), // Azul marino
                 ),
                 child: Stack(
                   children: [
                     // Lista de mensajes
                     Padding(
                       padding: EdgeInsets.only(
-                          top: 60, left: 20, right: 20, bottom: 20),
-                      child: ListView.builder(
-                        controller: _scrollController,
-                        itemCount: messages.length,
-                        itemBuilder: (context, index) {
-                          return ChatBubble(message: messages[index]);
-                        },
+                        top: 60,
+                        left: 20,
+                        right: 20,
+                        bottom: 20,
                       ),
+                      child: _loadingHistory
+                          ? const Center(child: CircularProgressIndicator())
+                          : ListView.builder(
+                              controller: _scrollController,
+                              itemCount: _messages.length,
+                              itemBuilder: (context, index) {
+                                return ChatBubble(message: _messages[index]);
+                              },
+                            ),
                     ),
                     // Botón "Detener"
                     Positioned(
                       top: 16,
                       right: 16,
                       child: GestureDetector(
-                        onTap: () {
-                          // Ahora solo cerramos el chat y volvemos atrás,
-                          // el registro emocional se hace al inicio tras el login.
-                          Navigator.pop(context);
-                        },
+                        onTap: _onStopChatPressed,
                         child: Container(
                           padding: const EdgeInsets.symmetric(
-                              horizontal: 16, vertical: 10),
+                            horizontal: 16,
+                            vertical: 10,
+                          ),
                           decoration: BoxDecoration(
                             color: Color(0xFF4CAF50),
                             borderRadius: BorderRadius.circular(25),
@@ -202,8 +477,7 @@ class _ChatScreenState extends State<ChatScreen> {
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              Icon(Icons.pause,
-                                  color: Colors.black, size: 18),
+                              Icon(Icons.pause, color: Colors.black, size: 18),
                               SizedBox(width: 6),
                               Text(
                                 "Detener",
@@ -243,15 +517,21 @@ class _ChatScreenState extends State<ChatScreen> {
                         borderRadius: BorderRadius.circular(30),
                       ),
                       child: Padding(
-                        padding: EdgeInsets.all(3), // Grosor del borde degradado
+                        padding: EdgeInsets.all(
+                          3,
+                        ), // Grosor del borde degradado
                         child: Container(
-                          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 20,
+                            vertical: 16,
+                          ),
                           decoration: BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(27),
                           ),
                           child: TextField(
                             controller: _messageController,
+                            enabled: !_sending,
                             decoration: InputDecoration(
                               hintText: "Comparte tu mensaje aquí..",
                               border: InputBorder.none,
@@ -274,12 +554,14 @@ class _ChatScreenState extends State<ChatScreen> {
                   ),
                   SizedBox(width: 12),
                   GestureDetector(
-                    onTap: _sendMessage, // <-- Hacer funcional el botón de enviar
+                    onTap: _sendMessage,
                     child: Container(
                       width: 55,
                       height: 55,
                       decoration: BoxDecoration(
-                        color: Color(0xFF3B2C5E), // Azul marino con toque morado
+                        color: Color(
+                          0xFF3B2C5E,
+                        ), // Azul marino con toque morado
                         shape: BoxShape.circle,
                       ),
                       child: Center(
@@ -289,7 +571,10 @@ class _ChatScreenState extends State<ChatScreen> {
                           decoration: BoxDecoration(
                             color: Colors.transparent, // Sin relleno
                             shape: BoxShape.circle,
-                            border: Border.all(color: Colors.white, width: 3), // Solo borde blanco
+                            border: Border.all(
+                              color: Colors.white,
+                              width: 3,
+                            ), // Solo borde blanco
                           ),
                           child: Center(
                             child: Icon(
@@ -310,45 +595,20 @@ class _ChatScreenState extends State<ChatScreen> {
       ),
     );
   }
-
-  Widget _eye() {
-    return Container(
-      width: 10,
-      height: 10,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        shape: BoxShape.circle,
-      ),
-      child: Center(
-        child: Container(
-          width: 6,
-          height: 6,
-          decoration: BoxDecoration(
-            color: Colors.black,
-            shape: BoxShape.circle,
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _cheek() {
-    return Container(
-      width: 8,
-      height: 8,
-      decoration: BoxDecoration(
-        color: Color(0xFFFF9AA2).withOpacity(0.6),
-        shape: BoxShape.circle,
-      ),
-    );
-  }
 }
 
 class ChatMessage {
   final String text;
   final bool isUser;
+  final bool isTyping;
+  final bool animateOnBuild;
 
-  ChatMessage({required this.text, required this.isUser});
+  const ChatMessage({
+    required this.text,
+    required this.isUser,
+    this.isTyping = false,
+    this.animateOnBuild = false,
+  });
 }
 
 class ChatBubble extends StatelessWidget {
@@ -358,32 +618,132 @@ class ChatBubble extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    if (message.isTyping) {
+      return const TypingBubble();
+    }
+
+    final bubble = Container(
       margin: EdgeInsets.only(bottom: 16),
       child: Row(
-        mainAxisAlignment:
-        message.isUser ? MainAxisAlignment.end : MainAxisAlignment.start,
+        mainAxisAlignment: message.isUser
+            ? MainAxisAlignment.end
+            : MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Message bubble
           Flexible(
             child: Container(
               padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               decoration: BoxDecoration(
                 color: message.isUser
-                    ? Color(0xFF64B5F6).withOpacity(0.85) // Usuario: azul claro menos transparente
-                    : Color(0xFFB3E5FC), // Receptor: azul más claro
+                    ? Color(0xFF64B5F6).withOpacity(0.85)
+                    : Color(0xFFB3E5FC),
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Text(
                 message.text,
                 style: TextStyle(
-                  color: Colors.black, // Texto en negro
+                  color: Colors.black,
                   fontSize: 15,
                   fontWeight: FontWeight.bold,
                   fontFamily: 'Freeman',
                   height: 1.4,
                 ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+
+    if (!message.animateOnBuild) {
+      return bubble;
+    }
+
+    return TweenAnimationBuilder<double>(
+      tween: Tween(begin: 0, end: 1),
+      duration: const Duration(milliseconds: 500),
+      curve: Curves.easeOut,
+      builder: (context, value, child) {
+        return Opacity(
+          opacity: value,
+          child: Transform.translate(
+            offset: Offset(0, (1 - value) * 14),
+            child: child,
+          ),
+        );
+      },
+      child: bubble,
+    );
+  }
+}
+
+class TypingBubble extends StatefulWidget {
+  const TypingBubble({super.key});
+
+  @override
+  State<TypingBubble> createState() => _TypingBubbleState();
+}
+
+class _TypingBubbleState extends State<TypingBubble>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 900),
+    )..repeat();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.only(bottom: 16),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            decoration: BoxDecoration(
+              color: const Color(0xFFE1F5FE),
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Container(
+              width: 56,
+              alignment: Alignment.center,
+              child: AnimatedBuilder(
+                animation: _controller,
+                builder: (context, _) {
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: List.generate(3, (index) {
+                      final start = index * 0.2;
+                      final t = ((_controller.value - start) % 1.0)
+                          .clamp(0.0, 1.0)
+                          .toDouble();
+                      final scale = 0.72 + (0.5 * (1 - (2 * t - 1).abs()));
+                      return Transform.scale(
+                        scale: scale,
+                        child: Container(
+                          width: 8,
+                          height: 8,
+                          decoration: const BoxDecoration(
+                            color: Color(0xFF2F9FE8),
+                            shape: BoxShape.circle,
+                          ),
+                        ),
+                      );
+                    }),
+                  );
+                },
               ),
             ),
           ),

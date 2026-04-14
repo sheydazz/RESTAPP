@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:rest/core/routes/app_routes.dart';
 import 'package:rest/core/services/emotion_service.dart';
+import 'package:rest/core/services/user_session.dart';
 import 'package:rest/features/emotion/utils/emotion_calculator.dart';
 
 class EmotionRegisterScreen extends StatefulWidget {
@@ -16,15 +17,25 @@ class _CheckScreenState extends State<EmotionRegisterScreen> {
 
   bool _isLoading = true;
   String? _error;
-  List<dynamic> _preguntas = [];
-  final Map<int, int> _opcionSeleccionadaPorPregunta = {}; // preguntaId -> opcionId
+  List<Map<String, dynamic>> _preguntas = [];
+  final Map<int, int> _opcionSeleccionadaPorPregunta =
+      {}; // preguntaId -> opcionId
 
   final List<String> _facesAssets = const [
     'assets/images/sadrest.jpg',
     'assets/images/yellowrest.jpg',
     'assets/images/normalrest.jpg',
     'assets/images/goodrest.jpg',
-    'assets/images/smilerest.jpg',
+    'assets/images/statesuperexcellent.png', // Cambio: nueva imagen para excelente
+  ];
+
+  // Etiquetas para las emociones
+  final List<String> _emotionLabels = const [
+    'Muy mal',
+    'Mal',
+    'Normal',
+    'Bien',
+    'Excelente',
   ];
 
   @override
@@ -39,9 +50,14 @@ class _CheckScreenState extends State<EmotionRegisterScreen> {
       _error = null;
     });
     try {
-      final preguntas = await _emotionService.fetchPreguntas();
+      // Obtener preguntas aleatorias del backend
+      final preguntasData = await _emotionService.fetchPreguntas();
       setState(() {
-        _preguntas = preguntas;
+        _preguntas = List<Map<String, dynamic>>.from(
+          preguntasData.map(
+            (p) => p is Map ? Map<String, dynamic>.from(p) : {},
+          ),
+        );
         _isLoading = false;
       });
     } catch (e) {
@@ -57,14 +73,11 @@ class _CheckScreenState extends State<EmotionRegisterScreen> {
 
     final respuestas = <Map<String, int>>[];
     for (final q in _preguntas) {
-      final int? preguntaId = (q is Map && q['id'] is int) ? q['id'] as int : null;
+      final int? preguntaId = q['id'] is int ? q['id'] as int : null;
       if (preguntaId == null) continue;
       final int? opcionId = _opcionSeleccionadaPorPregunta[preguntaId];
       if (opcionId == null) continue;
-      respuestas.add({
-        'pregunta_id': preguntaId,
-        'opcion_id': opcionId,
-      });
+      respuestas.add({'pregunta_id': preguntaId, 'opcion_id': opcionId});
     }
 
     if (respuestas.isEmpty) {
@@ -81,11 +94,16 @@ class _CheckScreenState extends State<EmotionRegisterScreen> {
     try {
       await _emotionService.enviarRegistroEmocional(respuestas: respuestas);
 
+      // Actualizar fecha del último test completado
+      UserSession.lastTestDate = DateTime.now();
+
       if (!mounted) return;
       final resultado = EmotionCalculator.calcularEstado(
         preguntas: _preguntas,
         opcionSeleccionadaPorPregunta: _opcionSeleccionadaPorPregunta,
       );
+      print('DEBUG: Navegando a trafficLight con resultado=$resultado');
+      // Navegar directo al semáforo emocional
       Navigator.pushReplacementNamed(
         context,
         AppRoutes.trafficLight,
@@ -93,9 +111,9 @@ class _CheckScreenState extends State<EmotionRegisterScreen> {
       );
     } catch (e) {
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(e.toString())),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(e.toString())));
     } finally {
       if (mounted) {
         setState(() {
@@ -134,7 +152,7 @@ class _CheckScreenState extends State<EmotionRegisterScreen> {
                       border: Border.all(color: Color(0xFF4ECDC4), width: 4),
                       boxShadow: [
                         BoxShadow(
-                          color: Color(0xFF4ECDC4).withOpacity(0.3),
+                          color: Color(0xFF4ECDC4).withValues(alpha: 0.3),
                           blurRadius: 8,
                           offset: Offset(0, 2),
                         ),
@@ -187,8 +205,8 @@ class _CheckScreenState extends State<EmotionRegisterScreen> {
                 child: _isLoading
                     ? const Center(child: CircularProgressIndicator())
                     : _error != null
-                        ? _buildErrorContent()
-                        : _buildPreguntasContent(),
+                    ? _buildErrorContent()
+                    : _buildPreguntasContent(),
               ),
             ),
 
@@ -209,7 +227,7 @@ class _CheckScreenState extends State<EmotionRegisterScreen> {
                     ),
                     borderRadius: BorderRadius.circular(32),
                   ),
-                    child: TextButton(
+                  child: TextButton(
                     onPressed: _isLoading ? null : _guardarRespuestas,
                     style: TextButton.styleFrom(
                       padding: EdgeInsets.zero,
@@ -262,7 +280,7 @@ class _CheckScreenState extends State<EmotionRegisterScreen> {
           ElevatedButton(
             onPressed: _cargarPreguntas,
             child: const Text('Reintentar'),
-          )
+          ),
         ],
       ),
     );
@@ -291,13 +309,13 @@ class _CheckScreenState extends State<EmotionRegisterScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: _preguntas.map((q) {
-                if (q is! Map) return const SizedBox.shrink();
-                final int? id = q['id'] is int ? q['id'] as int : null;
+                final int? id = (q['id'] as int?);
                 if (id == null) return const SizedBox.shrink();
-                final String textoPregunta =
-                    (q['texto'] ?? q['pregunta'] ?? '').toString();
-                final List<dynamic> opciones =
-                    (q['opciones'] is List) ? q['opciones'] as List : const [];
+                final String textoPregunta = (q['texto'] ?? q['pregunta'] ?? '')
+                    .toString();
+                final List<dynamic> opciones = (q['opciones'] is List)
+                    ? q['opciones'] as List
+                    : const [];
 
                 return Padding(
                   padding: const EdgeInsets.only(bottom: 24.0),
@@ -324,60 +342,110 @@ class _CheckScreenState extends State<EmotionRegisterScreen> {
                       const SizedBox(height: 12),
                       LayoutBuilder(
                         builder: (context, constraints) {
-                          final int count = opciones.length.clamp(0, _facesAssets.length);
+                          final int count = opciones.length.clamp(
+                            0,
+                            _facesAssets.length,
+                          );
                           final double maxFaceSize = 48;
                           final double spacing = 8;
                           final double borderWidth = 3 * 2;
                           final double paddingSize = 4 * 2;
                           final double available = constraints.maxWidth;
-                          final double idealTotal = count * (maxFaceSize + borderWidth + paddingSize) + (count - 1) * spacing;
+                          final double idealTotal =
+                              count *
+                                  (maxFaceSize + borderWidth + paddingSize) +
+                              (count - 1) * spacing;
                           final double faceSize = idealTotal > available
-                              ? ((available - (count - 1) * spacing) / count - borderWidth - paddingSize).clamp(24, maxFaceSize)
+                              ? ((available - (count - 1) * spacing) / count -
+                                        borderWidth -
+                                        paddingSize)
+                                    .clamp(24, maxFaceSize)
                               : maxFaceSize;
 
-                          return Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: List.generate(count, (index) {
-                              final dynamic opcion = opciones[index];
-                              final int? opcionId =
-                                  (opcion is Map && opcion['id'] is int)
+                          return Column(
+                            children: [
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: List.generate(count, (index) {
+                                  final dynamic opcion = opciones[index];
+                                  final int? opcionId =
+                                      (opcion is Map && opcion['id'] is int)
                                       ? opcion['id'] as int
                                       : null;
-                              if (opcionId == null) {
-                                return const SizedBox.shrink();
-                              }
-                              final bool seleccionado =
-                                  _opcionSeleccionadaPorPregunta[id] == opcionId;
+                                  if (opcionId == null) {
+                                    return const SizedBox.shrink();
+                                  }
+                                  final bool seleccionado =
+                                      _opcionSeleccionadaPorPregunta[id] ==
+                                      opcionId;
 
-                              return GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    _opcionSeleccionadaPorPregunta[id] =
-                                        opcionId;
-                                  });
-                                },
-                                child: Container(
-                                  padding: const EdgeInsets.all(4),
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    border: Border.all(
-                                      color: seleccionado
-                                          ? const Color(0xFFFFC107)
-                                          : Colors.transparent,
-                                      width: 3,
+                                  return GestureDetector(
+                                    onTap: () {
+                                      setState(() {
+                                        _opcionSeleccionadaPorPregunta[id] =
+                                            opcionId;
+                                      });
+                                    },
+                                    child: Container(
+                                      padding: const EdgeInsets.all(4),
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        border: Border.all(
+                                          color: seleccionado
+                                              ? const Color(0xFFFFC107)
+                                              : Colors.transparent,
+                                          width: 3,
+                                        ),
+                                      ),
+                                      child: ClipOval(
+                                        child: Image.asset(
+                                          _facesAssets[index.clamp(
+                                            0,
+                                            _facesAssets.length - 1,
+                                          )],
+                                          width: faceSize,
+                                          height: faceSize,
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
                                     ),
-                                  ),
-                                  child: ClipOval(
-                                    child: Image.asset(
-                                      _facesAssets[index],
-                                      width: faceSize,
-                                      height: faceSize,
-                                      fit: BoxFit.cover,
+                                  );
+                                }),
+                              ),
+                              const SizedBox(height: 8),
+                              // Agregar etiquetas de emociones
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: List.generate(count, (index) {
+                                  final dynamic opcion = opciones[index];
+                                  final String nombreOpcion =
+                                      (opcion is Map &&
+                                          opcion['nombre'] is String)
+                                      ? opcion['nombre'] as String
+                                      : _emotionLabels[index.clamp(
+                                          0,
+                                          _emotionLabels.length - 1,
+                                        )];
+                                  return SizedBox(
+                                    width: faceSize + 8,
+                                    child: Text(
+                                      nombreOpcion,
+                                      textAlign: TextAlign.center,
+                                      style: const TextStyle(
+                                        fontSize: 10,
+                                        fontWeight: FontWeight.w600,
+                                        color: Colors.black54,
+                                        fontFamily: 'Freeman',
+                                      ),
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
                                     ),
-                                  ),
-                                ),
-                              );
-                            }),
+                                  );
+                                }),
+                              ),
+                            ],
                           );
                         },
                       ),

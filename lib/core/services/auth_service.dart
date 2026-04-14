@@ -1,9 +1,10 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
+import 'package:rest/core/config/api_config.dart';
 
 class AuthService {
-  static const String _baseUrl = 'http://190.143.117.179:8080';
+  static String get _baseUrl => ApiConfig.baseUrl;
 
   Future<Map<String, dynamic>> login({
     required String correo,
@@ -12,7 +13,7 @@ class AuthService {
     final uri = Uri.parse('$_baseUrl/api/auth/login');
 
     final payload = {
-      'correo': correo,
+      'correo': correo.toLowerCase().trim(),
       'contrasena': contrasena,
     };
 
@@ -21,9 +22,7 @@ class AuthService {
 
     final response = await http.post(
       uri,
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers: {'Content-Type': 'application/json'},
       body: jsonEncode(payload),
     );
 
@@ -60,7 +59,7 @@ class AuthService {
     final uri = Uri.parse('$_baseUrl/api/auth/register');
 
     final payload = {
-      'correo': correo,
+      'correo': correo.toLowerCase().trim(),
       'contrasena': contrasena,
       'nombres': nombres,
       'apellidos': apellidos,
@@ -74,9 +73,7 @@ class AuthService {
 
     final response = await http.post(
       uri,
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers: {'Content-Type': 'application/json'},
       body: jsonEncode(payload),
     );
 
@@ -100,5 +97,41 @@ class AuthService {
       throw Exception(message);
     }
   }
-}
 
+  Future<Map<String, dynamic>> recoverPassword({
+    required String correo,
+    required String nuevaContrasena,
+    required String confirmarContrasena,
+  }) async {
+    final uri = Uri.parse('$_baseUrl/api/auth/recover-password');
+
+    final payload = {
+      'correo': correo.toLowerCase().trim(),
+      'nuevaContrasena': nuevaContrasena,
+      'confirmarContrasena': confirmarContrasena,
+    };
+
+    final response = await http.post(
+      uri,
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode(payload),
+    );
+
+    final data = jsonDecode(response.body);
+
+    if (response.statusCode >= 200 && response.statusCode < 300) {
+      return data is Map<String, dynamic> ? data : {'data': data};
+    }
+
+    String message = 'Error al recuperar contraseña';
+    if (data is Map<String, dynamic>) {
+      if (data['message'] != null) {
+        message = data['message'].toString();
+      }
+      if (data['errors'] != null) {
+        message = '$message: ${data['errors']}';
+      }
+    }
+    throw Exception(message);
+  }
+}

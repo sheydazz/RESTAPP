@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'register_screen.dart';
 import 'package:rest/core/services/auth_service.dart';
+import 'package:rest/core/routes/app_routes.dart';
 import 'package:rest/core/services/user_session.dart';
-import 'package:rest/core/services/emotion_service.dart';
 import 'package:rest/features/emotion/screens/emotionregister_screen.dart';
-import 'package:rest/features/emotion/screens/check_screen.dart';
+import 'package:rest/features/navigation/main_app.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -18,7 +18,6 @@ class _LoginScreenState extends State<LoginScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _authService = AuthService();
-  final _emotionService = EmotionService();
 
   bool _isLoading = false;
 
@@ -77,10 +76,15 @@ class _LoginScreenState extends State<LoginScreen> {
       }
 
       // El login puede devolver user/usuario en distintos formatos (el del login viene mal)
-      final dynamic user = response['user'] ??
+      final dynamic user =
+          response['user'] ??
           response['usuario'] ??
-          (response['data'] is Map ? (response['data'] as Map)['user'] : null) ??
-          (response['data'] is Map ? (response['data'] as Map)['usuario'] : null);
+          (response['data'] is Map
+              ? (response['data'] as Map)['user']
+              : null) ??
+          (response['data'] is Map
+              ? (response['data'] as Map)['usuario']
+              : null);
 
       print('LOGIN PARSED → user type: ${user.runtimeType}, value: $user');
 
@@ -105,32 +109,36 @@ class _LoginScreenState extends State<LoginScreen> {
         }
       }
 
-      print('LOGIN SESSION → authToken=${UserSession.authToken != null ? 'SET' : 'NULL'}, userId=${UserSession.userId}');
+      // IMPORTANTE: Resetear lastTestDate para cada nuevo usuario
+      // Esto garantiza que TODOS los usuarios nuevos vean el test
+      UserSession.lastTestDate = null;
+
+      print(
+        'LOGIN SESSION → authToken=${UserSession.authToken != null ? 'SET' : 'NULL'}, userId=${UserSession.userId}',
+      );
 
       if (!mounted) return;
 
-      // Verificar si ya hizo el registro emocional hoy
-      bool yaHizoRegistroHoy = false;
-      try {
-        if (UserSession.userId != null) {
-          yaHizoRegistroHoy = await _emotionService.existeRegistroEmocionalHoy();
-        }
-      } catch (_) {
-        yaHizoRegistroHoy = false;
+      // Validar si el usuario puede hacer el test hoy (solo una vez al día)
+      if (UserSession.canDoTestToday()) {
+        // Mostrar EmotionRegisterScreen si puede hacer el test
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const EmotionRegisterScreen(),
+          ),
+        );
+      } else {
+        // Si ya hizo el test hoy, ir a MainApp
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const MainApp()),
+        );
       }
-      if (!mounted) return;
-
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) =>
-              yaHizoRegistroHoy ? const CheckScreen() : const EmotionRegisterScreen(),
-        ),
-      );
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(e.toString())),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(e.toString())));
     } finally {
       if (mounted) {
         setState(() {
@@ -190,7 +198,9 @@ class _LoginScreenState extends State<LoginScreen> {
                 Column(
                   children: [
                     TextButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.pushNamed(context, AppRoutes.forgotPassword);
+                      },
                       child: RichText(
                         text: TextSpan(
                           style: GoogleFonts.fredoka(

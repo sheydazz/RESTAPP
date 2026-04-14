@@ -1,0 +1,182 @@
+import 'package:flutter/material.dart';
+
+class GamesScreen extends StatefulWidget {
+  const GamesScreen({super.key});
+
+  @override
+  State<GamesScreen> createState() => _GamesScreenState();
+}
+
+class _GamesScreenState extends State<GamesScreen> {
+  int _score = 0;
+  late List<int> _cards;
+  late List<bool> _revealed;
+  int? _firstSelected;
+  int? _secondSelected;
+  int _matches = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _initializeGame();
+  }
+
+  void _initializeGame() {
+    _cards = [1, 1, 2, 2, 3, 3, 4, 4];
+    _cards.shuffle();
+    _revealed = List.filled(8, false);
+    _firstSelected = null;
+    _secondSelected = null;
+    _matches = 0;
+    _score = 0;
+  }
+
+  void _cardTapped(int index) {
+    if (_revealed[index]) return;
+
+    setState(() {
+      if (_firstSelected == null) {
+        _firstSelected = index;
+        _revealed[index] = true;
+      } else if (_secondSelected == null) {
+        _secondSelected = index;
+        _revealed[index] = true;
+
+        Future.delayed(const Duration(milliseconds: 500), () {
+          if (_cards[_firstSelected!] == _cards[_secondSelected!]) {
+            _matches++;
+            _score += 10;
+            if (_matches == 4) {
+              _showWinDialog();
+            }
+          } else {
+            _revealed[_firstSelected!] = false;
+            _revealed[_secondSelected!] = false;
+          }
+          _firstSelected = null;
+          _secondSelected = null;
+          setState(() {});
+        });
+      }
+    });
+  }
+
+  void _showWinDialog() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('¡Ganaste!'),
+        content: Text('Puntuación: $_score'),
+        actions: [
+          ElevatedButton(
+            onPressed: () {
+              Navigator.pop(context);
+              setState(() => _initializeGame());
+            },
+            child: const Text('Jugar Nuevamente'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: const Color(0xFF2196F3),
+        title: const Text(
+          '🎮 Juegos',
+          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+        ),
+        centerTitle: true,
+        leading: GestureDetector(
+          onTap: () => Navigator.pop(context),
+          child: const Icon(Icons.arrow_back, color: Colors.white),
+        ),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          children: [
+            // Puntuación
+            Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                gradient: const LinearGradient(
+                  colors: [Color(0xFF2196F3), Color(0xFF64B5F6)],
+                ),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Text(
+                'Puntuación: $_score | Parejas: $_matches/4',
+                style: const TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+            const SizedBox(height: 24),
+            // Grid de tarjetas
+            Expanded(
+              child: GridView.count(
+                crossAxisCount: 4,
+                mainAxisSpacing: 8,
+                crossAxisSpacing: 8,
+                children: List.generate(8, (index) {
+                  return GestureDetector(
+                    onTap: () => _cardTapped(index),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        gradient: _revealed[index]
+                            ? const LinearGradient(
+                                colors: [Color(0xFF2196F3), Color(0xFF64B5F6)],
+                              )
+                            : LinearGradient(
+                                colors: [Colors.grey[300]!, Colors.grey[400]!],
+                              ),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Center(
+                        child: _revealed[index]
+                            ? Text(
+                                '${_cards[index]}',
+                                style: const TextStyle(
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
+                              )
+                            : const Icon(
+                                Icons.question_mark,
+                                color: Colors.grey,
+                                size: 32,
+                              ),
+                      ),
+                    ),
+                  );
+                }),
+              ),
+            ),
+            const SizedBox(height: 24),
+            ElevatedButton(
+              onPressed: () => setState(() => _initializeGame()),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFF2196F3),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 24,
+                  vertical: 12,
+                ),
+              ),
+              child: const Text(
+                'Reiniciar',
+                style: TextStyle(fontSize: 16, color: Colors.white),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}

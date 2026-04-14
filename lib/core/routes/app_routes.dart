@@ -4,6 +4,7 @@ class AppRoutes {
   static const login = '/login';
   static const register = '/register';
   static const howYouFound = '/how_you_found';
+  static const forgotPassword = '/forgot-password';
 
   // Main App (con Bottom Navigation)
   static const mainApp = '/main';
@@ -11,10 +12,10 @@ class AppRoutes {
   // Home
   static const home = '/home';
   static const settings = '/settings';
-  
+
   //ayuda salavidas
   static const cancelhelp = '/cancelhelp';
-  static const help = '/help'; 
+  static const help = '/help';
 
   //relax
   static const relax = '/relax';
@@ -33,5 +34,4 @@ class AppRoutes {
   static const String misCapitulos = '/mis-capitulos';
   static const String capituloDetalle = '/capitulo-detalle';
   static const misTecnicas = '/mis_tecnicas';
-
 }

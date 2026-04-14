@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:rest/core/routes/app_routes.dart';
+import '../../../core/services/user_session.dart';
+import '../utils/emotion_state_config.dart';
 
 class TrafficLightScreen extends StatelessWidget {
-  final String estado; // "excelente", "alerta-amarillo", "alerta-rojo"
+  final String estado;
   final String mensaje;
   final String botonTexto;
-  final double? promedioHoy; // Para pasar a CheckScreen y mostrar la carita del día
+  final double?
+  promedioHoy; // Para pasar a CheckScreen y mostrar la carita del día
   const TrafficLightScreen({
     super.key,
     required this.estado,
@@ -16,237 +19,233 @@ class TrafficLightScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Definimos colores, imagen y configuración según el estado
-    Color colorTitulo;
-    String titulo;
-    String rutaImagen;
-    Color colorMensaje;
+    // DEBUG: Ver qué parámetro recibimos
+    print('🔴 TrafficLightScreen recibió estado: "$estado"');
+    print(
+      '🔴 TrafficLightScreen resultado completo: estado=$estado, mensaje=$mensaje, botonTexto=$botonTexto, promedio=$promedioHoy',
+    );
 
-
-    switch (estado) {
-      case "excelente":
-        colorTitulo = const Color(0xFF08D557); // Verde
-        colorMensaje = const Color(0xFF41AC20);
-        titulo = "¡Excelente!";
-        rutaImagen = "assets/images/goodrest.jpg";
-
-        break;
-      case "alerta-amarillo":
-        colorTitulo = const Color(0xFFFF9800); // Naranja
-        colorMensaje = const Color(0xFFFF9800);
-        titulo = "¡ALERTA!";
-        rutaImagen = "assets/images/yellowrest.jpg";
-
-        break;
-      case "alerta-rojo":
-        colorTitulo = const Color(0xFFE91E63); // Rosa
-        colorMensaje = const Color(0xFFFF0D29);
-        titulo = "¡ALERTA!";
-        rutaImagen = "assets/images/sadrest.jpg";
-
-        break;
-      default:
-        colorMensaje = const Color(0xFF41AC20);
-        colorTitulo = Colors.grey;
-        titulo = "Sin estado";
-        rutaImagen = "assets/images/normalrest.jpg";
-    }
+    final config = EmotionStateConfig.getConfig(estado);
+    final recomendaciones = config.getRandomRecommendations(count: 3);
 
     return Scaffold(
-      backgroundColor: const Color(0xFF2D2D2D), // Fondo gris oscuro
+      backgroundColor: const Color(0xFF2D2D2D),
       body: Center(
         child: Container(
           width: 400,
-          height: 700,
+          height: 800,
           margin: const EdgeInsets.all(20),
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(24),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.1),
+                color: Colors.black.withOpacity(0.15),
                 blurRadius: 20,
                 spreadRadius: 4,
                 offset: const Offset(0, 8),
-              )
+              ),
             ],
           ),
-          child: Padding(
-            padding: const EdgeInsets.all(24),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                // Imagen/Carita con gradiente circular
-                Container(
-                  width: 300,
-                  height: 220,
-                  child: ClipOval(
-                    child: Image.asset(
-                      rutaImagen,
-                      width: 200,
-                      height: 200,
-                      fit: BoxFit.cover,
-                      errorBuilder: (context, error, stackTrace) {
-                        // En caso de que no encuentre la imagen, muestra un ícono
-                        return Icon(
-                          estado == "excelente"
-                              ? Icons.sentiment_very_satisfied
-                              : estado == "alerta-amarillo"
-                              ? Icons.sentiment_neutral
-                              : Icons.sentiment_dissatisfied,
-                          size: 80,
-                          color: Colors.white,
-                        );
-                      },
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(24),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  // Circulo decorativo de fondo
+                  Container(
+                    width: 280,
+                    height: 220,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      gradient: RadialGradient(
+                        colors: [
+                          config.colorPrincipal.withOpacity(0.15),
+                          config.colorPrincipal.withOpacity(0.05),
+                        ],
+                      ),
                     ),
-                  ),
-                ),
-
-                const SizedBox(height: 30),
-
-                // Título
-                Text(
-                  titulo,
-                  style: TextStyle(
-                    fontSize: 32,
-                    fontWeight: FontWeight.w900,
-
-                    color: colorTitulo,
-                    letterSpacing: 1.2,
-                  ),
-                ),
-
-                const SizedBox(height: 24),
-
-                // Contenedor del mensaje
-                Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFA8E2FF), // Azul claro
-                    borderRadius: BorderRadius.circular(20),
-                    border: Border.all(
-                      color: Colors.black,
-                      width: 1,
-                    ),
-                  ),
-                  child: Column(
-                    children: [
-                      Text(
-                        mensaje,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w600,
-                          color: colorMensaje,
-                          height: 1.4,
+                    child: Center(
+                      child: ClipOval(
+                        child: Image.asset(
+                          config.imagenAsset,
+                          width: 200,
+                          height: 200,
+                          fit: BoxFit.cover,
+                          errorBuilder: (context, error, stackTrace) {
+                            return Icon(
+                              Icons.sentiment_satisfied,
+                              size: 100,
+                              color: config.colorPrincipal,
+                            );
+                          },
                         ),
                       ),
-                      if (estado != "excelente") ...[
-                        const SizedBox(height: 8),
-                        const Text(
-                          "¡Tenemos esto para ti!",
+                    ),
+                  ),
+
+                  const SizedBox(height: 30),
+
+                  // Título dinámico con color según estado
+                  Text(
+                    config.titulo,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 28,
+                      fontWeight: FontWeight.w900,
+                      color: config.colorPrincipal,
+                      letterSpacing: 0.8,
+                    ),
+                  ),
+
+                  const SizedBox(height: 20),
+
+                  // Contenedor del mensaje principal
+                  Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 18,
+                      vertical: 14,
+                    ),
+                    decoration: BoxDecoration(
+                      color: config.colorPrincipal.withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(16),
+                      border: Border.all(
+                        color: config.colorPrincipal.withOpacity(0.3),
+                        width: 2,
+                      ),
+                    ),
+                    child: Column(
+                      children: [
+                        Text(
+                          config.mensaje,
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                            shadows: [
-                              Shadow(
-                                color: Colors.grey,
-                                offset: Offset(1, 1),
-                                blurRadius: 1,
-                              ),
-                            ],
-                            fontSize: 15,
-                            color: Colors.white,
-                            fontWeight: FontWeight.w500,
+                            fontSize: 18,
+                            fontWeight: FontWeight.w700,
+                            color: config.colorTexto,
+                            height: 1.4,
                           ),
                         ),
-                      ]
-                    ],
-                  ),
-                ),
-
-                const SizedBox(height: 32),
-
-
-                // Botón con RadialGradient
-                Container(
-                  width: 200,
-                  height: 60,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(28),
-                    gradient: const RadialGradient(
-                      colors: [
-                        Color(0xFF0BBDAC), // centro
-                        Color(0xFF6110E8), // bordes
+                        const SizedBox(height: 10),
+                        Text(
+                          config.mensaje2,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                            color: config.colorTexto.withOpacity(0.8),
+                            height: 1.3,
+                          ),
+                        ),
                       ],
-                      center: Alignment.center, // desde el centro
-                      radius: 3.5,
                     ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Color(0xFF0BBDAC).withOpacity(0.4),
-                        blurRadius: 12,
-                        spreadRadius: 1,
-                        offset: Offset(0, 4),
-                      ),
-                    ],
                   ),
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      elevation: 0,
-                      backgroundColor: Colors.transparent,
-                      shadowColor: Colors.transparent,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(28),
+
+                  const SizedBox(height: 24),
+
+                  // Recomendaciones quick tips
+                  if (estado != 'excelente' && recomendaciones.isNotEmpty) ...[
+                    Text(
+                      'Sugerencias de bienestar:',
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w700,
+                        color: Colors.black87,
                       ),
                     ),
-                    onPressed: () {
-                      final argsCheck = promedioHoy != null ? {"promedioHoy": promedioHoy} : null;
-                      switch (estado) {
-                        case "excelente":
-                          Navigator.of(context, rootNavigator: true).pushNamed(
-                            AppRoutes.check,
-                            arguments: argsCheck,
-                          );
-                          break;
-                        case "alerta-amarillo":
-                          Navigator.of(context, rootNavigator: true).pushNamed(
+                    const SizedBox(height: 12),
+                    Container(
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: Colors.grey.shade100,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Column(
+                        children: recomendaciones
+                            .map(
+                              (rec) => Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 4,
+                                ),
+                                child: Text(
+                                  rec,
+                                  style: const TextStyle(
+                                    fontSize: 12,
+                                    color: Colors.black87,
+                                    height: 1.3,
+                                  ),
+                                ),
+                              ),
+                            )
+                            .toList(),
+                      ),
+                    ),
+                    const SizedBox(height: 24),
+                  ],
+
+                  // Botón de acción
+                  Container(
+                    width: 220,
+                    height: 55,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(28),
+                      gradient: LinearGradient(
+                        colors: [config.colorPrincipal, config.colorSecundario],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: config.colorPrincipal.withOpacity(0.4),
+                          blurRadius: 12,
+                          offset: const Offset(0, 4),
+                        ),
+                      ],
+                    ),
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        elevation: 0,
+                        backgroundColor: Colors.transparent,
+                        shadowColor: Colors.transparent,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(28),
+                        ),
+                      ),
+                      onPressed: () {
+                        // TODAS las rutas van a CheckScreen (Registro Guardado)
+                        if (estado == 'alerta-amarillo' ||
+                            estado == 'critico') {
+                          // Primero mostrar consejos, luego ir a registro guardado
+                          Navigator.of(context).pushNamed(
                             AppRoutes.advice,
                             arguments: {
-                              "userName": "Mari",
-                              "adviceTitle": "Respira y\nRelájate",
-                              "message": "Ejercicios de respiración para calmarte...",
-                              "promedioHoy": promedioHoy,
+                              'estado': estado,
+                              'userName': UserSession.displayName,
                             },
                           );
-                          break;
-                        case "alerta-rojo":
-                          Navigator.of(context, rootNavigator: true).pushNamed(AppRoutes.help);
-                          break;
-                        default:
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text("Estado no reconocido"),
-                              behavior: SnackBarBehavior.floating,
-                            ),
+                        } else {
+                          // Estados buenos van directo a registro guardado
+                          Navigator.of(context).pushReplacementNamed(
+                            AppRoutes.check,
+                            arguments: {'promedioHoy': promedioHoy},
                           );
-                      }
-                    },
-
-                    child: Text(
-                      botonTexto.toUpperCase(),
-                      style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        letterSpacing: 1.1,
-                        color: Colors.white,
+                        }
+                      },
+                      child: Text(
+                        config.botonTexto,
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700,
+                          color: Colors.white,
+                          letterSpacing: 0.5,
+                        ),
                       ),
                     ),
                   ),
-                )
-
-
-              ],
+                ],
+              ),
             ),
           ),
         ),

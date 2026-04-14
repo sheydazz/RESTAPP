@@ -14,25 +14,165 @@ class RegisterScreen extends StatefulWidget {
 class _RegisterScreenState extends State<RegisterScreen> {
   final _nombreController = TextEditingController();
   final _apellidoController = TextEditingController();
-  final _edadController = TextEditingController();
-  final _ciudadController = TextEditingController();
-  final _carreraController = TextEditingController();
-  final _semestresController = TextEditingController();
   final _correoController = TextEditingController();
   final _passwordController = TextEditingController();
   final _telefonoController = TextEditingController();
 
+  // Variables para dropdowns
+  String? _edadSeleccionada;
+  String? _ciudadSeleccionada;
+  String? _carreraSeleccionada;
+  String? _semestresSeleccionado;
+
+  // Control de visibilidad de contraseña
+  bool _isPasswordVisible = false;
+
   final _authService = AuthService();
   bool _isLoading = false;
+
+  // Listas para los dropdowns
+  final List<String> _edades = List.generate(56, (i) => (i + 15).toString());
+  final List<String> _ciudades = [
+    'Barranquilla',
+    'Bogotá',
+    'Cali',
+    'Cartagena',
+    'Medellín',
+    'Santa Marta',
+    'Valledupar',
+    'Bucaramanga',
+    'Cúcuta',
+    'Ibagué',
+    'Manizales',
+    'Pereira',
+    'Armenia',
+    'Popayán',
+    'Pasto',
+    'Túquerres',
+    'Quibdó',
+    'Montería',
+    'Sincelejo',
+    'Riohacha',
+    'Santa Fe de Antioquia',
+    'Envigado',
+    'Sabaneta',
+    'La Estrella',
+    'Bello',
+    'Copacabana',
+    'Girardota',
+    'Barbosa',
+  ];
+  final List<String> _carreras = [
+    // 🎓 PREGRADOS
+    // ⚖️ Derecho y ciencias sociales
+    'Derecho',
+    'Ciencia Política',
+    'Trabajo Social',
+    'Comunicación Social y Periodismo',
+    // 💰 Ciencias económicas, administrativas y contables
+    'Administración de Empresas',
+    'Contaduría Pública',
+    'Economía',
+    'Negocios Internacionales',
+    'Mercadeo',
+    'Administración de Negocios',
+    // 🏥 Ciencias de la salud
+    'Medicina',
+    'Enfermería',
+    'Bacteriología',
+    'Instrumentación Quirúrgica',
+    'Fisioterapia',
+    // ⚙️ Ingeniería y tecnología
+    'Ingeniería Industrial',
+    'Ingeniería de Sistemas',
+    'Ingeniería Civil',
+    'Ingeniería Ambiental',
+    'Ingeniería Mecánica',
+    'Ingeniería en Ciencia de Datos',
+    // 🧪 Ciencias básicas
+    'Microbiología',
+    'Biología',
+    // 📚 Educación
+    'Licenciatura en Español e Inglés',
+
+    // 📌 ESPECIALIZACIONES
+    // ⚖️ Derecho
+    'Esp. Derecho Administrativo',
+    'Esp. Derecho Constitucional',
+    'Esp. Derecho Penal',
+    'Esp. Derecho Procesal',
+    'Esp. Derecho Laboral',
+    'Esp. Derecho Comercial',
+    'Esp. Derecho Tributario',
+    'Esp. Derecho Médico',
+    'Esp. Derecho de Familia',
+    // 💼 Administración / negocios
+    'Esp. Alta Gerencia',
+    'Esp. Gerencia de Proyectos',
+    'Esp. Gerencia Tributaria',
+    'Esp. Gerencia Financiera',
+    'Esp. Gerencia del Talento Humano',
+    'Esp. Gerencia de Mercadeo',
+    // 🏥 Salud
+    'Esp. Gerencia de Servicios de Salud',
+    'Esp. Seguridad y Salud en el Trabajo',
+    'Esp. Medicina Interna',
+    'Esp. Pediatría',
+    'Esp. Cirugía General',
+    'Esp. Dermatología',
+    // ⚙️ Ingeniería
+    'Esp. Gerencia Ambiental',
+    'Esp. Gestión de la Calidad',
+    'Esp. Seguridad Industrial',
+
+    // 🎓 MAESTRÍAS
+    // ⚖️ Derecho
+    'Maestría en Derecho',
+    'Maestría en Derecho Administrativo',
+    'Maestría en Derecho Penal',
+    'Maestría en Derecho Procesal',
+    // 💼 Administración / economía
+    'MBA (Administración de Empresas)',
+    'Maestría en Administración',
+    'Maestría en Gestión de Proyectos',
+    'Maestría en Finanzas',
+    'Maestría en Economía',
+    // 🏥 Salud
+    'Maestría en Seguridad y Salud en el Trabajo',
+    // 📚 Educación
+    'Maestría en Educación',
+
+    // 🏆 DOCTORADOS
+    'Doctorado en Derecho',
+    'Doctorado en Derecho Administrativo',
+    'Doctorado en Filosofía del Derecho y Teoría Jurídica',
+  ];
+  final List<String> _semestres = [
+    '1',
+    '2',
+    '3',
+    '4',
+    '5',
+    '6',
+    '7',
+    '8',
+    '9',
+    '10',
+    '1 y 2',
+    '2 y 3',
+    '3 y 4',
+    '4 y 5',
+    '5 y 6',
+    '6 y 7',
+    '7 y 8',
+    '8 y 9',
+    '9 y 10',
+  ];
 
   @override
   void dispose() {
     _nombreController.dispose();
     _apellidoController.dispose();
-    _edadController.dispose();
-    _ciudadController.dispose();
-    _carreraController.dispose();
-    _semestresController.dispose();
     _correoController.dispose();
     _passwordController.dispose();
     _telefonoController.dispose();
@@ -44,37 +184,37 @@ class _RegisterScreenState extends State<RegisterScreen> {
     final apellidos = _apellidoController.text.trim();
     final correo = _correoController.text.trim();
     final contrasena = _passwordController.text.trim();
-    final ciudad = _ciudadController.text.trim();
+    final ciudad = _ciudadSeleccionada;
     final telefono = _telefonoController.text.trim();
-    final edadText = _edadController.text.trim();
-    final edad = int.tryParse(edadText);
+    final edad = int.tryParse(_edadSeleccionada ?? '');
 
     if (nombres.isEmpty ||
         apellidos.isEmpty ||
         correo.isEmpty ||
         contrasena.isEmpty ||
+        ciudad == null ||
         ciudad.isEmpty ||
         telefono.isEmpty ||
-        edad == null) {
+        edad == null ||
+        _carreraSeleccionada == null ||
+        _carreraSeleccionada!.isEmpty ||
+        _semestresSeleccionado == null ||
+        _semestresSeleccionado!.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text(
-            'Completa nombre, apellido, correo, contraseña, ciudad, teléfono y una edad válida',
-          ),
-        ),
+        const SnackBar(content: Text('Completa todos los campos obligatorios')),
       );
       return;
     }
 
     // Validar formato de correo
-    final emailRegExp =
-        RegExp(r'^[\w\.-]+@([\w-]+\.)+[\w-]{2,4}$', caseSensitive: false);
+    final emailRegExp = RegExp(
+      r'^[\w\.-]+@([\w-]+\.)+[\w-]{2,4}$',
+      caseSensitive: false,
+    );
     if (!emailRegExp.hasMatch(correo)) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Ingresa un correo válido'),
-        ),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Ingresa un correo válido')));
       return;
     }
 
@@ -93,8 +233,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
     if (!phoneRegExp.hasMatch(telefono) || telefono.length <= 6) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content:
-              Text('El teléfono debe tener solo números y más de 6 dígitos'),
+          content: Text(
+            'El teléfono debe tener solo números y más de 6 dígitos',
+          ),
         ),
       );
       return;
@@ -136,19 +277,24 @@ class _RegisterScreenState extends State<RegisterScreen> {
         UserSession.userId = response['id'] as int;
       }
 
-      print('REGISTER SESSION → token=${UserSession.authToken != null ? 'SET' : 'NULL'}, userId=${UserSession.userId}');
+      // IMPORTANTE: Resetear lastTestDate para cada nuevo usuario
+      // Esto garantiza que TODOS los usuarios nuevos vean el test
+      UserSession.lastTestDate = null;
+
+      // DEBUG: Descomentar solo en desarrollo
+      // print(
+      //   'REGISTER SESSION → token=${UserSession.authToken != null ? 'SET' : 'NULL'}, userId=${UserSession.userId}',
+      // );
 
       if (!mounted) return;
       Navigator.push(
         context,
-        MaterialPageRoute(
-          builder: (context) => const HowYouFoundScreen(),
-        ),
+        MaterialPageRoute(builder: (context) => const HowYouFoundScreen()),
       );
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(e.toString())),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(e.toString())));
     } finally {
       if (mounted) {
         setState(() {
@@ -191,10 +337,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       shaderCallback: (bounds) => const LinearGradient(
                         begin: Alignment.topCenter,
                         end: Alignment.bottomCenter,
-                        colors: [
-                          Color(0xFF0419FF),
-                          Color(0xFF0AF3FF),
-                        ],
+                        colors: [Color(0xFF0419FF), Color(0xFF0AF3FF)],
                       ).createShader(bounds),
                       child: Text(
                         '¡Háblame de ti!',
@@ -213,30 +356,59 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 controller: _nombreController,
                 label: '¿Cómo quieres que te llame?',
                 hint: 'Tu nombre',
+                isRequired: true,
               ),
               const SizedBox(height: 20),
-              _buildInputField(
-                controller: _edadController,
+              _buildDropdownField(
                 label: '¿Cuántos años tienes?',
-                hint: 'Edad',
+                hint: 'Selecciona tu edad',
+                value: _edadSeleccionada,
+                items: _edades,
+                onChanged: (value) {
+                  setState(() {
+                    _edadSeleccionada = value;
+                  });
+                },
+                isRequired: true,
               ),
               const SizedBox(height: 20),
-              _buildInputField(
-                controller: _ciudadController,
+              _buildDropdownField(
                 label: '¿De qué ciudad eres?',
-                hint: 'Ciudad',
+                hint: 'Selecciona tu ciudad',
+                value: _ciudadSeleccionada,
+                items: _ciudades,
+                onChanged: (value) {
+                  setState(() {
+                    _ciudadSeleccionada = value;
+                  });
+                },
+                isRequired: true,
               ),
               const SizedBox(height: 20),
-              _buildInputField(
-                controller: _carreraController,
+              _buildDropdownField(
                 label: '¿Cuál es tu carrera?',
-                hint: 'Ej. Psicología',
+                hint: 'Selecciona tu carrera',
+                value: _carreraSeleccionada,
+                items: _carreras,
+                onChanged: (value) {
+                  setState(() {
+                    _carreraSeleccionada = value;
+                  });
+                },
+                isRequired: true,
               ),
               const SizedBox(height: 20),
-              _buildInputField(
-                controller: _semestresController,
+              _buildDropdownField(
                 label: '¿Qué semestres cursas?',
-                hint: 'Ej. 3 y 4',
+                hint: 'Selecciona el semestre',
+                value: _semestresSeleccionado,
+                items: _semestres,
+                onChanged: (value) {
+                  setState(() {
+                    _semestresSeleccionado = value;
+                  });
+                },
+                isRequired: true,
               ),
 
               const SizedBox(height: 20),
@@ -244,6 +416,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 controller: _telefonoController,
                 label: 'Teléfono',
                 hint: '3001234567',
+                isRequired: true,
               ),
 
               const SizedBox(height: 20),
@@ -251,6 +424,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 controller: _apellidoController,
                 label: 'Apellidos',
                 hint: 'Tus apellidos',
+                isRequired: true,
               ),
 
               const SizedBox(height: 20),
@@ -258,6 +432,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 controller: _correoController,
                 label: 'Correo institucional',
                 hint: 'example@correo.com',
+                isRequired: true,
               ),
               const SizedBox(height: 20),
               _buildInputField(
@@ -265,6 +440,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 label: 'Contraseña',
                 hint: '••••••••',
                 obscure: true,
+                isRequired: true,
               ),
 
               const SizedBox(height: 40),
@@ -292,28 +468,38 @@ class _RegisterScreenState extends State<RegisterScreen> {
     required String label,
     required String hint,
     bool obscure = false,
+    bool isRequired = false,
   }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          label,
-          style: GoogleFonts.fredoka(
-            fontSize: 15,
-            fontWeight: FontWeight.bold,
-            color: Colors.black87,
-          ),
+        Row(
+          children: [
+            Text(
+              label,
+              style: GoogleFonts.fredoka(
+                fontSize: 15,
+                fontWeight: FontWeight.bold,
+                color: Colors.black87,
+              ),
+            ),
+            if (isRequired)
+              Text(
+                ' Obligatorio',
+                style: GoogleFonts.fredoka(
+                  fontSize: 13,
+                  fontWeight: FontWeight.bold,
+                  color: const Color(0xFFFF6B7A),
+                ),
+              ),
+          ],
         ),
         const SizedBox(height: 8),
         Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(30),
             gradient: const LinearGradient(
-              colors: [
-                Color(0xFFADD8E6),
-                Color(0xFF3A5AFF),
-                Color(0xFF8C4EFF),
-              ],
+              colors: [Color(0xFFADD8E6), Color(0xFF3A5AFF), Color(0xFF8C4EFF)],
               begin: Alignment.centerLeft,
               end: Alignment.centerRight,
             ),
@@ -326,42 +512,186 @@ class _RegisterScreenState extends State<RegisterScreen> {
             ),
             child: TextField(
               controller: controller,
-              obscureText: obscure,
+              obscureText: obscure && !_isPasswordVisible,
               style: GoogleFonts.fredoka(
                 color: Colors.black87,
                 fontWeight: FontWeight.bold,
               ),
+              onChanged: (_) {
+                setState(() {});
+              },
               decoration: InputDecoration(
                 hintText: hint,
                 hintStyle: GoogleFonts.fredoka(
                   color: Colors.black38,
                   fontWeight: FontWeight.bold,
                 ),
-                suffixIcon: Padding(
-                  padding: const EdgeInsets.only(right: 20),
-                  child: Container(
-                    width: 28,
-                    height: 28,
-                    decoration: const BoxDecoration(
-                      color: Color(0xFF3709EC),
-                      shape: BoxShape.circle,
-                    ),
-                    child: const Center(
-                      child: Icon(
-                        Icons.check,
-                        color: Colors.white,
-                        size: 18,
+                suffixIcon: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    // Check dinámico (solo si hay texto)
+                    if (controller.text.isNotEmpty)
+                      Padding(
+                        padding: const EdgeInsets.only(right: 10),
+                        child: Container(
+                          width: 28,
+                          height: 28,
+                          decoration: const BoxDecoration(
+                            color: Color(0xFF3709EC),
+                            shape: BoxShape.circle,
+                          ),
+                          child: const Center(
+                            child: Icon(
+                              Icons.check,
+                              color: Colors.white,
+                              size: 18,
+                            ),
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
+                    // Toggle de contraseña (solo si es obscure)
+                    if (obscure)
+                      Padding(
+                        padding: const EdgeInsets.only(right: 15),
+                        child: GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              _isPasswordVisible = !_isPasswordVisible;
+                            });
+                          },
+                          child: Icon(
+                            _isPasswordVisible
+                                ? Icons.visibility
+                                : Icons.visibility_off,
+                            color: const Color(0xFF3709EC),
+                            size: 22,
+                          ),
+                        ),
+                      ),
+                  ],
                 ),
-                contentPadding:
-                const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 14,
+                ),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(28),
                   borderSide: BorderSide.none,
                 ),
               ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildDropdownField({
+    required String label,
+    required String hint,
+    required String? value,
+    required List<String> items,
+    required ValueChanged<String?> onChanged,
+    bool isRequired = false,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Text(
+              label,
+              style: GoogleFonts.fredoka(
+                fontSize: 15,
+                fontWeight: FontWeight.bold,
+                color: Colors.black87,
+              ),
+            ),
+            if (isRequired)
+              Text(
+                ' Obligatorio',
+                style: GoogleFonts.fredoka(
+                  fontSize: 13,
+                  fontWeight: FontWeight.bold,
+                  color: const Color(0xFFFF6B7A),
+                ),
+              ),
+          ],
+        ),
+        const SizedBox(height: 8),
+        Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(30),
+            gradient: const LinearGradient(
+              colors: [Color(0xFFADD8E6), Color(0xFF3A5AFF), Color(0xFF8C4EFF)],
+              begin: Alignment.centerLeft,
+              end: Alignment.centerRight,
+            ),
+          ),
+          padding: const EdgeInsets.all(2.5),
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(28),
+            ),
+            child: Row(
+              children: [
+                Expanded(
+                  child: DropdownButtonHideUnderline(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: DropdownButton<String>(
+                        isExpanded: true,
+                        hint: Text(
+                          hint,
+                          style: GoogleFonts.fredoka(
+                            color: Colors.black38,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        value: value,
+                        items: items
+                            .map(
+                              (item) => DropdownMenuItem(
+                                value: item,
+                                child: Text(
+                                  item,
+                                  style: GoogleFonts.fredoka(
+                                    color: Colors.black87,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            )
+                            .toList(),
+                        onChanged: onChanged,
+                        style: GoogleFonts.fredoka(
+                          color: Colors.black87,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                // Check dinámico (solo si hay selección)
+                if (value != null && value.isNotEmpty)
+                  Padding(
+                    padding: const EdgeInsets.only(right: 15),
+                    child: Container(
+                      width: 28,
+                      height: 28,
+                      decoration: const BoxDecoration(
+                        color: Color(0xFF3709EC),
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Center(
+                        child: Icon(Icons.check, color: Colors.white, size: 18),
+                      ),
+                    ),
+                  )
+                else
+                  const SizedBox(width: 15),
+              ],
             ),
           ),
         ),
@@ -376,10 +706,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     final gradient = const RadialGradient(
       center: Alignment.center,
       radius: 1.2,
-      colors: [
-        Color(0xFF5CCFC0),
-        Color(0xFF2981C1),
-      ],
+      colors: [Color(0xFF5CCFC0), Color(0xFF2981C1)],
     );
 
     return Container(
@@ -394,7 +721,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
           backgroundColor: Colors.transparent,
           shadowColor: Colors.transparent,
           padding: EdgeInsets.zero,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(50),
+          ),
         ),
         child: Text(
           text,

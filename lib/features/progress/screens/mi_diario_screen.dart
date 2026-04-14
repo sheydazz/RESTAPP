@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:rest/core/routes/app_routes.dart';
+import 'package:rest/core/services/diary_service.dart';
 
 class MiDiarioScreen extends StatefulWidget {
   const MiDiarioScreen({super.key});
@@ -11,6 +13,8 @@ class MiDiarioScreen extends StatefulWidget {
 class _MiDiarioScreenState extends State<MiDiarioScreen> {
   final TextEditingController _tituloController = TextEditingController();
   final TextEditingController _descripcionController = TextEditingController();
+  final DiaryService _diaryService = DiaryService();
+  bool _saving = false;
 
   final _gradient = const RadialGradient(
     center: Alignment.center,
@@ -23,6 +27,48 @@ class _MiDiarioScreenState extends State<MiDiarioScreen> {
     _tituloController.dispose();
     _descripcionController.dispose();
     super.dispose();
+  }
+
+  Future<void> _saveEntry() async {
+    if (_saving) return;
+
+    final titulo = _tituloController.text.trim();
+    final contenido = _descripcionController.text.trim();
+
+    if (titulo.isEmpty || contenido.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Completa titulo y descripcion para guardar.'),
+          backgroundColor: Colors.orange,
+        ),
+      );
+      return;
+    }
+
+    setState(() => _saving = true);
+    try {
+      await _diaryService.createEntry(titulo: titulo, contenido: contenido);
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Entrada guardada correctamente'),
+          backgroundColor: Color(0xFF4CAF50),
+        ),
+      );
+      Navigator.pop(context, true);
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('No se pudo guardar: $e'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    } finally {
+      if (mounted) {
+        setState(() => _saving = false);
+      }
+    }
   }
 
   @override
@@ -146,10 +192,7 @@ class _MiDiarioScreenState extends State<MiDiarioScreen> {
                             contentPadding: EdgeInsets.zero,
                           ),
                         ),
-                        const Divider(
-                          color: Color(0xFFE0E0E0),
-                          thickness: 1,
-                        ),
+                        const Divider(color: Color(0xFFE0E0E0), thickness: 1),
                         const SizedBox(height: 8),
 
                         // Campo descripción
@@ -194,7 +237,7 @@ class _MiDiarioScreenState extends State<MiDiarioScreen> {
                       ),
                       child: ElevatedButton(
                         onPressed: () {
-                          Navigator.pushNamed(context, '/mis-capitulos');
+                          Navigator.pushNamed(context, AppRoutes.misCapitulos);
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.transparent,
@@ -219,18 +262,7 @@ class _MiDiarioScreenState extends State<MiDiarioScreen> {
                   // Botón “Guardar” (verde, sin cambios)
                   Expanded(
                     child: ElevatedButton(
-                      onPressed: () {
-                        if (_tituloController.text.isNotEmpty ||
-                            _descripcionController.text.isNotEmpty) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('Entrada guardada'),
-                              backgroundColor: Color(0xFF4CAF50),
-                            ),
-                          );
-                          Navigator.pop(context);
-                        }
-                      },
+                      onPressed: _saving ? null : _saveEntry,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF4CAF50),
                         foregroundColor: Colors.white,
@@ -240,14 +272,25 @@ class _MiDiarioScreenState extends State<MiDiarioScreen> {
                         ),
                         elevation: 0,
                       ),
-                      child: Text(
-                        'Guardar',
-                        style: GoogleFonts.fredoka(
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
-                      ),
+                      child: _saving
+                          ? const SizedBox(
+                              height: 20,
+                              width: 20,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2.2,
+                                valueColor: AlwaysStoppedAnimation(
+                                  Colors.white,
+                                ),
+                              ),
+                            )
+                          : Text(
+                              'Guardar',
+                              style: GoogleFonts.fredoka(
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                            ),
                     ),
                   ),
                 ],

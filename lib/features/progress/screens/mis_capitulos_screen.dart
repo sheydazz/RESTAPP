@@ -1,8 +1,50 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
+import 'package:rest/core/routes/app_routes.dart';
+import 'package:rest/core/services/diary_service.dart';
 
-class MisCapitulosScreen extends StatelessWidget {
+class MisCapitulosScreen extends StatefulWidget {
   const MisCapitulosScreen({super.key});
+
+  @override
+  State<MisCapitulosScreen> createState() => _MisCapitulosScreenState();
+}
+
+class _MisCapitulosScreenState extends State<MisCapitulosScreen> {
+  final DiaryService _diaryService = DiaryService();
+
+  bool _loading = true;
+  String? _error;
+  List<DiaryEntry> _entries = const [];
+
+  @override
+  void initState() {
+    super.initState();
+    _loadEntries();
+  }
+
+  Future<void> _loadEntries() async {
+    setState(() {
+      _loading = true;
+      _error = null;
+    });
+
+    try {
+      final data = await _diaryService.fetchEntries();
+      if (!mounted) return;
+      setState(() {
+        _entries = data;
+        _loading = false;
+      });
+    } catch (e) {
+      if (!mounted) return;
+      setState(() {
+        _error = e.toString();
+        _loading = false;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -11,24 +53,6 @@ class MisCapitulosScreen extends StatelessWidget {
       radius: 1.2,
       colors: [Color(0xFF5CCFC0), Color(0xFF2981C1)],
     );
-
-    final capitulos = [
-      {
-        'titulo': 'Me duele',
-        'descripcion': 'Puede que esté pasando en mis días normales...',
-        'fecha': '10/03/2025',
-      },
-      {
-        'titulo': 'Me siento raro',
-        'descripcion': 'A veces me cuesta concentrarme...',
-        'fecha': '15/03/2025',
-      },
-      {
-        'titulo': 'Tristeza',
-        'descripcion': 'Hoy fue un día difícil...',
-        'fecha': '20/03/2025',
-      },
-    ];
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -42,7 +66,6 @@ class MisCapitulosScreen extends StatelessWidget {
                 children: [
                   Row(
                     children: [
-
                       GestureDetector(
                         onTap: () => Navigator.pop(context),
                         child: Container(
@@ -60,7 +83,6 @@ class MisCapitulosScreen extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(width: 16),
-
 
                       ShaderMask(
                         shaderCallback: (bounds) =>
@@ -92,51 +114,96 @@ class MisCapitulosScreen extends StatelessWidget {
 
             // 🔹 LISTA DE CAPÍTULOS
             Expanded(
-              child: capitulos.isEmpty
+              child: _loading
+                  ? const Center(child: CircularProgressIndicator())
+                  : _error != null
                   ? Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      Icons.book_outlined,
-                      size: 80,
-                      color: Colors.grey[300],
-                    ),
-                    const SizedBox(height: 16),
-                    Text(
-                      'No hay capítulos aún',
-                      style: TextStyle(
-                        fontSize: 18,
-                        color: Colors.grey[600],
-                        fontFamily: 'Fredoka',
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 24),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Icon(
+                              Icons.cloud_off,
+                              size: 64,
+                              color: Color(0xFF90A4AE),
+                            ),
+                            const SizedBox(height: 12),
+                            Text(
+                              'No se pudieron cargar tus capitulos',
+                              textAlign: TextAlign.center,
+                              style: GoogleFonts.fredoka(
+                                fontSize: 17,
+                                fontWeight: FontWeight.w700,
+                                color: const Color(0xFF546E7A),
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              _error!,
+                              textAlign: TextAlign.center,
+                              style: GoogleFonts.fredoka(
+                                fontSize: 13,
+                                color: const Color(0xFF90A4AE),
+                              ),
+                            ),
+                            const SizedBox(height: 16),
+                            ElevatedButton(
+                              onPressed: _loadEntries,
+                              child: const Text('Reintentar'),
+                            ),
+                          ],
+                        ),
+                      ),
+                    )
+                  : _entries.isEmpty
+                  ? Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.book_outlined,
+                            size: 80,
+                            color: Colors.grey[300],
+                          ),
+                          const SizedBox(height: 16),
+                          Text(
+                            'No hay capítulos aún',
+                            style: TextStyle(
+                              fontSize: 18,
+                              color: Colors.grey[600],
+                              fontFamily: 'Fredoka',
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          Text(
+                            'Comienza escribiendo en tu diario',
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Colors.grey[500],
+                              fontFamily: 'Fredoka',
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+                  : RefreshIndicator(
+                      onRefresh: _loadEntries,
+                      child: ListView.builder(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        itemCount: _entries.length,
+                        itemBuilder: (context, index) {
+                          final capitulo = _entries[index];
+                          return _buildCapituloCard(
+                            context,
+                            capitulo.titulo,
+                            capitulo.contenido,
+                            DateFormat('dd/MM/yyyy').format(capitulo.fecha),
+                            gradient,
+                          );
+                        },
                       ),
                     ),
-                    const SizedBox(height: 8),
-                    Text(
-                      'Comienza escribiendo en tu diario',
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.grey[500],
-                        fontFamily: 'Fredoka',
-                      ),
-                    ),
-                  ],
-                ),
-              )
-                  : ListView.builder(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                itemCount: capitulos.length,
-                itemBuilder: (context, index) {
-                  final capitulo = capitulos[index];
-                  return _buildCapituloCard(
-                    context,
-                    capitulo['titulo']!,
-                    capitulo['descripcion']!,
-                    capitulo['fecha']!,
-                    gradient,
-                  );
-                },
-              ),
             ),
           ],
         ),
@@ -145,17 +212,17 @@ class MisCapitulosScreen extends StatelessWidget {
   }
 
   Widget _buildCapituloCard(
-      BuildContext context,
-      String titulo,
-      String descripcion,
-      String fecha,
-      RadialGradient gradient,
-      ) {
+    BuildContext context,
+    String titulo,
+    String descripcion,
+    String fecha,
+    RadialGradient gradient,
+  ) {
     return GestureDetector(
       onTap: () {
         Navigator.pushNamed(
           context,
-          '/capitulo-detalle',
+          AppRoutes.capituloDetalle,
           arguments: {
             'titulo': titulo,
             'descripcion': descripcion,

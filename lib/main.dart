@@ -4,6 +4,7 @@ import 'features/intro_auth/screens/how_you_found_screen.dart';
 import 'features/intro_auth/screens/intro_screen.dart';
 import 'features/intro_auth/screens/login_screen.dart';
 import 'features/intro_auth/screens/register_screen.dart';
+import 'features/intro_auth/screens/forgot_password_screen.dart';
 import 'features/help/screens/cancelhelp_screen.dart';
 import 'features/help/screens/help_screen.dart';
 import 'features/home/screens/home_screen.dart';
@@ -13,7 +14,6 @@ import 'features/emotion/screens/chat_screen.dart';
 import 'features/emotion/screens/traffic_light_screen.dart';
 import 'features/emotion/screens/advice_screen.dart';
 import 'features/emotion/screens/check_screen.dart';
-import 'features/progress/screens/progress_screen.dart';
 import 'features/navigation/main_app.dart';
 import 'features/progress/screens/globalprogress_screen.dart';
 import 'features/progress/screens/myprogress_screen.dart';
@@ -21,8 +21,6 @@ import 'features/progress/screens/mi_diario_screen.dart';
 import 'features/progress/screens/mis_capitulos_screen.dart';
 import 'features/progress/screens/capitulo_detalle_screen.dart';
 import 'features/progress/screens/my_relaxation_techniques.dart';
-
-
 
 void main() {
   runApp(const MyApp());
@@ -38,61 +36,75 @@ class MyApp extends StatelessWidget {
       initialRoute: AppRoutes.intro,
       routes: {
         // Intro & Auth
-        AppRoutes.intro: (context) =>  IntroScreen(),
-        AppRoutes.login: (context) =>  LoginScreen(),
-        AppRoutes.register: (context) =>  RegisterScreen(),
-        AppRoutes.howYouFound: (context) =>  HowYouFoundScreen(),
+        AppRoutes.intro: (context) => IntroScreen(),
+        AppRoutes.login: (context) => LoginScreen(),
+        AppRoutes.register: (context) => RegisterScreen(),
+        AppRoutes.forgotPassword: (context) => const ForgotPasswordScreen(),
+        AppRoutes.howYouFound: (context) => HowYouFoundScreen(),
 
         // Main App
-        AppRoutes.mainApp: (context) =>  MainApp(),
+        AppRoutes.mainApp: (context) => MainApp(),
 
         // Home
-        AppRoutes.home: (context) =>  HomeScreen(),
-        AppRoutes.settings: (context) =>  SettingsScreen(),
+        AppRoutes.home: (context) => HomeScreen(),
+        AppRoutes.settings: (context) => SettingsScreen(),
 
         // Ayuda
-        AppRoutes.help: (context) =>  HelpScreen(),
-        AppRoutes.cancelhelp: (context) =>  CancelHelpScreen(),
+        AppRoutes.help: (context) => HelpScreen(),
+        AppRoutes.cancelhelp: (context) => CancelHelpScreen(),
 
         // Registro Emocional
-        AppRoutes.emotionHome: (context) =>  EmotionRegisterScreen(),
-        AppRoutes.chat: (context) =>  ChatScreen(),
+        AppRoutes.emotionHome: (context) => EmotionRegisterScreen(),
+        AppRoutes.chat: (context) => ChatScreen(),
         AppRoutes.trafficLight: (context) {
-          final args = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+          final args =
+              ModalRoute.of(context)?.settings.arguments
+                  as Map<String, dynamic>?;
           return TrafficLightScreen(
             estado: args?["estado"] ?? "excelente",
             mensaje: args?["mensaje"] ?? "¡Qué bien te sientes hoy!",
             botonTexto: args?["botonTexto"] ?? "Continuar",
-            promedioHoy: (args?["promedio"] is num) ? (args!["promedio"] as num).toDouble() : null,
+            promedioHoy: (args?["promedio"] is num)
+                ? (args!["promedio"] as num).toDouble()
+                : null,
           );
         },
 
         AppRoutes.advice: (context) {
-          final args = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+          final args =
+              ModalRoute.of(context)?.settings.arguments
+                  as Map<String, dynamic>?;
           return AdviceScreen(
             userName: args?["userName"] ?? "Usuario",
             adviceTitle: args?["adviceTitle"] ?? "Consejo",
             message: args?["message"] ?? "consejo personalizado.",
-            promedioHoy: (args?["promedioHoy"] is num) ? (args!["promedioHoy"] as num).toDouble() : null,
+            promedioHoy: (args?["promedioHoy"] is num)
+                ? (args!["promedioHoy"] as num).toDouble()
+                : null,
+            estado: args?["estado"] ?? "normal",
           );
         },
         AppRoutes.check: (context) {
-          final args = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
-          final promedioHoy = (args?["promedioHoy"] is num) ? (args!["promedioHoy"] as num).toDouble() : null;
+          final args =
+              ModalRoute.of(context)?.settings.arguments
+                  as Map<String, dynamic>?;
+          final promedioHoy = (args?["promedioHoy"] is num)
+              ? (args!["promedioHoy"] as num).toDouble()
+              : null;
           return CheckScreen(promedioHoy: promedioHoy);
         },
 
         // Mi Progreso
-        AppRoutes.globalprogress: (context) =>  GlobalProgressScreen(),
-        AppRoutes.progress: (context) =>  MyProgressScreen(),
-        AppRoutes.progress: (context) =>  ProgressScreen(),
+        AppRoutes.globalprogress: (context) => GlobalProgressScreen(),
+        AppRoutes.progress: (context) => MyProgressScreen(),
         AppRoutes.miDiario: (context) => const MiDiarioScreen(),
         AppRoutes.misCapitulos: (context) => const MisCapitulosScreen(),
         AppRoutes.misTecnicas: (context) => const MisTecnicasScreen(),
 
-
-    AppRoutes.capituloDetalle: (context) {
-          final args = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>?;
+        AppRoutes.capituloDetalle: (context) {
+          final args =
+              ModalRoute.of(context)!.settings.arguments
+                  as Map<String, dynamic>?;
           return CapituloDetalleScreen(
             titulo: args?['titulo'],
             descripcion: args?['descripcion'],

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import '../home/screens/home_screen.dart';
 import '../progress/screens/progress_screen.dart';
-import '../emotion/screens/emotionregister_screen.dart';
 import '../progress/screens/myprogress_screen.dart';
 
 class MainApp extends StatefulWidget {
