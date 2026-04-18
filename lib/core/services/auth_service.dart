@@ -55,6 +55,9 @@ class AuthService {
     required String telefono,
     required String ciudad,
     required int edad,
+    required String semestreActual,
+    required String sexo,
+    required String fechaNacimiento,
   }) async {
     final uri = Uri.parse('$_baseUrl/api/auth/register');
 
@@ -64,8 +67,11 @@ class AuthService {
       'nombres': nombres,
       'apellidos': apellidos,
       'telefono': telefono,
-      'ciudad': ciudad,
+      'ciudad': ciudad.toString(),
       'edad': edad,
+      'semestre_actual': semestreActual,
+      'sexo': sexo,
+      'fecha_nacimiento': fechaNacimiento,
     };
 
     print('REGISTER REQUEST → $uri');

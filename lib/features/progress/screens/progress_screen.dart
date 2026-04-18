@@ -320,22 +320,22 @@ class _ProgressScreenState extends State<ProgressScreen> {
               child: Text(
                 '¡Hola! ${UserSession.displayName}',
                 style: const TextStyle(
-                  fontSize: 22,
+                  fontSize: 20,
                   fontWeight: FontWeight.bold,
-                  color: Color(0xFF7DD3E8),
+                  color: Color(0xFF2E86AB),
                   fontFamily: 'Fredoka',
                 ),
                 overflow: TextOverflow.ellipsis,
               ),
             ),
             _buildHeaderIcon(
-              imagePath: 'assets/images/white_gear.png',
+              imagePath: 'assets/images/config.png',
               fallback: Icons.settings,
               onTap: () => Navigator.pushNamed(context, AppRoutes.settings),
             ),
             const SizedBox(width: 8),
             _buildHeaderIcon(
-              imagePath: 'assets/images/float.png',
+              imagePath: 'assets/images/salvavidas.png',
               fallback: Icons.help_outline,
               onTap: () => Navigator.pushNamed(context, AppRoutes.help),
             ),
@@ -364,7 +364,7 @@ class _ProgressScreenState extends State<ProgressScreen> {
         width: 40,
         height: 40,
         decoration: const BoxDecoration(
-          color: Color(0xFF7DD3E8),
+          color: Color(0xFF87CEEB),
           shape: BoxShape.circle,
         ),
         child: Center(

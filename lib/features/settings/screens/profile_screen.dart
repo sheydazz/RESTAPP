@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:rest/core/services/profile_service.dart';
+
 import '../../home/screens/gradient_text.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -7,18 +9,57 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  final TextEditingController _nombreController = TextEditingController(text: 'Juan Pérez');
-  final TextEditingController _correoController = TextEditingController(text: 'juan.perez@unilibre.edu.co');
-  final TextEditingController _programaController = TextEditingController(text: 'Ingeniería de sistemas');
-  final TextEditingController _semestreController = TextEditingController(text: 'Sexto');
-  final TextEditingController _telefonoController = TextEditingController(text: '+57 (300) 822-3541');
-  final TextEditingController _fechaNacimientoController = TextEditingController(text: '01/05/2003');
+  final ProfileService _profileService = ProfileService();
+  final TextEditingController _nombreController = TextEditingController();
+  final TextEditingController _correoController = TextEditingController();
+  final TextEditingController _ciudadController = TextEditingController();
+  final TextEditingController _semestreController = TextEditingController();
+  final TextEditingController _telefonoController = TextEditingController();
+  final TextEditingController _fechaNacimientoController =
+      TextEditingController();
+
+  bool _isLoading = true;
+  String? _errorMessage;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadProfile();
+  }
+
+  Future<void> _loadProfile() async {
+    setState(() {
+      _isLoading = true;
+      _errorMessage = null;
+    });
+
+    try {
+      final profile = await _profileService.fetchProfile();
+      if (!mounted) return;
+
+      setState(() {
+        _nombreController.text = profile.nombreCompleto;
+        _correoController.text = profile.correo;
+        _ciudadController.text = profile.ciudad ?? '';
+        _semestreController.text = profile.semestreActual ?? '';
+        _telefonoController.text = profile.telefono ?? '';
+        _fechaNacimientoController.text = profile.fechaNacimientoFormateada;
+        _isLoading = false;
+      });
+    } catch (e) {
+      if (!mounted) return;
+      setState(() {
+        _errorMessage = e.toString().replaceFirst('Exception: ', '');
+        _isLoading = false;
+      });
+    }
+  }
 
   @override
   void dispose() {
     _nombreController.dispose();
     _correoController.dispose();
-    _programaController.dispose();
+    _ciudadController.dispose();
     _semestreController.dispose();
     _telefonoController.dispose();
     _fechaNacimientoController.dispose();
@@ -53,11 +94,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                   ],
                 ),
-                child: Icon(
-                  Icons.arrow_back,
-                  color: Colors.white,
-                  size: 25,
-                ),
+                child: Icon(Icons.arrow_back, color: Colors.white, size: 25),
               ),
             ),
           ),
@@ -66,15 +103,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
           margin: const EdgeInsets.only(left: 10),
           child: GradientText(
             'Perfil',
-            style: TextStyle(
-              fontWeight: FontWeight.w600,
-              fontSize: 30,
-            ),
+            style: TextStyle(fontWeight: FontWeight.w600, fontSize: 30),
             gradient: LinearGradient(
-              colors: [
-                Color(0xFF0AF3FF),
-                Color(0xFF0419FF),
-              ],
+              colors: [Color(0xFF0AF3FF), Color(0xFF0419FF)],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
@@ -82,115 +113,131 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ),
         centerTitle: false,
       ),
-      body: SingleChildScrollView(
+      body: _buildBody(),
+    );
+  }
+
+  Widget _buildBody() {
+    if (_isLoading) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
+    if (_errorMessage != null) {
+      return Center(
         child: Padding(
-          padding: const EdgeInsets.all(20),
+          padding: const EdgeInsets.symmetric(horizontal: 24),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // Avatar section
-              Center(
-                child: Container(
-                  width: 100,
-                  height: 100,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    gradient: LinearGradient(
-                      colors: [
-                        Color(0xFF0AF3FF),
-                        Color(0xFF0419FF),
-                      ],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Color(0xFF0AF3FF).withOpacity(0.3),
-                        blurRadius: 15,
-                        offset: Offset(0, 5),
-                      ),
-                    ],
-                  ),
-                  child: Icon(
-                    Icons.person,
-                    color: Colors.white,
-                    size: 50,
-                  ),
-                ),
+              const Icon(
+                Icons.error_outline,
+                color: Colors.redAccent,
+                size: 40,
               ),
-              const SizedBox(height: 30),
+              const SizedBox(height: 12),
+              Text(
+                _errorMessage!,
+                textAlign: TextAlign.center,
+                style: const TextStyle(color: Color(0xFF2E3A59), fontSize: 14),
+              ),
+              const SizedBox(height: 16),
+              ElevatedButton(
+                onPressed: _loadProfile,
+                child: const Text('Reintentar'),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
 
-              // Form fields
-              _buildInputField('Nombre', _nombreController),
-              const SizedBox(height: 20),
-
-              _buildInputField('Correo', _correoController),
-              const SizedBox(height: 20),
-
-              _buildInputField('Programa', _programaController),
-              const SizedBox(height: 20),
-
-              _buildInputField('Semestre', _semestreController),
-              const SizedBox(height: 20),
-
-              _buildInputField('Teléfono', _telefonoController),
-              const SizedBox(height: 20),
-
-              _buildInputField('Fecha de nacimiento', _fechaNacimientoController),
-              const SizedBox(height: 40),
-
-              // Save button
-              Container(
-                width: double.infinity,
-                height: 55,
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Center(
+              child: Container(
+                width: 100,
+                height: 100,
                 decoration: BoxDecoration(
+                  shape: BoxShape.circle,
                   gradient: LinearGradient(
-                    colors: [
-                      Color(0xFF0AF3FF),
-                      Color(0xFF0419FF),
-                    ],
+                    colors: [Color(0xFF0AF3FF), Color(0xFF0419FF)],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                   ),
-                  borderRadius: BorderRadius.circular(15),
                   boxShadow: [
                     BoxShadow(
                       color: Color(0xFF0AF3FF).withOpacity(0.3),
-                      blurRadius: 10,
-                      offset: const Offset(0, 4),
+                      blurRadius: 15,
+                      offset: Offset(0, 5),
                     ),
                   ],
                 ),
-                child: Material(
-                  color: Colors.transparent,
-                  child: InkWell(
-                    borderRadius: BorderRadius.circular(15),
-                    onTap: () {
-                      // Aquí puedes agregar la lógica para guardar los datos
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text('Perfil actualizado correctamente'),
-                          backgroundColor: Color(0xFF4FC3F7),
-                        ),
-                      );
-                    },
-                    child: const Center(
-                      child: Text(
-                        'GUARDAR CAMBIOS',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.white,
-                          letterSpacing: 1.2,
-                        ),
+                child: Icon(Icons.person, color: Colors.white, size: 50),
+              ),
+            ),
+            const SizedBox(height: 30),
+            _buildInputField('Nombre', _nombreController),
+            const SizedBox(height: 20),
+            _buildInputField('Correo', _correoController),
+            const SizedBox(height: 20),
+            _buildInputField('Ciudad', _ciudadController),
+            const SizedBox(height: 20),
+            _buildInputField('Semestre', _semestreController),
+            const SizedBox(height: 20),
+            _buildInputField('Teléfono', _telefonoController),
+            const SizedBox(height: 20),
+            _buildInputField('Fecha de nacimiento', _fechaNacimientoController),
+            const SizedBox(height: 40),
+            Container(
+              width: double.infinity,
+              height: 55,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [Color(0xFF0AF3FF), Color(0xFF0419FF)],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+                borderRadius: BorderRadius.circular(15),
+                boxShadow: [
+                  BoxShadow(
+                    color: Color(0xFF0AF3FF).withOpacity(0.3),
+                    blurRadius: 10,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
+              ),
+              child: Material(
+                color: Colors.transparent,
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(15),
+                  onTap: () {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('Perfil actualizado correctamente'),
+                        backgroundColor: Color(0xFF4FC3F7),
+                      ),
+                    );
+                  },
+                  child: const Center(
+                    child: Text(
+                      'GUARDAR CAMBIOS',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.white,
+                        letterSpacing: 1.2,
                       ),
                     ),
                   ),
                 ),
               ),
-              const SizedBox(height: 20),
-            ],
-          ),
+            ),
+            const SizedBox(height: 20),
+          ],
         ),
       ),
     );

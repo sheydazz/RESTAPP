@@ -13,9 +13,12 @@ class EmotionalCalendarScreen extends StatefulWidget {
 
 class _EmotionalCalendarScreenState extends State<EmotionalCalendarScreen> {
   final EmotionService _emotionService = EmotionService();
+  final ScrollController _scrollController = ScrollController();
+  final List<GlobalKey> _monthKeys = List.generate(12, (_) => GlobalKey());
 
   final int _year = DateTime.now().year;
   bool _isLoading = true;
+  bool _didAutoScrollToCurrentMonth = false;
   String? _error;
   final Map<String, num> _byDate = {};
 
@@ -75,6 +78,8 @@ class _EmotionalCalendarScreenState extends State<EmotionalCalendarScreen> {
           ..addAll(mapped);
         _isLoading = false;
       });
+
+      _autoScrollToCurrentMonth();
     } catch (e) {
       if (!mounted) return;
       setState(() {
@@ -85,6 +90,12 @@ class _EmotionalCalendarScreenState extends State<EmotionalCalendarScreen> {
   }
 
   @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
@@ -92,6 +103,7 @@ class _EmotionalCalendarScreenState extends State<EmotionalCalendarScreen> {
         child: RefreshIndicator(
           onRefresh: _loadCalendar,
           child: SingleChildScrollView(
+            controller: _scrollController,
             physics: const AlwaysScrollableScrollPhysics(),
             padding: const EdgeInsets.all(16),
             child: Column(
@@ -109,6 +121,7 @@ class _EmotionalCalendarScreenState extends State<EmotionalCalendarScreen> {
                   ...List.generate(
                     12,
                     (index) => Padding(
+                      key: _monthKeys[index],
                       padding: const EdgeInsets.only(bottom: 26),
                       child: _monthCard(index + 1),
                     ),
@@ -119,6 +132,26 @@ class _EmotionalCalendarScreenState extends State<EmotionalCalendarScreen> {
         ),
       ),
     );
+  }
+
+  void _autoScrollToCurrentMonth() {
+    if (_didAutoScrollToCurrentMonth || !mounted) return;
+
+    final currentMonthIndex = DateTime.now().month - 1;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted || _didAutoScrollToCurrentMonth) return;
+
+      final context = _monthKeys[currentMonthIndex].currentContext;
+      if (context == null) return;
+
+      _didAutoScrollToCurrentMonth = true;
+      Scrollable.ensureVisible(
+        context,
+        duration: const Duration(milliseconds: 250),
+        curve: Curves.easeOut,
+        alignment: 0.05,
+      );
+    });
   }
 
   Widget _buildHeader(BuildContext context) {
