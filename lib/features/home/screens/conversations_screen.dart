@@ -94,32 +94,29 @@ class _ConversacionesScreenState extends State<ConversacionesScreen> {
         centerTitle: false,
       ),
 
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(20),
-          child: _loading
-              ? const Center(child: CircularProgressIndicator())
-              : _error != null
-              ? _errorState()
-              : _historial.isEmpty
-              ? _emptyState()
-              : Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: _historial
-                      .map(
-                        (h) => _buildConversacionItem(h, () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  ChatScreen(initialChatId: h.chatId),
-                            ),
-                          );
-                        }),
-                      )
-                      .toList(),
-                ),
-        ),
+      body: Padding(
+        padding: const EdgeInsets.all(20),
+        child: _loading
+            ? const Center(child: CircularProgressIndicator())
+            : _error != null
+            ? _errorState()
+            : _historial.isEmpty
+            ? SizedBox.expand(child: Center(child: _emptyState()))
+            : ListView(
+                children: _historial
+                    .map(
+                      (h) => _buildConversacionItem(h, () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                ChatScreen(initialChatId: h.chatId),
+                          ),
+                        );
+                      }),
+                    )
+                    .toList(),
+              ),
       ),
     );
   }

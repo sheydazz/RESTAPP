@@ -24,7 +24,7 @@ class _ProgressScreenState extends State<ProgressScreen> {
   bool _loadingActivities = true;
   bool _loadingTechniques = true;
   bool _loadingRewards = true;
-  bool _sendingActivity = false;
+  int? _sendingActivityId;
   int? _sendingRewardId;
 
   String? _weeklyError;
@@ -213,8 +213,8 @@ class _ProgressScreenState extends State<ProgressScreen> {
   }
 
   Future<void> _completeActivity(DailyActivity activity) async {
-    if (_sendingActivity) return;
-    setState(() => _sendingActivity = true);
+    if (_sendingActivityId != null) return;
+    setState(() => _sendingActivityId = activity.id);
 
     try {
       await _progressService.completarActividadDiaria(opcionId: activity.id);
@@ -236,7 +236,7 @@ class _ProgressScreenState extends State<ProgressScreen> {
       );
     } finally {
       if (mounted) {
-        setState(() => _sendingActivity = false);
+        setState(() => _sendingActivityId = null);
       }
     }
   }
@@ -1119,6 +1119,8 @@ class _ProgressScreenState extends State<ProgressScreen> {
   }
 
   Widget _activityItem(DailyActivity item, {required bool isDone}) {
+    final isSendingThisItem = _sendingActivityId == item.id;
+
     return Container(
       margin: const EdgeInsets.only(bottom: 8),
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
@@ -1158,11 +1160,20 @@ class _ProgressScreenState extends State<ProgressScreen> {
           ),
           if (!isDone)
             ElevatedButton.icon(
-              onPressed: _sendingActivity
+              onPressed: isSendingThisItem
                   ? null
                   : () => _completeActivity(item),
-              icon: const Icon(Icons.star_rounded, size: 18),
-              label: const Text('Completar'),
+              icon: isSendingThisItem
+                  ? const SizedBox(
+                      height: 18,
+                      width: 18,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        valueColor: AlwaysStoppedAnimation(Colors.white),
+                      ),
+                    )
+                  : const Icon(Icons.star_rounded, size: 18),
+              label: Text(isSendingThisItem ? 'Completando...' : 'Completar'),
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFF26A69A),
                 foregroundColor: Colors.white,
