@@ -134,23 +134,53 @@ class TermsScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     _buildTermSection(
-                      '1. Subtítulo 1',
-                      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi dolor tortor, lacinia et velit ac, pulvinar eleifend lacus. Donec sodales leo sed purus cursus, non tempor ligula mollis.',
+                      '1. Objeto del servicio',
+                      'La aplicación tiene como finalidad brindar herramientas de apoyo emocional, seguimiento del bienestar mental, orientación general y recursos informativos mediante inteligencia artificial.',
                     ),
 
                     _buildTermSection(
-                      '2. Subtítulo 2',
-                      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi dolor tortor, lacinia et velit ac, pulvinar eleifend lacus. Donec sodales leo sed purus cursus, non tempor ligula mollis.',
+                      '2. Naturaleza del servicio',
+                      'La aplicación no presta servicios médicos, psicológicos clínicos ni psiquiátricos. La información proporcionada no constituye diagnóstico, tratamiento ni reemplaza la atención profesional especializada.',
                     ),
 
                     _buildTermSection(
-                      '3. Subtítulo 3',
-                      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi dolor tortor, lacinia et velit ac, pulvinar eleifend lacus. Donec sodales leo sed purus cursus, non tempor ligula mollis.',
+                      '3. Registro y acceso',
+                      'Para utilizar determinadas funciones, el usuario podrá crear una cuenta proporcionando información veraz, actualizada y completa. El usuario es responsable de la seguridad de sus credenciales de acceso.',
                     ),
 
                     _buildTermSection(
-                      '4. Subtítulo 4',
-                      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi dolor tortor, lacinia et velit ac, pulvinar eleifend lacus. Donec sodales leo sed purus cursus, non tempor ligula mollis.',
+                      '4. Uso adecuado de la plataforma',
+                      'El usuario se compromete a utilizar la aplicación de manera lícita, ética y responsable, absteniéndose de realizar actividades que afecten el funcionamiento del sistema o perjudiquen a terceros.',
+                    ),
+
+                    _buildTermSection(
+                      '5. Privacidad y tratamiento de datos',
+                      'Los datos personales suministrados serán tratados conforme a la Política de Privacidad de la aplicación y la normativa vigente de protección de datos personales.',
+                    ),
+
+                    _buildTermSection(
+                      '6. Inteligencia artificial',
+                      'Las respuestas generadas por inteligencia artificial son automáticas, orientativas y pueden presentar limitaciones o errores. Se recomienda validar información sensible con profesionales competentes.',
+                    ),
+
+                    _buildTermSection(
+                      '7. Situaciones de emergencia',
+                      'La aplicación no sustituye servicios de emergencia. En casos de crisis emocional, riesgo suicida o peligro inmediato, el usuario deberá acudir a líneas de atención, servicios médicos o autoridades competentes.',
+                    ),
+
+                    _buildTermSection(
+                      '8. Propiedad intelectual',
+                      'El diseño, contenido, software, logotipos y funcionalidades de la aplicación son propiedad de sus desarrolladores o titulares autorizados y están protegidos por la legislación aplicable.',
+                    ),
+
+                    _buildTermSection(
+                      '9. Suspensión de uso',
+                      'La administración podrá suspender o restringir el acceso a usuarios que incumplan estos términos o hagan uso indebido de la plataforma.',
+                    ),
+
+                    _buildTermSection(
+                      '10. Modificaciones',
+                      'Los presentes términos podrán ser actualizados en cualquier momento. Las modificaciones serán notificadas dentro de la aplicación.',
                       isLast: true,
                     ),
                   ],

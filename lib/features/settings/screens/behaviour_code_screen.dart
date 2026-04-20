@@ -30,11 +30,7 @@ class BehaviourCodeScreen extends StatelessWidget {
                     ),
                   ],
                 ),
-                child: Icon(
-                  Icons.arrow_back,
-                  color: Colors.white,
-                  size: 25,
-                ),
+                child: Icon(Icons.arrow_back, color: Colors.white, size: 25),
               ),
             ),
           ),
@@ -43,15 +39,9 @@ class BehaviourCodeScreen extends StatelessWidget {
           margin: const EdgeInsets.only(left: 10),
           child: GradientText(
             'Código',
-            style: TextStyle(
-              fontWeight: FontWeight.w600,
-              fontSize: 30,
-            ),
+            style: TextStyle(fontWeight: FontWeight.w600, fontSize: 30),
             gradient: LinearGradient(
-              colors: [
-                Color(0xFF0AF3FF),
-                Color(0xFF0419FF),
-              ],
+              colors: [Color(0xFF0AF3FF), Color(0xFF0419FF)],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
@@ -92,11 +82,7 @@ class BehaviourCodeScreen extends StatelessWidget {
                         ),
                         shape: BoxShape.circle,
                       ),
-                      child: Icon(
-                        Icons.gavel,
-                        color: Colors.white,
-                        size: 28,
-                      ),
+                      child: Icon(Icons.gavel, color: Colors.white, size: 28),
                     ),
                     const SizedBox(width: 15),
                     Expanded(
@@ -134,23 +120,57 @@ class BehaviourCodeScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     _buildCodeSection(
-                      '1. Subtítulo 1',
-                      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi dolor tortor, lacinia et velit ac, pulvinar eleifend lacus. Donec sodales leo sed purus cursus, non tempor ligula mollis.',
+                      'Artículo 1. Respeto e integridad',
+                      'Todos los usuarios deberán interactuar dentro de la plataforma con respeto, cortesía y responsabilidad, evitando cualquier conducta ofensiva, discriminatoria, intimidatoria o que vulnere la dignidad de otras personas.',
                     ),
 
                     _buildCodeSection(
-                      '2. Subtítulo 2',
-                      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi dolor tortor, lacinia et velit ac, pulvinar eleifend lacus. Donec sodales leo sed purus cursus, non tempor ligula mollis.',
+                      'Artículo 2. Uso adecuado de la plataforma',
+                      'El aplicativo deberá ser utilizado exclusivamente con fines de orientación, acompañamiento emocional, prevención y promoción del bienestar psicológico de la comunidad estudiantil.',
                     ),
 
                     _buildCodeSection(
-                      '3. Subtítulo 3',
-                      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi dolor tortor, lacinia et velit ac, pulvinar eleifend lacus. Donec sodales leo sed purus cursus, non tempor ligula mollis.',
+                      'Artículo 3. Alcance de la inteligencia artificial',
+                      'Las herramientas de inteligencia artificial incorporadas en la aplicación constituyen un mecanismo de apoyo complementario y en ningún caso reemplazan la valoración, diagnóstico o tratamiento brindado por profesionales de la salud mental.',
                     ),
 
                     _buildCodeSection(
-                      '4. Subtítulo 4',
-                      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi dolor tortor, lacinia et velit ac, pulvinar eleifend lacus. Donec sodales leo sed purus cursus, non tempor ligula mollis.',
+                      'Artículo 4. Privacidad y confidencialidad',
+                      'Toda información suministrada por los usuarios será tratada bajo criterios de confidencialidad, seguridad y protección de datos personales, conforme a la normativa vigente aplicable.',
+                    ),
+
+                    _buildCodeSection(
+                      'Artículo 5. Veracidad de la información',
+                      'Los usuarios deberán proporcionar información veraz y actualizada en los formularios, evaluaciones y demás instrumentos dispuestos por la aplicación, con el fin de obtener resultados adecuados y recomendaciones pertinentes.',
+                    ),
+
+                    _buildCodeSection(
+                      'Artículo 6. Conductas prohibidas',
+                      'Se prohíbe expresamente el uso de la plataforma para:\n'
+                      'a) Promover violencia, acoso o discriminación.\n'
+                      'b) Difundir información falsa o malintencionada.\n'
+                      'c) Incentivar autolesiones, suicidio o consumo de sustancias psicoactivas.\n'
+                      'd) Vulnerar la seguridad informática del sistema.',
+                    ),
+
+                    _buildCodeSection(
+                      'Artículo 7. Atención en situaciones de riesgo',
+                      'En caso de identificar señales asociadas a crisis emocional, riesgo suicida u otras situaciones de urgencia psicológica, la aplicación orientará al usuario hacia canales institucionales, líneas de emergencia o atención profesional especializada.',
+                    ),
+
+                    _buildCodeSection(
+                      'Artículo 8. Inclusión y equidad',
+                      'El aplicativo garantizará igualdad de acceso y trato digno a todos los usuarios, sin discriminación por razones de género, edad, orientación sexual, etnia, condición socioeconómica, religión o discapacidad.',
+                    ),
+
+                    _buildCodeSection(
+                      'Artículo 9. Mejoramiento continuo',
+                      'Se promoverá la retroalimentación constante por parte de los usuarios, con el propósito de fortalecer la calidad, pertinencia y funcionamiento ético del aplicativo.',
+                    ),
+
+                    _buildCodeSection(
+                      'Artículo 10. Compromiso institucional',
+                      'El desarrollo y uso de la aplicación estarán orientados al fortalecimiento de la salud mental universitaria, la prevención de riesgos psicosociales y la generación de entornos académicos saludables.',
                       isLast: true,
                     ),
                   ],
@@ -163,7 +183,11 @@ class BehaviourCodeScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildCodeSection(String title, String content, {bool isLast = false}) {
+  Widget _buildCodeSection(
+    String title,
+    String content, {
+    bool isLast = false,
+  }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

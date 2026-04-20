@@ -134,23 +134,65 @@ class PrivacityScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     _buildPrivacySection(
-                      '1. Subtítulo 1',
-                      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi dolor tortor, lacinia et velit ac, pulvinar eleifend lacus. Donec sodales leo sed purus cursus, non tempor ligula mollis.',
+                      '1. Responsable del tratamiento de datos',
+                      'Los datos personales recopilados a través de la aplicación serán administrados por los desarrolladores o entidad responsable del proyecto, quienes velarán por su adecuado tratamiento y seguridad.',
                     ),
 
                     _buildPrivacySection(
-                      '2. Subtítulo 2',
-                      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi dolor tortor, lacinia et velit ac, pulvinar eleifend lacus. Donec sodales leo sed purus cursus, non tempor ligula mollis.',
+                      '2. Datos que pueden recopilarse',
+                      'La aplicación podrá solicitar o almacenar información como:\n\n'
+                      'Nombre o alias de usuario.\n'
+                      'Correo electrónico institucional o personal.\n'
+                      'Edad o rango de edad.\n'
+                      'Información académica básica (programa, semestre, universidad).\n'
+                      'Respuestas en evaluaciones emocionales o cuestionarios de bienestar.\n'
+                      'Historial de uso de funciones dentro de la aplicación.\n'
+                      'Datos técnicos del dispositivo necesarios para el funcionamiento.',
                     ),
 
                     _buildPrivacySection(
-                      '3. Subtítulo 3',
-                      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi dolor tortor, lacinia et velit ac, pulvinar eleifend lacus. Donec sodales leo sed purus cursus, non tempor ligula mollis.',
+                      '3. Finalidad del tratamiento',
+                      'La información recopilada será utilizada para:\n\n'
+                      'Permitir el acceso y funcionamiento de la aplicación.\n'
+                      'Personalizar recomendaciones y herramientas de apoyo emocional.\n'
+                      'Realizar seguimiento del bienestar mental del usuario.\n'
+                      'Mejorar la experiencia de uso y desempeño del sistema.\n'
+                      'Generar estadísticas generales con fines académicos o de mejora continua.\n'
+                      'Atender solicitudes, soporte o reportes realizados por el usuario.',
                     ),
 
                     _buildPrivacySection(
-                      '4. Subtítulo 4',
-                      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi dolor tortor, lacinia et velit ac, pulvinar eleifend lacus. Donec sodales leo sed purus cursus, non tempor ligula mollis.',
+                      '4. Confidencialidad y seguridad',
+                      'Los datos personales recopilados a través de la aplicación serán administrados por los desarrolladores o entidad responsable del proyecto, quienes velarán por su adecuado tratamiento y seguridad.',
+                    ),
+
+                    _buildPrivacySection(
+                      '5. Compartición de información',
+                      'Los datos personales no serán vendidos ni compartidos con terceros sin autorización del usuario, salvo obligación legal o cuando sea necesario para prestar servicios tecnológicos asociados al funcionamiento de la aplicación.',
+                    ),
+
+                    _buildPrivacySection(
+                      '6. Derechos del usuario',
+                      'El usuario podrá solicitar en cualquier momento:\n\n'
+                      'Conocer los datos almacenados.\n'
+                      'Actualizar o corregir información.\n'
+                      'Solicitar eliminación de la cuenta y datos asociados.\n'
+                      'Revocar autorizaciones otorgadas, cuando aplique.',
+                    ),
+
+                    _buildPrivacySection(
+                      '7. Conservación de datos',
+                      'La información será conservada durante el tiempo necesario para cumplir las finalidades descritas o mientras el usuario mantenga activa su cuenta.',
+                    ),
+
+                    _buildPrivacySection(
+                      '8. Uso de inteligencia artificial',
+                      'Algunas funciones utilizan inteligencia artificial para generar recomendaciones o respuestas automatizadas. Estas herramientas no reemplazan atención profesional en salud mental.',
+                    ),
+
+                    _buildPrivacySection(
+                      '9. Cambios al aviso de privacidad',
+                      'Este aviso podrá ser actualizado en cualquier momento. Los cambios serán informados dentro de la aplicación.',
                       isLast: true,
                     ),
                   ],
