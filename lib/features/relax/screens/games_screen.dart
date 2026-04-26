@@ -82,6 +82,7 @@ class _GamesScreenState extends State<GamesScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color(0xFF2196F3),
@@ -134,7 +135,7 @@ class _GamesScreenState extends State<GamesScreen> {
                                 colors: [Color(0xFF2196F3), Color(0xFF64B5F6)],
                               )
                             : LinearGradient(
-                                colors: [Colors.grey[300]!, Colors.grey[400]!],
+                                colors: [colorScheme.surfaceContainerLow, colorScheme.outlineVariant],
                               ),
                         borderRadius: BorderRadius.circular(8),
                       ),
@@ -148,9 +149,9 @@ class _GamesScreenState extends State<GamesScreen> {
                                   color: Colors.white,
                                 ),
                               )
-                            : const Icon(
+                            : Icon(
                                 Icons.question_mark,
-                                color: Colors.grey,
+                                color: colorScheme.onSurfaceVariant,
                                 size: 32,
                               ),
                       ),

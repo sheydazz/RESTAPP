@@ -8,11 +8,33 @@ class FeedbackScreen extends StatefulWidget {
 
 class _FeedbackScreenState extends State<FeedbackScreen> {
   int selectedRating = -1;
-  int selectedOption = -1;
+  final Set<int> _selectedOptions = {};
   TextEditingController commentController = TextEditingController();
 
   final List<String> ratingEmojis = ['😠', '🙁', '😐', '🙂', '😍'];
-  final List<String> options = ['Opción 1', 'Opción 2', 'Opción 3'];
+
+  static const List<String> _positiveOptions = [
+    'Las conversaciones con Noa',
+    'El registro emocional',
+    'Las técnicas de relajación',
+    'El seguimiento de actividades',
+    'Mi diario personal',
+    'El diseño de la app',
+  ];
+
+  static const List<String> _negativeOptions = [
+    'Las conversaciones con Noa',
+    'El registro emocional',
+    'Las técnicas de relajación',
+    'La velocidad de la app',
+    'El diseño de la app',
+  ];
+
+  List<String> get _currentOptions =>
+      selectedRating != -1 && selectedRating <= 1 ? _negativeOptions : _positiveOptions;
+
+  String get _optionsQuestion =>
+      selectedRating != -1 && selectedRating <= 1 ? '¿Qué mejorarías?' : '¿Qué te gustó?';
 
   @override
   void dispose() {
@@ -23,10 +45,10 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF8FAFB),
+      backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: AppBar(
         titleSpacing: 0,
-        backgroundColor: Colors.white,
+        backgroundColor: Theme.of(context).colorScheme.surface,
         elevation: 0,
         leadingWidth: 70,
         leading: Center(
@@ -86,7 +108,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
               Container(
                 width: double.infinity,
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: Theme.of(context).colorScheme.surfaceContainerLow,
                   borderRadius: BorderRadius.circular(20),
                   boxShadow: [
                     BoxShadow(
@@ -106,7 +128,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                         style: TextStyle(
                           fontSize: 22,
                           fontWeight: FontWeight.w700,
-                          color: Color(0xFF2E3A59),
+                          color: Theme.of(context).colorScheme.onSurface,
                         ),
                       ),
                       const SizedBox(height: 8),
@@ -115,7 +137,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                         style: TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w400,
-                          color: Color(0xFF9E9E9E),
+                          color: Theme.of(context).colorScheme.onSurfaceVariant,
                         ),
                       ),
                       const SizedBox(height: 25),
@@ -127,6 +149,9 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                           return GestureDetector(
                             onTap: () {
                               setState(() {
+                                final wasNegative = selectedRating != -1 && selectedRating <= 1;
+                                final willBeNegative = index <= 1;
+                                if (wasNegative != willBeNegative) _selectedOptions.clear();
                                 selectedRating = index;
                               });
                             },
@@ -176,62 +201,81 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                       const SizedBox(height: 30),
 
                       Text(
-                        '¿Qué te gustó?',
+                        _optionsQuestion,
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
-                          color: Color(0xFF2E3A59),
+                          color: Theme.of(context).colorScheme.onSurface,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        'Puedes elegir varias opciones',
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Theme.of(context).colorScheme.onSurfaceVariant,
                         ),
                       ),
                       const SizedBox(height: 15),
 
                       // Options
-                      ...List.generate(options.length, (index) {
-                        return Container(
-                          margin: const EdgeInsets.only(bottom: 12),
-                          child: GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                selectedOption = index;
-                              });
-                            },
+                      ...List.generate(_currentOptions.length, (index) {
+                        final isSelected = _selectedOptions.contains(index);
+                        return GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              if (isSelected) {
+                                _selectedOptions.remove(index);
+                              } else {
+                                _selectedOptions.add(index);
+                              }
+                            });
+                          },
+                          child: Container(
+                            margin: const EdgeInsets.only(bottom: 10),
+                            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                            decoration: BoxDecoration(
+                              color: isSelected
+                                  ? const Color(0xFF4FC3F7).withOpacity(0.08)
+                                  : Theme.of(context).colorScheme.surfaceContainerLow,
+                              borderRadius: BorderRadius.circular(10),
+                              border: Border.all(
+                                color: isSelected
+                                    ? const Color(0xFF4FC3F7)
+                                    : Theme.of(context).colorScheme.outlineVariant,
+                                width: isSelected ? 1.8 : 1.2,
+                              ),
+                            ),
                             child: Row(
                               children: [
                                 Container(
                                   width: 20,
                                   height: 20,
                                   decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
+                                    borderRadius: BorderRadius.circular(5),
                                     border: Border.all(
-                                      color: selectedOption == index
-                                          ? Color(0xFF4FC3F7)
-                                          : Color(0xFFE0E7FF),
+                                      color: isSelected
+                                          ? const Color(0xFF4FC3F7)
+                                          : Theme.of(context).colorScheme.outlineVariant,
                                       width: 2,
                                     ),
-                                    color: selectedOption == index
-                                        ? Color(0xFF4FC3F7)
+                                    color: isSelected
+                                        ? const Color(0xFF4FC3F7)
                                         : Colors.transparent,
                                   ),
-                                  child: selectedOption == index
-                                      ? Center(
-                                    child: Container(
-                                      width: 6,
-                                      height: 6,
-                                      decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        shape: BoxShape.circle,
-                                      ),
-                                    ),
-                                  )
+                                  child: isSelected
+                                      ? const Icon(Icons.check, color: Colors.white, size: 14)
                                       : null,
                                 ),
                                 const SizedBox(width: 12),
                                 Text(
-                                  options[index],
+                                  _currentOptions[index],
                                   style: TextStyle(
                                     fontSize: 14,
-                                    fontWeight: FontWeight.w500,
-                                    color: Color(0xFF2E3A59),
+                                    fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
+                                    color: isSelected
+                                        ? const Color(0xFF4FC3F7)
+                                        : Theme.of(context).colorScheme.onSurface,
                                   ),
                                 ),
                               ],
@@ -247,7 +291,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
-                          color: Color(0xFF2E3A59),
+                          color: Theme.of(context).colorScheme.onSurface,
                         ),
                       ),
                       const SizedBox(height: 12),
@@ -255,10 +299,10 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                       // Comment text field
                       Container(
                         decoration: BoxDecoration(
-                          color: Color(0xFFF8FAFB),
+                          color: Theme.of(context).colorScheme.surfaceContainerLow,
                           borderRadius: BorderRadius.circular(12),
                           border: Border.all(
-                            color: const Color(0xFFE0E7FF).withOpacity(0.8),
+                            color: Theme.of(context).colorScheme.outlineVariant,
                             width: 1.5,
                           ),
                         ),
@@ -268,14 +312,14 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                           decoration: InputDecoration(
                             hintText: 'Describe tu experiencia',
                             hintStyle: TextStyle(
-                              color: Color(0xFF9E9E9E),
+                              color: Theme.of(context).colorScheme.onSurfaceVariant,
                               fontSize: 14,
                             ),
                             border: InputBorder.none,
                             contentPadding: EdgeInsets.all(15),
                           ),
                           style: TextStyle(
-                            color: Color(0xFF2E3A59),
+                            color: Theme.of(context).colorScheme.onSurface,
                             fontSize: 14,
                           ),
                         ),
@@ -342,13 +386,14 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
       _showSnackBar('Por favor selecciona una calificación');
       return;
     }
+    if (_selectedOptions.isEmpty && commentController.text.trim().isEmpty) {
+      _showSnackBar('Selecciona al menos una opción o escribe un comentario');
+      return;
+    }
 
-    // Aquí puedes agregar la lógica para enviar el feedback
     _showSnackBar('¡Gracias por tu feedback!');
-
-    // Opcional: navegar de vuelta después de un delay
-    Future.delayed(Duration(seconds: 1), () {
-      Navigator.pop(context);
+    Future.delayed(const Duration(seconds: 1), () {
+      if (mounted) Navigator.pop(context);
     });
   }
 

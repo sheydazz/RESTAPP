@@ -77,6 +77,7 @@ class _CheckScreenState extends State<CheckScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
       backgroundColor: const Color(0xFF2D2D2D),
       body: Center(
@@ -85,7 +86,7 @@ class _CheckScreenState extends State<CheckScreen> {
           height: 800,
           margin: const EdgeInsets.all(20),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: colorScheme.surface,
             borderRadius: BorderRadius.circular(24),
             boxShadow: [
               BoxShadow(
@@ -226,7 +227,7 @@ class _CheckScreenState extends State<CheckScreen> {
                         ),
                       ),
                       const SizedBox(height: 15),
-                      _buildCalendarioContent(),
+                      _buildCalendarioContent(colorScheme),
                     ],
                   ),
                 ),
@@ -286,7 +287,7 @@ class _CheckScreenState extends State<CheckScreen> {
     );
   }
 
-  Widget _buildCalendarioContent() {
+  Widget _buildCalendarioContent(ColorScheme colorScheme) {
     if (_isLoading) {
       return const Padding(
         padding: EdgeInsets.all(24),
@@ -349,7 +350,7 @@ class _CheckScreenState extends State<CheckScreen> {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: colorScheme.surface,
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
@@ -439,27 +440,29 @@ class _CheckScreenState extends State<CheckScreen> {
 
   /// Rayita para días pasados sin registro
   Widget _buildNoLlenoIcon() {
+    final colorScheme = Theme.of(context).colorScheme;
     return Container(
       width: 36,
       height: 36,
       alignment: Alignment.center,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        color: Colors.grey[200],
-        border: Border.all(color: Colors.grey[400]!, width: 1),
+        color: colorScheme.surfaceContainerLow,
+        border: Border.all(color: colorScheme.outlineVariant, width: 1),
       ),
-      child: Container(width: 20, height: 2, color: Colors.grey[500]),
+      child: Container(width: 20, height: 2, color: colorScheme.outlineVariant),
     );
   }
 
   /// Bolita para días pendientes (futuros)
   Widget _buildPendienteIcon() {
+    final colorScheme = Theme.of(context).colorScheme;
     return Container(
       width: 36,
       height: 36,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        color: Colors.grey[200],
+        color: colorScheme.surfaceContainerLow,
         border: Border.all(color: const Color(0xFF0277BD), width: 2),
       ),
       child: Center(
@@ -488,10 +491,10 @@ class _CheckScreenState extends State<CheckScreen> {
       child: Text(
         day,
         textAlign: TextAlign.center,
-        style: const TextStyle(
+        style: TextStyle(
           fontSize: 10,
           fontWeight: FontWeight.w600,
-          color: Color(0xFF424242),
+          color: Theme.of(context).colorScheme.onSurfaceVariant,
           letterSpacing: 0.2,
         ),
         maxLines: 1,

@@ -74,7 +74,7 @@ class _ActivitiesScreenState extends State<ActivitiesScreen> {
     final hoy = formato.format(DateTime.now());
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       body: SafeArea(
         child: Column(
           children: [
@@ -126,7 +126,7 @@ class _ActivitiesScreenState extends State<ActivitiesScreen> {
             ),
 
             Divider(
-              color: Colors.grey[400],
+              color: Theme.of(context).colorScheme.outlineVariant,
               thickness: 2,
               height: 0,
               indent: 16,
@@ -143,7 +143,7 @@ class _ActivitiesScreenState extends State<ActivitiesScreen> {
                 text: TextSpan(
                   style: TextStyle(
                     fontSize: 16,
-                    color: Colors.black87,
+                    color: Theme.of(context).colorScheme.onSurface,
                     fontFamily: 'Fredoka',
                   ),
                   children: [
@@ -200,7 +200,7 @@ class _ActivitiesScreenState extends State<ActivitiesScreen> {
                         child: Container(
                           padding: EdgeInsets.all(20),
                           decoration: BoxDecoration(
-                            color: Colors.white,
+                            color: Theme.of(context).colorScheme.surface,
                             borderRadius: BorderRadius.circular(28),
                           ),
                           child: Column(
@@ -269,7 +269,7 @@ class _ActivitiesScreenState extends State<ActivitiesScreen> {
         Container(
           padding: EdgeInsets.all(16),
           decoration: BoxDecoration(
-            color: Color(0xFFE3F2FD),
+            color: Theme.of(context).colorScheme.surfaceContainerLow,
             borderRadius: BorderRadius.circular(20),
           ),
           child: Column(
@@ -290,7 +290,7 @@ class _ActivitiesScreenState extends State<ActivitiesScreen> {
                 style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.bold,
-                  color: Colors.black87,
+                  color: Theme.of(context).colorScheme.onSurface,
                   height: 1.2,
                 ),
               ),
@@ -318,14 +318,14 @@ class _ActivitiesScreenState extends State<ActivitiesScreen> {
         // Fecha de vencimiento fuera de la tarjeta
         Text(
           'Vence el:',
-          style: TextStyle(fontSize: 11, color: Colors.grey[600]),
+          style: TextStyle(fontSize: 11, color: Theme.of(context).colorScheme.onSurfaceVariant),
         ),
         Text(
           date,
           style: TextStyle(
             fontSize: 11,
             fontWeight: FontWeight.w600,
-            color: Colors.grey[600],
+            color: Theme.of(context).colorScheme.onSurfaceVariant,
           ),
         ),
       ],

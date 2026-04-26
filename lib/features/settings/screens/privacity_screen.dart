@@ -5,10 +5,10 @@ class PrivacityScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF8FAFB),
+      backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: AppBar(
         titleSpacing: 0,
-        backgroundColor: Colors.white,
+        backgroundColor: Theme.of(context).colorScheme.surface,
         elevation: 0,
         leadingWidth: 70,
         leading: Center(
@@ -69,7 +69,7 @@ class PrivacityScreen extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: Theme.of(context).colorScheme.surfaceContainerLow,
                   borderRadius: BorderRadius.circular(20),
                   boxShadow: [
                     BoxShadow(
@@ -105,7 +105,7 @@ class PrivacityScreen extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.w600,
-                          color: Color(0xFF2E3A59),
+                          color: Theme.of(context).colorScheme.onSurface,
                         ),
                       ),
                     ),
@@ -120,7 +120,7 @@ class PrivacityScreen extends StatelessWidget {
                 width: double.infinity,
                 padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: Theme.of(context).colorScheme.surfaceContainerLow,
                   borderRadius: BorderRadius.circular(15),
                   boxShadow: [
                     BoxShadow(
@@ -134,11 +134,13 @@ class PrivacityScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     _buildPrivacySection(
+                      context,
                       '1. Responsable del tratamiento de datos',
                       'Los datos personales recopilados a través de la aplicación serán administrados por los desarrolladores o entidad responsable del proyecto, quienes velarán por su adecuado tratamiento y seguridad.',
                     ),
 
                     _buildPrivacySection(
+                      context,
                       '2. Datos que pueden recopilarse',
                       'La aplicación podrá solicitar o almacenar información como:\n\n'
                       'Nombre o alias de usuario.\n'
@@ -151,6 +153,7 @@ class PrivacityScreen extends StatelessWidget {
                     ),
 
                     _buildPrivacySection(
+                      context,
                       '3. Finalidad del tratamiento',
                       'La información recopilada será utilizada para:\n\n'
                       'Permitir el acceso y funcionamiento de la aplicación.\n'
@@ -162,16 +165,19 @@ class PrivacityScreen extends StatelessWidget {
                     ),
 
                     _buildPrivacySection(
+                      context,
                       '4. Confidencialidad y seguridad',
                       'Los datos personales recopilados a través de la aplicación serán administrados por los desarrolladores o entidad responsable del proyecto, quienes velarán por su adecuado tratamiento y seguridad.',
                     ),
 
                     _buildPrivacySection(
+                      context,
                       '5. Compartición de información',
                       'Los datos personales no serán vendidos ni compartidos con terceros sin autorización del usuario, salvo obligación legal o cuando sea necesario para prestar servicios tecnológicos asociados al funcionamiento de la aplicación.',
                     ),
 
                     _buildPrivacySection(
+                      context,
                       '6. Derechos del usuario',
                       'El usuario podrá solicitar en cualquier momento:\n\n'
                       'Conocer los datos almacenados.\n'
@@ -181,16 +187,19 @@ class PrivacityScreen extends StatelessWidget {
                     ),
 
                     _buildPrivacySection(
+                      context,
                       '7. Conservación de datos',
                       'La información será conservada durante el tiempo necesario para cumplir las finalidades descritas o mientras el usuario mantenga activa su cuenta.',
                     ),
 
                     _buildPrivacySection(
+                      context,
                       '8. Uso de inteligencia artificial',
                       'Algunas funciones utilizan inteligencia artificial para generar recomendaciones o respuestas automatizadas. Estas herramientas no reemplazan atención profesional en salud mental.',
                     ),
 
                     _buildPrivacySection(
+                      context,
                       '9. Cambios al aviso de privacidad',
                       'Este aviso podrá ser actualizado en cualquier momento. Los cambios serán informados dentro de la aplicación.',
                       isLast: true,
@@ -205,7 +214,8 @@ class PrivacityScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildPrivacySection(String title, String content, {bool isLast = false}) {
+  Widget _buildPrivacySection(BuildContext context, String title, String content, {bool isLast = false}) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -214,7 +224,7 @@ class PrivacityScreen extends StatelessWidget {
           style: TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.w600,
-            color: Color(0xFF2E3A59),
+            color: colorScheme.onSurface,
           ),
         ),
         const SizedBox(height: 8),
@@ -223,7 +233,7 @@ class PrivacityScreen extends StatelessWidget {
           style: TextStyle(
             fontSize: 14,
             fontWeight: FontWeight.w400,
-            color: Color(0xFF6B7280),
+            color: colorScheme.onSurfaceVariant,
             height: 1.5,
           ),
         ),

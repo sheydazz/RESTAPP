@@ -242,10 +242,11 @@ class _ChatScreenState extends State<ChatScreen> {
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
       builder: (context) {
+        final sheetColorScheme = Theme.of(context).colorScheme;
         return Container(
-          decoration: const BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+          decoration: BoxDecoration(
+            color: sheetColorScheme.surface,
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
           ),
           padding: const EdgeInsets.fromLTRB(20, 18, 20, 28),
           child: SafeArea(
@@ -254,32 +255,33 @@ class _ChatScreenState extends State<ChatScreen> {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Center(
+                Center(
                   child: Text(
                     'Retroalimentacion de NOA',
                     style: TextStyle(
                       fontFamily: 'Fredoka',
                       fontWeight: FontWeight.bold,
                       fontSize: 22,
+                      color: sheetColorScheme.onSurface,
                     ),
                   ),
                 ),
                 const SizedBox(height: 14),
                 Text(
                   feedback.retroalimentacion,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontFamily: 'Fredoka',
                     fontSize: 15,
-                    color: Color(0xFF37474F),
+                    color: sheetColorScheme.onSurfaceVariant,
                   ),
                 ),
                 const SizedBox(height: 12),
-                const Text(
+                Text(
                   'Consejos para ti',
                   style: TextStyle(
                     fontFamily: 'Fredoka',
                     fontWeight: FontWeight.w800,
-                    color: Color(0xFF1565C0),
+                    color: sheetColorScheme.primary,
                   ),
                 ),
                 const SizedBox(height: 8),
@@ -288,9 +290,9 @@ class _ChatScreenState extends State<ChatScreen> {
                     padding: const EdgeInsets.only(bottom: 6),
                     child: Text(
                       '• $c',
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontFamily: 'Fredoka',
-                        color: Color(0xFF455A64),
+                        color: sheetColorScheme.onSurfaceVariant,
                       ),
                     ),
                   ),
@@ -336,8 +338,9 @@ class _ChatScreenState extends State<ChatScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: colorScheme.surface,
       body: SafeArea(
         child: Column(
           children: [
@@ -432,12 +435,12 @@ class _ChatScreenState extends State<ChatScreen> {
               child: Container(
                 margin: EdgeInsets.symmetric(horizontal: 16),
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: colorScheme.surfaceContainerLow,
                   borderRadius: BorderRadius.circular(30),
                   border: Border.all(
                     color: Color(0xFF153E75),
                     width: 4,
-                  ), // Azul marino
+                  ), // Azul marino (color de marca, se mantiene)
                 ),
                 child: Stack(
                   children: [
@@ -526,7 +529,7 @@ class _ChatScreenState extends State<ChatScreen> {
                             vertical: 16,
                           ),
                           decoration: BoxDecoration(
-                            color: Colors.white,
+                            color: colorScheme.surface,
                             borderRadius: BorderRadius.circular(27),
                           ),
                           child: TextField(
@@ -536,7 +539,7 @@ class _ChatScreenState extends State<ChatScreen> {
                               hintText: "Comparte tu mensaje aquí..",
                               border: InputBorder.none,
                               hintStyle: TextStyle(
-                                color: Colors.black,
+                                color: colorScheme.onSurface,
                                 fontFamily: 'Fredoka',
                                 fontWeight: FontWeight.bold,
                                 fontSize: 20,
@@ -622,6 +625,14 @@ class ChatBubble extends StatelessWidget {
       return const TypingBubble();
     }
 
+    final colorScheme = Theme.of(context).colorScheme;
+    final bubbleBg = message.isUser
+        ? colorScheme.primary
+        : colorScheme.surfaceContainerHigh;
+    final bubbleText = message.isUser
+        ? colorScheme.onPrimary
+        : colorScheme.onSurface;
+
     final bubble = Container(
       margin: EdgeInsets.only(bottom: 16),
       child: Row(
@@ -634,15 +645,13 @@ class ChatBubble extends StatelessWidget {
             child: Container(
               padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               decoration: BoxDecoration(
-                color: message.isUser
-                    ? Color(0xFF64B5F6).withOpacity(0.85)
-                    : Color(0xFFB3E5FC),
+                color: bubbleBg,
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Text(
                 message.text,
                 style: TextStyle(
-                  color: Colors.black,
+                  color: bubbleText,
                   fontSize: 15,
                   fontWeight: FontWeight.bold,
                   fontFamily: 'Freeman',
@@ -713,7 +722,7 @@ class _TypingBubbleState extends State<TypingBubble>
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             decoration: BoxDecoration(
-              color: const Color(0xFFE1F5FE),
+              color: Theme.of(context).colorScheme.surfaceContainerHigh,
               borderRadius: BorderRadius.circular(20),
             ),
             child: Container(

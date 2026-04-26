@@ -20,8 +20,9 @@ class MisTecnicasScreen extends StatelessWidget {
       {'nombre': 'Actividad Física', 'icono': 'assets/images/gym.png'},
     ];
 
+    final colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: colorScheme.surface,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
@@ -70,15 +71,15 @@ class MisTecnicasScreen extends StatelessWidget {
 
               const SizedBox(height: 12),
 
-              const Padding(
-                padding: EdgeInsets.only(left: 4),
+              Padding(
+                padding: const EdgeInsets.only(left: 4),
                 child: Text(
                   '⭐ Lo importante es mantener la calma y hacer algo que disfrutes',
                   style: TextStyle(
                     fontFamily: 'Fredoka',
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
-                    color: Colors.black,
+                    color: colorScheme.onSurface,
                   ),
                 ),
               ),
@@ -95,7 +96,7 @@ class MisTecnicasScreen extends StatelessWidget {
                   padding: const EdgeInsets.all(2),
                   child: Container(
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: colorScheme.surface,
                       borderRadius: BorderRadius.circular(14),
                     ),
                     padding: const EdgeInsets.all(16),

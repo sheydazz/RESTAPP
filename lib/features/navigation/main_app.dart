@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../home/screens/home_screen.dart';
 import '../progress/screens/progress_screen.dart';
 import '../progress/screens/myprogress_screen.dart';
+import '../help/screens/help_screen.dart';
 
 class MainApp extends StatefulWidget {
   const MainApp({super.key});
@@ -24,6 +25,18 @@ class _MainAppState extends State<MainApp> {
     return Scaffold(
       extendBody: true,
       body: _screens[_currentIndex],
+      floatingActionButton: FloatingActionButton(
+        heroTag: 'help_fab',
+        onPressed: () => Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) => HelpScreen()),
+        ),
+        backgroundColor: const Color(0xFFD32F2F),
+        tooltip: 'Pedir ayuda profesional',
+        shape: const CircleBorder(),
+        child: const Icon(Icons.phone, color: Colors.white, size: 28),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       bottomNavigationBar: CustomBottomNavBar(
         currentIndex: _currentIndex,
         onTap: (index) => setState(() => _currentIndex = index),

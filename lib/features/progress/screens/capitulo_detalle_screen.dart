@@ -44,8 +44,9 @@ class _CapituloDetalleScreenState extends State<CapituloDetalleScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: colorScheme.surface,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(20.0),
@@ -92,7 +93,7 @@ class _CapituloDetalleScreenState extends State<CapituloDetalleScreen> {
               // 🔸 Divider como en otras pantallas
               const SizedBox(height: 20),
               Divider(
-                color: Colors.grey[400],
+                color: colorScheme.outlineVariant,
                 thickness: 3,
                 height: 0,
                 indent: 23,
@@ -111,7 +112,7 @@ class _CapituloDetalleScreenState extends State<CapituloDetalleScreen> {
                   child: Container(
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: colorScheme.surface,
                       borderRadius: BorderRadius.circular(18),
                     ),
                     child: Column(
@@ -121,13 +122,13 @@ class _CapituloDetalleScreenState extends State<CapituloDetalleScreen> {
                           controller: _tituloController,
                           style: GoogleFonts.fredoka(
                             fontSize: 16,
-                            color: Colors.black87,
+                            color: colorScheme.onSurface,
                             fontWeight: FontWeight.bold,
                           ),
                           decoration: InputDecoration(
                             hintText: 'Título......',
                             hintStyle: TextStyle(
-                              color: Colors.grey[400],
+                              color: colorScheme.onSurfaceVariant,
                               fontFamily: 'Fredoka',
                             ),
                             border: InputBorder.none,
@@ -149,13 +150,13 @@ class _CapituloDetalleScreenState extends State<CapituloDetalleScreen> {
                             textAlignVertical: TextAlignVertical.top,
                             style: GoogleFonts.fredoka(
                               fontSize: 14,
-                              color: Colors.black87,
+                              color: colorScheme.onSurface,
                               fontWeight: FontWeight.bold,
                             ),
                             decoration: InputDecoration(
                               hintText: 'Descripción......',
                               hintStyle: TextStyle(
-                                color: Colors.grey[400],
+                                color: colorScheme.onSurfaceVariant,
                                 fontFamily: 'Fredoka',
                               ),
                               border: InputBorder.none,

@@ -53,8 +53,9 @@ class _HowYouFoundScreenState extends State<HowYouFoundScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
-      backgroundColor: const Color(0xFFFFFFFF),
+      backgroundColor: colorScheme.surface,
       body: Stack(
         children: [
           // Contenido principal
@@ -178,7 +179,7 @@ class _HowYouFoundScreenState extends State<HowYouFoundScreen> {
                       style: GoogleFonts.fredoka(
                         fontSize: 22,
                         fontWeight: FontWeight.bold,
-                        color: Colors.black,
+                        color: colorScheme.onSurface,
                       ),
                     ),
 
@@ -202,7 +203,7 @@ class _HowYouFoundScreenState extends State<HowYouFoundScreen> {
                             decoration: BoxDecoration(
                               color: selectedOption == option
                                   ? const Color(0xFF5CCFC0)
-                                  : Colors.white,
+                                  : colorScheme.surfaceContainerLow,
                               borderRadius: BorderRadius.circular(30),
                               border: Border.all(
                                 color: const Color(0xFF5CCFC0),

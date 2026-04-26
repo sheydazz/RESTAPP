@@ -353,8 +353,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: colorScheme.surface,
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 20),
@@ -560,6 +561,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     bool obscure = false,
     bool isRequired = false,
   }) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -570,7 +572,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               style: GoogleFonts.fredoka(
                 fontSize: 15,
                 fontWeight: FontWeight.bold,
-                color: Colors.black87,
+                color: colorScheme.onSurface,
               ),
             ),
             if (isRequired)
@@ -597,14 +599,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
           padding: const EdgeInsets.all(2.5),
           child: Container(
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: colorScheme.surfaceContainerLow,
               borderRadius: BorderRadius.circular(28),
             ),
             child: TextField(
               controller: controller,
               obscureText: obscure && !_isPasswordVisible,
               style: GoogleFonts.fredoka(
-                color: Colors.black87,
+                color: colorScheme.onSurface,
                 fontWeight: FontWeight.bold,
               ),
               onChanged: (_) {
@@ -613,7 +615,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               decoration: InputDecoration(
                 hintText: hint,
                 hintStyle: GoogleFonts.fredoka(
-                  color: Colors.black38,
+                  color: colorScheme.onSurfaceVariant,
                   fontWeight: FontWeight.bold,
                 ),
                 suffixIcon: Row(
@@ -684,6 +686,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     required ValueChanged<String?> onChanged,
     bool isRequired = false,
   }) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -694,7 +697,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               style: GoogleFonts.fredoka(
                 fontSize: 15,
                 fontWeight: FontWeight.bold,
-                color: Colors.black87,
+                color: colorScheme.onSurface,
               ),
             ),
             if (isRequired)
@@ -721,7 +724,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           padding: const EdgeInsets.all(2.5),
           child: Container(
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: colorScheme.surfaceContainerLow,
               borderRadius: BorderRadius.circular(28),
             ),
             child: Row(
@@ -735,7 +738,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         hint: Text(
                           hint,
                           style: GoogleFonts.fredoka(
-                            color: Colors.black38,
+                            color: colorScheme.onSurfaceVariant,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -747,7 +750,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 child: Text(
                                   item,
                                   style: GoogleFonts.fredoka(
-                                    color: Colors.black87,
+                                    color: colorScheme.onSurface,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
@@ -756,7 +759,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             .toList(),
                         onChanged: onChanged,
                         style: GoogleFonts.fredoka(
-                          color: Colors.black87,
+                          color: colorScheme.onSurface,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -796,6 +799,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     required VoidCallback onTap,
     bool isRequired = false,
   }) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -806,7 +810,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               style: GoogleFonts.fredoka(
                 fontSize: 15,
                 fontWeight: FontWeight.bold,
-                color: Colors.black87,
+                color: colorScheme.onSurface,
               ),
             ),
             if (isRequired)
@@ -833,7 +837,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           padding: const EdgeInsets.all(2.5),
           child: Container(
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: colorScheme.surfaceContainerLow,
               borderRadius: BorderRadius.circular(28),
             ),
             child: TextField(
@@ -841,13 +845,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
               readOnly: true,
               onTap: onTap,
               style: GoogleFonts.fredoka(
-                color: Colors.black87,
+                color: colorScheme.onSurface,
                 fontWeight: FontWeight.bold,
               ),
               decoration: InputDecoration(
                 hintText: hint,
                 hintStyle: GoogleFonts.fredoka(
-                  color: Colors.black38,
+                  color: colorScheme.onSurfaceVariant,
                   fontWeight: FontWeight.bold,
                 ),
                 suffixIcon: Row(

@@ -150,8 +150,9 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: colorScheme.surface,
       body: SafeArea(
         child: SingleChildScrollView(
           // ← Solución al overflow
@@ -207,10 +208,10 @@ class _LoginScreenState extends State<LoginScreen> {
                             fontSize: 15,
                             fontWeight: FontWeight.bold,
                           ),
-                          children: const [
+                          children: [
                             TextSpan(
                               text: '¿Se te olvidó? ',
-                              style: TextStyle(color: Colors.black),
+                              style: TextStyle(color: colorScheme.onSurface),
                             ),
                             TextSpan(
                               text: 'Recuperar',
@@ -220,7 +221,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ),
                     ),
-                    const Divider(color: Colors.grey, thickness: 1, height: 30),
+                    Divider(color: colorScheme.outlineVariant, thickness: 1, height: 30),
                   ],
                 ),
 
@@ -231,7 +232,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   style: GoogleFonts.fredoka(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
-                    color: Colors.black54,
+                    color: colorScheme.onSurfaceVariant,
                   ),
                 ),
 
@@ -245,7 +246,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       style: GoogleFonts.fredoka(
                         fontSize: 25,
                         fontWeight: FontWeight.bold,
-                        color: Colors.black87,
+                        color: colorScheme.onSurface,
                       ),
                     ),
                     ShaderMask(
@@ -298,6 +299,7 @@ class _LoginScreenState extends State<LoginScreen> {
     required String hint,
     bool obscure = false,
   }) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -305,7 +307,7 @@ class _LoginScreenState extends State<LoginScreen> {
           label,
           style: GoogleFonts.fredoka(
             fontSize: 16,
-            color: Colors.black87,
+            color: colorScheme.onSurface,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -322,20 +324,20 @@ class _LoginScreenState extends State<LoginScreen> {
           padding: const EdgeInsets.all(2.5),
           child: Container(
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: colorScheme.surfaceContainerLow,
               borderRadius: BorderRadius.circular(28),
             ),
             child: TextField(
               controller: controller,
               obscureText: obscure,
               style: GoogleFonts.fredoka(
-                color: Colors.black87,
+                color: colorScheme.onSurface,
                 fontWeight: FontWeight.bold,
               ),
               decoration: InputDecoration(
                 hintText: hint,
                 hintStyle: GoogleFonts.fredoka(
-                  color: Colors.black38,
+                  color: colorScheme.onSurfaceVariant,
                   fontWeight: FontWeight.bold,
                 ),
                 suffixIcon: Padding(

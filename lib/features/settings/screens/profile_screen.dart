@@ -69,10 +69,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF8FAFB),
+      backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: AppBar(
         titleSpacing: 0,
-        backgroundColor: Colors.white,
+        backgroundColor: Theme.of(context).colorScheme.surface,
         elevation: 0,
         leadingWidth: 70,
         leading: Center(
@@ -138,7 +138,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               Text(
                 _errorMessage!,
                 textAlign: TextAlign.center,
-                style: const TextStyle(color: Color(0xFF2E3A59), fontSize: 14),
+                style: TextStyle(color: Theme.of(context).colorScheme.onSurface, fontSize: 14),
               ),
               const SizedBox(height: 16),
               ElevatedButton(
@@ -249,19 +249,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
       children: [
         Text(
           label,
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.w600,
-            color: Color(0xFF2E3A59),
+            color: Theme.of(context).colorScheme.onSurface,
           ),
         ),
         const SizedBox(height: 8),
         Container(
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: Theme.of(context).colorScheme.surfaceContainerLow,
             borderRadius: BorderRadius.circular(12),
             border: Border.all(
-              color: const Color(0xFFE0E7FF).withOpacity(0.8),
+              color: Theme.of(context).colorScheme.outlineVariant,
               width: 1.5,
             ),
             boxShadow: [
@@ -281,14 +281,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 vertical: 14,
               ),
               hintStyle: TextStyle(
-                color: const Color(0xFF9E9E9E),
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
                 fontSize: 14,
               ),
             ),
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.w500,
-              color: Color(0xFF2E3A59),
+              color: Theme.of(context).colorScheme.onSurface,
             ),
           ),
         ),

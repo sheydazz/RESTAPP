@@ -34,6 +34,7 @@ class _YogaScreenState extends State<YogaScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color(0xFF4CAF50),
@@ -115,14 +116,14 @@ class _YogaScreenState extends State<YogaScreen> {
           gradient: LinearGradient(
             colors: isSelected
                 ? [const Color(0xFF4CAF50), const Color(0xFF81C784)]
-                : [Colors.grey[300]!, Colors.grey[400]!],
+                : [Theme.of(context).colorScheme.surfaceContainerLow, Theme.of(context).colorScheme.outlineVariant],
           ),
           borderRadius: BorderRadius.circular(12),
         ),
         child: Text(
           label,
           style: TextStyle(
-            color: isSelected ? Colors.white : Colors.black,
+            color: isSelected ? Colors.white : Theme.of(context).colorScheme.onSurface,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -151,7 +152,7 @@ class _YogaScreenState extends State<YogaScreen> {
           const SizedBox(height: 4),
           Text(
             '⏱️ ${pose['duration']!}',
-            style: const TextStyle(fontSize: 12, color: Colors.grey),
+            style: TextStyle(fontSize: 12, color: Theme.of(context).colorScheme.onSurfaceVariant),
           ),
         ],
       ),

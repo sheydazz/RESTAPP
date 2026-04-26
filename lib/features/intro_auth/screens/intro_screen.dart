@@ -138,8 +138,9 @@ class _IntroScreenState extends State<IntroScreen> with TickerProviderStateMixin
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: colorScheme.surface,
       body: AnimatedBuilder(
         animation: Listenable.merge([
           _logoController,
