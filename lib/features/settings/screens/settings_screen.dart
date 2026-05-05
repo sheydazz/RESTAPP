@@ -9,15 +9,17 @@ import 'privacity_screen.dart'; // Importar la pantalla de privacidad
 import 'behaviour_code_screen.dart'; // Importar la pantalla de código de conducta
 import 'package:rest/core/routes/app_routes.dart';
 import 'package:rest/core/services/user_session.dart';
+import 'package:rest/core/services/theme_service.dart';
 
 class SettingsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
-      backgroundColor: const Color(0xFFF8FAFB),
+      backgroundColor: colorScheme.surfaceContainerLow,
       appBar: AppBar(
         titleSpacing: 0, // Reducido para mejor control del espaciado
-        backgroundColor: Colors.white,
+        backgroundColor: colorScheme.surface,
         elevation: 0,
         leadingWidth: 70, // Ancho específico para el leading
         leading: Center( // Centra verticalmente el botón
@@ -33,7 +35,7 @@ class SettingsScreen extends StatelessWidget {
                   shape: BoxShape.circle,
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.1),
+                      color: colorScheme.shadow.withOpacity(0.1),
                       blurRadius: 3,
                       offset: Offset(0, 1),
                     ),
@@ -76,7 +78,7 @@ class SettingsScreen extends StatelessWidget {
             child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _buildSectionTitle('Cuenta'),
+              _buildSectionTitle('Cuenta', context),
               const SizedBox(height: 15),
               _buildConfigItem('Perfil', Icons.person_outline, () {
                 // Navegar a la pantalla de perfil
@@ -84,58 +86,52 @@ class SettingsScreen extends StatelessWidget {
                   context,
                   MaterialPageRoute(builder: (context) => ProfileScreen()),
                 );
-              }),
-              _buildConfigItem('Plan Actual', Icons.diamond_outlined, () {}),
-              _buildConfigItem('Referidos', Icons.group_outlined, () {}),
-              _buildConfigItem('Código de regalo', Icons.card_giftcard_outlined, () {}),
+              }, context),
+              _buildConfigItem('Plan Actual', Icons.diamond_outlined, () {}, context, disabled: true),
+              _buildConfigItem('Referidos', Icons.group_outlined, () {}, context, disabled: true),
+              _buildConfigItem('Código de regalo', Icons.card_giftcard_outlined, () {}, context, disabled: true),
 
               const SizedBox(height: 30),
-              _buildSectionTitle('Ajustes'),
+              _buildSectionTitle('Ajustes', context),
               const SizedBox(height: 15),
-              _buildConfigItem('Modo oscuro', Icons.dark_mode_outlined, () {}, hasSwitch: true),
-              _buildConfigItem('Recordatorios', Icons.notifications_outlined, () {}),
-              _buildConfigItem('Pin de seguridad', Icons.lock_outlined, () {}),
-              _buildConfigItem('Idioma', Icons.language_outlined, () {
-                // Navegar a la pantalla de idioma
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => LanguageScreen()),
-                );
-              }),
+              _buildDarkModeItem(context),
+              _buildConfigItem('Recordatorios', Icons.notifications_outlined, () {}, context, disabled: true),
+              _buildConfigItem('Pin de seguridad', Icons.lock_outlined, () {}, context, disabled: true),
+              _buildConfigItem('Idioma', Icons.language_outlined, () {}, context, disabled: true),
 
               const SizedBox(height: 30),
-              _buildSectionTitle('Soporte'),
+              _buildSectionTitle('Soporte', context),
               const SizedBox(height: 15),
               _buildConfigItem('Reportar falla técnica', Icons.bug_report_outlined, () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => FailReportScreen()),
                 );
-              }),
+              }, context),
               _buildConfigItem('Enviar feedback', Icons.feedback_outlined, () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => FeedbackScreen()),
                 );
-              }),
+              }, context),
               _buildConfigItem('Código de conducta', Icons.gavel_outlined, () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => BehaviourCodeScreen()),
                 );
-              }),
+              }, context),
               _buildConfigItem('Aviso de privacidad', Icons.privacy_tip_outlined, () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => PrivacityScreen()),
                 );
-              }),
+              }, context),
               _buildConfigItem('Términos y condiciones', Icons.description_outlined, () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => TermsScreen()),
                 );
-              }),
+              }, context),
 
               const SizedBox(height: 40),
               Container(
@@ -181,40 +177,41 @@ class SettingsScreen extends StatelessWidget {
     ));
   }
 
-  Widget _buildSectionTitle(String title) {
+  Widget _buildSectionTitle(String title, BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Text(
       title,
-      style: const TextStyle(
+      style: TextStyle(
         fontSize: 18,
         fontWeight: FontWeight.w600,
-        color: Color(0xFF2E3A59),
+        color: colorScheme.onSurface,
       ),
     );
   }
 
-  Widget _buildConfigItem(String title, IconData icon, VoidCallback onTap, {bool hasSwitch = false}) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 8),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: const Color(0xFFE0E7FF).withOpacity(0.8),
-          width: 1.5,
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.03),
-            blurRadius: 8,
-            offset: const Offset(0, 2),
+  Widget _buildDarkModeItem(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    return ValueListenableBuilder<ThemeMode>(
+      valueListenable: ThemeService.instance.themeModeNotifier,
+      builder: (context, themeMode, _) {
+        final isDark = themeMode == ThemeMode.dark;
+        return Container(
+          margin: const EdgeInsets.only(bottom: 8),
+          decoration: BoxDecoration(
+            color: colorScheme.surface,
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(
+              color: colorScheme.outlineVariant.withOpacity(0.8),
+              width: 1.5,
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: colorScheme.shadow.withOpacity(0.03),
+                blurRadius: 8,
+                offset: const Offset(0, 2),
+              ),
+            ],
           ),
-        ],
-      ),
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
-          borderRadius: BorderRadius.circular(12),
-          onTap: hasSwitch ? null : onTap,
           child: Padding(
             padding: const EdgeInsets.all(12),
             child: Row(
@@ -227,7 +224,7 @@ class SettingsScreen extends StatelessWidget {
                     shape: BoxShape.circle,
                   ),
                   child: Icon(
-                    icon,
+                    isDark ? Icons.dark_mode : Icons.light_mode_outlined,
                     color: const Color(0xFF4FC3F7),
                     size: 16,
                   ),
@@ -235,27 +232,116 @@ class SettingsScreen extends StatelessWidget {
                 const SizedBox(width: 12),
                 Expanded(
                   child: Text(
-                    title,
-                    style: const TextStyle(
+                    'Modo oscuro',
+                    style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w500,
-                      color: Color(0xFF2E3A59),
+                      color: colorScheme.onSurface,
                     ),
                   ),
                 ),
-                if (hasSwitch)
-                  Transform.scale(
-                    scale: 0.8,
-                    child: Switch(
-                      value: false,
-                      onChanged: (value) {},
-                      activeColor: const Color(0xFF4FC3F7),
+                Transform.scale(
+                  scale: 0.8,
+                  child: Switch(
+                    value: isDark,
+                    onChanged: (value) => ThemeService.instance.setDarkMode(value),
+                    activeColor: const Color(0xFF4FC3F7),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildConfigItem(
+    String title,
+    IconData icon,
+    VoidCallback onTap,
+    BuildContext context, {
+    bool disabled = false,
+  }) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final iconColor = disabled
+        ? colorScheme.onSurface.withOpacity(0.35)
+        : const Color(0xFF4FC3F7);
+    final textColor = disabled
+        ? colorScheme.onSurface.withOpacity(0.35)
+        : colorScheme.onSurface;
+    final bgColor = disabled
+        ? colorScheme.surfaceContainerLow.withOpacity(0.5)
+        : colorScheme.surface;
+    final borderColor = disabled
+        ? colorScheme.outlineVariant.withOpacity(0.35)
+        : colorScheme.outlineVariant.withOpacity(0.8);
+
+    return Container(
+      margin: const EdgeInsets.only(bottom: 8),
+      decoration: BoxDecoration(
+        color: bgColor,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: borderColor, width: 1.5),
+        boxShadow: disabled
+            ? null
+            : [
+                BoxShadow(
+                  color: colorScheme.shadow.withOpacity(0.03),
+                  blurRadius: 8,
+                  offset: const Offset(0, 2),
+                ),
+              ],
+      ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(12),
+          onTap: disabled ? null : onTap,
+          child: Padding(
+            padding: const EdgeInsets.all(12),
+            child: Row(
+              children: [
+                Container(
+                  width: 32,
+                  height: 32,
+                  decoration: BoxDecoration(
+                    color: iconColor.withOpacity(0.1),
+                    shape: BoxShape.circle,
+                  ),
+                  child: Icon(icon, color: iconColor, size: 16),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Text(
+                    title,
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                      color: textColor,
+                    ),
+                  ),
+                ),
+                if (disabled)
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                    decoration: BoxDecoration(
+                      color: colorScheme.onSurface.withOpacity(0.08),
+                      borderRadius: BorderRadius.circular(999),
+                    ),
+                    child: Text(
+                      'Próximamente',
+                      style: TextStyle(
+                        fontSize: 11,
+                        fontWeight: FontWeight.w500,
+                        color: colorScheme.onSurface.withOpacity(0.4),
+                      ),
                     ),
                   )
                 else
-                  const Icon(
+                  Icon(
                     Icons.chevron_right,
-                    color: Color(0xFF9E9E9E),
+                    color: colorScheme.onSurfaceVariant,
                     size: 28,
                   ),
               ],
@@ -270,6 +356,7 @@ class SettingsScreen extends StatelessWidget {
     showDialog(
       context: context,
       builder: (BuildContext context) {
+        final colorScheme = Theme.of(context).colorScheme;
         return AlertDialog(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(15),
@@ -278,13 +365,13 @@ class SettingsScreen extends StatelessWidget {
             '¿Cerrar sesión?',
             style: TextStyle(
               fontWeight: FontWeight.w600,
-              color: Color(0xFF2E3A59),
+              color: colorScheme.onSurface,
             ),
           ),
           content: Text(
             '¿Estás seguro de que quieres cerrar sesión?',
             style: TextStyle(
-              color: Color(0xFF2E3A59),
+              color: colorScheme.onSurface,
             ),
           ),
           actions: [
@@ -293,7 +380,7 @@ class SettingsScreen extends StatelessWidget {
               child: Text(
                 'Cancelar',
                 style: TextStyle(
-                  color: Color(0xFF4FC3F7),
+                  color: colorScheme.primary,
                   fontWeight: FontWeight.w500,
                 ),
               ),

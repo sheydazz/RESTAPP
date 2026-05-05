@@ -24,8 +24,9 @@ class GlobalProgressScreen extends StatelessWidget {
       {"day": 2, "emoji": "assets/images/normalrest.jpg"},
     ];
 
+    final colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: colorScheme.surface,
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(16),
@@ -90,6 +91,8 @@ class GlobalProgressScreen extends StatelessWidget {
 
   // Botón del switch Mes/Año
   Widget _buildSwitchButton(String text, bool active) {
+    // Note: this widget is called from build() but doesn't receive BuildContext.
+    // The active white background here is decorative within a gradient strip — preserved.
     return Container(
       decoration: BoxDecoration(
         color: active ? Colors.white : Colors.transparent,

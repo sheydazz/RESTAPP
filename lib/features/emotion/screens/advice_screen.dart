@@ -21,10 +21,11 @@ class AdviceScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     final config = EmotionStateConfig.getConfig(estado);
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: colorScheme.surface,
       appBar: AppBar(
         backgroundColor: config.colorPrincipal,
         elevation: 0,
@@ -116,7 +117,7 @@ class AdviceScreen extends StatelessWidget {
                             style: TextStyle(
                               fontSize: 12,
                               fontWeight: FontWeight.w500,
-                              color: Colors.black54,
+                              color: colorScheme.onSurfaceVariant,
                             ),
                           ),
                         ],
@@ -186,7 +187,7 @@ class AdviceScreen extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w800,
-                  color: Colors.black87,
+                  color: colorScheme.onSurface,
                   letterSpacing: 0.3,
                 ),
               ),
@@ -200,7 +201,7 @@ class AdviceScreen extends StatelessWidget {
                   child: Container(
                     padding: const EdgeInsets.all(14),
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: colorScheme.surfaceContainerLow,
                       borderRadius: BorderRadius.circular(14),
                       border: Border.all(
                         color: config.colorPrincipal.withOpacity(0.2),
@@ -216,10 +217,10 @@ class AdviceScreen extends StatelessWidget {
                     ),
                     child: Text(
                       rec,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
-                        color: Colors.black87,
+                        color: colorScheme.onSurface,
                         height: 1.5,
                       ),
                     ),
@@ -236,7 +237,7 @@ class AdviceScreen extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.w800,
-                    color: Colors.black87,
+                    color: colorScheme.onSurface,
                   ),
                 ),
                 const SizedBox(height: 12),
@@ -253,18 +254,20 @@ class AdviceScreen extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      _buildResourceItem('PAS Colombia', '123', Colors.red),
+                      _buildResourceItem('PAS Colombia', '123', Colors.red, context),
                       const SizedBox(height: 10),
                       _buildResourceItem(
                         'Línea de Emergencia Mental',
                         '+57 1 2288019',
                         Colors.orange,
+                        context,
                       ),
                       const SizedBox(height: 10),
                       _buildResourceItem(
                         'Chat con Psicólogo (24h)',
                         'Disponible en la app',
                         Colors.blue,
+                        context,
                       ),
                     ],
                   ),
@@ -312,7 +315,8 @@ class AdviceScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildResourceItem(String title, String contact, Color color) {
+  Widget _buildResourceItem(String title, String contact, Color color, BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
       decoration: BoxDecoration(
@@ -333,7 +337,7 @@ class AdviceScreen extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.w700,
-                    color: Colors.black87,
+                    color: colorScheme.onSurface,
                   ),
                 ),
                 Text(

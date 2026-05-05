@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:rest/features/progress/screens/globalprogress_screen.dart';
 import 'package:rest/core/services/personal_progress_service.dart';
 import '../../settings/screens/settings_screen.dart';
-import '../../help/screens/help_screen.dart';
 import '../../../core/services/user_session.dart';
 
 class MyProgressScreen extends StatefulWidget {
@@ -83,8 +82,9 @@ class _MyProgressScreenState extends State<MyProgressScreen> {
   Widget build(BuildContext context) {
     final diasTrabajados = _data?.diasTrabajadosEnMi ?? 0;
 
+    final colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: colorScheme.surface,
       body: SafeArea(
         child: RefreshIndicator(
           onRefresh: _loadPersonalData,
@@ -94,7 +94,7 @@ class _MyProgressScreenState extends State<MyProgressScreen> {
               children: [
                 _buildHeader(context),
                 Divider(
-                  color: Colors.grey[400],
+                  color: colorScheme.outlineVariant,
                   thickness: 3,
                   height: 0,
                   indent: 23,
@@ -105,10 +105,10 @@ class _MyProgressScreenState extends State<MyProgressScreen> {
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: Text(
                     'He trabajado $diasTrabajados días en mí',
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 30,
                       fontWeight: FontWeight.bold,
-                      color: Color(0xFF1E3A5F),
+                      color: Theme.of(context).colorScheme.onSurface,
                       fontFamily: 'Fredoka',
                     ),
                     textAlign: TextAlign.center,
@@ -162,30 +162,21 @@ class _MyProgressScreenState extends State<MyProgressScreen> {
           Expanded(
             child: Text(
               '¡Hola! ${UserSession.displayName}',
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
-                color: Color(0xFF2E86AB),
+                color: Theme.of(context).colorScheme.primary,
                 fontFamily: 'Fredoka',
               ),
             ),
           ),
           _CircleIconAction(
             imagePath: 'assets/images/config.png',
+            icon: Icons.settings,
             onTap: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (_) => SettingsScreen()),
-              );
-            },
-          ),
-          const SizedBox(width: 8),
-          _CircleIconAction(
-            imagePath: 'assets/images/salvavidas.png',
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => HelpScreen()),
               );
             },
           ),
@@ -210,9 +201,7 @@ class _MyProgressScreenState extends State<MyProgressScreen> {
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(15),
-          gradient: const LinearGradient(
-            colors: [Color(0xFFF7FEFF), Color(0xFFEAF7FF)],
-          ),
+          color: Theme.of(context).colorScheme.surfaceContainerLow,
           border: Border.all(color: const Color(0xFF2F9FE8), width: 2),
         ),
         child: Column(
@@ -283,11 +272,11 @@ class _MyProgressScreenState extends State<MyProgressScreen> {
               ),
             ),
             const SizedBox(height: 8),
-            const Text(
+            Text(
               'Activa tu estrella diaria para mantener la racha y sumar premios.',
               style: TextStyle(
                 fontWeight: FontWeight.w700,
-                color: Color(0xFF1E3A5F),
+                color: Theme.of(context).colorScheme.onSurface,
                 fontFamily: 'Fredoka',
               ),
               textAlign: TextAlign.center,
@@ -349,7 +338,7 @@ class _MyProgressScreenState extends State<MyProgressScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Row(
+          Row(
             children: [
               Icon(Icons.show_chart_rounded, color: Color(0xFF2F9FE8)),
               SizedBox(width: 8),
@@ -359,7 +348,7 @@ class _MyProgressScreenState extends State<MyProgressScreen> {
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
-                    color: Color(0xFF1E3A5F),
+                    color: Theme.of(context).colorScheme.onSurface,
                     fontFamily: 'Fredoka',
                   ),
                 ),
@@ -371,13 +360,13 @@ class _MyProgressScreenState extends State<MyProgressScreen> {
             evo == null
                 ? 'Aún no hay evolución para mostrar.'
                 : tendenciaTexto(evo.tendencia),
-            style: const TextStyle(fontSize: 14, color: Colors.black87),
+            style: TextStyle(fontSize: 14, color: Theme.of(context).colorScheme.onSurface),
           ),
           const SizedBox(height: 12),
           if (serie.isEmpty)
-            const Text(
+            Text(
               'No se han registrado estados de ánimo en el periodo seleccionado.',
-              style: TextStyle(fontSize: 14, color: Colors.black87),
+              style: TextStyle(fontSize: 14, color: Theme.of(context).colorScheme.onSurface),
             )
           else
             SizedBox(
@@ -463,10 +452,10 @@ class _DayItem extends StatelessWidget {
         const SizedBox(height: 4),
         Text(
           day,
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 12,
             fontWeight: FontWeight.w600,
-            color: Color(0xFF1E3A5F),
+            color: Theme.of(context).colorScheme.onSurface,
           ),
         ),
       ],
@@ -506,10 +495,10 @@ class _InfoCard extends StatelessWidget {
               Expanded(
                 child: Text(
                   title,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
-                    color: Color(0xFF1E3A5F),
+                    color: Theme.of(context).colorScheme.onSurface,
                     fontFamily: 'Fredoka',
                   ),
                 ),
@@ -519,9 +508,9 @@ class _InfoCard extends StatelessWidget {
           const SizedBox(height: 6),
           Text(
             content,
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 14,
-              color: Colors.black87,
+              color: Theme.of(context).colorScheme.onSurface,
               height: 1.35,
             ),
           ),
@@ -532,10 +521,11 @@ class _InfoCard extends StatelessWidget {
 }
 
 class _CircleIconAction extends StatelessWidget {
-  const _CircleIconAction({required this.imagePath, required this.onTap});
+  const _CircleIconAction({required this.imagePath, required this.onTap, this.icon});
 
   final String imagePath;
   final VoidCallback onTap;
+  final IconData? icon;
 
   @override
   Widget build(BuildContext context) {
@@ -548,9 +538,13 @@ class _CircleIconAction extends StatelessWidget {
           color: Color(0xFF87CEEB),
           shape: BoxShape.circle,
         ),
-        child: Padding(
-          padding: const EdgeInsets.all(6),
-          child: Image.asset(imagePath, fit: BoxFit.cover),
+        child: Center(
+          child: icon != null
+              ? Icon(icon, color: Colors.white, size: 22)
+              : Padding(
+                  padding: const EdgeInsets.all(6),
+                  child: Image.asset(imagePath, fit: BoxFit.cover),
+                ),
         ),
       ),
     );

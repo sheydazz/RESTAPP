@@ -85,7 +85,7 @@ class _LoadingScreenState extends State<HelpScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF5F7FA),
+      backgroundColor: Theme.of(context).colorScheme.surface,
       body: SafeArea(
         child: Column(
           children: [
@@ -312,22 +312,22 @@ class _LoadingScreenState extends State<HelpScreen>
                             ),
                           ),
                           const SizedBox(height: 16),
-                          const Text(
+                          Text(
                             'Abriendo WhatsApp...',
                             style: TextStyle(
                               fontSize: 13,
                               fontWeight: FontWeight.w500,
-                              color: Colors.black54,
+                              color: Theme.of(context).colorScheme.onSurfaceVariant,
                             ),
                           ),
                           const SizedBox(height: 16),
-                          const Text(
+                          Text(
                             'Un psicólogo reviará tu solicitud y se contactará pronto contigo',
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               fontSize: 13,
                               fontWeight: FontWeight.w500,
-                              color: Colors.black54,
+                              color: Theme.of(context).colorScheme.onSurfaceVariant,
                               height: 1.5,
                             ),
                           ),
@@ -376,7 +376,7 @@ class _LoadingScreenState extends State<HelpScreen>
                             style: TextStyle(
                               fontSize: 12,
                               fontWeight: FontWeight.w500,
-                              color: Colors.black54,
+                              color: Theme.of(context).colorScheme.onSurfaceVariant,
                             ),
                           ),
                         ],

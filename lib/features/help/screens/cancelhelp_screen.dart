@@ -14,7 +14,7 @@ class CancelHelpScreen extends StatelessWidget {
     final height = size.height;
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF5F7FA),
+      backgroundColor: Theme.of(context).colorScheme.surface,
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
@@ -23,7 +23,7 @@ class CancelHelpScreen extends StatelessWidget {
               margin: EdgeInsets.symmetric(horizontal: width * 0.075),
               padding: EdgeInsets.all(width * 0.06),
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: Theme.of(context).colorScheme.surfaceContainerLow,
                 border: Border.all(color: const Color(0xFF4FC3F7), width: 2.5),
                 borderRadius: BorderRadius.circular(28),
                 boxShadow: [
@@ -121,7 +121,7 @@ class CancelHelpScreen extends StatelessWidget {
                       style: TextStyle(
                         fontSize: width * 0.035,
                         fontWeight: FontWeight.w500,
-                        color: Colors.black54,
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
                         height: 1.4,
                       ),
                     ),

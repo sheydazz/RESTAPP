@@ -28,6 +28,7 @@ class TrafficLightScreen extends StatelessWidget {
     final config = EmotionStateConfig.getConfig(estado);
     final recomendaciones = config.getRandomRecommendations(count: 3);
 
+    final colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
       backgroundColor: const Color(0xFF2D2D2D),
       body: Center(
@@ -36,7 +37,7 @@ class TrafficLightScreen extends StatelessWidget {
           height: 800,
           margin: const EdgeInsets.all(20),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: colorScheme.surface,
             borderRadius: BorderRadius.circular(24),
             boxShadow: [
               BoxShadow(
@@ -152,14 +153,14 @@ class TrafficLightScreen extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w700,
-                        color: Colors.black87,
+                        color: colorScheme.onSurface,
                       ),
                     ),
                     const SizedBox(height: 12),
                     Container(
                       padding: const EdgeInsets.all(12),
                       decoration: BoxDecoration(
-                        color: Colors.grey.shade100,
+                        color: colorScheme.surfaceContainerLow,
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Column(

@@ -13,9 +13,12 @@ class EmotionalCalendarScreen extends StatefulWidget {
 
 class _EmotionalCalendarScreenState extends State<EmotionalCalendarScreen> {
   final EmotionService _emotionService = EmotionService();
+  final ScrollController _scrollController = ScrollController();
+  final List<GlobalKey> _monthKeys = List.generate(12, (_) => GlobalKey());
 
   final int _year = DateTime.now().year;
   bool _isLoading = true;
+  bool _didAutoScrollToCurrentMonth = false;
   String? _error;
   final Map<String, num> _byDate = {};
 
@@ -75,6 +78,8 @@ class _EmotionalCalendarScreenState extends State<EmotionalCalendarScreen> {
           ..addAll(mapped);
         _isLoading = false;
       });
+
+      _autoScrollToCurrentMonth();
     } catch (e) {
       if (!mounted) return;
       setState(() {
@@ -85,56 +90,99 @@ class _EmotionalCalendarScreenState extends State<EmotionalCalendarScreen> {
   }
 
   @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: colorScheme.surface,
       body: SafeArea(
-        child: RefreshIndicator(
-          onRefresh: _loadCalendar,
-          child: SingleChildScrollView(
-            physics: const AlwaysScrollableScrollPhysics(),
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _buildHeader(context),
-                const SizedBox(height: 16),
-                _buildLegend(),
-                const SizedBox(height: 18),
-                if (_isLoading)
-                  const Center(child: CircularProgressIndicator())
-                else if (_error != null)
-                  _buildError()
-                else
-                  ...List.generate(
-                    12,
-                    (index) => Padding(
-                      padding: const EdgeInsets.only(bottom: 26),
-                      child: _monthCard(index + 1),
-                    ),
-                  ),
-              ],
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+              child: _buildHeader(context),
             ),
-          ),
+            const SizedBox(height: 16),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: _buildLegend(),
+            ),
+            const SizedBox(height: 18),
+            Expanded(
+              child: RefreshIndicator(
+                onRefresh: _loadCalendar,
+                child: SingleChildScrollView(
+                  controller: _scrollController,
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      if (_isLoading)
+                        const Center(child: CircularProgressIndicator())
+                      else if (_error != null)
+                        _buildError()
+                      else
+                        ...List.generate(
+                          12,
+                          (index) => Padding(
+                            key: _monthKeys[index],
+                            padding: const EdgeInsets.only(bottom: 26),
+                            child: _monthCard(index + 1),
+                          ),
+                        ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
   }
 
+  void _autoScrollToCurrentMonth() {
+    if (_didAutoScrollToCurrentMonth || !mounted) return;
+
+    final currentMonthIndex = DateTime.now().month - 1;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted || _didAutoScrollToCurrentMonth) return;
+
+      final context = _monthKeys[currentMonthIndex].currentContext;
+      if (context == null) return;
+
+      _didAutoScrollToCurrentMonth = true;
+      Scrollable.ensureVisible(
+        context,
+        duration: const Duration(milliseconds: 250),
+        curve: Curves.easeOut,
+        alignment: 0.05,
+      );
+    });
+  }
+
   Widget _buildHeader(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Row(
       children: [
         GestureDetector(
           onTap: () => Navigator.pop(context),
-          child: const Icon(Icons.close, color: Color(0xFF1E88E5), size: 28),
+          child: Icon(Icons.close, color: colorScheme.primary, size: 28),
         ),
         const Spacer(),
         Text(
           'Registro Global $_year',
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 34,
             fontWeight: FontWeight.bold,
-            color: Color(0xFF1E88E5),
+            color: colorScheme.primary,
             fontFamily: 'Fredoka',
           ),
         ),
@@ -145,6 +193,8 @@ class _EmotionalCalendarScreenState extends State<EmotionalCalendarScreen> {
   }
 
   Widget _buildLegend() {
+    final colorScheme = Theme.of(context).colorScheme;
+
     Widget item(String label, String asset) {
       return Row(
         mainAxisSize: MainAxisSize.min,
@@ -161,9 +211,9 @@ class _EmotionalCalendarScreenState extends State<EmotionalCalendarScreen> {
           const SizedBox(width: 6),
           Text(
             label,
-            style: const TextStyle(
+            style: TextStyle(
               fontFamily: 'Fredoka',
-              color: Color(0xFF37474F),
+              color: colorScheme.onSurface,
               fontWeight: FontWeight.w700,
             ),
           ),
@@ -176,8 +226,8 @@ class _EmotionalCalendarScreenState extends State<EmotionalCalendarScreen> {
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
-        color: const Color(0xFFEAF4FF),
-        border: Border.all(color: const Color(0xFF90CAF9)),
+        color: colorScheme.surfaceContainerLow,
+        border: Border.all(color: colorScheme.outline),
       ),
       child: Wrap(
         spacing: 12,
@@ -235,10 +285,10 @@ class _EmotionalCalendarScreenState extends State<EmotionalCalendarScreen> {
         children: [
           Text(
             _capitalize(monthName),
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 36,
               fontWeight: FontWeight.w800,
-              color: Color(0xFF263238),
+              color: Theme.of(context).colorScheme.onSurface,
               fontFamily: 'Fredoka',
             ),
           ),
@@ -277,7 +327,7 @@ class _EmotionalCalendarScreenState extends State<EmotionalCalendarScreen> {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: const Color(0xFFD6DDE3)),
+        border: Border.all(color: Theme.of(context).colorScheme.outlineVariant),
       ),
       child: Stack(
         children: [
@@ -286,7 +336,7 @@ class _EmotionalCalendarScreenState extends State<EmotionalCalendarScreen> {
             right: 4,
             child: Text(
               '$day',
-              style: const TextStyle(fontSize: 10, color: Colors.black54),
+              style: TextStyle(fontSize: 10, color: Theme.of(context).colorScheme.onSurfaceVariant),
             ),
           ),
           Center(
@@ -363,10 +413,10 @@ class _WeekName extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       label,
-      style: const TextStyle(
+      style: TextStyle(
         fontSize: 10,
         fontWeight: FontWeight.w700,
-        color: Color(0xFF455A64),
+        color: Theme.of(context).colorScheme.onSurfaceVariant,
       ),
     );
   }

@@ -73,8 +73,9 @@ class _MiDiarioScreenState extends State<MiDiarioScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: colorScheme.surface,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(20.0),
@@ -119,7 +120,7 @@ class _MiDiarioScreenState extends State<MiDiarioScreen> {
               ),
               const SizedBox(height: 20),
               Divider(
-                color: Colors.grey[400],
+                color: colorScheme.outlineVariant,
                 thickness: 3,
                 height: 0,
                 indent: 23,
@@ -131,7 +132,7 @@ class _MiDiarioScreenState extends State<MiDiarioScreen> {
               Container(
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: const Color(0xFFFFFFFF),
+                  color: colorScheme.surfaceContainerLow,
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Row(
@@ -148,7 +149,7 @@ class _MiDiarioScreenState extends State<MiDiarioScreen> {
                         'Recuerda que este espacio es solo tuyo. Nadie puede leer tus notas; es totalmente privado: tus pensamientos y tú.',
                         style: GoogleFonts.fredoka(
                           fontSize: 15,
-                          color: Colors.black87,
+                          color: colorScheme.onSurface,
                           fontWeight: FontWeight.bold,
                           height: 1.3,
                         ),
@@ -169,7 +170,7 @@ class _MiDiarioScreenState extends State<MiDiarioScreen> {
                   padding: const EdgeInsets.all(2),
                   child: Container(
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: colorScheme.surface,
                       borderRadius: BorderRadius.circular(18),
                     ),
                     padding: const EdgeInsets.all(16),
@@ -180,13 +181,13 @@ class _MiDiarioScreenState extends State<MiDiarioScreen> {
                           controller: _tituloController,
                           style: GoogleFonts.fredoka(
                             fontSize: 16,
-                            color: Colors.black87,
+                            color: colorScheme.onSurface,
                             fontWeight: FontWeight.bold,
                           ),
                           decoration: InputDecoration(
                             hintText: 'Título...',
                             hintStyle: GoogleFonts.fredoka(
-                              color: Colors.grey[400],
+                              color: colorScheme.onSurfaceVariant,
                             ),
                             border: InputBorder.none,
                             contentPadding: EdgeInsets.zero,
@@ -204,13 +205,13 @@ class _MiDiarioScreenState extends State<MiDiarioScreen> {
                             textAlignVertical: TextAlignVertical.top,
                             style: GoogleFonts.fredoka(
                               fontSize: 14,
-                              color: Colors.black87,
+                              color: colorScheme.onSurface,
                               fontWeight: FontWeight.bold,
                             ),
                             decoration: InputDecoration(
                               hintText: 'Descripción...',
                               hintStyle: GoogleFonts.fredoka(
-                                color: Colors.grey[400],
+                                color: colorScheme.onSurfaceVariant,
                               ),
                               border: InputBorder.none,
                               contentPadding: EdgeInsets.zero,

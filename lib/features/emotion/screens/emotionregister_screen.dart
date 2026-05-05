@@ -125,8 +125,9 @@ class _CheckScreenState extends State<EmotionRegisterScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: colorScheme.surface,
       body: SafeArea(
         child: Column(
           children: [
@@ -198,7 +199,7 @@ class _CheckScreenState extends State<EmotionRegisterScreen> {
               child: Container(
                 margin: const EdgeInsets.symmetric(horizontal: 20),
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: colorScheme.surface,
                   borderRadius: BorderRadius.circular(15),
                   border: Border.all(color: Color(0xFF2196F3), width: 2),
                 ),
@@ -206,7 +207,7 @@ class _CheckScreenState extends State<EmotionRegisterScreen> {
                     ? const Center(child: CircularProgressIndicator())
                     : _error != null
                     ? _buildErrorContent()
-                    : _buildPreguntasContent(),
+                    : _buildPreguntasContent(context),
               ),
             ),
 
@@ -286,18 +287,19 @@ class _CheckScreenState extends State<EmotionRegisterScreen> {
     );
   }
 
-  Widget _buildPreguntasContent() {
+  Widget _buildPreguntasContent(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Column(
       children: [
         Container(
           width: double.infinity,
           padding: const EdgeInsets.all(16),
-          child: const Text(
+          child: Text(
             "Test Personal Diario",
             style: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,
-              color: Colors.black87,
+              color: colorScheme.onSurface,
               fontFamily: 'Freeman',
             ),
             textAlign: TextAlign.left,
@@ -326,15 +328,15 @@ class _CheckScreenState extends State<EmotionRegisterScreen> {
                         width: double.infinity,
                         padding: const EdgeInsets.all(12),
                         decoration: BoxDecoration(
-                          color: const Color(0xFFBDF6FD),
+                          color: colorScheme.primaryContainer,
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: Text(
                           textoPregunta,
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 13,
                             fontWeight: FontWeight.w900,
-                            color: Colors.black87,
+                            color: colorScheme.onPrimaryContainer,
                             fontFamily: 'Freeman',
                           ),
                         ),
@@ -433,10 +435,10 @@ class _CheckScreenState extends State<EmotionRegisterScreen> {
                                     child: Text(
                                       nombreOpcion,
                                       textAlign: TextAlign.center,
-                                      style: const TextStyle(
+                                      style: TextStyle(
                                         fontSize: 10,
                                         fontWeight: FontWeight.w600,
-                                        color: Colors.black54,
+                                        color: colorScheme.onSurfaceVariant,
                                         fontFamily: 'Freeman',
                                       ),
                                       maxLines: 2,

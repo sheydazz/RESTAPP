@@ -1,17 +1,188 @@
-# rest
-
-A new Flutter project.
-
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
 # RESTAPP
+
+Aplicacion Flutter enfocada en acompanamiento emocional, registro diario y seguimiento de progreso personal para estudiantes.
+
+## 1) Proposito
+
+RESTAPP busca ofrecer un flujo simple para:
+
+- autenticacion de usuario;
+- test emocional diario con semaforo de resultado;
+- conversacion con asistente IA (NOA) y escalamiento a "Salvavidas" cuando hay alerta;
+- seguimiento de progreso personal (racha, estrellas, emociones frecuentes, evolucion);
+- actividades/tecnicas de relajacion y diario personal.
+
+## 2) Stack tecnologico
+
+- `Flutter` + `Dart` (SDK `^3.9.0`)
+- Dependencias principales:
+  - `http` para consumo de API REST
+  - `google_fonts` para tipografia
+  - `flutter_svg`
+  - `intl`
+  - `url_launcher`
+- Linting base: `flutter_lints`
+
+Referencia: `pubspec.yaml`.
+
+## 3) Arquitectura y estructura del proyecto
+
+El proyecto esta organizado por features dentro de `lib/`, con una capa `core/` para rutas, configuracion y servicios HTTP.
+
+```text
+lib/
+  core/
+    config/      # API config
+    routes/      # Route names
+    services/    # Integracion con backend
+  features/
+    intro_auth/  # Intro, login, register, forgot password
+    emotion/     # Test emocional, chat, semaforo y consejo
+    home/        # Home principal y accesos
+    progress/    # Progreso global y personal
+    relax/       # Tecnicas/actividades de relajacion
+    help/        # Salvavidas / ayuda
+    settings/    # Configuracion y pantallas informativas
+    navigation/  # Bottom navigation
+  main.dart      # Entry point + route table
+```
+
+Archivos clave:
+
+- `lib/main.dart`: define `MaterialApp`, `initialRoute` y registro de rutas.
+- `lib/core/routes/app_routes.dart`: constantes de rutas.
+- `lib/core/config/api_config.dart`: seleccion de `baseUrl` backend.
+- `lib/core/services/*.dart`: capa de acceso a API (auth, chat, emotion, progress, diary).
+
+## 4) Requisitos
+
+- Flutter SDK compatible con Dart `^3.9.0`
+- Android Studio / VS Code con plugin Flutter
+- Emulador Android/iOS o dispositivo fisico
+- Backend REST disponible y accesible desde el dispositivo/emulador
+
+## 5) Instalacion
+
+```bash
+flutter pub get
+```
+
+## 6) Ejecucion local
+
+```bash
+flutter run
+```
+
+Para listar dispositivos:
+
+```bash
+flutter devices
+```
+
+## 7) Scripts/comandos utiles
+
+- Ejecutar app: `flutter run`
+- Analisis estatico: `flutter analyze`
+- Pruebas: `flutter test`
+- Formateo: `dart format .`
+
+> Nota: no hay scripts custom en `pubspec.yaml`; se usan comandos estandar de Flutter/Dart.
+
+## 8) Configuracion de backend y entorno
+
+Actualmente la app no usa archivo `.env`; la URL del backend se controla por codigo en:
+
+- `lib/core/config/api_config.dart`
+
+Configuracion actual:
+
+- `useLocalDocker = false`
+- `localBaseUrl = http://localhost:3000`
+- `universityBaseUrl = http://190.143.117.179:8080`
+
+### Cambiar backend
+
+Edita `useLocalDocker` segun el entorno:
+
+- `true`: usa `localBaseUrl`
+- `false`: usa `universityBaseUrl`
+
+### Importante para pruebas en Android emulator/device
+
+- `localhost` en movil/emulador no siempre apunta a tu maquina host.
+- Si usas Android emulator, normalmente debes usar `10.0.2.2` en lugar de `localhost`.
+
+## 9) Flujo principal de la aplicacion
+
+1. **Intro** (`/intro`) con animacion de bienvenida.
+2. **Login/Register**:
+   - Login consume `/api/auth/login`
+   - Guarda token e info basica en `UserSession` (memoria de ejecucion)
+3. **Validacion de test diario**:
+   - Si no hay test hoy, abre `EmotionRegisterScreen`
+   - Si ya existe, entra a `MainApp`
+4. **Test emocional diario**:
+   - Consulta preguntas desde backend
+   - Envia respuestas a `/api/registro-emocional`
+   - Navega a semaforo emocional y consejos
+5. **Home**:
+   - Acceso a chat NOA, historial, actividades y ayuda
+6. **Chat IA (NOA)**:
+   - Endpoint principal: `/api/chats/ia`
+   - Si backend marca `requiere_salvavidas`, redirige a ayuda
+7. **Progreso personal**:
+   - Rachas, estrellas, emociones frecuentes, evolucion y activacion diaria
+
+## 10) Variables de entorno
+
+Actualmente: **pendiente/por definir**.
+
+- No existe contrato formal de variables de entorno en el repo.
+- La configuracion de API esta hardcoded en `ApiConfig`.
+
+Recomendacion futura:
+
+- migrar a esquema de `--dart-define` o gestion externa de entornos (`dev/staging/prod`).
+
+## 11) Convenciones del proyecto
+
+- Estructura por modulo funcional (`features/*`).
+- Servicios HTTP en `core/services`.
+- Rutas centralizadas en `core/routes`.
+- Tipografia principal `Fredoka` (assets y `google_fonts`).
+- Lints base desde `flutter_lints`.
+
+## 12) Troubleshooting basico
+
+### Error de conexion al backend
+
+- Verifica URL activa en `api_config.dart`.
+- Confirma que el backend este corriendo y accesible desde el dispositivo.
+- En emulador Android, evita `localhost` y prueba `10.0.2.2`.
+
+### Login exitoso pero fallan endpoints protegidos
+
+- Revisa si `UserSession.authToken` se esta asignando correctamente.
+- Valida que el backend acepte header `Authorization: Bearer <token>`.
+
+### No cargan preguntas del test emocional
+
+- Revisa disponibilidad de `/api/registro-emocional/preguntas`.
+- El servicio implementa fallback sin token cuando recibe `403`; revisar roles/backend.
+
+### Overflow/UI rota en pantallas pequenas
+
+- Ejecuta en distintos tamanos (`flutter run` en emulator pequeno y grande).
+- Revisa `SingleChildScrollView` en pantallas de formularios.
+
+## 13) Pendientes / por definir
+
+- Documentacion oficial de API backend (OpenAPI/Postman): **pendiente/por definir**.
+- Estrategia formal de entornos (`dev/staging/prod`): **pendiente/por definir**.
+- Persistencia segura de sesion (actualmente en memoria con `UserSession`): **pendiente/por definir**.
+- Evidencia de cobertura de pruebas automatizadas: **pendiente/por definir**.
+
+## 14) Recursos Flutter
+
+- [Flutter docs](https://docs.flutter.dev/)
+- [Dart docs](https://dart.dev/)

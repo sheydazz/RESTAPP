@@ -17,12 +17,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final _correoController = TextEditingController();
   final _passwordController = TextEditingController();
   final _telefonoController = TextEditingController();
+  final _fechaNacimientoController = TextEditingController();
 
   // Variables para dropdowns
   String? _edadSeleccionada;
   String? _ciudadSeleccionada;
   String? _carreraSeleccionada;
   String? _semestresSeleccionado;
+  String? _sexoSeleccionado;
 
   // Control de visibilidad de contraseña
   bool _isPasswordVisible = false;
@@ -168,6 +170,19 @@ class _RegisterScreenState extends State<RegisterScreen> {
     '8 y 9',
     '9 y 10',
   ];
+  final List<String> _sexos = [
+    'Femenino',
+    'Masculino',
+    'Otro',
+    'Prefiero no decir',
+  ];
+
+  static const Map<String, String> _sexoCodes = {
+    'Masculino': 'M',
+    'Femenino': 'F',
+    'Otro': 'O',
+    'Prefiero no decir': 'N',
+  };
 
   @override
   void dispose() {
@@ -176,7 +191,20 @@ class _RegisterScreenState extends State<RegisterScreen> {
     _correoController.dispose();
     _passwordController.dispose();
     _telefonoController.dispose();
+    _fechaNacimientoController.dispose();
     super.dispose();
+  }
+
+  String _formatDate(DateTime date) {
+    final year = date.year.toString().padLeft(4, '0');
+    final month = date.month.toString().padLeft(2, '0');
+    final day = date.day.toString().padLeft(2, '0');
+    return '$year-$month-$day';
+  }
+
+  String? _mapSexoToCode(String? sexoLabel) {
+    if (sexoLabel == null || sexoLabel.isEmpty) return null;
+    return _sexoCodes[sexoLabel];
   }
 
   Future<void> _handleRegister() async {
@@ -187,6 +215,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
     final ciudad = _ciudadSeleccionada;
     final telefono = _telefonoController.text.trim();
     final edad = int.tryParse(_edadSeleccionada ?? '');
+    final semestreActual = _semestresSeleccionado;
+    final sexo = _mapSexoToCode(_sexoSeleccionado);
+    final fechaNacimiento = _fechaNacimientoController.text.trim();
 
     if (nombres.isEmpty ||
         apellidos.isEmpty ||
@@ -198,10 +229,23 @@ class _RegisterScreenState extends State<RegisterScreen> {
         edad == null ||
         _carreraSeleccionada == null ||
         _carreraSeleccionada!.isEmpty ||
-        _semestresSeleccionado == null ||
-        _semestresSeleccionado!.isEmpty) {
+        semestreActual == null ||
+        semestreActual.isEmpty ||
+        sexo == null ||
+        sexo.isEmpty ||
+        fechaNacimiento.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Completa todos los campos obligatorios')),
+      );
+      return;
+    }
+
+    final birthDateRegExp = RegExp(r'^\d{4}-\d{2}-\d{2}$');
+    if (!birthDateRegExp.hasMatch(fechaNacimiento)) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('La fecha de nacimiento debe tener formato YYYY-MM-DD'),
+        ),
       );
       return;
     }
@@ -254,6 +298,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
         telefono: telefono,
         ciudad: ciudad,
         edad: edad,
+        semestreActual: semestreActual,
+        sexo: sexo,
+        fechaNacimiento: fechaNacimiento,
       );
 
       UserSession.currentUserName = nombres;
@@ -306,8 +353,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: colorScheme.surface,
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 20),
@@ -412,6 +460,49 @@ class _RegisterScreenState extends State<RegisterScreen> {
               ),
 
               const SizedBox(height: 20),
+              _buildDropdownField(
+                label: '¿Con qué sexo te identificas?',
+                hint: 'Selecciona una opción',
+                value: _sexoSeleccionado,
+                items: _sexos,
+                onChanged: (value) {
+                  setState(() {
+                    _sexoSeleccionado = value;
+                  });
+                },
+                isRequired: true,
+              ),
+
+              const SizedBox(height: 20),
+              _buildDateField(
+                controller: _fechaNacimientoController,
+                label: 'Fecha de nacimiento',
+                hint: 'YYYY-MM-DD',
+                isRequired: true,
+                onTap: () async {
+                  final now = DateTime.now();
+                  final initialDate = DateTime(
+                    now.year - 18,
+                    now.month,
+                    now.day,
+                  );
+                  final firstDate = DateTime(1900, 1, 1);
+                  final lastDate = now;
+                  final pickedDate = await showDatePicker(
+                    context: context,
+                    initialDate: initialDate,
+                    firstDate: firstDate,
+                    lastDate: lastDate,
+                  );
+                  if (pickedDate != null) {
+                    setState(() {
+                      _fechaNacimientoController.text = _formatDate(pickedDate);
+                    });
+                  }
+                },
+              ),
+
+              const SizedBox(height: 20),
               _buildInputField(
                 controller: _telefonoController,
                 label: 'Teléfono',
@@ -470,6 +561,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     bool obscure = false,
     bool isRequired = false,
   }) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -480,7 +572,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               style: GoogleFonts.fredoka(
                 fontSize: 15,
                 fontWeight: FontWeight.bold,
-                color: Colors.black87,
+                color: colorScheme.onSurface,
               ),
             ),
             if (isRequired)
@@ -507,14 +599,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
           padding: const EdgeInsets.all(2.5),
           child: Container(
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: colorScheme.surfaceContainerLow,
               borderRadius: BorderRadius.circular(28),
             ),
             child: TextField(
               controller: controller,
               obscureText: obscure && !_isPasswordVisible,
               style: GoogleFonts.fredoka(
-                color: Colors.black87,
+                color: colorScheme.onSurface,
                 fontWeight: FontWeight.bold,
               ),
               onChanged: (_) {
@@ -523,7 +615,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               decoration: InputDecoration(
                 hintText: hint,
                 hintStyle: GoogleFonts.fredoka(
-                  color: Colors.black38,
+                  color: colorScheme.onSurfaceVariant,
                   fontWeight: FontWeight.bold,
                 ),
                 suffixIcon: Row(
@@ -594,6 +686,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     required ValueChanged<String?> onChanged,
     bool isRequired = false,
   }) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -604,7 +697,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               style: GoogleFonts.fredoka(
                 fontSize: 15,
                 fontWeight: FontWeight.bold,
-                color: Colors.black87,
+                color: colorScheme.onSurface,
               ),
             ),
             if (isRequired)
@@ -631,7 +724,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           padding: const EdgeInsets.all(2.5),
           child: Container(
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: colorScheme.surfaceContainerLow,
               borderRadius: BorderRadius.circular(28),
             ),
             child: Row(
@@ -645,7 +738,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         hint: Text(
                           hint,
                           style: GoogleFonts.fredoka(
-                            color: Colors.black38,
+                            color: colorScheme.onSurfaceVariant,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -657,7 +750,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 child: Text(
                                   item,
                                   style: GoogleFonts.fredoka(
-                                    color: Colors.black87,
+                                    color: colorScheme.onSurface,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
@@ -666,7 +759,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             .toList(),
                         onChanged: onChanged,
                         style: GoogleFonts.fredoka(
-                          color: Colors.black87,
+                          color: colorScheme.onSurface,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -692,6 +785,118 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 else
                   const SizedBox(width: 15),
               ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildDateField({
+    required TextEditingController controller,
+    required String label,
+    required String hint,
+    required VoidCallback onTap,
+    bool isRequired = false,
+  }) {
+    final colorScheme = Theme.of(context).colorScheme;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Text(
+              label,
+              style: GoogleFonts.fredoka(
+                fontSize: 15,
+                fontWeight: FontWeight.bold,
+                color: colorScheme.onSurface,
+              ),
+            ),
+            if (isRequired)
+              Text(
+                ' Obligatorio',
+                style: GoogleFonts.fredoka(
+                  fontSize: 13,
+                  fontWeight: FontWeight.bold,
+                  color: const Color(0xFFFF6B7A),
+                ),
+              ),
+          ],
+        ),
+        const SizedBox(height: 8),
+        Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(30),
+            gradient: const LinearGradient(
+              colors: [Color(0xFFADD8E6), Color(0xFF3A5AFF), Color(0xFF8C4EFF)],
+              begin: Alignment.centerLeft,
+              end: Alignment.centerRight,
+            ),
+          ),
+          padding: const EdgeInsets.all(2.5),
+          child: Container(
+            decoration: BoxDecoration(
+              color: colorScheme.surfaceContainerLow,
+              borderRadius: BorderRadius.circular(28),
+            ),
+            child: TextField(
+              controller: controller,
+              readOnly: true,
+              onTap: onTap,
+              style: GoogleFonts.fredoka(
+                color: colorScheme.onSurface,
+                fontWeight: FontWeight.bold,
+              ),
+              decoration: InputDecoration(
+                hintText: hint,
+                hintStyle: GoogleFonts.fredoka(
+                  color: colorScheme.onSurfaceVariant,
+                  fontWeight: FontWeight.bold,
+                ),
+                suffixIcon: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    if (controller.text.isNotEmpty)
+                      Padding(
+                        padding: const EdgeInsets.only(right: 10),
+                        child: Container(
+                          width: 28,
+                          height: 28,
+                          decoration: const BoxDecoration(
+                            color: Color(0xFF3709EC),
+                            shape: BoxShape.circle,
+                          ),
+                          child: const Center(
+                            child: Icon(
+                              Icons.check,
+                              color: Colors.white,
+                              size: 18,
+                            ),
+                          ),
+                        ),
+                      )
+                    else
+                      const SizedBox(width: 10),
+                    const Padding(
+                      padding: EdgeInsets.only(right: 15),
+                      child: Icon(
+                        Icons.calendar_today,
+                        color: Color(0xFF3709EC),
+                        size: 22,
+                      ),
+                    ),
+                  ],
+                ),
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 14,
+                ),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(28),
+                  borderSide: BorderSide.none,
+                ),
+              ),
             ),
           ),
         ),

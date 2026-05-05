@@ -20,10 +20,10 @@ class _FailReportScreenState extends State<FailReportScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF8FAFB),
+      backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: AppBar(
         titleSpacing: 0,
-        backgroundColor: Colors.white,
+        backgroundColor: Theme.of(context).colorScheme.surface,
         elevation: 0,
         leadingWidth: 70,
         leading: Center(
@@ -84,7 +84,7 @@ class _FailReportScreenState extends State<FailReportScreen> {
               Container(
                 padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: Theme.of(context).colorScheme.surfaceContainerLow,
                   borderRadius: BorderRadius.circular(20),
                   boxShadow: [
                     BoxShadow(
@@ -123,7 +123,7 @@ class _FailReportScreenState extends State<FailReportScreen> {
                             style: TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.w600,
-                              color: Color(0xFF2E3A59),
+                              color: Theme.of(context).colorScheme.onSurface,
                             ),
                           ),
                           const SizedBox(height: 5),
@@ -131,7 +131,7 @@ class _FailReportScreenState extends State<FailReportScreen> {
                             'Déjanos saber qué problemas has presentado',
                             style: TextStyle(
                               fontSize: 14,
-                              color: Color(0xFF9E9E9E),
+                              color: Theme.of(context).colorScheme.onSurfaceVariant,
                               fontWeight: FontWeight.w400,
                             ),
                           ),
@@ -220,10 +220,10 @@ class _FailReportScreenState extends State<FailReportScreen> {
   }) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).colorScheme.surfaceContainerLow,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: const Color(0xFFE0E7FF).withOpacity(0.8),
+          color: Theme.of(context).colorScheme.outlineVariant,
           width: 1.5,
         ),
         boxShadow: [
@@ -241,7 +241,7 @@ class _FailReportScreenState extends State<FailReportScreen> {
         decoration: InputDecoration(
           hintText: hintText,
           hintStyle: TextStyle(
-            color: Color(0xFF9E9E9E),
+            color: Theme.of(context).colorScheme.onSurfaceVariant,
             fontSize: 14,
             fontWeight: FontWeight.w400,
           ),
@@ -249,7 +249,7 @@ class _FailReportScreenState extends State<FailReportScreen> {
           contentPadding: EdgeInsets.all(16),
         ),
         style: TextStyle(
-          color: Color(0xFF2E3A59),
+          color: Theme.of(context).colorScheme.onSurface,
           fontSize: 14,
           fontWeight: FontWeight.w500,
         ),
@@ -281,13 +281,13 @@ class _FailReportScreenState extends State<FailReportScreen> {
             'Error',
             style: TextStyle(
               fontWeight: FontWeight.w600,
-              color: Color(0xFF2E3A59),
+              color: Theme.of(context).colorScheme.onSurface,
             ),
           ),
           content: Text(
             message,
             style: TextStyle(
-              color: Color(0xFF2E3A59),
+              color: Theme.of(context).colorScheme.onSurface,
             ),
           ),
           actions: [
@@ -319,13 +319,13 @@ class _FailReportScreenState extends State<FailReportScreen> {
             '¡Reporte enviado!',
             style: TextStyle(
               fontWeight: FontWeight.w600,
-              color: Color(0xFF2E3A59),
+              color: Theme.of(context).colorScheme.onSurface,
             ),
           ),
           content: Text(
             'Tu reporte ha sido enviado exitosamente. Nos pondremos en contacto contigo pronto.',
             style: TextStyle(
-              color: Color(0xFF2E3A59),
+              color: Theme.of(context).colorScheme.onSurface,
             ),
           ),
           actions: [

@@ -9,8 +9,9 @@ class RelaxScreen extends StatelessWidget {
     final width = size.width;
     final height = size.height;
 
+    final colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: colorScheme.surface,
       body: SafeArea(
         child: Padding(
           padding: EdgeInsets.all(width * 0.05),
@@ -57,7 +58,7 @@ class RelaxScreen extends StatelessWidget {
                       style: TextStyle(
                         fontSize: width * 0.04,
                         fontWeight: FontWeight.w600,
-                        color: Colors.black87,
+                        color: colorScheme.onSurface,
                       ),
                     ),
                   ),
@@ -141,7 +142,7 @@ class _CardTecnica extends StatelessWidget {
             style: TextStyle(
               fontSize: width * 0.045,
               fontWeight: FontWeight.bold,
-              color: Colors.black,
+              color: Theme.of(context).colorScheme.onSurface,
             ),
           ),
         ],

@@ -27,6 +27,7 @@ class _MusicScreenState extends State<MusicScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color(0xFF9C27B0),
@@ -110,7 +111,7 @@ class _MusicScreenState extends State<MusicScreen> {
                     decoration: BoxDecoration(
                       color: _selectedPlaylist == index
                           ? const Color(0xFF9C27B0).withOpacity(0.2)
-                          : Colors.grey[100],
+                          : colorScheme.surfaceContainerLow,
                       border: Border.all(
                         color: _selectedPlaylist == index
                             ? const Color(0xFF9C27B0)
@@ -141,7 +142,7 @@ class _MusicScreenState extends State<MusicScreen> {
                               Text(
                                 playlists[index]['songs']!,
                                 style: TextStyle(
-                                  color: Colors.grey[600],
+                                  color: colorScheme.onSurfaceVariant,
                                   fontSize: 12,
                                 ),
                               ),
@@ -173,7 +174,7 @@ class _MusicScreenState extends State<MusicScreen> {
                   margin: const EdgeInsets.only(bottom: 8),
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: Colors.grey[100],
+                    color: colorScheme.surfaceContainerLow,
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Row(

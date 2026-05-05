@@ -54,8 +54,9 @@ class _MisCapitulosScreenState extends State<MisCapitulosScreen> {
       colors: [Color(0xFF5CCFC0), Color(0xFF2981C1)],
     );
 
+    final colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: colorScheme.surface,
       body: SafeArea(
         child: Column(
           children: [
@@ -102,7 +103,7 @@ class _MisCapitulosScreenState extends State<MisCapitulosScreen> {
                   // divisor
                   const SizedBox(height: 20),
                   Divider(
-                    color: Colors.grey[400],
+                    color: colorScheme.outlineVariant,
                     thickness: 3,
                     height: 0,
                     indent: 23,
@@ -164,14 +165,14 @@ class _MisCapitulosScreenState extends State<MisCapitulosScreen> {
                           Icon(
                             Icons.book_outlined,
                             size: 80,
-                            color: Colors.grey[300],
+                            color: colorScheme.outlineVariant,
                           ),
                           const SizedBox(height: 16),
                           Text(
                             'No hay capítulos aún',
                             style: TextStyle(
                               fontSize: 18,
-                              color: Colors.grey[600],
+                              color: colorScheme.onSurfaceVariant,
                               fontFamily: 'Fredoka',
                             ),
                           ),
@@ -180,7 +181,7 @@ class _MisCapitulosScreenState extends State<MisCapitulosScreen> {
                             'Comienza escribiendo en tu diario',
                             style: TextStyle(
                               fontSize: 14,
-                              color: Colors.grey[500],
+                              color: colorScheme.onSurfaceVariant,
                               fontFamily: 'Fredoka',
                             ),
                           ),
@@ -247,7 +248,7 @@ class _MisCapitulosScreenState extends State<MisCapitulosScreen> {
         child: Container(
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: Theme.of(context).colorScheme.surfaceContainerLow,
             borderRadius: BorderRadius.circular(16),
           ),
           child: Column(
@@ -259,7 +260,7 @@ class _MisCapitulosScreenState extends State<MisCapitulosScreen> {
                 style: GoogleFonts.fredoka(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
-                  color: Colors.black87,
+                  color: Theme.of(context).colorScheme.onSurface,
                 ),
               ),
               const SizedBox(height: 8),
@@ -270,7 +271,7 @@ class _MisCapitulosScreenState extends State<MisCapitulosScreen> {
                 style: GoogleFonts.fredoka(
                   fontSize: 14,
                   fontWeight: FontWeight.bold,
-                  color: Colors.black87,
+                  color: Theme.of(context).colorScheme.onSurface,
                   height: 1.3,
                 ),
                 maxLines: 2,
@@ -284,7 +285,7 @@ class _MisCapitulosScreenState extends State<MisCapitulosScreen> {
                 fecha,
                 style: GoogleFonts.fredoka(
                   fontSize: 12,
-                  color: Colors.black87,
+                  color: Theme.of(context).colorScheme.onSurface,
                   fontWeight: FontWeight.bold,
                 ),
               ),

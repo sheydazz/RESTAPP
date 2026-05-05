@@ -5,10 +5,10 @@ class TermsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF8FAFB),
+      backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: AppBar(
         titleSpacing: 0,
-        backgroundColor: Colors.white,
+        backgroundColor: Theme.of(context).colorScheme.surface,
         elevation: 0,
         leadingWidth: 70,
         leading: Center(
@@ -69,7 +69,7 @@ class TermsScreen extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: Theme.of(context).colorScheme.surfaceContainerLow,
                   borderRadius: BorderRadius.circular(20),
                   boxShadow: [
                     BoxShadow(
@@ -105,7 +105,7 @@ class TermsScreen extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.w600,
-                          color: Color(0xFF2E3A59),
+                          color: Theme.of(context).colorScheme.onSurface,
                         ),
                       ),
                     ),
@@ -120,7 +120,7 @@ class TermsScreen extends StatelessWidget {
                 width: double.infinity,
                 padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: Theme.of(context).colorScheme.surfaceContainerLow,
                   borderRadius: BorderRadius.circular(15),
                   boxShadow: [
                     BoxShadow(
@@ -134,23 +134,63 @@ class TermsScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     _buildTermSection(
-                      '1. Subtítulo 1',
-                      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi dolor tortor, lacinia et velit ac, pulvinar eleifend lacus. Donec sodales leo sed purus cursus, non tempor ligula mollis.',
+                      context,
+                      '1. Objeto del servicio',
+                      'La aplicación tiene como finalidad brindar herramientas de apoyo emocional, seguimiento del bienestar mental, orientación general y recursos informativos mediante inteligencia artificial.',
                     ),
 
                     _buildTermSection(
-                      '2. Subtítulo 2',
-                      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi dolor tortor, lacinia et velit ac, pulvinar eleifend lacus. Donec sodales leo sed purus cursus, non tempor ligula mollis.',
+                      context,
+                      '2. Naturaleza del servicio',
+                      'La aplicación no presta servicios médicos, psicológicos clínicos ni psiquiátricos. La información proporcionada no constituye diagnóstico, tratamiento ni reemplaza la atención profesional especializada.',
                     ),
 
                     _buildTermSection(
-                      '3. Subtítulo 3',
-                      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi dolor tortor, lacinia et velit ac, pulvinar eleifend lacus. Donec sodales leo sed purus cursus, non tempor ligula mollis.',
+                      context,
+                      '3. Registro y acceso',
+                      'Para utilizar determinadas funciones, el usuario podrá crear una cuenta proporcionando información veraz, actualizada y completa. El usuario es responsable de la seguridad de sus credenciales de acceso.',
                     ),
 
                     _buildTermSection(
-                      '4. Subtítulo 4',
-                      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi dolor tortor, lacinia et velit ac, pulvinar eleifend lacus. Donec sodales leo sed purus cursus, non tempor ligula mollis.',
+                      context,
+                      '4. Uso adecuado de la plataforma',
+                      'El usuario se compromete a utilizar la aplicación de manera lícita, ética y responsable, absteniéndose de realizar actividades que afecten el funcionamiento del sistema o perjudiquen a terceros.',
+                    ),
+
+                    _buildTermSection(
+                      context,
+                      '5. Privacidad y tratamiento de datos',
+                      'Los datos personales suministrados serán tratados conforme a la Política de Privacidad de la aplicación y la normativa vigente de protección de datos personales.',
+                    ),
+
+                    _buildTermSection(
+                      context,
+                      '6. Inteligencia artificial',
+                      'Las respuestas generadas por inteligencia artificial son automáticas, orientativas y pueden presentar limitaciones o errores. Se recomienda validar información sensible con profesionales competentes.',
+                    ),
+
+                    _buildTermSection(
+                      context,
+                      '7. Situaciones de emergencia',
+                      'La aplicación no sustituye servicios de emergencia. En casos de crisis emocional, riesgo suicida o peligro inmediato, el usuario deberá acudir a líneas de atención, servicios médicos o autoridades competentes.',
+                    ),
+
+                    _buildTermSection(
+                      context,
+                      '8. Propiedad intelectual',
+                      'El diseño, contenido, software, logotipos y funcionalidades de la aplicación son propiedad de sus desarrolladores o titulares autorizados y están protegidos por la legislación aplicable.',
+                    ),
+
+                    _buildTermSection(
+                      context,
+                      '9. Suspensión de uso',
+                      'La administración podrá suspender o restringir el acceso a usuarios que incumplan estos términos o hagan uso indebido de la plataforma.',
+                    ),
+
+                    _buildTermSection(
+                      context,
+                      '10. Modificaciones',
+                      'Los presentes términos podrán ser actualizados en cualquier momento. Las modificaciones serán notificadas dentro de la aplicación.',
                       isLast: true,
                     ),
                   ],
@@ -208,7 +248,8 @@ class TermsScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildTermSection(String title, String content, {bool isLast = false}) {
+  Widget _buildTermSection(BuildContext context, String title, String content, {bool isLast = false}) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -217,7 +258,7 @@ class TermsScreen extends StatelessWidget {
           style: TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.w600,
-            color: Color(0xFF2E3A59),
+            color: colorScheme.onSurface,
           ),
         ),
         const SizedBox(height: 8),
@@ -226,7 +267,7 @@ class TermsScreen extends StatelessWidget {
           style: TextStyle(
             fontSize: 14,
             fontWeight: FontWeight.w400,
-            color: Color(0xFF6B7280),
+            color: colorScheme.onSurfaceVariant,
             height: 1.5,
           ),
         ),
@@ -247,13 +288,13 @@ class TermsScreen extends StatelessWidget {
             '¡Términos aceptados!',
             style: TextStyle(
               fontWeight: FontWeight.w600,
-              color: Color(0xFF2E3A59),
+              color: Theme.of(context).colorScheme.onSurface,
             ),
           ),
           content: Text(
             'Has aceptado los términos y condiciones de uso de la aplicación.',
             style: TextStyle(
-              color: Color(0xFF2E3A59),
+              color: Theme.of(context).colorScheme.onSurface,
             ),
           ),
           actions: [

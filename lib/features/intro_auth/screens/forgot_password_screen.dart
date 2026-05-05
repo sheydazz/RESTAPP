@@ -90,16 +90,17 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: colorScheme.surface,
       appBar: AppBar(
         title: Text(
           'Recuperar contraseña',
           style: GoogleFonts.fredoka(fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.black,
+        backgroundColor: colorScheme.surface,
+        foregroundColor: colorScheme.onSurface,
         elevation: 0,
       ),
       body: SafeArea(
@@ -170,6 +171,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     required String hint,
     bool obscure = false,
   }) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -183,7 +185,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
           obscureText: obscure,
           decoration: InputDecoration(
             hintText: hint,
-            hintStyle: GoogleFonts.fredoka(color: Colors.grey),
+            hintStyle: GoogleFonts.fredoka(color: colorScheme.onSurfaceVariant),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(20),
               borderSide: const BorderSide(color: Color(0xFF6A5CFF), width: 2),

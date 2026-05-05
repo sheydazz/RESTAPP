@@ -98,6 +98,7 @@ class _EmotionSavedScreenState extends State<EmotionSavedScreen>
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
       backgroundColor: const Color(0xFF2D2D2D),
       body: Center(
@@ -106,7 +107,7 @@ class _EmotionSavedScreenState extends State<EmotionSavedScreen>
           height: 800,
           margin: const EdgeInsets.all(20),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: colorScheme.surface,
             borderRadius: BorderRadius.circular(24),
             boxShadow: [
               BoxShadow(
@@ -187,7 +188,7 @@ class _EmotionSavedScreenState extends State<EmotionSavedScreen>
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
-                          color: Colors.grey[700],
+                          color: colorScheme.onSurfaceVariant,
                           height: 1.4,
                         ),
                       ),
@@ -203,7 +204,7 @@ class _EmotionSavedScreenState extends State<EmotionSavedScreen>
                 width: 60,
                 height: 60,
                 child: CircularProgressIndicator(
-                  valueColor: AlwaysStoppedAnimation<Color>(Colors.grey[400]!),
+                  valueColor: AlwaysStoppedAnimation<Color>(colorScheme.outlineVariant),
                   strokeWidth: 3,
                 ),
               ),
@@ -215,7 +216,7 @@ class _EmotionSavedScreenState extends State<EmotionSavedScreen>
                 style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w500,
-                  color: Colors.grey[600],
+                  color: colorScheme.onSurfaceVariant,
                 ),
               ),
             ],

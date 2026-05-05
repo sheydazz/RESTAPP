@@ -49,10 +49,10 @@ class _ConversacionesScreenState extends State<ConversacionesScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF8FAFB),
+      backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: AppBar(
         titleSpacing: 0,
-        backgroundColor: Colors.white,
+        backgroundColor: Theme.of(context).colorScheme.surface,
         elevation: 0,
         leadingWidth: 70,
         leading: Center(
@@ -94,32 +94,29 @@ class _ConversacionesScreenState extends State<ConversacionesScreen> {
         centerTitle: false,
       ),
 
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(20),
-          child: _loading
-              ? const Center(child: CircularProgressIndicator())
-              : _error != null
-              ? _errorState()
-              : _historial.isEmpty
-              ? _emptyState()
-              : Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: _historial
-                      .map(
-                        (h) => _buildConversacionItem(h, () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  ChatScreen(initialChatId: h.chatId),
-                            ),
-                          );
-                        }),
-                      )
-                      .toList(),
-                ),
-        ),
+      body: Padding(
+        padding: const EdgeInsets.all(20),
+        child: _loading
+            ? const Center(child: CircularProgressIndicator())
+            : _error != null
+            ? _errorState()
+            : _historial.isEmpty
+            ? SizedBox.expand(child: Center(child: _emptyState()))
+            : ListView(
+                children: _historial
+                    .map(
+                      (h) => _buildConversacionItem(h, () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                ChatScreen(initialChatId: h.chatId),
+                          ),
+                        );
+                      }),
+                    )
+                    .toList(),
+              ),
       ),
     );
   }
@@ -145,7 +142,7 @@ class _ConversacionesScreenState extends State<ConversacionesScreen> {
   Widget _emptyState() {
     return const Column(
       children: [
-        Icon(Icons.chat_bubble_outline, size: 72, color: Color(0xFF90A4AE)),
+        Icon(Icons.forum_rounded, size: 72, color: Color(0xFF90A4AE)),
         SizedBox(height: 10),
         Text(
           'Aun no tienes sesiones con NOA',
@@ -168,7 +165,7 @@ class _ConversacionesScreenState extends State<ConversacionesScreen> {
     return Container(
       margin: const EdgeInsets.only(bottom: 15),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).colorScheme.surfaceContainerLow,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(color: const Color(0xFF08B1DD), width: 2),
         boxShadow: [
@@ -195,7 +192,7 @@ class _ConversacionesScreenState extends State<ConversacionesScreen> {
                     color: Colors.black,
                     borderRadius: BorderRadius.circular(8),
                   ),
-                  child: Icon(Icons.chat_bubble, color: Colors.white, size: 24),
+                  child: Icon(Icons.forum_rounded, color: Colors.white, size: 24),
                 ),
                 const SizedBox(width: 16),
                 Expanded(
@@ -204,19 +201,19 @@ class _ConversacionesScreenState extends State<ConversacionesScreen> {
                     children: [
                       Text(
                         titulo,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
-                          color: Color(0xFF2E3A59),
+                          color: Theme.of(context).colorScheme.onSurface,
                         ),
                       ),
                       const SizedBox(height: 4),
                       Text(
                         '$fecha • ${item.totalMensajes} mensajes\n${item.preview}',
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w400,
-                          color: Color(0xFF9E9E9E),
+                          color: Theme.of(context).colorScheme.onSurfaceVariant,
                         ),
                       ),
                     ],

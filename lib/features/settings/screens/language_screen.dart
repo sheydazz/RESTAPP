@@ -20,10 +20,10 @@ class _LanguageScreenState extends State<LanguageScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF8FAFB),
+      backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: AppBar(
         titleSpacing: 0,
-        backgroundColor: Colors.white,
+        backgroundColor: Theme.of(context).colorScheme.surface,
         elevation: 0,
         leadingWidth: 70,
         leading: Center(
@@ -149,12 +149,12 @@ class _LanguageScreenState extends State<LanguageScreen> {
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).colorScheme.surfaceContainerLow,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
           color: isSelected
               ? const Color(0xFF4FC3F7).withOpacity(0.8)
-              : const Color(0xFFE0E7FF).withOpacity(0.8),
+              : Theme.of(context).colorScheme.outlineVariant,
           width: isSelected ? 2.0 : 1.5,
         ),
         boxShadow: [
@@ -182,7 +182,7 @@ class _LanguageScreenState extends State<LanguageScreen> {
                       fontWeight: FontWeight.w500,
                       color: isSelected
                           ? const Color(0xFF4FC3F7)
-                          : const Color(0xFF2E3A59),
+                          : Theme.of(context).colorScheme.onSurface,
                     ),
                   ),
                 ),
@@ -194,7 +194,7 @@ class _LanguageScreenState extends State<LanguageScreen> {
                     border: Border.all(
                       color: isSelected
                           ? const Color(0xFF4FC3F7)
-                          : const Color(0xFF9E9E9E),
+                          : Theme.of(context).colorScheme.outlineVariant,
                       width: 2,
                     ),
                     color: isSelected
@@ -229,13 +229,13 @@ class _LanguageScreenState extends State<LanguageScreen> {
             '¿Guardar cambios?',
             style: TextStyle(
               fontWeight: FontWeight.w600,
-              color: Color(0xFF2E3A59),
+              color: Theme.of(context).colorScheme.onSurface,
             ),
           ),
           content: Text(
             'El idioma se cambiará a $selectedLanguage. La aplicación se reiniciará para aplicar los cambios.',
             style: TextStyle(
-              color: Color(0xFF2E3A59),
+              color: Theme.of(context).colorScheme.onSurface,
             ),
           ),
           actions: [
@@ -244,7 +244,7 @@ class _LanguageScreenState extends State<LanguageScreen> {
               child: Text(
                 'Cancelar',
                 style: TextStyle(
-                  color: Color(0xFF9E9E9E),
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
                   fontWeight: FontWeight.w500,
                 ),
               ),
