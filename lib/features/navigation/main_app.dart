@@ -21,6 +21,12 @@ class _MainAppState extends State<MainApp> {
   ];
 
   @override
+  void initState() {
+    super.initState();
+    ProgressScreen.prefetch();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       extendBody: true,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'core/routes/app_routes.dart';
 import 'core/services/theme_service.dart';
+import 'core/services/user_session.dart';
 import 'core/theme/app_theme.dart';
 import 'features/intro_auth/screens/how_you_found_screen.dart';
 import 'features/intro_auth/screens/intro_screen.dart';
@@ -27,6 +28,7 @@ import 'features/progress/screens/my_relaxation_techniques.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await ThemeService.instance.loadThemeMode();
+  await UserSession.load();
   runApp(const MyApp());
 }
 

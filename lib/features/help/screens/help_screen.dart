@@ -49,19 +49,40 @@ class _LoadingScreenState extends State<HelpScreen>
     });
   }
 
+  String _normalizePhone(String rawPhone) {
+    var digits = rawPhone.replaceAll(RegExp(r'[^0-9+]'), '');
+    if (!digits.startsWith('+')) {
+      digits = '+$digits';
+    }
+    if (digits.startsWith('+57')) {
+      return digits;
+    }
+    final justDigits = digits.replaceAll('+', '');
+    if (justDigits.length == 10) {
+      return '+57$justDigits';
+    }
+    return digits;
+  }
+
   Future<void> _openWhatsApp() async {
     const String psychologistPhone = '+573015460169';
     const String message =
         'Hola, he enviado una solicitud de ayuda desde REST.';
-    final String whatsappUrl =
-        'https://wa.me/$psychologistPhone?text=${Uri.encodeComponent(message)}';
+    final normalizedPhone = _normalizePhone(psychologistPhone);
+    final Uri nativeUri = Uri(
+      scheme: 'whatsapp',
+      path: 'send',
+      queryParameters: {'phone': normalizedPhone, 'text': message},
+    );
+    final Uri webUri = Uri.parse(
+      'https://wa.me/$normalizedPhone?text=${Uri.encodeComponent(message)}',
+    );
 
     try {
-      if (await canLaunchUrl(Uri.parse(whatsappUrl))) {
-        await launchUrl(
-          Uri.parse(whatsappUrl),
-          mode: LaunchMode.externalApplication,
-        );
+      if (await canLaunchUrl(nativeUri)) {
+        await launchUrl(nativeUri, mode: LaunchMode.externalApplication);
+      } else if (await canLaunchUrl(webUri)) {
+        await launchUrl(webUri, mode: LaunchMode.externalApplication);
         // Regresar al Home después de abrir WhatsApp
         if (mounted) {
           Navigator.of(context).popUntil((route) => route.isFirst);
@@ -317,7 +338,9 @@ class _LoadingScreenState extends State<HelpScreen>
                             style: TextStyle(
                               fontSize: 13,
                               fontWeight: FontWeight.w500,
-                              color: Theme.of(context).colorScheme.onSurfaceVariant,
+                              color: Theme.of(
+                                context,
+                              ).colorScheme.onSurfaceVariant,
                             ),
                           ),
                           const SizedBox(height: 16),
@@ -327,7 +350,9 @@ class _LoadingScreenState extends State<HelpScreen>
                             style: TextStyle(
                               fontSize: 13,
                               fontWeight: FontWeight.w500,
-                              color: Theme.of(context).colorScheme.onSurfaceVariant,
+                              color: Theme.of(
+                                context,
+                              ).colorScheme.onSurfaceVariant,
                               height: 1.5,
                             ),
                           ),
@@ -376,7 +401,9 @@ class _LoadingScreenState extends State<HelpScreen>
                             style: TextStyle(
                               fontSize: 12,
                               fontWeight: FontWeight.w500,
-                              color: Theme.of(context).colorScheme.onSurfaceVariant,
+                              color: Theme.of(
+                                context,
+                              ).colorScheme.onSurfaceVariant,
                             ),
                           ),
                         ],

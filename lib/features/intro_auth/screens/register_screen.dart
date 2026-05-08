@@ -328,6 +328,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
       // Esto garantiza que TODOS los usuarios nuevos vean el test
       UserSession.lastTestDate = null;
 
+      await UserSession.persist();
+
       // DEBUG: Descomentar solo en desarrollo
       // print(
       //   'REGISTER SESSION → token=${UserSession.authToken != null ? 'SET' : 'NULL'}, userId=${UserSession.userId}',
