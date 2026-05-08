@@ -12,7 +12,7 @@ class ApiConfig {
   static const String localBaseUrl = 'http://localhost:3000';
   static const String androidEmulatorBaseUrl = 'http://10.0.2.2:3000';
 
-  static const String universityBaseUrl = 'http://190.143.117.179:3000';
+  static const String universityBaseUrl = 'http://10.4.100.146:3000';
 
   static String get baseUrl {
     if (!useLocalDocker) {
