@@ -20,7 +20,12 @@ class ApiConfig {
     }
 
     if (kIsWeb) {
-      return localBaseUrl;
+      final host = Uri.base.host;
+      final scheme = Uri.base.scheme.isEmpty ? 'http' : Uri.base.scheme;
+      if (host.isEmpty) {
+        return localBaseUrl;
+      }
+      return '$scheme://$host:3000';
     }
 
     if (Platform.isAndroid) {
