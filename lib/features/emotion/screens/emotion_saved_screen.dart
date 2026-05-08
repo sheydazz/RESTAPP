@@ -54,17 +54,23 @@ class _EmotionSavedScreenState extends State<EmotionSavedScreen>
             '+573015460169'; // Sin espacios para WhatsApp
         const String message =
             'Hola, he enviado una solicitud de ayuda desde REST.';
+        final normalizedPhone = _normalizePhone(psychologistPhone);
 
-        // Crear URL de WhatsApp
-        final String whatsappUrl =
-            'https://wa.me/$psychologistPhone?text=${Uri.encodeComponent(message)}';
+        // Crear URLs de WhatsApp
+        final Uri nativeUri = Uri(
+          scheme: 'whatsapp',
+          path: 'send',
+          queryParameters: {'phone': normalizedPhone, 'text': message},
+        );
+        final Uri webUri = Uri.parse(
+          'https://wa.me/$normalizedPhone?text=${Uri.encodeComponent(message)}',
+        );
 
         try {
-          if (await canLaunchUrl(Uri.parse(whatsappUrl))) {
-            await launchUrl(
-              Uri.parse(whatsappUrl),
-              mode: LaunchMode.externalApplication,
-            );
+          if (await canLaunchUrl(nativeUri)) {
+            await launchUrl(nativeUri, mode: LaunchMode.externalApplication);
+          } else if (await canLaunchUrl(webUri)) {
+            await launchUrl(webUri, mode: LaunchMode.externalApplication);
             // Cerrar la pantalla después de abrir WhatsApp
             if (mounted) {
               Navigator.pop(context);
@@ -94,6 +100,21 @@ class _EmotionSavedScreenState extends State<EmotionSavedScreen>
     _checkController.dispose();
     _slideController.dispose();
     super.dispose();
+  }
+
+  String _normalizePhone(String rawPhone) {
+    var digits = rawPhone.replaceAll(RegExp(r'[^0-9+]'), '');
+    if (!digits.startsWith('+')) {
+      digits = '+$digits';
+    }
+    if (digits.startsWith('+57')) {
+      return digits;
+    }
+    final justDigits = digits.replaceAll('+', '');
+    if (justDigits.length == 10) {
+      return '+57$justDigits';
+    }
+    return digits;
   }
 
   @override
@@ -204,7 +225,9 @@ class _EmotionSavedScreenState extends State<EmotionSavedScreen>
                 width: 60,
                 height: 60,
                 child: CircularProgressIndicator(
-                  valueColor: AlwaysStoppedAnimation<Color>(colorScheme.outlineVariant),
+                  valueColor: AlwaysStoppedAnimation<Color>(
+                    colorScheme.outlineVariant,
+                  ),
                   strokeWidth: 3,
                 ),
               ),

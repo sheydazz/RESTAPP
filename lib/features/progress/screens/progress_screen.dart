@@ -12,6 +12,46 @@ import 'package:rest/features/relax/screens/yoga_screen.dart';
 class ProgressScreen extends StatefulWidget {
   const ProgressScreen({super.key});
 
+  static const List<Duration> _retryDelays = [
+    Duration(milliseconds: 500),
+    Duration(milliseconds: 900),
+    Duration(milliseconds: 1400),
+  ];
+  static const Duration _cacheTtl = Duration(minutes: 3);
+
+  static DailyActivitiesSummary? _cachedActividades;
+  static List<RelaxTechnique>? _cachedTecnicas;
+  static DateTime? _cachedAt;
+
+  static bool _isCacheValid() {
+    final cacheAt = _cachedAt;
+    if (cacheAt == null) return false;
+    if (_cachedActividades == null || _cachedTecnicas == null) return false;
+    return DateTime.now().difference(cacheAt) <= _cacheTtl;
+  }
+
+  static Future<void> prefetch({bool force = false}) async {
+    if (!force && _isCacheValid()) return;
+    if (UserSession.authToken == null || UserSession.userId == null) {
+      await UserSession.load();
+    }
+    if (UserSession.authToken == null || UserSession.userId == null) return;
+
+    final service = ProgressService();
+    try {
+      _cachedActividades = await service.fetchActividadesDiarias();
+      _cachedAt = DateTime.now();
+    } catch (_) {
+      // Ignore; screen will handle errors/retry
+    }
+    try {
+      _cachedTecnicas = await service.fetchTecnicasRelajacion();
+      _cachedAt = DateTime.now();
+    } catch (_) {
+      // Ignore; screen will handle errors/retry
+    }
+  }
+
   @override
   State<ProgressScreen> createState() => _ProgressScreenState();
 }
@@ -43,13 +83,58 @@ class _ProgressScreenState extends State<ProgressScreen> {
     _loadAll();
   }
 
-  Future<void> _loadAll() async {
+  Future<void> _loadAll({bool force = false}) async {
+    await _ensureSessionReady();
+    if (!mounted) return;
+
+    if (UserSession.authToken == null || UserSession.userId == null) {
+      setState(() {
+        _loadingWeekly = false;
+        _loadingActivities = false;
+        _loadingTechniques = false;
+        _loadingRewards = false;
+        _weeklyError = 'No hay sesión activa. Inicia sesión nuevamente.';
+        _activitiesError = 'No hay sesión activa. Inicia sesión nuevamente.';
+        _techniquesError = 'No hay sesión activa. Inicia sesión nuevamente.';
+        _rewardsError = 'No hay sesión activa. Inicia sesión nuevamente.';
+      });
+      return;
+    }
+
+    final shouldUseCache = !force && ProgressScreen._isCacheValid();
+    if (shouldUseCache) {
+      setState(() {
+        _actividades = ProgressScreen._cachedActividades;
+        _tecnicas = ProgressScreen._cachedTecnicas ?? const [];
+        _loadingActivities = false;
+        _loadingTechniques = false;
+      });
+    }
+
     await Future.wait([
       _loadWeekly(),
-      _loadDailyActivities(),
-      _loadTechniques(),
+      if (!shouldUseCache) _loadDailyActivities(),
+      if (!shouldUseCache) _loadTechniques(),
       _loadRewardsCatalog(),
     ]);
+  }
+
+  Future<void> _ensureSessionReady() async {
+    if (UserSession.authToken != null && UserSession.userId != null) {
+      return;
+    }
+
+    await UserSession.load();
+    if (UserSession.authToken != null && UserSession.userId != null) {
+      return;
+    }
+
+    for (var i = 0; i < 10; i += 1) {
+      await Future.delayed(const Duration(milliseconds: 150));
+      if (UserSession.authToken != null && UserSession.userId != null) {
+        return;
+      }
+    }
   }
 
   Future<void> _loadWeekly() async {
@@ -120,19 +205,33 @@ class _ProgressScreenState extends State<ProgressScreen> {
       _activitiesError = null;
     });
 
-    try {
-      final data = await _progressService.fetchActividadesDiarias();
-      if (!mounted) return;
-      setState(() {
-        _actividades = data;
-        _loadingActivities = false;
-      });
-    } catch (e) {
-      if (!mounted) return;
-      setState(() {
-        _activitiesError = e.toString();
-        _loadingActivities = false;
-      });
+    for (
+      var attempt = 0;
+      attempt <= ProgressScreen._retryDelays.length;
+      attempt += 1
+    ) {
+      try {
+        final data = await _progressService.fetchActividadesDiarias();
+        if (!mounted) return;
+        setState(() {
+          _actividades = data;
+          _loadingActivities = false;
+        });
+        ProgressScreen._cachedActividades = data;
+        ProgressScreen._cachedAt = DateTime.now();
+        return;
+      } catch (e) {
+        if (attempt < ProgressScreen._retryDelays.length && _shouldRetry(e)) {
+          await Future.delayed(ProgressScreen._retryDelays[attempt]);
+          continue;
+        }
+        if (!mounted) return;
+        setState(() {
+          _activitiesError = e.toString();
+          _loadingActivities = false;
+        });
+        return;
+      }
     }
   }
 
@@ -142,20 +241,45 @@ class _ProgressScreenState extends State<ProgressScreen> {
       _techniquesError = null;
     });
 
-    try {
-      final data = await _progressService.fetchTecnicasRelajacion();
-      if (!mounted) return;
-      setState(() {
-        _tecnicas = data;
-        _loadingTechniques = false;
-      });
-    } catch (e) {
-      if (!mounted) return;
-      setState(() {
-        _techniquesError = e.toString();
-        _loadingTechniques = false;
-      });
+    for (
+      var attempt = 0;
+      attempt <= ProgressScreen._retryDelays.length;
+      attempt += 1
+    ) {
+      try {
+        final data = await _progressService.fetchTecnicasRelajacion();
+        if (!mounted) return;
+        setState(() {
+          _tecnicas = data;
+          _loadingTechniques = false;
+        });
+        ProgressScreen._cachedTecnicas = data;
+        ProgressScreen._cachedAt = DateTime.now();
+        return;
+      } catch (e) {
+        if (attempt < ProgressScreen._retryDelays.length && _shouldRetry(e)) {
+          await Future.delayed(ProgressScreen._retryDelays[attempt]);
+          continue;
+        }
+        if (!mounted) return;
+        setState(() {
+          _techniquesError = e.toString();
+          _loadingTechniques = false;
+        });
+        return;
+      }
     }
+  }
+
+  bool _shouldRetry(Object error) {
+    final message = error.toString().toLowerCase();
+    return message.contains('no hay sesión activa') ||
+        message.contains('failed to fetch') ||
+        message.contains('socketexception') ||
+        message.contains('statuscode 401') ||
+        message.contains('statuscode 403') ||
+        message.contains('status 401') ||
+        message.contains('status 403');
   }
 
   Future<void> _loadRewardsCatalog() async {
@@ -271,7 +395,7 @@ class _ProgressScreenState extends State<ProgressScreen> {
       backgroundColor: colorScheme.surface,
       body: SafeArea(
         child: RefreshIndicator(
-          onRefresh: _loadAll,
+          onRefresh: () => _loadAll(force: true),
           child: SingleChildScrollView(
             physics: const AlwaysScrollableScrollPhysics(),
             child: Padding(
@@ -373,7 +497,8 @@ class _ProgressScreenState extends State<ProgressScreen> {
                   child: Image.asset(
                     imagePath,
                     fit: BoxFit.cover,
-                    errorBuilder: (_, __, ___) => Icon(fallback, color: Colors.white),
+                    errorBuilder: (_, __, ___) =>
+                        Icon(fallback, color: Colors.white),
                   ),
                 ),
         ),
@@ -388,7 +513,9 @@ class _ProgressScreenState extends State<ProgressScreen> {
 
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final colorScheme = Theme.of(context).colorScheme;
-    final cardTextColor = isDark ? colorScheme.onPrimaryContainer : Colors.white;
+    final cardTextColor = isDark
+        ? colorScheme.onPrimaryContainer
+        : Colors.white;
     final buttonBgColor = isDark
         ? colorScheme.primary.withValues(alpha: 0.25)
         : Colors.white.withValues(alpha: 0.2);
@@ -443,7 +570,11 @@ class _ProgressScreenState extends State<ProgressScreen> {
                   ),
                   child: Row(
                     children: [
-                      Icon(Icons.calendar_month, color: cardTextColor, size: 16),
+                      Icon(
+                        Icons.calendar_month,
+                        color: cardTextColor,
+                        size: 16,
+                      ),
                       const SizedBox(width: 6),
                       Text(
                         'Ver Todo',
@@ -508,7 +639,12 @@ class _ProgressScreenState extends State<ProgressScreen> {
                             date.year == today.year &&
                             date.month == today.month &&
                             date.day == today.day;
-                        return _weekEmotionChip(context, date, prom, isToday: isToday);
+                        return _weekEmotionChip(
+                          context,
+                          date,
+                          prom,
+                          isToday: isToday,
+                        );
                       },
                     ),
                   ),
@@ -534,7 +670,9 @@ class _ProgressScreenState extends State<ProgressScreen> {
     return Container(
       width: 78,
       decoration: BoxDecoration(
-        color: isToday ? colorScheme.primaryContainer : colorScheme.surfaceContainerLow,
+        color: isToday
+            ? colorScheme.primaryContainer
+            : colorScheme.surfaceContainerLow,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
           color: isToday ? const Color(0xFF2F9FE8) : colorScheme.outlineVariant,
@@ -786,7 +924,10 @@ class _ProgressScreenState extends State<ProgressScreen> {
                     ),
                     const SizedBox(height: 8),
                     if (pendientes.isEmpty)
-                      _emptyHint(context, 'Ya completaste todas tus actividades de hoy')
+                      _emptyHint(
+                        context,
+                        'Ya completaste todas tus actividades de hoy',
+                      )
                     else
                       ...pendientes
                           .take(5)
@@ -843,7 +984,9 @@ class _ProgressScreenState extends State<ProgressScreen> {
             return Container(
               decoration: BoxDecoration(
                 color: Theme.of(context).colorScheme.surface,
-                borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+                borderRadius: const BorderRadius.vertical(
+                  top: Radius.circular(24),
+                ),
               ),
               child: SingleChildScrollView(
                 controller: scrollController,
@@ -909,7 +1052,9 @@ class _ProgressScreenState extends State<ProgressScreen> {
                             style: TextStyle(
                               fontFamily: 'Fredoka',
                               fontWeight: FontWeight.w700,
-                              color: Theme.of(context).colorScheme.onSurfaceVariant,
+                              color: Theme.of(
+                                context,
+                              ).colorScheme.onSurfaceVariant,
                             ),
                           ),
                           const SizedBox(height: 14),
@@ -938,7 +1083,9 @@ class _ProgressScreenState extends State<ProgressScreen> {
                                     style: TextStyle(
                                       fontFamily: 'Fredoka',
                                       fontWeight: FontWeight.w700,
-                                      color: Theme.of(context).colorScheme.onSurface,
+                                      color: Theme.of(
+                                        context,
+                                      ).colorScheme.onSurface,
                                     ),
                                   ),
                                 ],
@@ -951,7 +1098,9 @@ class _ProgressScreenState extends State<ProgressScreen> {
                               'No hay premios activos por el momento.',
                               style: TextStyle(
                                 fontFamily: 'Fredoka',
-                                color: Theme.of(context).colorScheme.onSurfaceVariant,
+                                color: Theme.of(
+                                  context,
+                                ).colorScheme.onSurfaceVariant,
                               ),
                             )
                           else
@@ -990,7 +1139,9 @@ class _ProgressScreenState extends State<ProgressScreen> {
                                       '• ${s.premioNombre} - ${s.estado.toUpperCase()}',
                                       style: TextStyle(
                                         fontFamily: 'Fredoka',
-                                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                                        color: Theme.of(
+                                          context,
+                                        ).colorScheme.onSurfaceVariant,
                                       ),
                                     ),
                                   ),
@@ -1022,10 +1173,14 @@ class _ProgressScreenState extends State<ProgressScreen> {
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: unlocked ? colorScheme.secondaryContainer : colorScheme.surfaceContainerLow,
+        color: unlocked
+            ? colorScheme.secondaryContainer
+            : colorScheme.surfaceContainerLow,
         borderRadius: BorderRadius.circular(14),
         border: Border.all(
-          color: unlocked ? const Color(0xFF4CAF50) : colorScheme.outlineVariant,
+          color: unlocked
+              ? const Color(0xFF4CAF50)
+              : colorScheme.outlineVariant,
           width: 1.2,
         ),
       ),
@@ -1134,7 +1289,11 @@ class _ProgressScreenState extends State<ProgressScreen> {
     );
   }
 
-  Widget _activityItem(BuildContext context, DailyActivity item, {required bool isDone}) {
+  Widget _activityItem(
+    BuildContext context,
+    DailyActivity item, {
+    required bool isDone,
+  }) {
     final colorScheme = Theme.of(context).colorScheme;
     final isSendingThisItem = _sendingActivityId == item.id;
 
@@ -1150,7 +1309,9 @@ class _ProgressScreenState extends State<ProgressScreen> {
         children: [
           Icon(
             isDone ? Icons.check_circle : Icons.circle_outlined,
-            color: isDone ? const Color(0xFF2E7D32) : colorScheme.onSurfaceVariant,
+            color: isDone
+                ? const Color(0xFF2E7D32)
+                : colorScheme.onSurfaceVariant,
           ),
           const SizedBox(width: 10),
           Expanded(

@@ -113,6 +113,8 @@ class _LoginScreenState extends State<LoginScreen> {
       // Esto garantiza que TODOS los usuarios nuevos vean el test
       UserSession.lastTestDate = null;
 
+      await UserSession.persist();
+
       print(
         'LOGIN SESSION → authToken=${UserSession.authToken != null ? 'SET' : 'NULL'}, userId=${UserSession.userId}',
       );
@@ -221,7 +223,11 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ),
                     ),
-                    Divider(color: colorScheme.outlineVariant, thickness: 1, height: 30),
+                    Divider(
+                      color: colorScheme.outlineVariant,
+                      thickness: 1,
+                      height: 30,
+                    ),
                   ],
                 ),
 

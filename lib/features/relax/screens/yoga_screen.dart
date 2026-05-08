@@ -34,7 +34,6 @@ class _YogaScreenState extends State<YogaScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color(0xFF4CAF50),
@@ -75,7 +74,7 @@ class _YogaScreenState extends State<YogaScreen> {
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 12),
-              ...poses.map((pose) => _buildPoseCard(pose)).toList(),
+              ...poses.map((pose) => _buildPoseCard(pose)),
               const SizedBox(height: 24),
               // Botón de inicio
               SizedBox(
@@ -116,14 +115,19 @@ class _YogaScreenState extends State<YogaScreen> {
           gradient: LinearGradient(
             colors: isSelected
                 ? [const Color(0xFF4CAF50), const Color(0xFF81C784)]
-                : [Theme.of(context).colorScheme.surfaceContainerLow, Theme.of(context).colorScheme.outlineVariant],
+                : [
+                    Theme.of(context).colorScheme.surfaceContainerLow,
+                    Theme.of(context).colorScheme.outlineVariant,
+                  ],
           ),
           borderRadius: BorderRadius.circular(12),
         ),
         child: Text(
           label,
           style: TextStyle(
-            color: isSelected ? Colors.white : Theme.of(context).colorScheme.onSurface,
+            color: isSelected
+                ? Colors.white
+                : Theme.of(context).colorScheme.onSurface,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -136,7 +140,7 @@ class _YogaScreenState extends State<YogaScreen> {
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: const Color(0xFF4CAF50).withOpacity(0.1),
+        color: const Color(0xFF4CAF50).withValues(alpha: 0.1),
         border: Border.all(color: const Color(0xFF4CAF50), width: 2),
         borderRadius: BorderRadius.circular(12),
       ),
@@ -152,7 +156,10 @@ class _YogaScreenState extends State<YogaScreen> {
           const SizedBox(height: 4),
           Text(
             '⏱️ ${pose['duration']!}',
-            style: TextStyle(fontSize: 12, color: Theme.of(context).colorScheme.onSurfaceVariant),
+            style: TextStyle(
+              fontSize: 12,
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
+            ),
           ),
         ],
       ),

@@ -32,7 +32,6 @@ class _PhysicalActivityScreenState extends State<PhysicalActivityScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color(0xFFE53935),
@@ -104,9 +103,7 @@ class _PhysicalActivityScreenState extends State<PhysicalActivityScreen> {
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 12),
-              ...exercises
-                  .map((exercise) => _buildExerciseCard(exercise))
-                  .toList(),
+              ...exercises.map((exercise) => _buildExerciseCard(exercise)),
               const SizedBox(height: 24),
               // Botón de inicio
               SizedBox(
@@ -149,14 +146,19 @@ class _PhysicalActivityScreenState extends State<PhysicalActivityScreen> {
           gradient: LinearGradient(
             colors: isSelected
                 ? [const Color(0xFFE53935), const Color(0xFFEF5350)]
-                : [Theme.of(context).colorScheme.surfaceContainerLow, Theme.of(context).colorScheme.outlineVariant],
+                : [
+                    Theme.of(context).colorScheme.surfaceContainerLow,
+                    Theme.of(context).colorScheme.outlineVariant,
+                  ],
           ),
           borderRadius: BorderRadius.circular(12),
         ),
         child: Text(
           '$duration min',
           style: TextStyle(
-            color: isSelected ? Colors.white : Theme.of(context).colorScheme.onSurface,
+            color: isSelected
+                ? Colors.white
+                : Theme.of(context).colorScheme.onSurface,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -169,7 +171,7 @@ class _PhysicalActivityScreenState extends State<PhysicalActivityScreen> {
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: const Color(0xFFE53935).withOpacity(0.1),
+        color: const Color(0xFFE53935).withValues(alpha: 0.1),
         border: Border.all(color: const Color(0xFFE53935), width: 2),
         borderRadius: BorderRadius.circular(12),
       ),
@@ -185,7 +187,10 @@ class _PhysicalActivityScreenState extends State<PhysicalActivityScreen> {
           ),
           Text(
             '${exercise['cal']} kcal/min',
-            style: TextStyle(fontSize: 12, color: Theme.of(context).colorScheme.onSurfaceVariant),
+            style: TextStyle(
+              fontSize: 12,
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
+            ),
           ),
         ],
       ),
