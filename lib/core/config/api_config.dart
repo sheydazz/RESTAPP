@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 class ApiConfig {
   // true: usa Docker local
   // false: usa servidor universidad (http://190.143.117.179:3000)
-  static const bool useLocalDocker = false;
+  static const bool useLocalDocker = true;
 
   // Local host mapping by platform
   // Android emulator: 10.0.2.2 -> host machine
