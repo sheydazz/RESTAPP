@@ -3,7 +3,7 @@ import 'package:flutter/foundation.dart';
 
 class ApiConfig {
   // true: usa Docker local
-  // false: usa servidor universidad (http://190.143.117.179:3000)
+  // false: usa servidor universidad
   static const bool useLocalDocker = true;
 
   // Local host mapping by platform
