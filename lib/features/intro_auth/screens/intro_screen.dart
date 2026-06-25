@@ -159,7 +159,7 @@ class _IntroScreenState extends State<IntroScreen> with TickerProviderStateMixin
                 child: Transform.translate(
                   offset: Offset(0, _logoPosition.value),
                   child: Image.asset(
-                    'assets/images/restSalud.png',
+                    'assets/images/restSalud-removebg-preview.png',
                     width: 350,
                     fit: BoxFit.contain,
                   ),
@@ -214,7 +214,7 @@ class _IntroScreenState extends State<IntroScreen> with TickerProviderStateMixin
                     child: Column(
                       children: [
                         Image.asset(
-                          'assets/images/hola.png',
+                          'assets/images/hola-removebg-preview.png',
                           width: 248,
                           height: 115,
                           fit: BoxFit.contain,

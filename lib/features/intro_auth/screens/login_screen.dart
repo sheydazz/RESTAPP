@@ -22,6 +22,13 @@ class _LoginScreenState extends State<LoginScreen> {
   bool _isLoading = false;
 
   @override
+  void initState() {
+    super.initState();
+    _emailController.addListener(() => setState(() {}));
+    _passwordController.addListener(() => setState(() {}));
+  }
+
+  @override
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
@@ -169,7 +176,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(20),
                     image: const DecorationImage(
-                      image: AssetImage('assets/images/restSalud.png'),
+                      image: AssetImage('assets/images/restSalud-removebg-preview.png'),
                       fit: BoxFit.contain,
                     ),
                   ),
@@ -346,20 +353,22 @@ class _LoginScreenState extends State<LoginScreen> {
                   color: colorScheme.onSurfaceVariant,
                   fontWeight: FontWeight.bold,
                 ),
-                suffixIcon: Padding(
-                  padding: const EdgeInsets.only(right: 20),
-                  child: Container(
-                    width: 28,
-                    height: 28,
-                    decoration: const BoxDecoration(
-                      color: Color(0xFF3709EC),
-                      shape: BoxShape.circle,
-                    ),
-                    child: const Center(
-                      child: Icon(Icons.check, color: Colors.white, size: 18),
-                    ),
-                  ),
-                ),
+                suffixIcon: controller.text.isNotEmpty
+                    ? Padding(
+                        padding: const EdgeInsets.only(right: 20),
+                        child: Container(
+                          width: 28,
+                          height: 28,
+                          decoration: const BoxDecoration(
+                            color: Color(0xFF3709EC),
+                            shape: BoxShape.circle,
+                          ),
+                          child: const Center(
+                            child: Icon(Icons.check, color: Colors.white, size: 18),
+                          ),
+                        ),
+                      )
+                    : null,
                 contentPadding: const EdgeInsets.symmetric(
                   horizontal: 16,
                   vertical: 14,
