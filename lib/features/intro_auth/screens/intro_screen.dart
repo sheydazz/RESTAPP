@@ -1,7 +1,10 @@
 import 'dart:async';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:video_player/video_player.dart';
 import 'login_screen.dart';
-
+import 'noa_video_stub.dart'
+    if (dart.library.html) 'noa_video_web.dart';
 
 class IntroScreen extends StatefulWidget {
   const IntroScreen({super.key});
@@ -11,262 +14,469 @@ class IntroScreen extends StatefulWidget {
 }
 
 class _IntroScreenState extends State<IntroScreen> with TickerProviderStateMixin {
-  late AnimationController _logoController;
-  late AnimationController _noaMoveController;
-  late AnimationController _noaPulseController;
-  late AnimationController _shadowController;
-  late AnimationController _shadowFadeController;
+  // ── Video ──
+  late VideoPlayerController _videoController;
+  bool _videoReady = false;
 
-  late Animation<double> _logoPosition;
-  late Animation<double> _noaVerticalPosition;
+  // ── Controladores ──
+  late AnimationController _logoFadeCtrl;   // fade-in inicial del logo
+  late AnimationController _logoMoveCtrl;   // logo sube hacia arriba
+  late AnimationController _noaCtrl;        // NOA entra con scale
+  late AnimationController _noaFloatCtrl;   // flotación idle continua
+  late AnimationController _textCtrl;       // texto aparece
+  late AnimationController _buttonCtrl;     // botón aparece
+  late AnimationController _shimmerCtrl;    // shimmer del botón
+
+  // ── Animaciones ──
+  late Animation<double> _logoFade;
+  late Animation<double> _logoScale;
+  late Animation<double> _logoMoveY;   // desplazamiento vertical del logo
   late Animation<double> _noaScale;
-  late Animation<double> _noaPulse;
-  late Animation<double> _shadowWidth;
-  late Animation<double> _shadowHeight;
-  late Animation<double> _shadowFadeOut;
+  late Animation<double> _noaFade;
+  late Animation<double> _noaFloatY;
+  late Animation<double> _textFade;
+  late Animation<Offset> _textSlide;
+  late Animation<double> _buttonFade;
+  late Animation<double> _buttonScale;
+  late Animation<double> _shimmer;
 
-  double shadowOpacity = 0.0;
-  bool showNoa = false;
-  bool showHola = false;
+  // ── Estado ──
+  bool _logoAtTop = false;   // true cuando el logo ya subió
+  bool _showNoa = false;
+  bool _showText = false;
+  bool _showButton = false;
+  int _typewriterIndex = 0;
+  Timer? _typewriterTimer;
+
+  static const String _greeting = '¡Hola! Soy NOA';
+  static const String _subtitle = 'Tu compañero de bienestar mental';
 
   @override
   void initState() {
     super.initState();
+    _videoController = VideoPlayerController.asset(
+      'assets/VideosAnimaciones/VideoWelcomeNoa1.mp4',
+    );
+    _initAnimations();
+    _startSequence();
+    // El video solo funciona en móvil/desktop nativo, no en web
+    if (!kIsWeb) {
+      _loadVideo();
+    }
+  }
 
-    _logoController = AnimationController(
-      duration: const Duration(milliseconds: 1000),
+  // Carga e inicializa el video en background (solo móvil/desktop)
+  Future<void> _loadVideo() async {
+    try {
+      await _videoController.initialize();
+      if (!mounted) return;
+      _videoController.setLooping(true);
+      _videoController.setVolume(0);
+      setState(() => _videoReady = true);
+      if (_showNoa) _videoController.play();
+    } catch (_) {
+      // Fallback: se queda la imagen estática
+    }
+  }
+
+  // ── Definir todos los controladores y animaciones ──
+  void _initAnimations() {
+    // Logo: fade-in + scale elástico
+    _logoFadeCtrl = AnimationController(
+      duration: const Duration(milliseconds: 900),
       vsync: this,
     );
-
-    _noaMoveController = AnimationController(
-      duration: const Duration(milliseconds: 1000),
-      vsync: this,
+    _logoFade = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _logoFadeCtrl, curve: Curves.easeOut),
+    );
+    _logoScale = Tween<double>(begin: 0.7, end: 1.0).animate(
+      CurvedAnimation(parent: _logoFadeCtrl, curve: Curves.elasticOut),
     );
 
-    _noaPulseController = AnimationController(
+    // Logo: sube desde el centro hacia la parte superior
+    _logoMoveCtrl = AnimationController(
+      duration: const Duration(milliseconds: 750),
+      vsync: this,
+    );
+    // El valor real de Y se calcula en build() usando el tamaño de pantalla
+    _logoMoveY = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _logoMoveCtrl, curve: Curves.easeInOut),
+    );
+
+    // NOA: aparece con scale + fade
+    _noaCtrl = AnimationController(
       duration: const Duration(milliseconds: 800),
+      vsync: this,
+    );
+    _noaScale = Tween<double>(begin: 0.3, end: 1.0).animate(
+      CurvedAnimation(parent: _noaCtrl, curve: Curves.elasticOut),
+    );
+    _noaFade = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _noaCtrl, curve: Curves.easeOut),
+    );
+
+    // NOA: flotación suave continua
+    _noaFloatCtrl = AnimationController(
+      duration: const Duration(milliseconds: 2400),
       vsync: this,
     )..repeat(reverse: true);
+    _noaFloatY = Tween<double>(begin: -8.0, end: 8.0).animate(
+      CurvedAnimation(parent: _noaFloatCtrl, curve: Curves.easeInOut),
+    );
 
-    _shadowController = AnimationController(
-      duration: const Duration(milliseconds: 800),
+    // Texto
+    _textCtrl = AnimationController(
+      duration: const Duration(milliseconds: 550),
       vsync: this,
     );
+    _textFade = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _textCtrl, curve: Curves.easeOut),
+    );
+    _textSlide = Tween<Offset>(
+      begin: const Offset(0, 0.35),
+      end: Offset.zero,
+    ).animate(CurvedAnimation(parent: _textCtrl, curve: Curves.easeOut));
 
-    _shadowFadeController = AnimationController(
-      duration: const Duration(milliseconds: 400),
+    // Botón
+    _buttonCtrl = AnimationController(
+      duration: const Duration(milliseconds: 650),
       vsync: this,
     );
-
-    _noaVerticalPosition = Tween<double>(begin: 260, end: 0).animate(
-      CurvedAnimation(parent: _noaMoveController, curve: Curves.easeOut),
+    _buttonFade = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _buttonCtrl, curve: Curves.easeOut),
+    );
+    _buttonScale = Tween<double>(begin: 0.75, end: 1.0).animate(
+      CurvedAnimation(parent: _buttonCtrl, curve: Curves.elasticOut),
     );
 
-    _noaScale = Tween<double>(begin: 0.6, end: 1.0).animate(
-      CurvedAnimation(parent: _noaMoveController, curve: Curves.easeOut),
+    // Shimmer continuo en botón
+    _shimmerCtrl = AnimationController(
+      duration: const Duration(milliseconds: 1800),
+      vsync: this,
+    )..repeat();
+    _shimmer = Tween<double>(begin: -1.5, end: 1.5).animate(
+      CurvedAnimation(parent: _shimmerCtrl, curve: Curves.easeInOut),
     );
+  }
 
-    _noaPulse = Tween<double>(begin: 1.0, end: 1.1).animate(
-      CurvedAnimation(parent: _noaPulseController, curve: Curves.easeInOut),
-    );
-
-    _shadowWidth = Tween<double>(begin: 311.0, end: 60.0).animate(
-      CurvedAnimation(parent: _shadowController, curve: Curves.easeOut),
-    );
-
-    _shadowHeight = Tween<double>(begin: 70.0, end: 20.0).animate(
-      CurvedAnimation(parent: _shadowController, curve: Curves.easeOut),
-    );
-
-    _shadowFadeOut = Tween<double>(begin: 1.0, end: 0.0).animate(
-      CurvedAnimation(parent: _shadowFadeController, curve: Curves.easeOut),
-    );
-
-    // Secuencia de animaciones
-    Timer(const Duration(seconds: 5), () {
-      _logoController.forward();
+  // ── Secuencia principal ──
+  void _startSequence() {
+    // PASO 1 (300ms): Logo aparece en el centro con fade + scale
+    Timer(const Duration(milliseconds: 300), () {
+      if (mounted) _logoFadeCtrl.forward();
     });
 
-    Timer(const Duration(milliseconds: 5500), () {
-      setState(() {
-        shadowOpacity = 1.0;
-      });
+    // PASO 2 (1800ms): Logo sube con animación fluida
+    Timer(const Duration(milliseconds: 1800), () {
+      if (mounted) {
+        setState(() => _logoAtTop = true);
+        _logoMoveCtrl.forward();
+      }
     });
 
-    Timer(const Duration(seconds: 6), () {
-      setState(() {
-        showNoa = true;
-      });
-      _noaMoveController.forward();
-      _shadowController.forward();
+    // PASO 3 (2600ms): NOA aparece en el centro con bounce
+    Timer(const Duration(milliseconds: 2600), () {
+      if (mounted) {
+        setState(() => _showNoa = true);
+        _noaCtrl.forward();
+        // Si el video ya estaba inicializado antes de este momento, reproducirlo
+        if (_videoController.value.isInitialized) {
+          _videoController.play();
+        }
+      }
     });
 
-    Timer(const Duration(milliseconds: 6800), () {
-      _shadowFadeController.forward(); // desaparece después de encogerse
+    // PASO 4 (3800ms): Texto typewriter aparece debajo de NOA
+    Timer(const Duration(milliseconds: 3800), () {
+      if (mounted) {
+        setState(() => _showText = true);
+        _textCtrl.forward();
+        _startTypewriter();
+      }
     });
 
-    Timer(const Duration(seconds: 7), () {
-      setState(() {
-        showHola = true;
-      });
+    // PASO 5 (5400ms): Botón COMENZAR aparece
+    Timer(const Duration(milliseconds: 5400), () {
+      if (mounted) {
+        setState(() => _showButton = true);
+        _buttonCtrl.forward();
+      }
     });
   }
 
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
+  // ── Efecto typewriter ──
+  void _startTypewriter() {
+    _typewriterIndex = 0;
+    _typewriterTimer = Timer.periodic(const Duration(milliseconds: 52), (timer) {
+      if (!mounted) { timer.cancel(); return; }
+      final total = _greeting.length + _subtitle.length;
+      if (_typewriterIndex < total) {
+        setState(() => _typewriterIndex++);
+      } else {
+        timer.cancel();
+      }
+    });
+  }
 
-    final double screenHeight = MediaQuery.of(context).size.height;
+  String get _displayGreeting {
+    final i = _typewriterIndex.clamp(0, _greeting.length);
+    return _greeting.substring(0, i);
+  }
 
-    _logoPosition = Tween<double>(
-      begin: 0.0,
-      end: -screenHeight / 3,
-    ).animate(
-      CurvedAnimation(parent: _logoController, curve: Curves.easeOut),
+  String get _displaySubtitle {
+    if (_typewriterIndex <= _greeting.length) return '';
+    final i = (_typewriterIndex - _greeting.length).clamp(0, _subtitle.length);
+    return _subtitle.substring(0, i);
+  }
+
+  // ── Navegación ──
+  void _navigateToLogin() {
+    Navigator.pushReplacement(
+      context,
+      PageRouteBuilder(
+        pageBuilder: (_, __, ___) => const LoginScreen(),
+        transitionsBuilder: (_, anim, __, child) =>
+            FadeTransition(opacity: anim, child: child),
+        transitionDuration: const Duration(milliseconds: 500),
+      ),
     );
   }
 
   @override
   void dispose() {
-    _logoController.dispose();
-    _noaMoveController.dispose();
-    _noaPulseController.dispose();
-    _shadowController.dispose();
-    _shadowFadeController.dispose();
+    _typewriterTimer?.cancel();
+    _videoController.dispose();
+    _logoFadeCtrl.dispose();
+    _logoMoveCtrl.dispose();
+    _noaCtrl.dispose();
+    _noaFloatCtrl.dispose();
+    _textCtrl.dispose();
+    _buttonCtrl.dispose();
+    _shimmerCtrl.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final size = MediaQuery.of(context).size;
+
     return Scaffold(
-      backgroundColor: colorScheme.surface,
+      backgroundColor: Colors.white,
       body: AnimatedBuilder(
         animation: Listenable.merge([
-          _logoController,
-          _noaMoveController,
-          _noaPulseController,
-          _shadowController,
-          _shadowFadeController,
+          _logoFadeCtrl,
+          _logoMoveCtrl,
+          _noaCtrl,
+          _noaFloatCtrl,
+          _textCtrl,
+          _buttonCtrl,
+          _shimmerCtrl,
+          if (!kIsWeb) _videoController,
         ]),
-        builder: (context, child) {
+        builder: (context, _) {
+          // Logo: arranca en el centro y termina en top fijo de 50px
+          final double logoStartTop = size.height / 2 - 100;
+          final double logoEndTop = 50.0;
+          final double logoTop = logoStartTop + (logoEndTop - logoStartTop) * _logoMoveY.value;
+
           return Stack(
-            alignment: Alignment.center,
             children: [
-              // Imagen "REST Salud Mental"
-              Align(
-                alignment: Alignment.center,
-                child: Transform.translate(
-                  offset: Offset(0, _logoPosition.value),
-                  child: Image.asset(
-                    'assets/images/restSalud-removebg-preview.png',
-                    width: 350,
-                    fit: BoxFit.contain,
-                  ),
-                ),
+              // ── FONDO: blanco puro para que coincida con el video ──
+              Positioned.fill(
+                child: Container(color: Colors.white),
               ),
 
-              // Sombra azul: aparece, se encoge, luego desaparece
+              // ── LOGO REST: arranca en el centro y sube ──
               Positioned(
-                bottom: 270,
-                child: AnimatedOpacity(
-                  duration: const Duration(milliseconds: 600),
-                  opacity: shadowOpacity * _shadowFadeOut.value,
-                  child: AnimatedBuilder(
-                    animation: Listenable.merge([_shadowController, _shadowFadeController]),
-                    builder: (context, child) {
-                      return Container(
-                        width: _shadowWidth.value,
-                        height: _shadowHeight.value,
-                        decoration: BoxDecoration(
-                          color: const Color(0xFFB8D7FF),
-                          borderRadius: BorderRadius.all(
-                            Radius.elliptical(_shadowWidth.value, _shadowHeight.value),
-                          ),
-                        ),
-                      );
-                    },
+                left: 0,
+                right: 0,
+                top: logoTop,
+                child: Opacity(
+                  opacity: _logoFade.value,
+                  child: Transform.scale(
+                    scale: _logoScale.value,
+                    child: Image.asset(
+                      'assets/images/restSalud-removebg-preview.png',
+                      width: size.width * 0.62,
+                      fit: BoxFit.contain,
+                    ),
                   ),
                 ),
               ),
 
-              // Noa: sube desde la sombra y palpita
-              if (showNoa)
-                Transform.translate(
-                  offset: Offset(0, _noaVerticalPosition.value),
-                  child: Transform.scale(
-                    scale: _noaScale.value * _noaPulse.value,
-                    child: Image.asset(
-                      'assets/images/rest.png',
-                      width: 270,
-                      height: 270,
+              // ── NOA ligeramente debajo del centro ──
+              if (_showNoa)
+                Positioned.fill(
+                  child: Align(
+                    alignment: const Alignment(0, -0.15),
+                    child: Opacity(
+                      opacity: _noaFade.value,
+                      child: Transform.scale(
+                        scale: _noaScale.value,
+                        child: _buildNoaWidget(size),
+                      ),
                     ),
                   ),
                 ),
 
-              // Imagen "Hola" y botón Iniciar
-              if (showHola)
+              // ── TEXTO TYPEWRITER ──
+              if (_showText)
                 Positioned(
-                  bottom: 100,
-                  child: AnimatedOpacity(
-                    duration: const Duration(milliseconds: 600),
-                    opacity: 1.0,
-                    child: Column(
-                      children: [
-                        Image.asset(
-                          'assets/images/hola-removebg-preview.png',
-                          width: 248,
-                          height: 115,
-                          fit: BoxFit.contain,
-                        ),
-                        const SizedBox(height: 20),
-                        Container(
-                          width: 300,
-                          height: 50,
-                          decoration: BoxDecoration(
-                            gradient: const LinearGradient(
-                              colors: [
-                                Color(0xFF22AF95), // aguamarina izquierda
-                                Color(0xFF207DC3), // morado derecha
-                              ],
+                  left: 24,
+                  right: 24,
+                  bottom: _showButton ? 190 : 170,
+                  child: FadeTransition(
+                    opacity: _textFade,
+                    child: SlideTransition(
+                      position: _textSlide,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          ShaderMask(
+                            shaderCallback: (bounds) => const LinearGradient(
+                              colors: [Color(0xFF1565C0), Color(0xFF00ACC1)],
                               begin: Alignment.centerLeft,
                               end: Alignment.centerRight,
-                            ),
-                            borderRadius: BorderRadius.circular(30),
-                          ),
-                          child: ElevatedButton(
-                            onPressed: () {
-                              Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(builder: (context) => const LoginScreen()),
-                              );
-                            },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.transparent,
-                              shadowColor: Colors.transparent,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(30),
-                              ),
-                              elevation: 0,
-                            ),
-                            child: const Text(
-                              'Iniciar',
-                              style: TextStyle(
+                            ).createShader(bounds),
+                            child: Text(
+                              _displayGreeting,
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(
                                 fontFamily: 'Fredoka',
-                                fontSize: 22,
+                                fontSize: 42,
                                 fontWeight: FontWeight.bold,
                                 color: Colors.white,
+                                height: 1.05,
                               ),
                             ),
                           ),
-                        ),
-                      ],
+                          if (_displaySubtitle.isNotEmpty) ...[
+                            const SizedBox(height: 6),
+                            Text(
+                              _displaySubtitle,
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontFamily: 'Fredoka',
+                                fontSize: 19,
+                                fontWeight: FontWeight.w500,
+                                color: Theme.of(context).colorScheme.onSurfaceVariant,
+                                height: 1.3,
+                              ),
+                            ),
+                          ],
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+
+              // ── BOTÓN COMENZAR ──
+              if (_showButton)
+                Positioned(
+                  left: 32,
+                  right: 32,
+                  bottom: 90,
+                  child: FadeTransition(
+                    opacity: _buttonFade,
+                    child: Transform.scale(
+                      scale: _buttonScale.value,
+                      child: _buildShimmerButton(),
                     ),
                   ),
                 ),
             ],
           );
         },
+      ),
+    );
+  }
+
+  // ── Widget del video / fallback ──
+  Widget _buildNoaWidget(Size size) {
+    final double noaWidth = size.width * 0.82;
+
+    // En web: usar HtmlElementView con <video> nativo del navegador
+    if (kIsWeb) {
+      return NoaVideoWeb(width: noaWidth, height: noaWidth);
+    }
+
+    // En móvil/desktop: usar video_player
+    if (_videoController.value.isInitialized) {
+      final videoAspect = _videoController.value.aspectRatio;
+      return SizedBox(
+        width: noaWidth,
+        height: noaWidth / videoAspect,
+        child: VideoPlayer(_videoController),
+      );
+    }
+
+    // Fallback imagen mientras carga el video (móvil)
+    return Image.asset(
+      'assets/images/NoaBase.png',
+      width: noaWidth,
+      fit: BoxFit.contain,
+    );
+  }
+
+  // ── Botón con shimmer ──
+  Widget _buildShimmerButton() {
+    return GestureDetector(
+      onTap: _navigateToLogin,
+      child: Container(
+        width: double.infinity,
+        height: 62,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(31),
+          gradient: const LinearGradient(
+            colors: [Color(0xFF22AF95), Color(0xFF207DC3)],
+            begin: Alignment.centerLeft,
+            end: Alignment.centerRight,
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: const Color(0xFF22AF95).withOpacity(0.4),
+              blurRadius: 20,
+              offset: const Offset(0, 8),
+            ),
+          ],
+        ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(31),
+          child: Stack(
+            children: [
+              // Shimmer deslizante
+              Positioned.fill(
+                child: Transform.translate(
+                  offset: Offset(_shimmer.value * 220, 0),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [
+                          Colors.white.withOpacity(0.0),
+                          Colors.white.withOpacity(0.20),
+                          Colors.white.withOpacity(0.0),
+                        ],
+                        stops: const [0.0, 0.5, 1.0],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              const Center(
+                child: Text(
+                  'COMENZAR',
+                  style: TextStyle(
+                    fontFamily: 'Fredoka',
+                    fontSize: 26,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                    letterSpacing: 1.5,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
