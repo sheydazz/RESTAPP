@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rest/core/utils/app_toast.dart';
 import 'package:rest/core/routes/app_routes.dart';
 import 'package:rest/core/services/emotion_service.dart';
 import 'package:rest/core/services/progress_service.dart';
@@ -312,23 +313,11 @@ class _ProgressScreenState extends State<ProgressScreen> {
       await _progressService.requestReward(premioId: reward.id);
       await _loadRewardsCatalog();
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            'Solicitud enviada: ${reward.nombre}. Bienestar Universitario recibio el correo.',
-          ),
-          backgroundColor: const Color(0xFF2E7D32),
-        ),
-      );
+      AppToast.success(context, 'Solicitud enviada: ${reward.nombre}. Bienestar Universitario recibió el correo.');
       Navigator.pop(context);
     } catch (e) {
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('No se pudo solicitar premio: $e'),
-          backgroundColor: Colors.red,
-        ),
-      );
+      AppToast.error(context, 'No se pudo solicitar premio: $e');
     } finally {
       if (mounted) {
         setState(() => _sendingRewardId = null);
@@ -344,20 +333,10 @@ class _ProgressScreenState extends State<ProgressScreen> {
       await _progressService.completarActividadDiaria(opcionId: activity.id);
       await Future.wait([_loadDailyActivities(), _loadRewardsCatalog()]);
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Actividad completada: ${activity.nombre}'),
-          backgroundColor: const Color(0xFF2E7D32),
-        ),
-      );
+      AppToast.success(context, 'Actividad completada: ${activity.nombre}');
     } catch (e) {
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('No se pudo completar: $e'),
-          backgroundColor: Colors.red,
-        ),
-      );
+      AppToast.error(context, 'No se pudo completar: $e');
     } finally {
       if (mounted) {
         setState(() => _sendingActivityId = null);
@@ -373,12 +352,7 @@ class _ProgressScreenState extends State<ProgressScreen> {
       try {
         await _progressService.registrarPracticaTecnica(opcionId: tecnica.id);
         if (!mounted) return;
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Práctica registrada: ${tecnica.nombre}'),
-            backgroundColor: const Color(0xFF1565C0),
-          ),
-        );
+        AppToast.success(context, 'Práctica registrada: ${tecnica.nombre}');
       } catch (_) {
         // Si falla el registro no bloquea navegación
       }

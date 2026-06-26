@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rest/core/utils/app_toast.dart';
 import '../../home/screens/gradient_text.dart';
 
 class FeedbackScreen extends StatefulWidget {
@@ -398,15 +399,6 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
   }
 
   void _showSnackBar(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-        backgroundColor: Color(0xFF4FC3F7),
-        behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10),
-        ),
-      ),
-    );
+    AppToast.info(context, message);
   }
 }
