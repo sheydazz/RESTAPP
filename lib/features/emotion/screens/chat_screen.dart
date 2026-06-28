@@ -34,6 +34,7 @@ class _ChatScreenState extends State<ChatScreen> {
   void dispose() {
     _messageController.dispose();
     _scrollController.dispose();
+    UserSession.registerDailyCompletion();
     super.dispose();
   }
 
@@ -221,6 +222,8 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   Future<void> _onStopChatPressed() async {
+    // Registrar racha al completar chat con NOA
+    await UserSession.registerDailyCompletion();
     try {
       final feedback = await _chatService.detenerSesionIA();
       if (!mounted) return;
@@ -344,257 +347,221 @@ class _ChatScreenState extends State<ChatScreen> {
       body: SafeArea(
         child: Column(
           children: [
-            // Header con logo a la izquierda y títulos centrados
-            Container(
-              padding: const EdgeInsets.all(20),
-              child: Stack(
+            _buildHeader(colorScheme),
+            _buildChatArea(colorScheme),
+            _buildInputArea(colorScheme),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildHeader(ColorScheme colorScheme) {
+    return Container(
+      padding: const EdgeInsets.all(20),
+      child: Stack(
+        children: [
+          Align(
+            alignment: Alignment.topLeft,
+            child: Container(
+              width: 80,
+              height: 80,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                border: Border.all(color: const Color(0xFF4ECDC4), width: 4),
+                boxShadow: [
+                  BoxShadow(
+                    color: const Color(0xFF4ECDC4).withOpacity(0.3),
+                    blurRadius: 8,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
+                image: const DecorationImage(
+                  image: AssetImage('assets/images/normalrest.jpg'),
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+          ),
+          Align(
+            alignment: Alignment.topCenter,
+            child: Padding(
+              padding: const EdgeInsets.only(top: 10),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
                 children: [
-                  // Logo en la esquina superior izquierda
-                  Align(
-                    alignment: Alignment.topLeft,
-                    child: Container(
-                      width: 80,
-                      height: 80,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        border: Border.all(color: Color(0xFF4ECDC4), width: 4),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Color(0xFF4ECDC4).withOpacity(0.3),
-                            blurRadius: 8,
-                            offset: Offset(0, 2),
-                          ),
-                        ],
-                        image: DecorationImage(
-                          image: AssetImage(
-                            'assets/images/normalrest.jpg',
-                          ), // Asegúrate de tener la imagen en esta ruta
-                          fit: BoxFit.cover,
-                        ),
+                  ShaderMask(
+                    shaderCallback: (Rect bounds) => const LinearGradient(
+                      colors: [Color(0xFF7DFDFE), Color(0xFF2196F3)],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ).createShader(bounds),
+                    child: const Text(
+                      '¡Hablemos',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 35,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: 'Fredoka',
+                        height: 0.9,
+                        color: Colors.white,
                       ),
                     ),
                   ),
-                  // Títulos centrados
-                  Align(
-                    alignment: Alignment.topCenter,
-                    child: Padding(
-                      padding: const EdgeInsets.only(top: 10),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          ShaderMask(
-                            shaderCallback: (Rect bounds) {
-                              return LinearGradient(
-                                colors: [Color(0xFF7DFDFE), Color(0xFF2196F3)],
-                                begin: Alignment.topLeft,
-                                end: Alignment.bottomRight,
-                              ).createShader(bounds);
-                            },
-                            child: Text(
-                              "¡Hablemos",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontSize: 35,
-                                fontWeight: FontWeight.bold,
-                                fontFamily: 'Fredoka',
-                                height: 0.9,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ),
-                          ShaderMask(
-                            shaderCallback: (Rect bounds) {
-                              return LinearGradient(
-                                colors: [Color(0xFF7DFDFE), Color(0xFF2196F3)],
-                                begin: Alignment.topLeft,
-                                end: Alignment.bottomRight,
-                              ).createShader(bounds);
-                            },
-                            child: Text(
-                              "un Rato!",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontSize: 35,
-                                fontWeight: FontWeight.bold,
-                                fontFamily: 'Fredoka',
-                                height: 0.9,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ),
-                        ],
+                  ShaderMask(
+                    shaderCallback: (Rect bounds) => const LinearGradient(
+                      colors: [Color(0xFF7DFDFE), Color(0xFF2196F3)],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ).createShader(bounds),
+                    child: const Text(
+                      'un Rato!',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 35,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: 'Fredoka',
+                        height: 0.9,
+                        color: Colors.white,
                       ),
                     ),
                   ),
                 ],
               ),
             ),
+          ),
+        ],
+      ),
+    );
+  }
 
-            // Chat container con borde redondeado azul
-            Expanded(
-              child: Container(
-                margin: EdgeInsets.symmetric(horizontal: 16),
-                decoration: BoxDecoration(
-                  color: colorScheme.surfaceContainerLow,
-                  borderRadius: BorderRadius.circular(30),
-                  border: Border.all(
-                    color: Color(0xFF153E75),
-                    width: 4,
-                  ), // Azul marino (color de marca, se mantiene)
-                ),
-                child: Stack(
-                  children: [
-                    // Lista de mensajes
-                    Padding(
-                      padding: EdgeInsets.only(
-                        top: 60,
-                        left: 20,
-                        right: 20,
-                        bottom: 20,
-                      ),
-                      child: _loadingHistory
-                          ? const Center(child: CircularProgressIndicator())
-                          : ListView.builder(
-                              controller: _scrollController,
-                              itemCount: _messages.length,
-                              itemBuilder: (context, index) {
-                                return ChatBubble(message: _messages[index]);
-                              },
-                            ),
+  Widget _buildChatArea(ColorScheme colorScheme) {
+    return Expanded(
+      child: Container(
+        margin: const EdgeInsets.symmetric(horizontal: 16),
+        decoration: BoxDecoration(
+          color: colorScheme.surfaceContainerLow,
+          borderRadius: BorderRadius.circular(30),
+          border: Border.all(color: const Color(0xFF153E75), width: 4),
+        ),
+        child: Stack(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(top: 60, left: 20, right: 20, bottom: 20),
+              child: _loadingHistory
+                  ? const Center(child: CircularProgressIndicator())
+                  : ListView.builder(
+                      controller: _scrollController,
+                      itemCount: _messages.length,
+                      itemBuilder: (context, index) => ChatBubble(message: _messages[index]),
                     ),
-                    // Botón "Detener"
-                    Positioned(
-                      top: 16,
-                      right: 16,
-                      child: GestureDetector(
-                        onTap: _onStopChatPressed,
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 16,
-                            vertical: 10,
-                          ),
-                          decoration: BoxDecoration(
-                            color: Color(0xFF4CAF50),
-                            borderRadius: BorderRadius.circular(25),
-                          ),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Icon(Icons.pause, color: Colors.black, size: 18),
-                              SizedBox(width: 6),
-                              Text(
-                                "Detener",
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: 'Fredoka',
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
             ),
-
-            // Input area
-            Container(
-              padding: EdgeInsets.all(20),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Container(
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          colors: [
-                            Color(0xFF6A4C93), // Morado
-                            Color(0xFF153E75), // Azul marino
-                          ],
-                          begin: Alignment.centerLeft,
-                          end: Alignment.centerRight,
-                        ),
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                      child: Padding(
-                        padding: EdgeInsets.all(
-                          3,
-                        ), // Grosor del borde degradado
-                        child: Container(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: 20,
-                            vertical: 16,
-                          ),
-                          decoration: BoxDecoration(
-                            color: colorScheme.surface,
-                            borderRadius: BorderRadius.circular(27),
-                          ),
-                          child: TextField(
-                            controller: _messageController,
-                            enabled: !_sending,
-                            decoration: InputDecoration(
-                              hintText: "Comparte tu mensaje aquí..",
-                              border: InputBorder.none,
-                              hintStyle: TextStyle(
-                                color: colorScheme.onSurface,
-                                fontFamily: 'Fredoka',
-                                fontWeight: FontWeight.bold,
-                                fontSize: 20,
-                              ),
-                            ),
-                            style: TextStyle(
-                              fontFamily: 'Freeman',
-                              fontSize: 16,
-                            ),
-                            onSubmitted: (value) => _sendMessage(),
-                          ),
-                        ),
-                      ),
-                    ),
+            Positioned(
+              top: 16,
+              right: 16,
+              child: GestureDetector(
+                onTap: _onStopChatPressed,
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFF4CAF50),
+                    borderRadius: BorderRadius.circular(25),
                   ),
-                  SizedBox(width: 12),
-                  GestureDetector(
-                    onTap: _sendMessage,
-                    child: Container(
-                      width: 55,
-                      height: 55,
-                      decoration: BoxDecoration(
-                        color: Color(
-                          0xFF3B2C5E,
-                        ), // Azul marino con toque morado
-                        shape: BoxShape.circle,
-                      ),
-                      child: Center(
-                        child: Container(
-                          width: 38,
-                          height: 38,
-                          decoration: BoxDecoration(
-                            color: Colors.transparent, // Sin relleno
-                            shape: BoxShape.circle,
-                            border: Border.all(
-                              color: Colors.white,
-                              width: 3,
-                            ), // Solo borde blanco
-                          ),
-                          child: Center(
-                            child: Icon(
-                              Icons.arrow_forward,
-                              color: Colors.white, // Flecha blanca
-                              size: 22,
-                            ),
-                          ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Icon(Icons.pause, color: Colors.black, size: 18),
+                      const SizedBox(width: 6),
+                      const Text(
+                        'Detener',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: 'Fredoka',
                         ),
                       ),
-                    ),
+                    ],
                   ),
-                ],
+                ),
               ),
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildInputArea(ColorScheme colorScheme) {
+    return Container(
+      padding: const EdgeInsets.all(20),
+      child: Row(
+        children: [
+          Expanded(
+            child: Container(
+              decoration: BoxDecoration(
+                gradient: const LinearGradient(
+                  colors: [Color(0xFF6A4C93), Color(0xFF153E75)],
+                  begin: Alignment.centerLeft,
+                  end: Alignment.centerRight,
+                ),
+                borderRadius: BorderRadius.circular(30),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(3),
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                  decoration: BoxDecoration(
+                    color: colorScheme.surface,
+                    borderRadius: BorderRadius.circular(27),
+                  ),
+                  child: TextField(
+                    controller: _messageController,
+                    enabled: !_sending,
+                    decoration: InputDecoration(
+                      hintText: 'Comparte tu mensaje aquí..',
+                      border: InputBorder.none,
+                      hintStyle: TextStyle(
+                        color: colorScheme.onSurface,
+                        fontFamily: 'Fredoka',
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20,
+                      ),
+                    ),
+                    style: const TextStyle(fontFamily: 'Freeman', fontSize: 16),
+                    onSubmitted: (_) => _sendMessage(),
+                  ),
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(width: 12),
+          GestureDetector(
+            onTap: _sendMessage,
+            child: Container(
+              width: 55,
+              height: 55,
+              decoration: const BoxDecoration(
+                color: Color(0xFF3B2C5E),
+                shape: BoxShape.circle,
+              ),
+              child: Center(
+                child: Container(
+                  width: 38,
+                  height: 38,
+                  decoration: BoxDecoration(
+                    color: Colors.transparent,
+                    shape: BoxShape.circle,
+                    border: Border.all(color: Colors.white, width: 3),
+                  ),
+                  child: const Center(
+                    child: Icon(Icons.arrow_forward, color: Colors.white, size: 22),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -715,7 +682,7 @@ class _TypingBubbleState extends State<TypingBubble>
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(bottom: 16),
+      margin: const EdgeInsets.only(bottom: 16),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
@@ -725,9 +692,8 @@ class _TypingBubbleState extends State<TypingBubble>
               color: Theme.of(context).colorScheme.surfaceContainerHigh,
               borderRadius: BorderRadius.circular(20),
             ),
-            child: Container(
+            child: SizedBox(
               width: 56,
-              alignment: Alignment.center,
               child: AnimatedBuilder(
                 animation: _controller,
                 builder: (context, _) {
@@ -741,12 +707,14 @@ class _TypingBubbleState extends State<TypingBubble>
                       final scale = 0.72 + (0.5 * (1 - (2 * t - 1).abs()));
                       return Transform.scale(
                         scale: scale,
-                        child: Container(
+                        child: const SizedBox(
                           width: 8,
                           height: 8,
-                          decoration: const BoxDecoration(
-                            color: Color(0xFF2F9FE8),
-                            shape: BoxShape.circle,
+                          child: DecoratedBox(
+                            decoration: BoxDecoration(
+                              color: Color(0xFF2F9FE8),
+                              shape: BoxShape.circle,
+                            ),
                           ),
                         ),
                       );

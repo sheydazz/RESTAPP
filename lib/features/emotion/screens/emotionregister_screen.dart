@@ -96,6 +96,7 @@ class _CheckScreenState extends State<EmotionRegisterScreen> {
 
       // Actualizar fecha del último test completado
       UserSession.lastTestDate = DateTime.now();
+      await UserSession.persist();
 
       if (!mounted) return;
       final resultado = EmotionCalculator.calcularEstado(

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:rest/core/utils/app_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'register_screen.dart';
@@ -138,9 +139,7 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
     final contrasena = _passwordController.text.trim();
 
     if (correo.isEmpty || contrasena.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Ingresa correo y contraseña')),
-      );
+      AppToast.warning(context, 'Ingresa correo y contraseña');
       return;
     }
 
@@ -243,9 +242,7 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
         );
       }
     } catch (e) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text(e.toString())));
+      AppToast.error(context, e.toString());
     } finally {
       if (mounted) {
         setState(() {

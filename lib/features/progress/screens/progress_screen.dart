@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:rest/core/utils/app_toast.dart';
 import 'package:rest/core/routes/app_routes.dart';
 import 'package:rest/core/services/emotion_service.dart';
 import 'package:rest/core/services/progress_service.dart';
 import 'package:rest/core/services/user_session.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:rest/features/progress/screens/emotional_calendar_screen.dart';
+import 'package:rest/features/progress/screens/streak_screen.dart';
 import 'package:rest/features/relax/screens/jokes_screen.dart';
 import 'package:rest/features/relax/screens/music_screen.dart';
 import 'package:rest/features/relax/screens/physical_activity_screen.dart';
@@ -312,23 +315,11 @@ class _ProgressScreenState extends State<ProgressScreen> {
       await _progressService.requestReward(premioId: reward.id);
       await _loadRewardsCatalog();
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            'Solicitud enviada: ${reward.nombre}. Bienestar Universitario recibio el correo.',
-          ),
-          backgroundColor: const Color(0xFF2E7D32),
-        ),
-      );
+      AppToast.success(context, 'Solicitud enviada: ${reward.nombre}. Bienestar Universitario recibió el correo.');
       Navigator.pop(context);
     } catch (e) {
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('No se pudo solicitar premio: $e'),
-          backgroundColor: Colors.red,
-        ),
-      );
+      AppToast.error(context, 'No se pudo solicitar premio: $e');
     } finally {
       if (mounted) {
         setState(() => _sendingRewardId = null);
@@ -344,20 +335,10 @@ class _ProgressScreenState extends State<ProgressScreen> {
       await _progressService.completarActividadDiaria(opcionId: activity.id);
       await Future.wait([_loadDailyActivities(), _loadRewardsCatalog()]);
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Actividad completada: ${activity.nombre}'),
-          backgroundColor: const Color(0xFF2E7D32),
-        ),
-      );
+      AppToast.success(context, 'Actividad completada: ${activity.nombre}');
     } catch (e) {
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('No se pudo completar: $e'),
-          backgroundColor: Colors.red,
-        ),
-      );
+      AppToast.error(context, 'No se pudo completar: $e');
     } finally {
       if (mounted) {
         setState(() => _sendingActivityId = null);
@@ -373,12 +354,7 @@ class _ProgressScreenState extends State<ProgressScreen> {
       try {
         await _progressService.registrarPracticaTecnica(opcionId: tecnica.id);
         if (!mounted) return;
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Práctica registrada: ${tecnica.nombre}'),
-            backgroundColor: const Color(0xFF1565C0),
-          ),
-        );
+        AppToast.success(context, 'Práctica registrada: ${tecnica.nombre}');
       } catch (_) {
         // Si falla el registro no bloquea navegación
       }
@@ -404,6 +380,8 @@ class _ProgressScreenState extends State<ProgressScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   _buildHeader(context),
+                  const SizedBox(height: 16),
+                  _buildRachaCard(context),
                   const SizedBox(height: 20),
                   _buildRegistroEmocional(context),
                   const SizedBox(height: 24),
@@ -417,6 +395,90 @@ class _ProgressScreenState extends State<ProgressScreen> {
               ),
             ),
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildRachaCard(BuildContext context) {
+    final streak = UserSession.streakCount;
+    final goal   = UserSession.goalDays;
+    final goalSet = UserSession.streakGoalSet;
+    final progress = goalSet ? (streak / goal).clamp(0.0, 1.0) : 0.0;
+
+    return GestureDetector(
+      onTap: () {
+        Navigator.of(context).push(PageRouteBuilder(
+          pageBuilder: (_, __, ___) => goalSet
+              ? const StreakCelebrationScreen()
+              : const GoalPickerScreen(),
+          transitionsBuilder: (_, anim, __, child) => FadeTransition(opacity: anim, child: child),
+          transitionDuration: const Duration(milliseconds: 300),
+        ));
+      },
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20),
+          gradient: const LinearGradient(
+            colors: [Color(0xFFF0F4FF), Color(0xFFF5F0FF)],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+          border: Border.all(color: const Color(0xFFCDD8FF), width: 1.5),
+          boxShadow: [
+            BoxShadow(color: const Color(0xFF3A5AFF).withOpacity(0.08), blurRadius: 12, offset: const Offset(0, 4)),
+          ],
+        ),
+        child: Row(
+          children: [
+            // Llama
+            Image.asset('assets/images/RachaDaily.png', width: 52, height: 52),
+            const SizedBox(width: 14),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Text(
+                        goalSet ? '$streak ${streak == 1 ? "día" : "días"} de racha' : 'Sin racha activa',
+                        style: GoogleFonts.fredoka(
+                          fontSize: 17, fontWeight: FontWeight.bold,
+                          color: const Color(0xFF3A5AFF),
+                        ),
+                      ),
+                      const SizedBox(width: 6),
+                      if (streak > 0) Text('🔥', style: const TextStyle(fontSize: 16)),
+                    ],
+                  ),
+                  const SizedBox(height: 4),
+                  if (goalSet) ...[
+                    Text(
+                      'Meta: $goal días · faltan ${(goal - streak).clamp(0, goal)} días',
+                      style: GoogleFonts.fredoka(fontSize: 12, color: const Color(0xFF6B7280)),
+                    ),
+                    const SizedBox(height: 6),
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(6),
+                      child: LinearProgressIndicator(
+                        value: progress,
+                        minHeight: 7,
+                        backgroundColor: const Color(0xFFE0E7FF),
+                        valueColor: const AlwaysStoppedAnimation<Color>(Color(0xFF3A5AFF)),
+                      ),
+                    ),
+                  ] else
+                    Text(
+                      'Toca para elegir tu meta y activar la racha',
+                      style: GoogleFonts.fredoka(fontSize: 12, color: const Color(0xFF8C4EFF)),
+                    ),
+                ],
+              ),
+            ),
+            const SizedBox(width: 8),
+            const Icon(Icons.chevron_right_rounded, color: Color(0xFF3A5AFF), size: 20),
+          ],
         ),
       ),
     );

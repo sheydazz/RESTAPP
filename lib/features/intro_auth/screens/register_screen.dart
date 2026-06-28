@@ -1,4 +1,7 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:rest/core/utils/app_toast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'how_you_found_screen.dart';
 import 'package:rest/core/services/auth_service.dart';
@@ -11,26 +14,65 @@ class RegisterScreen extends StatefulWidget {
   State<RegisterScreen> createState() => _RegisterScreenState();
 }
 
-class _RegisterScreenState extends State<RegisterScreen> {
+class _RegisterScreenState extends State<RegisterScreen>
+    with TickerProviderStateMixin {
+  // ── Controllers ──
   final _nombreController = TextEditingController();
   final _apellidoController = TextEditingController();
   final _correoController = TextEditingController();
   final _passwordController = TextEditingController();
   final _telefonoController = TextEditingController();
   final _fechaNacimientoController = TextEditingController();
+  final _pageController = PageController();
 
-  // Variables para dropdowns
+  // ── Focus nodes ──
+  final _nombreFocus = FocusNode();
+  final _apellidoFocus = FocusNode();
+  final _correoFocus = FocusNode();
+  final _passwordFocus = FocusNode();
+  final _telefonoFocus = FocusNode();
+
+  // ── Dropdowns ──
   String? _edadSeleccionada;
   String? _ciudadSeleccionada;
   String? _carreraSeleccionada;
   String? _semestresSeleccionado;
   String? _sexoSeleccionado;
 
-  // Control de visibilidad de contraseña
+  // ── Estado ──
   bool _isPasswordVisible = false;
+  bool _isLoading = false;
+  int _currentStep = 0;
+  bool _showSuccess = false;
+  bool _termsAccepted = false;
+  bool _termsScrolledToBottom = false;
+  final ScrollController _termsScrollCtrl = ScrollController();
+
+  late AnimationController _checkboxCtrl;
+  late Animation<double> _checkboxScale;
+
+  // ── Animaciones ──
+  late AnimationController _pageEntryCtrl;
+  late Animation<Offset> _pageSlide;
+  late Animation<double> _pageFade;
+
+  late AnimationController _checkCtrl;
+  late Animation<double> _checkScale;
+  late Animation<double> _checkFade;
+
+  late AnimationController _progressCtrl;
+  late Animation<double> _progressValue;
+
+  late AnimationController _successCtrl;
+  late Animation<double> _successFade;
+  late Animation<double> _noaScale;
+  late Animation<Offset> _noaSlide;
+  late Animation<double> _textFade;
+
+  late AnimationController _noaBounceCtrl;
+  late Animation<double> _noaBounce;
 
   final _authService = AuthService();
-  bool _isLoading = false;
 
   // Listas para los dropdowns
   final List<String> _edades = List.generate(56, (i) => (i + 15).toString());
@@ -185,6 +227,64 @@ class _RegisterScreenState extends State<RegisterScreen> {
   };
 
   @override
+  void initState() {
+    super.initState();
+    for (final n in [_nombreFocus, _apellidoFocus, _correoFocus, _passwordFocus, _telefonoFocus]) {
+      n.addListener(() => setState(() {}));
+    }
+    for (final c in [_nombreController, _apellidoController, _correoController, _passwordController, _telefonoController, _fechaNacimientoController]) {
+      c.addListener(() => setState(() {}));
+    }
+
+    _pageEntryCtrl = AnimationController(vsync: this, duration: const Duration(milliseconds: 400));
+    _pageSlide = Tween<Offset>(begin: const Offset(0.12, 0), end: Offset.zero)
+        .animate(CurvedAnimation(parent: _pageEntryCtrl, curve: Curves.easeOut));
+    _pageFade = Tween<double>(begin: 0, end: 1)
+        .animate(CurvedAnimation(parent: _pageEntryCtrl, curve: Curves.easeOut));
+    _pageEntryCtrl.forward();
+
+    _checkCtrl = AnimationController(vsync: this, duration: const Duration(milliseconds: 600));
+    _checkScale = Tween<double>(begin: 0, end: 1)
+        .animate(CurvedAnimation(parent: _checkCtrl, curve: Curves.elasticOut));
+    _checkFade = Tween<double>(begin: 0, end: 1)
+        .animate(CurvedAnimation(parent: _checkCtrl, curve: const Interval(0, 0.4, curve: Curves.easeOut)));
+
+    _progressCtrl = AnimationController(vsync: this, duration: const Duration(milliseconds: 500));
+    _progressValue = Tween<double>(begin: 0, end: 1.0 / 3.0)
+        .animate(CurvedAnimation(parent: _progressCtrl, curve: Curves.easeOut));
+    _progressCtrl.forward();
+
+    _successCtrl = AnimationController(vsync: this, duration: const Duration(milliseconds: 1400));
+    _successFade = Tween<double>(begin: 0, end: 1)
+        .animate(CurvedAnimation(parent: _successCtrl, curve: const Interval(0, 0.3, curve: Curves.easeOut)));
+    _noaSlide = Tween<Offset>(begin: const Offset(0, 0.5), end: Offset.zero)
+        .animate(CurvedAnimation(parent: _successCtrl, curve: const Interval(0.1, 0.55, curve: Curves.easeOutBack)));
+    _noaScale = Tween<double>(begin: 0.5, end: 1.0)
+        .animate(CurvedAnimation(parent: _successCtrl, curve: const Interval(0.1, 0.55, curve: Curves.easeOutBack)));
+    _textFade = Tween<double>(begin: 0, end: 1)
+        .animate(CurvedAnimation(parent: _successCtrl, curve: const Interval(0.5, 1.0, curve: Curves.easeOut)));
+
+    _noaBounceCtrl = AnimationController(vsync: this, duration: const Duration(milliseconds: 900))..repeat(reverse: true);
+    _noaBounce = Tween<double>(begin: -8, end: 8)
+        .animate(CurvedAnimation(parent: _noaBounceCtrl, curve: Curves.easeInOut));
+
+    _checkboxCtrl = AnimationController(vsync: this, duration: const Duration(milliseconds: 400));
+    _checkboxScale = Tween<double>(begin: 0.0, end: 1.0)
+        .animate(CurvedAnimation(parent: _checkboxCtrl, curve: Curves.elasticOut));
+
+    _termsScrollCtrl.addListener(() {
+      if (!_termsScrolledToBottom && _termsScrollCtrl.hasClients) {
+        final max = _termsScrollCtrl.position.maxScrollExtent;
+        final current = _termsScrollCtrl.offset;
+        if (max > 0 && current >= max - 20) {
+          setState(() => _termsScrolledToBottom = true);
+          _checkboxCtrl.forward();
+        }
+      }
+    });
+  }
+
+  @override
   void dispose() {
     _nombreController.dispose();
     _apellidoController.dispose();
@@ -192,7 +292,75 @@ class _RegisterScreenState extends State<RegisterScreen> {
     _passwordController.dispose();
     _telefonoController.dispose();
     _fechaNacimientoController.dispose();
+    _pageController.dispose();
+    _termsScrollCtrl.dispose();
+    _checkboxCtrl.dispose();
+    _nombreFocus.dispose();
+    _apellidoFocus.dispose();
+    _correoFocus.dispose();
+    _passwordFocus.dispose();
+    _telefonoFocus.dispose();
+    _pageEntryCtrl.dispose();
+    _checkCtrl.dispose();
+    _progressCtrl.dispose();
+    _successCtrl.dispose();
+    _noaBounceCtrl.dispose();
     super.dispose();
+  }
+
+  // ── Validación por paso ──
+  String? _validateStep(int step) {
+    if (step == 0) {
+      if (_nombreController.text.trim().isEmpty) return 'Ingresa tu nombre';
+      if (_apellidoController.text.trim().isEmpty) return 'Ingresa tus apellidos';
+      if (_edadSeleccionada == null) return 'Selecciona tu edad';
+      if (_fechaNacimientoController.text.trim().isEmpty) return 'Selecciona tu fecha de nacimiento';
+      if (_sexoSeleccionado == null) return 'Selecciona tu sexo';
+    } else if (step == 1) {
+      if (_ciudadSeleccionada == null) return 'Selecciona tu ciudad';
+      if (_carreraSeleccionada == null) return 'Selecciona tu carrera';
+      if (_semestresSeleccionado == null) return 'Selecciona tu semestre';
+      if (_telefonoController.text.trim().isEmpty) return 'Ingresa tu teléfono';
+      final phoneRegExp = RegExp(r'^\d+$');
+      if (!phoneRegExp.hasMatch(_telefonoController.text.trim()) || _telefonoController.text.trim().length <= 6) {
+        return 'El teléfono debe tener solo números y más de 6 dígitos';
+      }
+    } else if (step == 2) {
+      if (_correoController.text.trim().isEmpty) return 'Ingresa tu correo';
+      final emailRegExp = RegExp(r'^[\w\.-]+@([\w-]+\.)+[\w-]{2,4}$', caseSensitive: false);
+      if (!emailRegExp.hasMatch(_correoController.text.trim())) return 'Ingresa un correo válido';
+      if (_passwordController.text.trim().isEmpty) return 'Ingresa tu contraseña';
+      if (_passwordController.text.trim().length <= 8) return 'La contraseña debe tener más de 8 caracteres';
+      if (!_termsAccepted) return 'Debes aceptar los Términos y Condiciones para continuar';
+    }
+    return null;
+  }
+
+  void _goToStep(int step) {
+    setState(() => _currentStep = step);
+    _pageController.animateToPage(step, duration: const Duration(milliseconds: 380), curve: Curves.easeInOut);
+    _pageEntryCtrl.forward(from: 0);
+    final target = (step + 1) / 3.0;
+    _progressValue = Tween<double>(begin: _progressValue.value, end: target)
+        .animate(CurvedAnimation(parent: _progressCtrl, curve: Curves.easeOut));
+    _progressCtrl.forward(from: 0);
+  }
+
+  void _nextStep() {
+    final error = _validateStep(_currentStep);
+    if (error != null) { AppToast.warning(context, error); return; }
+    _checkCtrl.forward(from: 0);
+    Timer(const Duration(milliseconds: 500), () {
+      if (_currentStep < 2) {
+        _goToStep(_currentStep + 1);
+      } else {
+        _handleRegister();
+      }
+    });
+  }
+
+  void _prevStep() {
+    if (_currentStep > 0) _goToStep(_currentStep - 1);
   }
 
   String _formatDate(DateTime date) {
@@ -208,86 +376,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   Future<void> _handleRegister() async {
+    setState(() => _isLoading = true);
     final nombres = _nombreController.text.trim();
     final apellidos = _apellidoController.text.trim();
     final correo = _correoController.text.trim();
     final contrasena = _passwordController.text.trim();
-    final ciudad = _ciudadSeleccionada;
+    final ciudad = _ciudadSeleccionada!;
     final telefono = _telefonoController.text.trim();
-    final edad = int.tryParse(_edadSeleccionada ?? '');
-    final semestreActual = _semestresSeleccionado;
-    final sexo = _mapSexoToCode(_sexoSeleccionado);
+    final edad = int.tryParse(_edadSeleccionada ?? '')!;
+    final semestreActual = _semestresSeleccionado!;
+    final sexo = _mapSexoToCode(_sexoSeleccionado)!;
     final fechaNacimiento = _fechaNacimientoController.text.trim();
-
-    if (nombres.isEmpty ||
-        apellidos.isEmpty ||
-        correo.isEmpty ||
-        contrasena.isEmpty ||
-        ciudad == null ||
-        ciudad.isEmpty ||
-        telefono.isEmpty ||
-        edad == null ||
-        _carreraSeleccionada == null ||
-        _carreraSeleccionada!.isEmpty ||
-        semestreActual == null ||
-        semestreActual.isEmpty ||
-        sexo == null ||
-        sexo.isEmpty ||
-        fechaNacimiento.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Completa todos los campos obligatorios')),
-      );
-      return;
-    }
-
-    final birthDateRegExp = RegExp(r'^\d{4}-\d{2}-\d{2}$');
-    if (!birthDateRegExp.hasMatch(fechaNacimiento)) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('La fecha de nacimiento debe tener formato YYYY-MM-DD'),
-        ),
-      );
-      return;
-    }
-
-    // Validar formato de correo
-    final emailRegExp = RegExp(
-      r'^[\w\.-]+@([\w-]+\.)+[\w-]{2,4}$',
-      caseSensitive: false,
-    );
-    if (!emailRegExp.hasMatch(correo)) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text('Ingresa un correo válido')));
-      return;
-    }
-
-    // Validar longitud de contraseña (> 8 caracteres)
-    if (contrasena.length <= 8) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('La contraseña debe tener más de 8 caracteres'),
-        ),
-      );
-      return;
-    }
-
-    // Validar teléfono: solo dígitos y más de 6
-    final phoneRegExp = RegExp(r'^\d+$');
-    if (!phoneRegExp.hasMatch(telefono) || telefono.length <= 6) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text(
-            'El teléfono debe tener solo números y más de 6 dígitos',
-          ),
-        ),
-      );
-      return;
-    }
-
-    setState(() {
-      _isLoading = true;
-    });
 
     try {
       final response = await _authService.register(
@@ -305,18 +404,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
       UserSession.currentUserName = nombres;
 
-      // Guardar token y userId directamente del registro (el del login viene mal)
       final dynamic token =
-          response['token'] ??
-          response['accessToken'] ??
-          response['jwt'] ??
+          response['token'] ?? response['accessToken'] ?? response['jwt'] ??
           (response['data'] is Map ? (response['data'] as Map)['token'] : null);
-      if (token is String && token.isNotEmpty) {
-        UserSession.authToken = token;
-      }
+      if (token is String && token.isNotEmpty) UserSession.authToken = token;
 
-      final dynamic user =
-          response['user'] ??
+      final dynamic user = response['user'] ??
           (response['data'] is Map ? (response['data'] as Map)['user'] : null);
       if (user is Map && user['id'] is int) {
         UserSession.userId = user['id'] as int;
@@ -324,231 +417,389 @@ class _RegisterScreenState extends State<RegisterScreen> {
         UserSession.userId = response['id'] as int;
       }
 
-      // IMPORTANTE: Resetear lastTestDate para cada nuevo usuario
-      // Esto garantiza que TODOS los usuarios nuevos vean el test
       UserSession.lastTestDate = null;
-
       await UserSession.persist();
 
-      // DEBUG: Descomentar solo en desarrollo
-      // print(
-      //   'REGISTER SESSION → token=${UserSession.authToken != null ? 'SET' : 'NULL'}, userId=${UserSession.userId}',
-      // );
-
       if (!mounted) return;
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => const HowYouFoundScreen()),
-      );
+      setState(() { _isLoading = false; _showSuccess = true; });
+      _successCtrl.forward();
     } catch (e) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text(e.toString())));
-    } finally {
       if (mounted) {
-        setState(() {
-          _isLoading = false;
-        });
+        setState(() => _isLoading = false);
+        AppToast.error(context, e.toString());
       }
     }
   }
 
+  // ── BUILD PRINCIPAL ──
   @override
   Widget build(BuildContext context) {
+    if (_showSuccess) return _buildSuccessScreen();
+    if (_isLoading) return _buildLoadingScreen();
+    return _buildCarousel();
+  }
+
+  // ── PANTALLA DE CARGA ──
+  Widget _buildLoadingScreen() {
     final colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
       backgroundColor: colorScheme.surface,
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: 20),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.asset('assets/images/NoaBase.png', width: 100, height: 100),
+            const SizedBox(height: 24),
+            const SizedBox(
+              width: 40, height: 40,
+              child: CircularProgressIndicator(
+                strokeWidth: 3,
+                valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF3A5AFF)),
+              ),
+            ),
+            const SizedBox(height: 20),
+            Text(
+              'Creando tu perfil...',
+              style: GoogleFonts.fredoka(
+                fontSize: 20, fontWeight: FontWeight.w600,
+                color: colorScheme.onSurfaceVariant,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 
-              // Imagen + Título en una fila
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
+  // ── PANTALLA ÉXITO NOA ──
+  Widget _buildSuccessScreen() {
+    final nombre = _nombreController.text.trim();
+    return AnimatedBuilder(
+      animation: _successCtrl,
+      builder: (_, __) => Scaffold(
+        body: Container(
+          width: double.infinity, height: double.infinity,
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Color(0xFFE8F0FF), Color(0xFFF0E8FF)],
+              begin: Alignment.topLeft, end: Alignment.bottomRight,
+            ),
+          ),
+          child: SafeArea(
+            child: FadeTransition(
+              opacity: _successFade,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Container(
-                    width: 100,
-                    height: 100,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12),
-                      image: const DecorationImage(
-                        image: AssetImage('assets/images/normalrest.jpg'),
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  ),
-
-                  Expanded(
-                    child: ShaderMask(
-                      shaderCallback: (bounds) => const LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        colors: [Color(0xFF0419FF), Color(0xFF0AF3FF)],
-                      ).createShader(bounds),
-                      child: Text(
-                        '¡Háblame de ti!',
-                        style: GoogleFonts.fredoka(
-                          fontSize: 32,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
+                  // ── NOA animada ──
+                  SlideTransition(
+                    position: _noaSlide,
+                    child: ScaleTransition(
+                      scale: _noaScale,
+                      child: AnimatedBuilder(
+                        animation: _noaBounceCtrl,
+                        builder: (_, child) => Transform.translate(
+                          offset: Offset(0, _noaBounce.value),
+                          child: child,
+                        ),
+                        child: Image.asset(
+                          'assets/images/NoaOjosEstrellas.png',
+                          width: 160, height: 160,
                         ),
                       ),
                     ),
                   ),
+                  const SizedBox(height: 28),
+                  FadeTransition(
+                    opacity: _textFade,
+                    child: Column(
+                      children: [
+                        ShaderMask(
+                          shaderCallback: (b) => const LinearGradient(
+                            colors: [Color(0xFF3A5AFF), Color(0xFF8C4EFF)],
+                          ).createShader(b),
+                          child: Text(
+                            '¡Bienvenido/a, $nombre! 🎉',
+                            textAlign: TextAlign.center,
+                            style: GoogleFonts.fredoka(
+                              fontSize: 28, fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 12),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 36),
+                          child: Text(
+                            'Estoy muy feliz de acompañarte en tu bienestar mental. ¡Juntos lo haremos increíble!',
+                            textAlign: TextAlign.center,
+                            style: GoogleFonts.fredoka(
+                              fontSize: 16, fontWeight: FontWeight.w500,
+                              color: const Color(0xFF5C6080), height: 1.4,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 40),
+                        GestureDetector(
+                          onTap: () => Navigator.pushReplacement(
+                            context,
+                            PageRouteBuilder(
+                              pageBuilder: (_, a, __) => const HowYouFoundScreen(),
+                              transitionsBuilder: (_, anim, __, child) =>
+                                  FadeTransition(opacity: anim, child: child),
+                              transitionDuration: const Duration(milliseconds: 400),
+                            ),
+                          ),
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 16),
+                            decoration: BoxDecoration(
+                              gradient: const LinearGradient(
+                                colors: [Color(0xFF5CCFC0), Color(0xFF2981C1)],
+                              ),
+                              borderRadius: BorderRadius.circular(16),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: const Color(0xFF2981C1).withOpacity(0.35),
+                                  blurRadius: 16, offset: const Offset(0, 6),
+                                ),
+                              ],
+                            ),
+                            child: Text(
+                              '¡Empecemos! →',
+                              style: GoogleFonts.fredoka(
+                                color: Colors.white, fontSize: 22,
+                                fontWeight: FontWeight.bold, letterSpacing: 0.8,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ],
               ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 
-              _buildInputField(
-                controller: _nombreController,
-                label: '¿Cómo quieres que te llame?',
-                hint: 'Tu nombre',
-                isRequired: true,
-              ),
-              const SizedBox(height: 20),
-              _buildDropdownField(
-                label: '¿Cuántos años tienes?',
-                hint: 'Selecciona tu edad',
-                value: _edadSeleccionada,
-                items: _edades,
-                onChanged: (value) {
-                  setState(() {
-                    _edadSeleccionada = value;
-                  });
-                },
-                isRequired: true,
-              ),
-              const SizedBox(height: 20),
-              _buildDropdownField(
-                label: '¿De qué ciudad eres?',
-                hint: 'Selecciona tu ciudad',
-                value: _ciudadSeleccionada,
-                items: _ciudades,
-                onChanged: (value) {
-                  setState(() {
-                    _ciudadSeleccionada = value;
-                  });
-                },
-                isRequired: true,
-              ),
-              const SizedBox(height: 20),
-              _buildDropdownField(
-                label: '¿Cuál es tu carrera?',
-                hint: 'Selecciona tu carrera',
-                value: _carreraSeleccionada,
-                items: _carreras,
-                onChanged: (value) {
-                  setState(() {
-                    _carreraSeleccionada = value;
-                  });
-                },
-                isRequired: true,
-              ),
-              const SizedBox(height: 20),
-              _buildDropdownField(
-                label: '¿Qué semestres cursas?',
-                hint: 'Selecciona el semestre',
-                value: _semestresSeleccionado,
-                items: _semestres,
-                onChanged: (value) {
-                  setState(() {
-                    _semestresSeleccionado = value;
-                  });
-                },
-                isRequired: true,
-              ),
+  // ── CARRUSEL 3 PASOS ──
+  Widget _buildCarousel() {
+    final colorScheme = Theme.of(context).colorScheme;
+    final steps = [
+      _StepMeta(emoji: '👤', title: '¿Quién eres?', subtitle: 'Cuéntame un poco sobre ti'),
+      _StepMeta(emoji: '🎓', title: '¿Dónde estudias?', subtitle: 'Tu información académica'),
+      _StepMeta(emoji: '🔐', title: 'Tu cuenta', subtitle: 'Datos para ingresar a REST'),
+    ];
 
-              const SizedBox(height: 20),
-              _buildDropdownField(
-                label: '¿Con qué sexo te identificas?',
-                hint: 'Selecciona una opción',
-                value: _sexoSeleccionado,
-                items: _sexos,
-                onChanged: (value) {
-                  setState(() {
-                    _sexoSeleccionado = value;
-                  });
-                },
-                isRequired: true,
-              ),
-
-              const SizedBox(height: 20),
-              _buildDateField(
-                controller: _fechaNacimientoController,
-                label: 'Fecha de nacimiento',
-                hint: 'YYYY-MM-DD',
-                isRequired: true,
-                onTap: () async {
-                  final now = DateTime.now();
-                  final initialDate = DateTime(
-                    now.year - 18,
-                    now.month,
-                    now.day,
-                  );
-                  final firstDate = DateTime(1900, 1, 1);
-                  final lastDate = now;
-                  final pickedDate = await showDatePicker(
-                    context: context,
-                    initialDate: initialDate,
-                    firstDate: firstDate,
-                    lastDate: lastDate,
-                  );
-                  if (pickedDate != null) {
-                    setState(() {
-                      _fechaNacimientoController.text = _formatDate(pickedDate);
-                    });
-                  }
-                },
-              ),
-
-              const SizedBox(height: 20),
-              _buildInputField(
-                controller: _telefonoController,
-                label: 'Teléfono',
-                hint: '3001234567',
-                isRequired: true,
+    return Scaffold(
+      backgroundColor: colorScheme.surface,
+      body: SafeArea(
+        child: AnimatedBuilder(
+          animation: Listenable.merge([_progressCtrl, _checkCtrl, _pageEntryCtrl]),
+          builder: (_, __) => Column(
+            children: [
+              // ── HEADER ──
+              Padding(
+                padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
+                child: Row(
+                  children: [
+                    if (_currentStep > 0)
+                      GestureDetector(
+                        onTap: _prevStep,
+                        child: AnimatedContainer(
+                          duration: const Duration(milliseconds: 200),
+                          width: 40, height: 40,
+                          decoration: BoxDecoration(
+                            color: const Color(0xFF3A5AFF).withOpacity(0.1),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: const Icon(Icons.arrow_back_ios_rounded,
+                              color: Color(0xFF3A5AFF), size: 18),
+                        ),
+                      )
+                    else
+                      GestureDetector(
+                        onTap: () => Navigator.pop(context),
+                        child: AnimatedContainer(
+                          duration: const Duration(milliseconds: 200),
+                          width: 40, height: 40,
+                          decoration: BoxDecoration(
+                            color: colorScheme.surfaceContainerLow,
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Icon(Icons.close_rounded,
+                              color: colorScheme.onSurfaceVariant, size: 20),
+                        ),
+                      ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Paso ${_currentStep + 1} de 3',
+                            style: GoogleFonts.fredoka(
+                              fontSize: 12, fontWeight: FontWeight.w600,
+                              color: colorScheme.onSurfaceVariant,
+                            ),
+                          ),
+                          const SizedBox(height: 6),
+                          // ── TIMELINE PROGRESS ──
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(4),
+                            child: LinearProgressIndicator(
+                              value: _progressValue.value,
+                              minHeight: 6,
+                              backgroundColor: colorScheme.surfaceContainerHighest,
+                              valueColor: const AlwaysStoppedAnimation<Color>(Color(0xFF3A5AFF)),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    // ── DOTS ──
+                    Row(
+                      children: List.generate(3, (i) => AnimatedContainer(
+                        duration: const Duration(milliseconds: 300),
+                        margin: const EdgeInsets.only(left: 5),
+                        width: i == _currentStep ? 20 : 8,
+                        height: 8,
+                        decoration: BoxDecoration(
+                          color: i <= _currentStep
+                              ? const Color(0xFF3A5AFF)
+                              : colorScheme.surfaceContainerHighest,
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                      )),
+                    ),
+                  ],
+                ),
               ),
 
-              const SizedBox(height: 20),
-              _buildInputField(
-                controller: _apellidoController,
-                label: 'Apellidos',
-                hint: 'Tus apellidos',
-                isRequired: true,
-              ),
+              const SizedBox(height: 8),
 
-              const SizedBox(height: 20),
-              _buildInputField(
-                controller: _correoController,
-                label: 'Correo institucional',
-                hint: 'example@correo.com',
-                isRequired: true,
-              ),
-              const SizedBox(height: 20),
-              _buildInputField(
-                controller: _passwordController,
-                label: 'Contraseña',
-                hint: '••••••••',
-                obscure: true,
-                isRequired: true,
-              ),
-
-              const SizedBox(height: 40),
-
-              Center(
-                child: SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.6,
-                  child: _buildRadialButton(
-                    text: _isLoading ? 'GUARDANDO...' : 'GUARDAR',
-                    onPressed: _isLoading ? null : () => _handleRegister(),
+              // ── TÍTULO DE PASO ──
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: FadeTransition(
+                  opacity: _pageFade,
+                  child: SlideTransition(
+                    position: _pageSlide,
+                    child: Row(
+                      children: [
+                        Text(steps[_currentStep].emoji,
+                            style: const TextStyle(fontSize: 28)),
+                        const SizedBox(width: 10),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              steps[_currentStep].title,
+                              style: GoogleFonts.fredoka(
+                                fontSize: 22, fontWeight: FontWeight.bold,
+                                color: colorScheme.onSurface,
+                              ),
+                            ),
+                            Text(
+                              steps[_currentStep].subtitle,
+                              style: GoogleFonts.fredoka(
+                                fontSize: 13, color: colorScheme.onSurfaceVariant,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
 
-              const SizedBox(height: 20),
+              const SizedBox(height: 12),
+
+              // ── PÁGINAS ──
+              Expanded(
+                child: PageView(
+                  controller: _pageController,
+                  physics: const NeverScrollableScrollPhysics(),
+                  children: [
+                    _buildStep1(),
+                    _buildStep2(),
+                    _buildStep3(),
+                  ],
+                ),
+              ),
+
+              // ── BOTÓN SIGUIENTE / CHECK ──
+              Padding(
+                padding: const EdgeInsets.fromLTRB(20, 8, 20, 20),
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    // Botón principal
+                    GestureDetector(
+                      onTap: _nextStep,
+                      child: AnimatedOpacity(
+                        opacity: _checkCtrl.isAnimating ? 0 : 1,
+                        duration: const Duration(milliseconds: 150),
+                        child: Container(
+                          width: double.infinity, height: 58,
+                          decoration: BoxDecoration(
+                            gradient: const LinearGradient(
+                              colors: [Color(0xFF5CCFC0), Color(0xFF2981C1)],
+                              begin: Alignment.centerLeft,
+                              end: Alignment.centerRight,
+                            ),
+                            borderRadius: BorderRadius.circular(16),
+                            boxShadow: [
+                              BoxShadow(
+                                color: const Color(0xFF2981C1).withOpacity(0.3),
+                                blurRadius: 14, offset: const Offset(0, 5),
+                              ),
+                            ],
+                          ),
+                          child: Center(
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  _currentStep < 2 ? 'Continuar' : 'Crear mi cuenta',
+                                  style: GoogleFonts.fredoka(
+                                    color: Colors.white, fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                const SizedBox(width: 8),
+                                const Icon(Icons.arrow_forward_rounded,
+                                    color: Colors.white, size: 20),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    // Check animado al avanzar
+                    if (_checkCtrl.isAnimating || _checkCtrl.value > 0 && _checkCtrl.value < 1)
+                      ScaleTransition(
+                        scale: _checkScale,
+                        child: FadeTransition(
+                          opacity: _checkFade,
+                          child: Container(
+                            width: 58, height: 58,
+                            decoration: const BoxDecoration(
+                              color: Color(0xFF00C853), shape: BoxShape.circle,
+                            ),
+                            child: const Icon(Icons.check_rounded,
+                                color: Colors.white, size: 32),
+                          ),
+                        ),
+                      ),
+                  ],
+                ),
+              ),
             ],
           ),
         ),
@@ -556,347 +807,472 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 
-  Widget _buildInputField({
-    required TextEditingController controller,
-    required String label,
-    required String hint,
-    bool obscure = false,
-    bool isRequired = false,
-  }) {
-    final colorScheme = Theme.of(context).colorScheme;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          children: [
-            Text(
-              label,
-              style: GoogleFonts.fredoka(
-                fontSize: 15,
-                fontWeight: FontWeight.bold,
-                color: colorScheme.onSurface,
-              ),
-            ),
-            if (isRequired)
-              Text(
-                ' Obligatorio',
-                style: GoogleFonts.fredoka(
-                  fontSize: 13,
-                  fontWeight: FontWeight.bold,
-                  color: const Color(0xFFFF6B7A),
-                ),
-              ),
-          ],
-        ),
-        const SizedBox(height: 8),
-        Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(30),
-            gradient: const LinearGradient(
-              colors: [Color(0xFFADD8E6), Color(0xFF3A5AFF), Color(0xFF8C4EFF)],
-              begin: Alignment.centerLeft,
-              end: Alignment.centerRight,
-            ),
-          ),
-          padding: const EdgeInsets.all(2.5),
-          child: Container(
-            decoration: BoxDecoration(
-              color: colorScheme.surfaceContainerLow,
-              borderRadius: BorderRadius.circular(28),
-            ),
-            child: TextField(
-              controller: controller,
-              obscureText: obscure && !_isPasswordVisible,
-              style: GoogleFonts.fredoka(
-                color: colorScheme.onSurface,
-                fontWeight: FontWeight.bold,
-              ),
-              onChanged: (_) {
-                setState(() {});
-              },
-              decoration: InputDecoration(
-                hintText: hint,
-                hintStyle: GoogleFonts.fredoka(
-                  color: colorScheme.onSurfaceVariant,
-                  fontWeight: FontWeight.bold,
-                ),
-                suffixIcon: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    // Check dinámico (solo si hay texto)
-                    if (controller.text.isNotEmpty)
-                      Padding(
-                        padding: const EdgeInsets.only(right: 10),
-                        child: Container(
-                          width: 28,
-                          height: 28,
-                          decoration: const BoxDecoration(
-                            color: Color(0xFF3709EC),
-                            shape: BoxShape.circle,
-                          ),
-                          child: const Center(
-                            child: Icon(
-                              Icons.check,
-                              color: Colors.white,
-                              size: 18,
-                            ),
-                          ),
-                        ),
-                      ),
-                    // Toggle de contraseña (solo si es obscure)
-                    if (obscure)
-                      Padding(
-                        padding: const EdgeInsets.only(right: 15),
-                        child: GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              _isPasswordVisible = !_isPasswordVisible;
-                            });
-                          },
-                          child: Icon(
-                            _isPasswordVisible
-                                ? Icons.visibility
-                                : Icons.visibility_off,
-                            color: const Color(0xFF3709EC),
-                            size: 22,
-                          ),
-                        ),
-                      ),
-                  ],
-                ),
-                contentPadding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 14,
-                ),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(28),
-                  borderSide: BorderSide.none,
-                ),
-              ),
-            ),
-          ),
-        ),
-      ],
+  // ── PASO 1: ¿Quién eres? ──
+  Widget _buildStep1() {
+    return SingleChildScrollView(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      physics: const BouncingScrollPhysics(),
+      child: Column(
+        children: [
+          _field('¿Cómo te llamas?', 'Tu nombre', _nombreController, _nombreFocus),
+          const SizedBox(height: 14),
+          _field('Apellidos', 'Tus apellidos', _apellidoController, _apellidoFocus),
+          const SizedBox(height: 14),
+          _dropdown('¿Cuántos años tienes?', 'Selecciona tu edad',
+              _edadSeleccionada, _edades, (v) => setState(() => _edadSeleccionada = v)),
+          const SizedBox(height: 14),
+          _datePicker(),
+          const SizedBox(height: 14),
+          _dropdown('¿Con qué sexo te identificas?', 'Selecciona una opción',
+              _sexoSeleccionado, _sexos, (v) => setState(() => _sexoSeleccionado = v)),
+          const SizedBox(height: 16),
+        ],
+      ),
     );
   }
 
-  Widget _buildDropdownField({
-    required String label,
-    required String hint,
-    required String? value,
-    required List<String> items,
-    required ValueChanged<String?> onChanged,
-    bool isRequired = false,
-  }) {
+  // ── PASO 2: ¿Dónde estudias? ──
+  Widget _buildStep2() {
+    return SingleChildScrollView(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      physics: const BouncingScrollPhysics(),
+      child: Column(
+        children: [
+          _dropdown('¿De qué ciudad eres?', 'Selecciona tu ciudad',
+              _ciudadSeleccionada, _ciudades, (v) => setState(() => _ciudadSeleccionada = v)),
+          const SizedBox(height: 14),
+          _dropdown('¿Cuál es tu carrera?', 'Selecciona tu carrera',
+              _carreraSeleccionada, _carreras, (v) => setState(() => _carreraSeleccionada = v)),
+          const SizedBox(height: 14),
+          _dropdown('¿Qué semestre cursas?', 'Selecciona el semestre',
+              _semestresSeleccionado, _semestres, (v) => setState(() => _semestresSeleccionado = v)),
+          const SizedBox(height: 14),
+          _field('Teléfono', '3001234567', _telefonoController, _telefonoFocus,
+              keyboardType: TextInputType.phone,
+              inputFormatters: [FilteringTextInputFormatter.digitsOnly]),
+          const SizedBox(height: 16),
+        ],
+      ),
+    );
+  }
+
+  // ── PASO 3: Tu cuenta ──
+  Widget _buildStep3() {
     final colorScheme = Theme.of(context).colorScheme;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          children: [
-            Text(
-              label,
-              style: GoogleFonts.fredoka(
-                fontSize: 15,
-                fontWeight: FontWeight.bold,
-                color: colorScheme.onSurface,
-              ),
-            ),
-            if (isRequired)
-              Text(
-                ' Obligatorio',
-                style: GoogleFonts.fredoka(
-                  fontSize: 13,
-                  fontWeight: FontWeight.bold,
-                  color: const Color(0xFFFF6B7A),
-                ),
-              ),
-          ],
-        ),
-        const SizedBox(height: 8),
-        Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(30),
-            gradient: const LinearGradient(
-              colors: [Color(0xFFADD8E6), Color(0xFF3A5AFF), Color(0xFF8C4EFF)],
-              begin: Alignment.centerLeft,
-              end: Alignment.centerRight,
-            ),
-          ),
-          padding: const EdgeInsets.all(2.5),
-          child: Container(
-            decoration: BoxDecoration(
-              color: colorScheme.surfaceContainerLow,
-              borderRadius: BorderRadius.circular(28),
-            ),
+    return SingleChildScrollView(
+      padding: const EdgeInsets.fromLTRB(20, 0, 20, 16),
+      physics: const BouncingScrollPhysics(),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _field('Correo institucional', 'example@correo.com',
+              _correoController, _correoFocus,
+              keyboardType: TextInputType.emailAddress),
+          const SizedBox(height: 14),
+          _field('Contraseña', '••••••••', _passwordController, _passwordFocus,
+              isPassword: true),
+          const SizedBox(height: 4),
+          Padding(
+            padding: const EdgeInsets.only(left: 4),
             child: Row(
               children: [
-                Expanded(
-                  child: DropdownButtonHideUnderline(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: DropdownButton<String>(
-                        isExpanded: true,
-                        hint: Text(
-                          hint,
-                          style: GoogleFonts.fredoka(
-                            color: colorScheme.onSurfaceVariant,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        value: value,
-                        items: items
-                            .map(
-                              (item) => DropdownMenuItem(
-                                value: item,
-                                child: Text(
-                                  item,
-                                  style: GoogleFonts.fredoka(
-                                    color: colorScheme.onSurface,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ),
-                            )
-                            .toList(),
-                        onChanged: onChanged,
-                        style: GoogleFonts.fredoka(
-                          color: colorScheme.onSurface,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                // Check dinámico (solo si hay selección)
-                if (value != null && value.isNotEmpty)
-                  Padding(
-                    padding: const EdgeInsets.only(right: 15),
-                    child: Container(
-                      width: 28,
-                      height: 28,
-                      decoration: const BoxDecoration(
-                        color: Color(0xFF3709EC),
-                        shape: BoxShape.circle,
-                      ),
-                      child: const Center(
-                        child: Icon(Icons.check, color: Colors.white, size: 18),
-                      ),
-                    ),
-                  )
-                else
-                  const SizedBox(width: 15),
+                const Icon(Icons.info_outline_rounded, size: 13, color: Color(0xFF8C4EFF)),
+                const SizedBox(width: 5),
+                Text('Mínimo 9 caracteres',
+                    style: GoogleFonts.fredoka(fontSize: 12, color: const Color(0xFF8C4EFF), fontWeight: FontWeight.w500)),
               ],
             ),
           ),
-        ),
-      ],
+          const SizedBox(height: 18),
+
+          // ── BLOQUE TÉRMINOS Y CONDICIONES ──
+          _buildTermsBlock(colorScheme),
+        ],
+      ),
     );
   }
 
-  Widget _buildDateField({
-    required TextEditingController controller,
-    required String label,
-    required String hint,
-    required VoidCallback onTap,
-    bool isRequired = false,
-  }) {
-    final colorScheme = Theme.of(context).colorScheme;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          children: [
-            Text(
-              label,
-              style: GoogleFonts.fredoka(
-                fontSize: 15,
-                fontWeight: FontWeight.bold,
-                color: colorScheme.onSurface,
+  Widget _buildTermsBlock(ColorScheme colorScheme) {
+    return AnimatedBuilder(
+      animation: _checkboxCtrl,
+      builder: (_, __) => Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Header T&C
+          Row(
+            children: [
+              Container(
+                width: 28, height: 28,
+                decoration: BoxDecoration(
+                  gradient: const LinearGradient(colors: [Color(0xFF3A5AFF), Color(0xFF8C4EFF)]),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: const Icon(Icons.gavel_rounded, color: Colors.white, size: 16),
               ),
+              const SizedBox(width: 8),
+              Text('Términos y Condiciones',
+                  style: GoogleFonts.fredoka(
+                    fontSize: 15, fontWeight: FontWeight.bold,
+                    color: colorScheme.onSurface,
+                  )),
+              const Spacer(),
+              if (!_termsScrolledToBottom)
+                Row(
+                  children: [
+                    Icon(Icons.arrow_downward_rounded, size: 13, color: colorScheme.onSurfaceVariant),
+                    const SizedBox(width: 3),
+                    Text('Desliza', style: GoogleFonts.fredoka(
+                      fontSize: 11, color: colorScheme.onSurfaceVariant,
+                    )),
+                  ],
+                )
+              else
+                Text('✓ Leídos', style: GoogleFonts.fredoka(
+                  fontSize: 11, color: const Color(0xFF00C853), fontWeight: FontWeight.bold,
+                )),
+            ],
+          ),
+          const SizedBox(height: 8),
+
+          // Caja de T&C scrolleable
+          AnimatedContainer(
+            duration: const Duration(milliseconds: 300),
+            height: 180,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(14),
+              border: Border.all(
+                color: _termsScrolledToBottom
+                    ? const Color(0xFF00C853).withOpacity(0.6)
+                    : const Color(0xFF3A5AFF).withOpacity(0.2),
+                width: 1.5,
+              ),
+              color: colorScheme.surfaceContainerLow,
             ),
-            if (isRequired)
-              Text(
-                ' Obligatorio',
-                style: GoogleFonts.fredoka(
-                  fontSize: 13,
-                  fontWeight: FontWeight.bold,
-                  color: const Color(0xFFFF6B7A),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(13),
+              child: Scrollbar(
+                controller: _termsScrollCtrl,
+                thumbVisibility: true,
+                child: SingleChildScrollView(
+                  controller: _termsScrollCtrl,
+                  padding: const EdgeInsets.all(14),
+                  child: Text(
+                    _termsText,
+                    style: GoogleFonts.fredoka(
+                      fontSize: 13, color: colorScheme.onSurface,
+                      height: 1.6, fontWeight: FontWeight.w400,
+                    ),
+                  ),
                 ),
               ),
-          ],
-        ),
-        const SizedBox(height: 8),
-        Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(30),
-            gradient: const LinearGradient(
-              colors: [Color(0xFFADD8E6), Color(0xFF3A5AFF), Color(0xFF8C4EFF)],
-              begin: Alignment.centerLeft,
-              end: Alignment.centerRight,
             ),
           ),
-          padding: const EdgeInsets.all(2.5),
-          child: Container(
-            decoration: BoxDecoration(
-              color: colorScheme.surfaceContainerLow,
-              borderRadius: BorderRadius.circular(28),
-            ),
-            child: TextField(
-              controller: controller,
-              readOnly: true,
-              onTap: onTap,
-              style: GoogleFonts.fredoka(
-                color: colorScheme.onSurface,
-                fontWeight: FontWeight.bold,
-              ),
-              decoration: InputDecoration(
-                hintText: hint,
-                hintStyle: GoogleFonts.fredoka(
-                  color: colorScheme.onSurfaceVariant,
-                  fontWeight: FontWeight.bold,
-                ),
-                suffixIcon: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    if (controller.text.isNotEmpty)
-                      Padding(
-                        padding: const EdgeInsets.only(right: 10),
-                        child: Container(
-                          width: 28,
-                          height: 28,
-                          decoration: const BoxDecoration(
-                            color: Color(0xFF3709EC),
-                            shape: BoxShape.circle,
+          const SizedBox(height: 12),
+
+          // Checkbox animado (se desbloquea al llegar al fondo)
+          GestureDetector(
+            onTap: _termsScrolledToBottom
+                ? () => setState(() => _termsAccepted = !_termsAccepted)
+                : null,
+            child: AnimatedOpacity(
+              duration: const Duration(milliseconds: 300),
+              opacity: _termsScrolledToBottom ? 1.0 : 0.35,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  // Checkbox animado
+                  ScaleTransition(
+                    scale: _termsScrolledToBottom
+                        ? (_termsAccepted
+                            ? const AlwaysStoppedAnimation(1.0)
+                            : _checkboxScale)
+                        : const AlwaysStoppedAnimation(0.7),
+                    child: AnimatedContainer(
+                      duration: const Duration(milliseconds: 250),
+                      width: 26, height: 26,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                        gradient: _termsAccepted
+                            ? const LinearGradient(
+                                colors: [Color(0xFF00C853), Color(0xFF00897B)])
+                            : null,
+                        border: _termsAccepted
+                            ? null
+                            : Border.all(
+                                color: _termsScrolledToBottom
+                                    ? const Color(0xFF3A5AFF)
+                                    : colorScheme.onSurfaceVariant,
+                                width: 2),
+                        color: _termsAccepted ? null : Colors.transparent,
+                        boxShadow: _termsAccepted
+                            ? [BoxShadow(
+                                color: const Color(0xFF00C853).withOpacity(0.35),
+                                blurRadius: 8, offset: const Offset(0, 3))]
+                            : [],
+                      ),
+                      child: _termsAccepted
+                          ? const Icon(Icons.check_rounded, color: Colors.white, size: 16)
+                          : null,
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: RichText(
+                      text: TextSpan(
+                        style: GoogleFonts.fredoka(
+                          fontSize: 13, color: colorScheme.onSurface,
+                          fontWeight: FontWeight.w500,
+                        ),
+                        children: const [
+                          TextSpan(text: 'He leído y acepto los '),
+                          TextSpan(
+                            text: 'Términos y Condiciones',
+                            style: TextStyle(
+                              color: Color(0xFF3A5AFF),
+                              fontWeight: FontWeight.bold,
+                              decoration: TextDecoration.underline,
+                            ),
                           ),
-                          child: const Center(
-                            child: Icon(
-                              Icons.check,
-                              color: Colors.white,
-                              size: 18,
+                          TextSpan(text: ' de REST Salud Mental'),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+
+          // Hint si aún no ha scrolleado
+          if (!_termsScrolledToBottom) ...[
+            const SizedBox(height: 8),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.touch_app_rounded, size: 13, color: colorScheme.onSurfaceVariant.withOpacity(0.5)),
+                const SizedBox(width: 4),
+                Text('Lee los términos para desbloquear',
+                    style: GoogleFonts.fredoka(
+                      fontSize: 11, color: colorScheme.onSurfaceVariant.withOpacity(0.5),
+                    )),
+              ],
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+
+  static const String _termsText = '''
+TÉRMINOS Y CONDICIONES DE USO — REST SALUD MENTAL
+
+Última actualización: Junio 2025
+
+Bienvenido/a a REST, una aplicación de apoyo al bienestar emocional y salud mental dirigida a estudiantes universitarios.
+
+1. ACEPTACIÓN DE TÉRMINOS
+Al crear una cuenta y usar esta aplicación, aceptas quedar vinculado/a por estos Términos y Condiciones. Si no estás de acuerdo con alguna parte, te pedimos que no uses la aplicación.
+
+2. USO DE LA APLICACIÓN
+REST es una herramienta de apoyo complementario al bienestar mental. No reemplaza servicios clínicos, diagnósticos médicos ni tratamientos psicológicos profesionales. En caso de crisis o emergencia, comunícate con un profesional de salud mental.
+
+3. PRIVACIDAD Y DATOS PERSONALES
+Tus datos personales (nombre, correo, edad, carrera, etc.) serán usados exclusivamente para personalizar tu experiencia dentro de la aplicación. No compartiremos tu información con terceros sin tu consentimiento explícito. Consulta nuestra Política de Privacidad para más detalles.
+
+4. CONFIDENCIALIDAD
+La información que compartes con NOA (nuestro asistente de bienestar) es tratada con estricta confidencialidad y solo se usa para mejorar tu experiencia dentro de la app.
+
+5. CONTENIDO GENERADO POR EL USUARIO
+Al escribir en el diario o chat, eres responsable del contenido que compartes. REST se reserva el derecho de suspender cuentas que hagan uso indebido de la plataforma.
+
+6. LIMITACIÓN DE RESPONSABILIDAD
+REST y su equipo de desarrollo no se hacen responsables por decisiones tomadas con base en el contenido de la aplicación. Siempre recomendamos consultar con profesionales de salud mental calificados.
+
+7. MODIFICACIONES
+Podemos actualizar estos términos en cualquier momento. Te notificaremos a través de la aplicación cuando haya cambios relevantes.
+
+8. CONTACTO
+¿Tienes preguntas? Escríbenos a: soporte@restsaludmental.app
+
+Al aceptar, confirmas que tienes al menos 15 años de edad y que has leído y comprendido estos términos en su totalidad.
+''';
+
+
+  // ── CAMPO DE TEXTO ANIMADO ──
+  Widget _field(
+    String label, String hint,
+    TextEditingController controller, FocusNode focusNode, {
+    bool isPassword = false,
+    TextInputType keyboardType = TextInputType.text,
+    List<TextInputFormatter> inputFormatters = const [],
+  }) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final isFocused = focusNode.hasFocus;
+    final hasText = controller.text.isNotEmpty;
+
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 200),
+      curve: Curves.easeOut,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(14),
+        boxShadow: isFocused ? [
+          BoxShadow(color: const Color(0xFF3A5AFF).withOpacity(0.2),
+              blurRadius: 14, offset: const Offset(0, 4)),
+        ] : [],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          AnimatedDefaultTextStyle(
+            duration: const Duration(milliseconds: 180),
+            style: GoogleFonts.fredoka(
+              fontSize: 13, fontWeight: FontWeight.bold,
+              color: isFocused ? const Color(0xFF3A5AFF) : colorScheme.onSurfaceVariant,
+            ),
+            child: Padding(
+              padding: const EdgeInsets.only(left: 4, bottom: 5),
+              child: Text(label),
+            ),
+          ),
+          Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(13),
+              gradient: isFocused
+                  ? const LinearGradient(colors: [Color(0xFF3A5AFF), Color(0xFF8C4EFF)])
+                  : const LinearGradient(colors: [Color(0xFFCDD8FF), Color(0xFFD8C8FF)]),
+            ),
+            padding: const EdgeInsets.all(2),
+            child: Container(
+              decoration: BoxDecoration(
+                color: colorScheme.surfaceContainerLow,
+                borderRadius: BorderRadius.circular(11),
+              ),
+              child: TextField(
+                controller: controller,
+                focusNode: focusNode,
+                obscureText: isPassword && !_isPasswordVisible,
+                keyboardType: keyboardType,
+                inputFormatters: inputFormatters,
+                style: GoogleFonts.fredoka(
+                  color: colorScheme.onSurface, fontSize: 15,
+                  fontWeight: FontWeight.w600,
+                ),
+                decoration: InputDecoration(
+                  hintText: hint,
+                  hintStyle: GoogleFonts.fredoka(
+                    color: colorScheme.onSurfaceVariant.withOpacity(0.55), fontSize: 14,
+                  ),
+                  prefixIcon: Icon(
+                    isPassword ? Icons.lock_outline_rounded : Icons.edit_outlined,
+                    color: isFocused ? const Color(0xFF3A5AFF) : colorScheme.onSurfaceVariant,
+                    size: 18,
+                  ),
+                  suffixIcon: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      if (hasText)
+                        AnimatedScale(
+                          scale: 1.0, duration: const Duration(milliseconds: 200),
+                          curve: Curves.elasticOut,
+                          child: Padding(
+                            padding: const EdgeInsets.only(right: 4),
+                            child: Container(
+                              width: 22, height: 22,
+                              decoration: const BoxDecoration(
+                                  color: Color(0xFF3709EC), shape: BoxShape.circle),
+                              child: const Icon(Icons.check, color: Colors.white, size: 13),
                             ),
                           ),
                         ),
-                      )
-                    else
-                      const SizedBox(width: 10),
-                    const Padding(
-                      padding: EdgeInsets.only(right: 15),
-                      child: Icon(
-                        Icons.calendar_today,
-                        color: Color(0xFF3709EC),
-                        size: 22,
-                      ),
-                    ),
-                  ],
+                      if (isPassword)
+                        Padding(
+                          padding: const EdgeInsets.only(right: 10),
+                          child: GestureDetector(
+                            onTap: () => setState(() => _isPasswordVisible = !_isPasswordVisible),
+                            child: AnimatedSwitcher(
+                              duration: const Duration(milliseconds: 200),
+                              child: Icon(
+                                _isPasswordVisible ? Icons.visibility_rounded : Icons.visibility_off_rounded,
+                                key: ValueKey(_isPasswordVisible),
+                                color: isFocused ? const Color(0xFF3A5AFF) : colorScheme.onSurfaceVariant,
+                                size: 18,
+                              ),
+                            ),
+                          ),
+                        ),
+                    ],
+                  ),
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 4, vertical: 13),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(11), borderSide: BorderSide.none,
+                  ),
                 ),
-                contentPadding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 14,
-                ),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(28),
-                  borderSide: BorderSide.none,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // ── DROPDOWN ANIMADO ──
+  Widget _dropdown(String label, String hint, String? value,
+      List<String> items, ValueChanged<String?> onChanged) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final hasValue = value != null;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(left: 4, bottom: 5),
+          child: Text(label,
+            style: GoogleFonts.fredoka(
+              fontSize: 13, fontWeight: FontWeight.bold,
+              color: hasValue ? const Color(0xFF3A5AFF) : colorScheme.onSurfaceVariant,
+            ),
+          ),
+        ),
+        Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(13),
+            gradient: hasValue
+                ? const LinearGradient(colors: [Color(0xFF3A5AFF), Color(0xFF8C4EFF)])
+                : const LinearGradient(colors: [Color(0xFFCDD8FF), Color(0xFFD8C8FF)]),
+          ),
+          padding: const EdgeInsets.all(2),
+          child: Container(
+            decoration: BoxDecoration(
+              color: colorScheme.surfaceContainerLow,
+              borderRadius: BorderRadius.circular(11),
+            ),
+            child: DropdownButtonHideUnderline(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                child: DropdownButton<String>(
+                  isExpanded: true,
+                  hint: Text(hint, style: GoogleFonts.fredoka(
+                    color: colorScheme.onSurfaceVariant.withOpacity(0.55), fontSize: 14,
+                  )),
+                  value: value,
+                  icon: hasValue
+                      ? Container(
+                          width: 22, height: 22,
+                          decoration: const BoxDecoration(
+                              color: Color(0xFF3709EC), shape: BoxShape.circle),
+                          child: const Icon(Icons.check, color: Colors.white, size: 13),
+                        )
+                      : const Icon(Icons.keyboard_arrow_down_rounded,
+                          color: Color(0xFF8C4EFF)),
+                  items: items.map((item) => DropdownMenuItem(
+                    value: item,
+                    child: Text(item, style: GoogleFonts.fredoka(
+                      color: colorScheme.onSurface, fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                    )),
+                  )).toList(),
+                  onChanged: onChanged,
+                  style: GoogleFonts.fredoka(color: colorScheme.onSurface, fontSize: 14),
                 ),
               ),
             ),
@@ -906,41 +1282,83 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 
-  Widget _buildRadialButton({
-    required String text,
-    required VoidCallback? onPressed,
-  }) {
-    final gradient = const RadialGradient(
-      center: Alignment.center,
-      radius: 1.2,
-      colors: [Color(0xFF5CCFC0), Color(0xFF2981C1)],
-    );
+  // ── DATE PICKER ──
+  Widget _datePicker() {
+    final colorScheme = Theme.of(context).colorScheme;
+    final hasDate = _fechaNacimientoController.text.isNotEmpty;
 
-    return Container(
-      height: 65,
-      decoration: BoxDecoration(
-        gradient: gradient,
-        borderRadius: BorderRadius.circular(50),
-      ),
-      child: ElevatedButton(
-        onPressed: onPressed,
-        style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.transparent,
-          shadowColor: Colors.transparent,
-          padding: EdgeInsets.zero,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(50),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(left: 4, bottom: 5),
+          child: Text('Fecha de nacimiento',
+            style: GoogleFonts.fredoka(
+              fontSize: 13, fontWeight: FontWeight.bold,
+              color: hasDate ? const Color(0xFF3A5AFF) : colorScheme.onSurfaceVariant,
+            ),
           ),
         ),
-        child: Text(
-          text,
-          style: GoogleFonts.fredoka(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-            fontSize: 35,
+        GestureDetector(
+          onTap: () async {
+            final now = DateTime.now();
+            final picked = await showDatePicker(
+              context: context,
+              initialDate: DateTime(now.year - 18, now.month, now.day),
+              firstDate: DateTime(1900), lastDate: now,
+            );
+            if (picked != null) {
+              setState(() => _fechaNacimientoController.text = _formatDate(picked));
+            }
+          },
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(13),
+              gradient: hasDate
+                  ? const LinearGradient(colors: [Color(0xFF3A5AFF), Color(0xFF8C4EFF)])
+                  : const LinearGradient(colors: [Color(0xFFCDD8FF), Color(0xFFD8C8FF)]),
+            ),
+            padding: const EdgeInsets.all(2),
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+              decoration: BoxDecoration(
+                color: colorScheme.surfaceContainerLow,
+                borderRadius: BorderRadius.circular(11),
+              ),
+              child: Row(
+                children: [
+                  Icon(Icons.calendar_today_rounded, size: 18,
+                      color: hasDate ? const Color(0xFF3A5AFF) : colorScheme.onSurfaceVariant),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: Text(
+                      hasDate ? _fechaNacimientoController.text : 'Selecciona tu fecha',
+                      style: GoogleFonts.fredoka(
+                        color: hasDate ? colorScheme.onSurface : colorScheme.onSurfaceVariant.withOpacity(0.55),
+                        fontSize: 14, fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                  if (hasDate)
+                    Container(
+                      width: 22, height: 22,
+                      decoration: const BoxDecoration(
+                          color: Color(0xFF3709EC), shape: BoxShape.circle),
+                      child: const Icon(Icons.check, color: Colors.white, size: 13),
+                    ),
+                ],
+              ),
+            ),
           ),
         ),
-      ),
+      ],
     );
   }
+}
+
+class _StepMeta {
+  final String emoji;
+  final String title;
+  final String subtitle;
+  const _StepMeta({required this.emoji, required this.title, required this.subtitle});
 }

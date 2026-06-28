@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rest/core/utils/app_toast.dart';
 import '../../home/screens/gradient_text.dart';
 
 class LanguageScreen extends StatefulWidget {
@@ -254,16 +255,7 @@ class _LanguageScreenState extends State<LanguageScreen> {
                 Navigator.of(context).pop();
                 // Aquí puedes agregar la lógica para aplicar el cambio de idioma
                 Navigator.of(context).pop(); // Regresar a la pantalla anterior
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text('Idioma cambiado a $selectedLanguage'),
-                    backgroundColor: Color(0xFF4FC3F7),
-                    behavior: SnackBarBehavior.floating,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
-                );
+                AppToast.success(context, 'Idioma cambiado a $selectedLanguage');
               },
               child: Text(
                 'Guardar',
