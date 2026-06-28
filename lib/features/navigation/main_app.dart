@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import '../home/screens/home_screen.dart';
 import '../progress/screens/progress_screen.dart';
 import '../progress/screens/myprogress_screen.dart';
+import '../progress/screens/streak_screen.dart';
 import '../help/screens/help_screen.dart';
+import 'package:rest/core/services/user_session.dart';
 
 class MainApp extends StatefulWidget {
   const MainApp({super.key});
@@ -16,7 +18,7 @@ class _MainAppState extends State<MainApp> {
 
   final List<Widget> _screens = [
     HomeScreen(),
-    ProgressScreen(), // 📊 Progreso
+    ProgressScreen(),
     MyProgressScreen(),
   ];
 
@@ -24,6 +26,34 @@ class _MainAppState extends State<MainApp> {
   void initState() {
     super.initState();
     ProgressScreen.prefetch();
+    // Mostrar pantalla de racha después del primer frame
+    WidgetsBinding.instance.addPostFrameCallback((_) => _checkStreak());
+  }
+
+  Future<void> _checkStreak() async {
+    await UserSession.load();
+
+    final shouldShow = UserSession.showStreakToday || !UserSession.streakGoalSet;
+    if (!shouldShow) return;
+
+    // Limpiar flag antes de mostrar para que no vuelva a aparecer
+    if (UserSession.showStreakToday) {
+      UserSession.showStreakToday = false;
+      await UserSession.persist();
+    }
+
+    if (!mounted) return;
+    Navigator.of(context).push(
+      PageRouteBuilder(
+        opaque: false,
+        barrierDismissible: false,
+        barrierColor: Colors.transparent,
+        pageBuilder: (_, __, ___) => const StreakEntryScreen(),
+        transitionsBuilder: (_, anim, __, child) =>
+            FadeTransition(opacity: anim, child: child),
+        transitionDuration: const Duration(milliseconds: 350),
+      ),
+    );
   }
 
   @override
