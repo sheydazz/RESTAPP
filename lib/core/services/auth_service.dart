@@ -17,17 +17,11 @@ class AuthService {
       'contrasena': contrasena,
     };
 
-    print('LOGIN REQUEST → $uri');
-    print('LOGIN BODY    → $payload');
-
     final response = await http.post(
       uri,
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode(payload),
     );
-
-    print('LOGIN RESPONSE STATUS → ${response.statusCode}');
-    print('LOGIN RESPONSE BODY   → ${response.body}');
 
     final data = jsonDecode(response.body);
 
@@ -74,17 +68,11 @@ class AuthService {
       'fecha_nacimiento': fechaNacimiento,
     };
 
-    print('REGISTER REQUEST → $uri');
-    print('REGISTER BODY    → $payload');
-
     final response = await http.post(
       uri,
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode(payload),
     );
-
-    print('REGISTER RESPONSE STATUS → ${response.statusCode}');
-    print('REGISTER RESPONSE BODY   → ${response.body}');
 
     final data = jsonDecode(response.body);
 

@@ -132,7 +132,7 @@ class _EmotionSavedScreenState extends State<EmotionSavedScreen>
             borderRadius: BorderRadius.circular(24),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.15),
+                color: Colors.black.withValues(alpha: 0.15),
                 blurRadius: 20,
                 spreadRadius: 4,
                 offset: const Offset(0, 8),
@@ -157,7 +157,7 @@ class _EmotionSavedScreenState extends State<EmotionSavedScreen>
                     ),
                     boxShadow: [
                       BoxShadow(
-                        color: const Color(0xFF08D557).withOpacity(0.4),
+                        color: const Color(0xFF08D557).withValues(alpha: 0.4),
                         blurRadius: 20,
                         offset: const Offset(0, 8),
                       ),

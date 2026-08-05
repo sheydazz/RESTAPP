@@ -49,7 +49,6 @@ class EmotionService {
 
     if (response.statusCode >= 200 && response.statusCode < 300) {
       final data = jsonDecode(response.body);
-      print('🔄 EmotionService - Respuesta cruda del API: ${response.body}');
 
       List<Map<String, dynamic>> parseList(List input) {
         return List<Map<String, dynamic>>.from(
@@ -101,15 +100,9 @@ class EmotionService {
       },
     );
 
-    print('PREGUNTAS STATUS → ${response.statusCode}');
-    print('PREGUNTAS BODY   → ${response.body}');
-
     // Si el backend rechaza por rol (403), reintentar SIN token
     if (response.statusCode == 403) {
-      print('PREGUNTAS → 403 con token, reintentando sin token...');
       response = await http.get(uri);
-      print('PREGUNTAS (sin token) STATUS → ${response.statusCode}');
-      print('PREGUNTAS (sin token) BODY   → ${response.body}');
     }
 
     if (response.statusCode >= 200 && response.statusCode < 300) {
@@ -143,10 +136,6 @@ class EmotionService {
     final response = await http.get(
       uri,
       headers: {'Authorization': 'Bearer $token'},
-    );
-
-    print(
-      'EXISTE_REGISTRO → status=${response.statusCode}, body=${response.body}',
     );
 
     if (response.statusCode == 404) {

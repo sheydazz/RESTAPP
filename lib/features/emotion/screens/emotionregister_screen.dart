@@ -103,7 +103,6 @@ class _CheckScreenState extends State<EmotionRegisterScreen> {
         preguntas: _preguntas,
         opcionSeleccionadaPorPregunta: _opcionSeleccionadaPorPregunta,
       );
-      print('DEBUG: Navegando a trafficLight con resultado=$resultado');
       // Navegar directo al semáforo emocional
       Navigator.pushReplacementNamed(
         context,

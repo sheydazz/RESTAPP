@@ -19,12 +19,6 @@ class TrafficLightScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // DEBUG: Ver qué parámetro recibimos
-    print('🔴 TrafficLightScreen recibió estado: "$estado"');
-    print(
-      '🔴 TrafficLightScreen resultado completo: estado=$estado, mensaje=$mensaje, botonTexto=$botonTexto, promedio=$promedioHoy',
-    );
-
     final config = EmotionStateConfig.getConfig(estado);
     final recomendaciones = config.getRandomRecommendations(count: 3);
 
@@ -41,7 +35,7 @@ class TrafficLightScreen extends StatelessWidget {
             borderRadius: BorderRadius.circular(24),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.15),
+                color: Colors.black.withValues(alpha: 0.15),
                 blurRadius: 20,
                 spreadRadius: 4,
                 offset: const Offset(0, 8),
@@ -62,8 +56,8 @@ class TrafficLightScreen extends StatelessWidget {
                       shape: BoxShape.circle,
                       gradient: RadialGradient(
                         colors: [
-                          config.colorPrincipal.withOpacity(0.15),
-                          config.colorPrincipal.withOpacity(0.05),
+                          config.colorPrincipal.withValues(alpha: 0.15),
+                          config.colorPrincipal.withValues(alpha: 0.05),
                         ],
                       ),
                     ),
@@ -110,10 +104,10 @@ class TrafficLightScreen extends StatelessWidget {
                       vertical: 14,
                     ),
                     decoration: BoxDecoration(
-                      color: config.colorPrincipal.withOpacity(0.1),
+                      color: config.colorPrincipal.withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(16),
                       border: Border.all(
-                        color: config.colorPrincipal.withOpacity(0.3),
+                        color: config.colorPrincipal.withValues(alpha: 0.3),
                         width: 2,
                       ),
                     ),
@@ -136,7 +130,7 @@ class TrafficLightScreen extends StatelessWidget {
                           style: TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.w500,
-                            color: config.colorTexto.withOpacity(0.8),
+                            color: config.colorTexto.withValues(alpha: 0.8),
                             height: 1.3,
                           ),
                         ),
@@ -199,7 +193,7 @@ class TrafficLightScreen extends StatelessWidget {
                       ),
                       boxShadow: [
                         BoxShadow(
-                          color: config.colorPrincipal.withOpacity(0.4),
+                          color: config.colorPrincipal.withValues(alpha: 0.4),
                           blurRadius: 12,
                           offset: const Offset(0, 4),
                         ),

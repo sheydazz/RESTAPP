@@ -88,7 +88,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   shape: BoxShape.circle,
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.1),
+                      color: Colors.black.withValues(alpha: 0.1),
                       blurRadius: 3,
                       offset: Offset(0, 1),
                     ),
@@ -170,7 +170,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                   boxShadow: [
                     BoxShadow(
-                      color: Color(0xFF0AF3FF).withOpacity(0.3),
+                      color: Color(0xFF0AF3FF).withValues(alpha: 0.3),
                       blurRadius: 15,
                       offset: Offset(0, 5),
                     ),
@@ -204,7 +204,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 borderRadius: BorderRadius.circular(15),
                 boxShadow: [
                   BoxShadow(
-                    color: Color(0xFF0AF3FF).withOpacity(0.3),
+                    color: Color(0xFF0AF3FF).withValues(alpha: 0.3),
                     blurRadius: 10,
                     offset: const Offset(0, 4),
                   ),
@@ -266,7 +266,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.03),
+                color: Colors.black.withValues(alpha: 0.03),
                 blurRadius: 8,
                 offset: const Offset(0, 2),
               ),

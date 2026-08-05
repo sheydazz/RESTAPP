@@ -126,7 +126,7 @@ class CustomBottomNavBar extends StatelessWidget {
         width: 60,
         height: 50,
         decoration: BoxDecoration(
-          color: isActive ? Colors.white.withOpacity(0.9) : Colors.transparent,
+          color: isActive ? Colors.white.withValues(alpha: 0.9) : Colors.transparent,
           shape: BoxShape.circle,
         ),
         child: Icon(

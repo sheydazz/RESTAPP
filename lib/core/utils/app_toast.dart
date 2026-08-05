@@ -180,7 +180,7 @@ class _ToastWidgetState extends State<_ToastWidget>
                     borderRadius: BorderRadius.circular(18),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.18),
+                        color: Colors.black.withValues(alpha: 0.18),
                         blurRadius: 20,
                         offset: const Offset(0, 8),
                       ),
@@ -196,7 +196,7 @@ class _ToastWidgetState extends State<_ToastWidget>
                         width: 40,
                         height: 40,
                         decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.2),
+                          color: Colors.white.withValues(alpha: 0.2),
                           shape: BoxShape.circle,
                         ),
                         child: Icon(cfg.icon, color: Colors.white, size: 22),
@@ -210,7 +210,7 @@ class _ToastWidgetState extends State<_ToastWidget>
                             Text(
                               cfg.label,
                               style: GoogleFonts.fredoka(
-                                color: Colors.white.withOpacity(0.85),
+                                color: Colors.white.withValues(alpha: 0.85),
                                 fontSize: 12,
                                 fontWeight: FontWeight.w600,
                                 letterSpacing: 0.8,
@@ -234,7 +234,7 @@ class _ToastWidgetState extends State<_ToastWidget>
                         onTap: _dismiss,
                         child: Icon(
                           Icons.close_rounded,
-                          color: Colors.white.withOpacity(0.7),
+                          color: Colors.white.withValues(alpha: 0.7),
                           size: 18,
                         ),
                       ),

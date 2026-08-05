@@ -16,7 +16,6 @@ class IntroScreen extends StatefulWidget {
 class _IntroScreenState extends State<IntroScreen> with TickerProviderStateMixin {
   // ── Video ──
   late VideoPlayerController _videoController;
-  bool _videoReady = false;
 
   // ── Controladores ──
   late AnimationController _logoFadeCtrl;   // fade-in inicial del logo
@@ -33,7 +32,6 @@ class _IntroScreenState extends State<IntroScreen> with TickerProviderStateMixin
   late Animation<double> _logoMoveY;   // desplazamiento vertical del logo
   late Animation<double> _noaScale;
   late Animation<double> _noaFade;
-  late Animation<double> _noaFloatY;
   late Animation<double> _textFade;
   late Animation<Offset> _textSlide;
   late Animation<double> _buttonFade;
@@ -41,7 +39,6 @@ class _IntroScreenState extends State<IntroScreen> with TickerProviderStateMixin
   late Animation<double> _shimmer;
 
   // ── Estado ──
-  bool _logoAtTop = false;   // true cuando el logo ya subió
   bool _showNoa = false;
   bool _showText = false;
   bool _showButton = false;
@@ -72,7 +69,7 @@ class _IntroScreenState extends State<IntroScreen> with TickerProviderStateMixin
       if (!mounted) return;
       _videoController.setLooping(true);
       _videoController.setVolume(0);
-      setState(() => _videoReady = true);
+      setState(() {});
       if (_showNoa) _videoController.play();
     } catch (_) {
       // Fallback: se queda la imagen estática
@@ -120,9 +117,6 @@ class _IntroScreenState extends State<IntroScreen> with TickerProviderStateMixin
       duration: const Duration(milliseconds: 2400),
       vsync: this,
     )..repeat(reverse: true);
-    _noaFloatY = Tween<double>(begin: -8.0, end: 8.0).animate(
-      CurvedAnimation(parent: _noaFloatCtrl, curve: Curves.easeInOut),
-    );
 
     // Texto
     _textCtrl = AnimationController(
@@ -169,7 +163,7 @@ class _IntroScreenState extends State<IntroScreen> with TickerProviderStateMixin
     // PASO 2 (1800ms): Logo sube con animación fluida
     Timer(const Duration(milliseconds: 1800), () {
       if (mounted) {
-        setState(() => _logoAtTop = true);
+        setState(() {});
         _logoMoveCtrl.forward();
       }
     });
@@ -434,7 +428,7 @@ class _IntroScreenState extends State<IntroScreen> with TickerProviderStateMixin
           ),
           boxShadow: [
             BoxShadow(
-              color: const Color(0xFF22AF95).withOpacity(0.4),
+              color: const Color(0xFF22AF95).withValues(alpha: 0.4),
               blurRadius: 20,
               offset: const Offset(0, 8),
             ),
@@ -452,9 +446,9 @@ class _IntroScreenState extends State<IntroScreen> with TickerProviderStateMixin
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
                         colors: [
-                          Colors.white.withOpacity(0.0),
-                          Colors.white.withOpacity(0.20),
-                          Colors.white.withOpacity(0.0),
+                          Colors.white.withValues(alpha: 0.0),
+                          Colors.white.withValues(alpha: 0.20),
+                          Colors.white.withValues(alpha: 0.0),
                         ],
                         stops: const [0.0, 0.5, 1.0],
                       ),

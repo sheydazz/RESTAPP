@@ -269,8 +269,8 @@ class _ChatCard extends StatelessWidget {
     final titleColor = isDark ? const Color(0xFF90CAF9) : Colors.white;
     final subtitleColor = isDark ? const Color(0xFF64B5F6) : Colors.white70;
     final shadowColor = isDark
-        ? Colors.black.withOpacity(0.3)
-        : const Color(0xFF87CEEB).withOpacity(0.4);
+        ? Colors.black.withValues(alpha: 0.3)
+        : const Color(0xFF87CEEB).withValues(alpha: 0.4);
 
     return InkWell(
       onTap: onTap,

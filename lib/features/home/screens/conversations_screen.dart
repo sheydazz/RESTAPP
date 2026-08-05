@@ -68,7 +68,7 @@ class _ConversacionesScreenState extends State<ConversacionesScreen> {
                   shape: BoxShape.circle,
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.1),
+                      color: Colors.black.withValues(alpha: 0.1),
                       blurRadius: 3,
                       offset: Offset(0, 1),
                     ),
@@ -170,7 +170,7 @@ class _ConversacionesScreenState extends State<ConversacionesScreen> {
         border: Border.all(color: const Color(0xFF08B1DD), width: 2),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.03),
+            color: Colors.black.withValues(alpha: 0.03),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),

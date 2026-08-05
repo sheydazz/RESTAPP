@@ -53,15 +53,15 @@ class AdviceScreen extends StatelessWidget {
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     colors: [
-                      config.colorPrincipal.withOpacity(0.15),
-                      config.colorSecundario.withOpacity(0.15),
+                      config.colorPrincipal.withValues(alpha: 0.15),
+                      config.colorSecundario.withValues(alpha: 0.15),
                     ],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                   ),
                   borderRadius: BorderRadius.circular(20),
                   border: Border.all(
-                    color: config.colorPrincipal.withOpacity(0.3),
+                    color: config.colorPrincipal.withValues(alpha: 0.3),
                     width: 2,
                   ),
                 ),
@@ -79,7 +79,7 @@ class AdviceScreen extends StatelessWidget {
                         ),
                         boxShadow: [
                           BoxShadow(
-                            color: config.colorPrincipal.withOpacity(0.3),
+                            color: config.colorPrincipal.withValues(alpha: 0.3),
                             blurRadius: 8,
                             offset: const Offset(0, 4),
                           ),
@@ -146,10 +146,10 @@ class AdviceScreen extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: config.colorPrincipal.withOpacity(0.08),
+                  color: config.colorPrincipal.withValues(alpha: 0.08),
                   borderRadius: BorderRadius.circular(16),
                   border: Border.all(
-                    color: config.colorPrincipal.withOpacity(0.2),
+                    color: config.colorPrincipal.withValues(alpha: 0.2),
                     width: 1,
                   ),
                 ),
@@ -171,7 +171,7 @@ class AdviceScreen extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w500,
-                        color: config.colorTexto.withOpacity(0.85),
+                        color: config.colorTexto.withValues(alpha: 0.85),
                         height: 1.4,
                       ),
                     ),
@@ -204,12 +204,12 @@ class AdviceScreen extends StatelessWidget {
                       color: colorScheme.surfaceContainerLow,
                       borderRadius: BorderRadius.circular(14),
                       border: Border.all(
-                        color: config.colorPrincipal.withOpacity(0.2),
+                        color: config.colorPrincipal.withValues(alpha: 0.2),
                         width: 1.5,
                       ),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withOpacity(0.04),
+                          color: Colors.black.withValues(alpha: 0.04),
                           blurRadius: 6,
                           offset: const Offset(0, 2),
                         ),
@@ -244,10 +244,10 @@ class AdviceScreen extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
-                    color: Colors.red.withOpacity(0.05),
+                    color: Colors.red.withValues(alpha: 0.05),
                     borderRadius: BorderRadius.circular(14),
                     border: Border.all(
-                      color: Colors.red.withOpacity(0.2),
+                      color: Colors.red.withValues(alpha: 0.2),
                       width: 1.5,
                     ),
                   ),
@@ -287,7 +287,7 @@ class AdviceScreen extends StatelessWidget {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(28),
                     ),
-                    shadowColor: config.colorPrincipal.withOpacity(0.4),
+                    shadowColor: config.colorPrincipal.withValues(alpha: 0.4),
                   ),
                   onPressed: () {
                     // Después de leer consejos, ir al registro guardado
@@ -320,9 +320,9 @@ class AdviceScreen extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.08),
+        color: color.withValues(alpha: 0.08),
         borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: color.withOpacity(0.2), width: 1),
+        border: Border.all(color: color.withValues(alpha: 0.2), width: 1),
       ),
       child: Row(
         children: [

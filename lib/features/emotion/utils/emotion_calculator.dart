@@ -55,7 +55,6 @@ class EmotionCalculator {
       resultado = Map<String, dynamic>.from(_estadoCritico());
     }
     resultado['promedio'] = promedio;
-    print('DEBUG: Resultado final = $resultado');
     return resultado;
   }
 

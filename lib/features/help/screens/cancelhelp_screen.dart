@@ -28,7 +28,7 @@ class CancelHelpScreen extends StatelessWidget {
                 borderRadius: BorderRadius.circular(28),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.08),
+                    color: Colors.black.withValues(alpha: 0.08),
                     blurRadius: 25,
                     offset: const Offset(0, 8),
                   ),
@@ -50,7 +50,7 @@ class CancelHelpScreen extends StatelessWidget {
                           width: width * 0.5,
                           height: height * 0.35,
                           decoration: BoxDecoration(
-                            color: const Color(0xFF4FC3F7).withOpacity(0.1),
+                            color: const Color(0xFF4FC3F7).withValues(alpha: 0.1),
                             borderRadius: BorderRadius.circular(20),
                           ),
                           child: const Center(
@@ -108,10 +108,10 @@ class CancelHelpScreen extends StatelessWidget {
                       vertical: height * 0.015,
                     ),
                     decoration: BoxDecoration(
-                      color: const Color(0xFF4FC3F7).withOpacity(0.08),
+                      color: const Color(0xFF4FC3F7).withValues(alpha: 0.08),
                       borderRadius: BorderRadius.circular(16),
                       border: Border.all(
-                        color: const Color(0xFF4FC3F7).withOpacity(0.2),
+                        color: const Color(0xFF4FC3F7).withValues(alpha: 0.2),
                         width: 1.5,
                       ),
                     ),
@@ -143,7 +143,7 @@ class CancelHelpScreen extends StatelessWidget {
                             ),
                             shadowColor: const Color(
                               0xFF1BD77C,
-                            ).withOpacity(0.4),
+                            ).withValues(alpha: 0.4),
                           ),
                           onPressed: () {
                             Navigator.pushReplacement(
@@ -183,7 +183,7 @@ class CancelHelpScreen extends StatelessWidget {
                             ),
                             shadowColor: const Color(
                               0xFFE91E63,
-                            ).withOpacity(0.4),
+                            ).withValues(alpha: 0.4),
                           ),
                           onPressed: () {
                             Navigator.pushReplacement(

@@ -40,7 +40,7 @@ class _LanguageScreenState extends State<LanguageScreen> {
                   shape: BoxShape.circle,
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.1),
+                      color: Colors.black.withValues(alpha: 0.1),
                       blurRadius: 3,
                       offset: Offset(0, 1),
                     ),
@@ -111,7 +111,7 @@ class _LanguageScreenState extends State<LanguageScreen> {
                 borderRadius: BorderRadius.circular(15),
                 boxShadow: [
                   BoxShadow(
-                    color: const Color(0xFF4FC3F7).withOpacity(0.3),
+                    color: const Color(0xFF4FC3F7).withValues(alpha: 0.3),
                     blurRadius: 10,
                     offset: const Offset(0, 4),
                   ),
@@ -154,13 +154,13 @@ class _LanguageScreenState extends State<LanguageScreen> {
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
           color: isSelected
-              ? const Color(0xFF4FC3F7).withOpacity(0.8)
+              ? const Color(0xFF4FC3F7).withValues(alpha: 0.8)
               : Theme.of(context).colorScheme.outlineVariant,
           width: isSelected ? 2.0 : 1.5,
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.03),
+            color: Colors.black.withValues(alpha: 0.03),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),

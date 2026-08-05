@@ -559,7 +559,7 @@ class _RegisterScreenState extends State<RegisterScreen>
                               borderRadius: BorderRadius.circular(16),
                               boxShadow: [
                                 BoxShadow(
-                                  color: const Color(0xFF2981C1).withOpacity(0.35),
+                                  color: const Color(0xFF2981C1).withValues(alpha: 0.35),
                                   blurRadius: 16, offset: const Offset(0, 6),
                                 ),
                               ],
@@ -613,7 +613,7 @@ class _RegisterScreenState extends State<RegisterScreen>
                           duration: const Duration(milliseconds: 200),
                           width: 40, height: 40,
                           decoration: BoxDecoration(
-                            color: const Color(0xFF3A5AFF).withOpacity(0.1),
+                            color: const Color(0xFF3A5AFF).withValues(alpha: 0.1),
                             borderRadius: BorderRadius.circular(12),
                           ),
                           child: const Icon(Icons.arrow_back_ios_rounded,
@@ -756,7 +756,7 @@ class _RegisterScreenState extends State<RegisterScreen>
                             borderRadius: BorderRadius.circular(16),
                             boxShadow: [
                               BoxShadow(
-                                color: const Color(0xFF2981C1).withOpacity(0.3),
+                                color: const Color(0xFF2981C1).withValues(alpha: 0.3),
                                 blurRadius: 14, offset: const Offset(0, 5),
                               ),
                             ],
@@ -942,8 +942,8 @@ class _RegisterScreenState extends State<RegisterScreen>
               borderRadius: BorderRadius.circular(14),
               border: Border.all(
                 color: _termsScrolledToBottom
-                    ? const Color(0xFF00C853).withOpacity(0.6)
-                    : const Color(0xFF3A5AFF).withOpacity(0.2),
+                    ? const Color(0xFF00C853).withValues(alpha: 0.6)
+                    : const Color(0xFF3A5AFF).withValues(alpha: 0.2),
                 width: 1.5,
               ),
               color: colorScheme.surfaceContainerLow,
@@ -1006,7 +1006,7 @@ class _RegisterScreenState extends State<RegisterScreen>
                         color: _termsAccepted ? null : Colors.transparent,
                         boxShadow: _termsAccepted
                             ? [BoxShadow(
-                                color: const Color(0xFF00C853).withOpacity(0.35),
+                                color: const Color(0xFF00C853).withValues(alpha: 0.35),
                                 blurRadius: 8, offset: const Offset(0, 3))]
                             : [],
                       ),
@@ -1049,11 +1049,11 @@ class _RegisterScreenState extends State<RegisterScreen>
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(Icons.touch_app_rounded, size: 13, color: colorScheme.onSurfaceVariant.withOpacity(0.5)),
+                Icon(Icons.touch_app_rounded, size: 13, color: colorScheme.onSurfaceVariant.withValues(alpha: 0.5)),
                 const SizedBox(width: 4),
                 Text('Lee los términos para desbloquear',
                     style: GoogleFonts.fredoka(
-                      fontSize: 11, color: colorScheme.onSurfaceVariant.withOpacity(0.5),
+                      fontSize: 11, color: colorScheme.onSurfaceVariant.withValues(alpha: 0.5),
                     )),
               ],
             ),
@@ -1116,7 +1116,7 @@ Al aceptar, confirmas que tienes al menos 15 años de edad y que has leído y co
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(14),
         boxShadow: isFocused ? [
-          BoxShadow(color: const Color(0xFF3A5AFF).withOpacity(0.2),
+          BoxShadow(color: const Color(0xFF3A5AFF).withValues(alpha: 0.2),
               blurRadius: 14, offset: const Offset(0, 4)),
         ] : [],
       ),
@@ -1160,7 +1160,7 @@ Al aceptar, confirmas que tienes al menos 15 años de edad y que has leído y co
                 decoration: InputDecoration(
                   hintText: hint,
                   hintStyle: GoogleFonts.fredoka(
-                    color: colorScheme.onSurfaceVariant.withOpacity(0.55), fontSize: 14,
+                    color: colorScheme.onSurfaceVariant.withValues(alpha: 0.55), fontSize: 14,
                   ),
                   prefixIcon: Icon(
                     isPassword ? Icons.lock_outline_rounded : Icons.edit_outlined,
@@ -1252,7 +1252,7 @@ Al aceptar, confirmas que tienes al menos 15 años de edad y que has leído y co
                 child: DropdownButton<String>(
                   isExpanded: true,
                   hint: Text(hint, style: GoogleFonts.fredoka(
-                    color: colorScheme.onSurfaceVariant.withOpacity(0.55), fontSize: 14,
+                    color: colorScheme.onSurfaceVariant.withValues(alpha: 0.55), fontSize: 14,
                   )),
                   value: value,
                   icon: hasValue
@@ -1334,7 +1334,7 @@ Al aceptar, confirmas que tienes al menos 15 años de edad y que has leído y co
                     child: Text(
                       hasDate ? _fechaNacimientoController.text : 'Selecciona tu fecha',
                       style: GoogleFonts.fredoka(
-                        color: hasDate ? colorScheme.onSurface : colorScheme.onSurfaceVariant.withOpacity(0.55),
+                        color: hasDate ? colorScheme.onSurface : colorScheme.onSurfaceVariant.withValues(alpha: 0.55),
                         fontSize: 14, fontWeight: FontWeight.w600,
                       ),
                     ),

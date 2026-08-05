@@ -65,7 +65,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                   shape: BoxShape.circle,
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.1),
+                      color: Colors.black.withValues(alpha: 0.1),
                       blurRadius: 3,
                       offset: Offset(0, 1),
                     ),
@@ -113,7 +113,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                   borderRadius: BorderRadius.circular(20),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.05),
+                      color: Colors.black.withValues(alpha: 0.05),
                       blurRadius: 15,
                       offset: const Offset(0, 5),
                     ),
@@ -161,7 +161,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                               height: 55,
                               decoration: BoxDecoration(
                                 color: selectedRating == index
-                                    ? Color(0xFF4FC3F7).withOpacity(0.1)
+                                    ? Color(0xFF4FC3F7).withValues(alpha: 0.1)
                                     : Colors.transparent,
                                 shape: BoxShape.circle,
                                 border: selectedRating == index
@@ -237,7 +237,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                             padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
                             decoration: BoxDecoration(
                               color: isSelected
-                                  ? const Color(0xFF4FC3F7).withOpacity(0.08)
+                                  ? const Color(0xFF4FC3F7).withValues(alpha: 0.08)
                                   : Theme.of(context).colorScheme.surfaceContainerLow,
                               borderRadius: BorderRadius.circular(10),
                               border: Border.all(
@@ -344,7 +344,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                           borderRadius: BorderRadius.circular(15),
                           boxShadow: [
                             BoxShadow(
-                              color: Color(0xFF0AF3FF).withOpacity(0.3),
+                              color: Color(0xFF0AF3FF).withValues(alpha: 0.3),
                               blurRadius: 10,
                               offset: const Offset(0, 4),
                             ),

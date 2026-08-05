@@ -55,12 +55,6 @@ class _CheckScreenState extends State<CheckScreen> {
         fin: fin,
       );
 
-      // DEBUG: Ver qué datos recibimos del API
-      print('✅ CheckScreen - Datos del API calendario: $datos');
-      for (final item in datos) {
-        print('   - Día: ${item['fecha']}, promedio: ${item['promedio']}');
-      }
-
       if (!mounted) return;
       setState(() {
         _calendario = datos;
@@ -90,7 +84,7 @@ class _CheckScreenState extends State<CheckScreen> {
             borderRadius: BorderRadius.circular(24),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.1),
+                color: Colors.black.withValues(alpha: 0.1),
                 blurRadius: 20,
                 spreadRadius: 4,
                 offset: const Offset(0, 8),
@@ -174,7 +168,7 @@ class _CheckScreenState extends State<CheckScreen> {
                     border: Border.all(color: Colors.black, width: 1),
                     boxShadow: [
                       BoxShadow(
-                        color: const Color(0xFF4FC3F7).withOpacity(0.4),
+                        color: const Color(0xFF4FC3F7).withValues(alpha: 0.4),
                         blurRadius: 10,
                         spreadRadius: 2,
                         offset: const Offset(0, 4),
@@ -246,7 +240,7 @@ class _CheckScreenState extends State<CheckScreen> {
                     ),
                     boxShadow: [
                       BoxShadow(
-                        color: const Color(0xFF0BBDAC).withOpacity(0.4),
+                        color: const Color(0xFF0BBDAC).withValues(alpha: 0.4),
                         blurRadius: 12,
                         spreadRadius: 1,
                         offset: const Offset(0, 4),
@@ -331,9 +325,6 @@ class _CheckScreenState extends State<CheckScreen> {
       if (p != null) datosPorFecha[fechaNorm] = p;
     }
 
-    print('📅 CheckScreen - Mapa datosPorFecha: $datosPorFecha');
-    print('📅 CheckScreen - Total items en _calendario: ${_calendario.length}');
-
     // Si viene del flujo de registro, usar promedioHoy para hoy (asegura que se muestre la carita)
     final promedioHoy = widget.promedioHoy;
     if (promedioHoy != null) {
@@ -354,7 +345,7 @@ class _CheckScreenState extends State<CheckScreen> {
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
+            color: Colors.black.withValues(alpha: 0.1),
             blurRadius: 5,
             spreadRadius: 1,
             offset: const Offset(0, 2),
@@ -550,13 +541,13 @@ class _CheckScreenState extends State<CheckScreen> {
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         gradient: LinearGradient(
-          colors: [colorFondo, colorFondo.withOpacity(0.7)],
+          colors: [colorFondo, colorFondo.withValues(alpha: 0.7)],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
         boxShadow: [
           BoxShadow(
-            color: colorFondo.withOpacity(0.4),
+            color: colorFondo.withValues(alpha: 0.4),
             blurRadius: 8,
             spreadRadius: 2,
             offset: const Offset(0, 2),

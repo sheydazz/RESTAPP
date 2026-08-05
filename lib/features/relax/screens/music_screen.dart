@@ -72,7 +72,7 @@ class _MusicScreenState extends State<MusicScreen> {
                         height: 80,
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
-                          color: Colors.white.withOpacity(0.2),
+                          color: Colors.white.withValues(alpha: 0.2),
                         ),
                         child: Icon(
                           _isPlaying ? Icons.pause : Icons.play_arrow,
@@ -110,7 +110,7 @@ class _MusicScreenState extends State<MusicScreen> {
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
                       color: _selectedPlaylist == index
-                          ? const Color(0xFF9C27B0).withOpacity(0.2)
+                          ? const Color(0xFF9C27B0).withValues(alpha: 0.2)
                           : colorScheme.surfaceContainerLow,
                       border: Border.all(
                         color: _selectedPlaylist == index

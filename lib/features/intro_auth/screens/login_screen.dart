@@ -164,16 +164,12 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
 
       UserSession.currentUserName = nombre;
 
-      print('LOGIN PARSED → response keys: ${response.keys.toList()}');
-
       // Guardar token e id de usuario si vienen en la respuesta
       final dynamic token =
           response['token'] ??
           response['accessToken'] ??
           response['jwt'] ??
           (response['data'] is Map ? (response['data'] as Map)['token'] : null);
-
-      print('LOGIN PARSED → token type: ${token.runtimeType}, value: $token');
 
       if (token is String && token.isNotEmpty) {
         UserSession.authToken = token;
@@ -189,8 +185,6 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
           (response['data'] is Map
               ? (response['data'] as Map)['usuario']
               : null);
-
-      print('LOGIN PARSED → user type: ${user.runtimeType}, value: $user');
 
       if (user is Map) {
         final id = user['id'];
@@ -218,10 +212,6 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
       UserSession.lastTestDate = null;
 
       await UserSession.persist();
-
-      print(
-        'LOGIN SESSION → authToken=${UserSession.authToken != null ? 'SET' : 'NULL'}, userId=${UserSession.userId}',
-      );
 
       if (!mounted) return;
 
@@ -464,14 +454,14 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
         borderRadius: BorderRadius.circular(20),
         gradient: LinearGradient(
           colors: [
-            const Color(0xFF3A5AFF).withOpacity(0.08),
-            const Color(0xFF8C4EFF).withOpacity(0.08),
+            const Color(0xFF3A5AFF).withValues(alpha: 0.08),
+            const Color(0xFF8C4EFF).withValues(alpha: 0.08),
           ],
           begin: Alignment.centerLeft,
           end: Alignment.centerRight,
         ),
         border: Border.all(
-          color: const Color(0xFF3A5AFF).withOpacity(0.18),
+          color: const Color(0xFF3A5AFF).withValues(alpha: 0.18),
           width: 1.5,
         ),
       ),
@@ -536,7 +526,7 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
         boxShadow: isFocused
             ? [
                 BoxShadow(
-                  color: const Color(0xFF3A5AFF).withOpacity(0.22),
+                  color: const Color(0xFF3A5AFF).withValues(alpha: 0.22),
                   blurRadius: 16,
                   offset: const Offset(0, 4),
                 ),
@@ -591,7 +581,7 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
                 decoration: InputDecoration(
                   hintText: hint,
                   hintStyle: GoogleFonts.fredoka(
-                    color: colorScheme.onSurfaceVariant.withOpacity(0.6),
+                    color: colorScheme.onSurfaceVariant.withValues(alpha: 0.6),
                     fontSize: 15,
                   ),
                   prefixIcon: AnimatedContainer(
@@ -680,7 +670,7 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
             ),
             boxShadow: [
               BoxShadow(
-                color: const Color(0xFF2981C1).withOpacity(0.35),
+                color: const Color(0xFF2981C1).withValues(alpha: 0.35),
                 blurRadius: 18,
                 offset: const Offset(0, 6),
               ),
@@ -698,9 +688,9 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
                           colors: [
-                            Colors.white.withOpacity(0.0),
-                            Colors.white.withOpacity(0.18),
-                            Colors.white.withOpacity(0.0),
+                            Colors.white.withValues(alpha: 0.0),
+                            Colors.white.withValues(alpha: 0.18),
+                            Colors.white.withValues(alpha: 0.0),
                           ],
                           stops: const [0.0, 0.5, 1.0],
                         ),
@@ -772,7 +762,7 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
               ),
               boxShadow: [
                 BoxShadow(
-                  color: const Color(0xFF5CCFC0).withOpacity(0.3),
+                  color: const Color(0xFF5CCFC0).withValues(alpha: 0.3),
                   blurRadius: 14,
                   offset: const Offset(0, 5),
                 ),

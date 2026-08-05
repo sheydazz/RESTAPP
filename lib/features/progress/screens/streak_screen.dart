@@ -146,7 +146,7 @@ class _GoalPickerScreenState extends State<GoalPickerScreen>
                               color: selected ? Colors.transparent : const Color(0xFFCDD8FF),
                               width: 1.5,
                             ),
-                            boxShadow: selected ? [BoxShadow(color: _kBlue.withOpacity(0.25), blurRadius: 14, offset: const Offset(0, 4))] : [],
+                            boxShadow: selected ? [BoxShadow(color: _kBlue.withValues(alpha: 0.25), blurRadius: 14, offset: const Offset(0, 4))] : [],
                           ),
                           child: Row(
                             children: [
@@ -190,7 +190,7 @@ class _GoalPickerScreenState extends State<GoalPickerScreen>
                       decoration: BoxDecoration(
                         gradient: const LinearGradient(colors: [_kTeal, _kBlue]),
                         borderRadius: BorderRadius.circular(16),
-                        boxShadow: [BoxShadow(color: _kBlue.withOpacity(0.3), blurRadius: 16, offset: const Offset(0, 5))],
+                        boxShadow: [BoxShadow(color: _kBlue.withValues(alpha: 0.3), blurRadius: 16, offset: const Offset(0, 5))],
                       ),
                       child: Center(
                         child: Text('¡Activar mi racha! 🔥',
@@ -519,7 +519,7 @@ class _StreakCelebrationScreenState extends State<StreakCelebrationScreen>
                                 borderRadius: BorderRadius.circular(14),
                                 boxShadow: [
                                   BoxShadow(
-                                    color: const Color(0xFFFFA000).withOpacity(0.28),
+                                    color: const Color(0xFFFFA000).withValues(alpha: 0.28),
                                     blurRadius: 14,
                                     offset: const Offset(0, 4),
                                   ),
@@ -560,7 +560,7 @@ class _StreakCelebrationScreenState extends State<StreakCelebrationScreen>
                               decoration: BoxDecoration(
                                 gradient: const LinearGradient(colors: [_kTeal, _kBlue]),
                                 borderRadius: BorderRadius.circular(16),
-                                boxShadow: [BoxShadow(color: _kBlue.withOpacity(0.3), blurRadius: 16, offset: const Offset(0, 5))],
+                                boxShadow: [BoxShadow(color: _kBlue.withValues(alpha: 0.3), blurRadius: 16, offset: const Offset(0, 5))],
                               ),
                               child: Center(
                                 child: Text('MANTENER MI COMPROMISO 🔥',
@@ -632,7 +632,7 @@ class _AnimatedDayDot extends StatelessWidget {
                   shape: BoxShape.circle,
                   color: const Color(0xFFF0F0F8),
                   border: Border.all(
-                    color: dot.isToday ? _kBlue.withOpacity(0.4) : const Color(0xFFDDE1FF),
+                    color: dot.isToday ? _kBlue.withValues(alpha: 0.4) : const Color(0xFFDDE1FF),
                     width: 1.5,
                   ),
                 ),
@@ -691,7 +691,7 @@ class _ParticlePainter extends CustomPainter {
     for (final p in particles) {
       final progress = (t * p.speed + p.angle / (math.pi * 2)) % 1.0;
       final opacity = (math.sin(progress * math.pi)).clamp(0.0, 1.0);
-      final paint = Paint()..color = p.color.withOpacity(opacity * 0.18);
+      final paint = Paint()..color = p.color.withValues(alpha: opacity * 0.18);
       final x = (p.x + math.cos(p.angle) * progress * 0.3) * size.width;
       final y = (p.y + math.sin(p.angle + t * 2) * 0.08) * size.height;
       canvas.drawCircle(Offset(x, y), p.size * opacity, paint);
