@@ -2,10 +2,6 @@ import 'dart:io' show Platform;
 import 'package:flutter/foundation.dart';
 
 class ApiConfig {
-  // true: usa Docker local
-  // false: usa servidor universidad
-  static const bool useLocalDocker = false;
-
   // Local host mapping by platform
   // Android emulator: 10.0.2.2 -> host machine
   // iOS simulator/desktop: localhost
@@ -15,7 +11,8 @@ class ApiConfig {
   static const String universityBaseUrl = 'http://179.197.239.216:3000';
 
   static String get baseUrl {
-    if (!useLocalDocker) {
+    // debug/profile (flutter run) -> servidor local; release (flutter build) -> servidor universidad
+    if (kReleaseMode) {
       return universityBaseUrl;
     }
 
