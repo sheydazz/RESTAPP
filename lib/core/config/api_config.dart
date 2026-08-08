@@ -9,7 +9,6 @@ class ApiConfig {
   static const String androidEmulatorBaseUrl = 'http://10.0.2.2:3000';
 
   static const String universityBaseUrl = 'http://179.197.239.216:3000';
-
   static String get baseUrl {
     // debug/profile (flutter run) -> servidor local; release (flutter build) -> servidor universidad
     if (kReleaseMode) {

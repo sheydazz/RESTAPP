@@ -28,41 +28,76 @@ class _MusicScreenState extends State<MusicScreen> {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
+    final cardColor = isDark ? const Color(0xFF1E3A4A) : const Color(0xFF87CEEB);
+    final shadowColor = isDark 
+        ? Colors.black.withValues(alpha: 0.3) 
+        : const Color(0xFF87CEEB).withValues(alpha: 0.4);
+    final onCardColor = isDark ? const Color(0xFF90CAF9) : Colors.white;
+    final secondaryTextColor = isDark ? const Color(0xFF64B5F6) : Colors.white70;
+
     return Scaffold(
+      backgroundColor: colorScheme.surface,
       appBar: AppBar(
-        backgroundColor: const Color(0xFF9C27B0),
-        title: const Text(
+        backgroundColor: colorScheme.surface,
+        elevation: 0,
+        title: Text(
           '🎵 Música',
-          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: colorScheme.primary,
+            fontFamily: 'Fredoka',
+            fontSize: 22,
+          ),
         ),
         centerTitle: true,
-        leading: GestureDetector(
-          onTap: () => Navigator.pop(context),
-          child: const Icon(Icons.arrow_back, color: Colors.white),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_rounded, color: colorScheme.primary),
+          onPressed: () => Navigator.pop(context),
+        ),
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(1.0),
+          child: Divider(
+            color: colorScheme.outlineVariant,
+            thickness: 1,
+            height: 1,
+            indent: 20,
+            endIndent: 20,
+          ),
         ),
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.all(20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              const SizedBox(height: 24),
               // Reproductor
               Container(
-                padding: const EdgeInsets.all(24),
+                width: double.infinity,
+                padding: const EdgeInsets.all(30),
                 decoration: BoxDecoration(
-                  gradient: const LinearGradient(
-                    colors: [Color(0xFF9C27B0), Color(0xFFBA68C8)],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
-                  borderRadius: BorderRadius.circular(20),
+                  color: cardColor,
+                  borderRadius: BorderRadius.circular(30),
+                  boxShadow: [
+                    BoxShadow(
+                      color: shadowColor,
+                      blurRadius: 15,
+                      offset: const Offset(0, 8),
+                    ),
+                  ],
                 ),
                 child: Column(
                   children: [
-                    const Text(
+                    Text(
                       'Ahora reproduciendo:',
-                      style: TextStyle(color: Colors.white70, fontSize: 14),
+                      style: TextStyle(
+                        color: secondaryTextColor,
+                        fontSize: 14,
+                        fontFamily: 'Fredoka',
+                      ),
                     ),
                     const SizedBox(height: 16),
                     GestureDetector(
@@ -84,117 +119,133 @@ class _MusicScreenState extends State<MusicScreen> {
                     const SizedBox(height: 16),
                     Text(
                       songs[0],
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 18,
+                      style: TextStyle(
+                        color: onCardColor,
+                        fontSize: 20,
                         fontWeight: FontWeight.bold,
+                        fontFamily: 'Fredoka',
                       ),
                       textAlign: TextAlign.center,
                     ),
                   ],
                 ),
               ),
-              const SizedBox(height: 24),
+              const SizedBox(height: 32),
               // Playlists
-              const Text(
+              Text(
                 'Mis Playlists:',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: 'Fredoka',
+                  color: colorScheme.primary,
+                ),
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: 16),
               ...List.generate(
                 playlists.length,
                 (index) => GestureDetector(
                   onTap: () => setState(() => _selectedPlaylist = index),
                   child: Container(
                     margin: const EdgeInsets.only(bottom: 12),
-                    padding: const EdgeInsets.all(16),
+                    padding: const EdgeInsets.all(20),
                     decoration: BoxDecoration(
                       color: _selectedPlaylist == index
-                          ? const Color(0xFF9C27B0).withValues(alpha: 0.2)
+                          ? colorScheme.primary.withValues(alpha: 0.1)
                           : colorScheme.surfaceContainerLow,
                       border: Border.all(
                         color: _selectedPlaylist == index
-                            ? const Color(0xFF9C27B0)
-                            : Colors.transparent,
+                            ? colorScheme.primary
+                            : colorScheme.outlineVariant,
                         width: 2,
                       ),
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(30),
                     ),
                     child: Row(
                       children: [
-                        const Icon(
+                        Icon(
                           Icons.playlist_play,
-                          color: Color(0xFF9C27B0),
-                          size: 24,
+                          color: colorScheme.primary,
+                          size: 28,
                         ),
-                        const SizedBox(width: 12),
+                        const SizedBox(width: 16),
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
                                 playlists[index]['name']!,
-                                style: const TextStyle(
+                                style: TextStyle(
                                   fontWeight: FontWeight.bold,
-                                  fontSize: 16,
+                                  fontSize: 18,
+                                  fontFamily: 'Fredoka',
+                                  color: colorScheme.onSurface,
                                 ),
                               ),
                               Text(
                                 playlists[index]['songs']!,
                                 style: TextStyle(
                                   color: colorScheme.onSurfaceVariant,
-                                  fontSize: 12,
+                                  fontSize: 14,
+                                  fontFamily: 'Fredoka',
                                 ),
                               ),
                             ],
                           ),
                         ),
-                        const Icon(
-                          Icons.arrow_forward,
-                          color: Color(0xFF9C27B0),
+                        Icon(
+                          Icons.arrow_forward_ios_rounded,
+                          color: colorScheme.primary,
+                          size: 18,
                         ),
                       ],
                     ),
                   ),
                 ),
               ),
-              const SizedBox(height: 24),
+              const SizedBox(height: 32),
               // Canciones
               Text(
                 'Canciones en ${playlists[_selectedPlaylist]['name']}:',
-                style: const TextStyle(
-                  fontSize: 16,
+                style: TextStyle(
+                  fontSize: 18,
                   fontWeight: FontWeight.bold,
+                  fontFamily: 'Fredoka',
+                  color: colorScheme.primary,
                 ),
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: 16),
               ...List.generate(
                 songs.length,
                 (index) => Container(
                   margin: const EdgeInsets.only(bottom: 8),
-                  padding: const EdgeInsets.all(12),
+                  padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
                     color: colorScheme.surfaceContainerLow,
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(20),
                   ),
                   child: Row(
                     children: [
-                      const Icon(
-                        Icons.music_note,
-                        color: Color(0xFF9C27B0),
-                        size: 20,
+                      Icon(
+                        Icons.music_note_rounded,
+                        color: colorScheme.primary,
+                        size: 24,
                       ),
-                      const SizedBox(width: 12),
+                      const SizedBox(width: 16),
                       Expanded(
                         child: Text(
                           songs[index],
-                          style: const TextStyle(fontSize: 14),
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontFamily: 'Fredoka',
+                            color: colorScheme.onSurface,
+                          ),
                         ),
                       ),
-                      const Icon(
-                        Icons.play_arrow,
-                        color: Color(0xFF9C27B0),
-                        size: 20,
+                      Icon(
+                        Icons.play_circle_filled_rounded,
+                        color: colorScheme.primary,
+                        size: 24,
                       ),
                     ],
                   ),
@@ -207,3 +258,4 @@ class _MusicScreenState extends State<MusicScreen> {
     );
   }
 }
+

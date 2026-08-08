@@ -32,31 +32,64 @@ class _PhysicalActivityScreenState extends State<PhysicalActivityScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
+    final cardColor = isDark ? const Color(0xFF1E3A4A) : const Color(0xFF87CEEB);
+    final shadowColor = isDark 
+        ? Colors.black.withValues(alpha: 0.3) 
+        : const Color(0xFF87CEEB).withValues(alpha: 0.4);
+    final onCardColor = isDark ? const Color(0xFF90CAF9) : Colors.white;
+    final secondaryTextColor = isDark ? const Color(0xFF64B5F6) : Colors.white70;
+
     return Scaffold(
+      backgroundColor: colorScheme.surface,
       appBar: AppBar(
-        backgroundColor: const Color(0xFFE53935),
-        title: const Text(
+        backgroundColor: colorScheme.surface,
+        elevation: 0,
+        title: Text(
           '💪 Actividad Física',
-          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: colorScheme.primary,
+            fontFamily: 'Fredoka',
+            fontSize: 22,
+          ),
         ),
         centerTitle: true,
-        leading: GestureDetector(
-          onTap: () => Navigator.pop(context),
-          child: const Icon(Icons.arrow_back, color: Colors.white),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_rounded, color: colorScheme.primary),
+          onPressed: () => Navigator.pop(context),
+        ),
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(1.0),
+          child: Divider(
+            color: colorScheme.outlineVariant,
+            thickness: 1,
+            height: 1,
+            indent: 20,
+            endIndent: 20,
+          ),
         ),
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.all(20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              const SizedBox(height: 24),
               // Selector de duración
-              const Text(
+              Text(
                 'Duración de la sesión:',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: 'Fredoka',
+                  color: colorScheme.primary,
+                ),
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: 16),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
@@ -66,69 +99,83 @@ class _PhysicalActivityScreenState extends State<PhysicalActivityScreen> {
                   45,
                 ].map((duration) => _buildDurationButton(duration)).toList(),
               ),
-              const SizedBox(height: 24),
+              const SizedBox(height: 32),
               // Calorías quemadas
               Container(
-                padding: const EdgeInsets.all(20),
+                width: double.infinity,
+                padding: const EdgeInsets.all(30),
                 decoration: BoxDecoration(
-                  gradient: const LinearGradient(
-                    colors: [Color(0xFFE53935), Color(0xFFEF5350)],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
-                  borderRadius: BorderRadius.circular(16),
+                  color: cardColor,
+                  borderRadius: BorderRadius.circular(30),
+                  boxShadow: [
+                    BoxShadow(
+                      color: shadowColor,
+                      blurRadius: 15,
+                      offset: const Offset(0, 8),
+                    ),
+                  ],
                 ),
                 child: Column(
                   children: [
-                    const Text(
+                    Text(
                       'Calorías estimadas a quemar:',
-                      style: TextStyle(color: Colors.white70),
+                      style: TextStyle(
+                        color: secondaryTextColor,
+                        fontFamily: 'Fredoka',
+                        fontSize: 16,
+                      ),
                     ),
-                    const SizedBox(height: 8),
+                    const SizedBox(height: 12),
                     Text(
                       '$_burnedCalories kcal',
-                      style: const TextStyle(
-                        fontSize: 32,
+                      style: TextStyle(
+                        fontSize: 36,
                         fontWeight: FontWeight.bold,
-                        color: Colors.white,
+                        color: onCardColor,
+                        fontFamily: 'Fredoka',
                       ),
                     ),
                   ],
                 ),
               ),
-              const SizedBox(height: 24),
+              const SizedBox(height: 32),
               // Lista de ejercicios
-              const Text(
+              Text(
                 'Ejercicios disponibles:',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: 'Fredoka',
+                  color: colorScheme.primary,
+                ),
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: 16),
               ...exercises.map((exercise) => _buildExerciseCard(exercise)),
-              const SizedBox(height: 24),
+              const SizedBox(height: 32),
               // Botón de inicio
               SizedBox(
                 width: double.infinity,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFFE53935),
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                  ),
+                child: _ActionButton(
                   onPressed: () {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                         content: Text(
                           'Sesión de $_selectedDuration min iniciada!',
+                          style: const TextStyle(fontFamily: 'Fredoka'),
                         ),
-                        backgroundColor: const Color(0xFFE53935),
+                        backgroundColor: colorScheme.primary,
+                        behavior: SnackBarBehavior.floating,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15),
+                        ),
                       ),
                     );
                   },
-                  child: const Text(
-                    'Iniciar Sesión',
-                    style: TextStyle(fontSize: 16, color: Colors.white),
-                  ),
+                  label: 'Iniciar Sesión',
+                  icon: Icons.play_arrow_rounded,
                 ),
               ),
+              const SizedBox(height: 24),
             ],
           ),
         ),
@@ -137,29 +184,33 @@ class _PhysicalActivityScreenState extends State<PhysicalActivityScreen> {
   }
 
   Widget _buildDurationButton(int duration) {
+    final colorScheme = Theme.of(context).colorScheme;
     bool isSelected = _selectedDuration == duration;
     return GestureDetector(
       onTap: () => _calculateCalories(duration),
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
         decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: isSelected
-                ? [const Color(0xFFE53935), const Color(0xFFEF5350)]
-                : [
-                    Theme.of(context).colorScheme.surfaceContainerLow,
-                    Theme.of(context).colorScheme.outlineVariant,
-                  ],
+          color: isSelected ? colorScheme.primary : colorScheme.surfaceContainerLow,
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(
+            color: isSelected ? colorScheme.primary : colorScheme.outlineVariant,
+            width: 2,
           ),
-          borderRadius: BorderRadius.circular(12),
+          boxShadow: isSelected ? [
+            BoxShadow(
+              color: colorScheme.primary.withValues(alpha: 0.3),
+              blurRadius: 8,
+              offset: const Offset(0, 4),
+            )
+          ] : null,
         ),
         child: Text(
           '$duration min',
           style: TextStyle(
-            color: isSelected
-                ? Colors.white
-                : Theme.of(context).colorScheme.onSurface,
+            color: isSelected ? Colors.white : colorScheme.onSurface,
             fontWeight: FontWeight.bold,
+            fontFamily: 'Fredoka',
           ),
         ),
       ),
@@ -167,29 +218,44 @@ class _PhysicalActivityScreenState extends State<PhysicalActivityScreen> {
   }
 
   Widget _buildExerciseCard(Map<String, dynamic> exercise) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
-      padding: const EdgeInsets.all(12),
+      padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: const Color(0xFFE53935).withValues(alpha: 0.1),
-        border: Border.all(color: const Color(0xFFE53935), width: 2),
-        borderRadius: BorderRadius.circular(12),
+        color: colorScheme.surfaceContainerLow,
+        borderRadius: BorderRadius.circular(30),
+        border: Border.all(color: colorScheme.outlineVariant),
       ),
       child: Row(
         children: [
-          Text(exercise['emoji'], style: const TextStyle(fontSize: 28)),
-          const SizedBox(width: 12),
+          Text(exercise['emoji'], style: const TextStyle(fontSize: 32)),
+          const SizedBox(width: 16),
           Expanded(
             child: Text(
               exercise['name'],
-              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                fontFamily: 'Fredoka',
+                color: colorScheme.onSurface,
+              ),
             ),
           ),
-          Text(
-            '${exercise['cal']} kcal/min',
-            style: TextStyle(
-              fontSize: 12,
-              color: Theme.of(context).colorScheme.onSurfaceVariant,
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+            decoration: BoxDecoration(
+              color: colorScheme.primary.withValues(alpha: 0.1),
+              borderRadius: BorderRadius.circular(15),
+            ),
+            child: Text(
+              '${exercise['cal']} kcal/min',
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+                color: colorScheme.primary,
+                fontFamily: 'Fredoka',
+              ),
             ),
           ),
         ],
@@ -197,3 +263,56 @@ class _PhysicalActivityScreenState extends State<PhysicalActivityScreen> {
     );
   }
 }
+
+class _ActionButton extends StatelessWidget {
+  final VoidCallback onPressed;
+  final String label;
+  final IconData icon;
+
+  const _ActionButton({
+    required this.onPressed,
+    required this.label,
+    required this.icon,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return InkWell(
+      onTap: onPressed,
+      borderRadius: BorderRadius.circular(20),
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 16),
+        decoration: BoxDecoration(
+          color: colorScheme.primary,
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: [
+            BoxShadow(
+              color: colorScheme.primary.withValues(alpha: 0.3),
+              blurRadius: 8,
+              offset: const Offset(0, 4),
+            )
+          ],
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(icon, color: Colors.white),
+            const SizedBox(width: 8),
+            Text(
+              label,
+              style: const TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontFamily: 'Fredoka',
+                fontSize: 18,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
