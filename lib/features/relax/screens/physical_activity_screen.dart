@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 
 class PhysicalActivityScreen extends StatefulWidget {
@@ -10,6 +11,11 @@ class PhysicalActivityScreen extends StatefulWidget {
 class _PhysicalActivityScreenState extends State<PhysicalActivityScreen> {
   int _selectedDuration = 30;
   int _burnedCalories = 0;
+  
+  Timer? _timer;
+  int _remainingSeconds = 0;
+  bool _isSessionActive = false;
+  bool _isPaused = false;
 
   final List<Map<String, dynamic>> exercises = [
     {'name': 'Correr', 'cal': 10, 'emoji': '🏃'},
@@ -18,6 +24,18 @@ class _PhysicalActivityScreenState extends State<PhysicalActivityScreen> {
     {'name': 'Caminar', 'cal': 5, 'emoji': '🚶'},
     {'name': 'Boxeo', 'cal': 14, 'emoji': '🥊'},
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    _calculateCalories(_selectedDuration);
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
 
   void _calculateCalories(int duration) {
     int total = 0;
@@ -30,17 +48,75 @@ class _PhysicalActivityScreenState extends State<PhysicalActivityScreen> {
     });
   }
 
+  void _startTimer() {
+    setState(() {
+      if (!_isSessionActive) {
+        _remainingSeconds = _selectedDuration * 60;
+        _isSessionActive = true;
+      }
+      _isPaused = false;
+    });
+
+    _timer?.cancel();
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (!mounted) return;
+      setState(() {
+        if (_remainingSeconds > 0) {
+          _remainingSeconds--;
+        } else {
+          _stopTimer();
+          _showCompletionDialog();
+        }
+      });
+    });
+  }
+
+  void _pauseTimer() {
+    setState(() {
+      _isPaused = true;
+      _timer?.cancel();
+    });
+  }
+
+  void _stopTimer() {
+    setState(() {
+      _timer?.cancel();
+      _isSessionActive = false;
+      _isPaused = false;
+      _remainingSeconds = 0;
+    });
+  }
+
+  String _formatTime(int seconds) {
+    int minutes = seconds ~/ 60;
+    int remainingSecs = seconds % 60;
+    return '${minutes.toString().padLeft(2, '0')}:${remainingSecs.toString().padLeft(2, '0')}';
+  }
+
+  void _showCompletionDialog() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+        title: const Text('¡Felicidades!', style: TextStyle(fontFamily: 'Fredoka')),
+        content: Text(
+          'Has completado tu sesión de $_selectedDuration minutos.\n¡Excelente trabajo!',
+          style: const TextStyle(fontFamily: 'Fredoka'),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cerrar', style: TextStyle(fontFamily: 'Fredoka')),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final isDark = Theme.of(context).brightness == Brightness.dark;
-
-    final cardColor = isDark ? const Color(0xFF1E3A4A) : const Color(0xFF87CEEB);
-    final shadowColor = isDark 
-        ? Colors.black.withValues(alpha: 0.3) 
-        : const Color(0xFF87CEEB).withValues(alpha: 0.4);
-    final onCardColor = isDark ? const Color(0xFF90CAF9) : Colors.white;
-    final secondaryTextColor = isDark ? const Color(0xFF64B5F6) : Colors.white70;
 
     return Scaffold(
       backgroundColor: colorScheme.surface,
@@ -48,7 +124,7 @@ class _PhysicalActivityScreenState extends State<PhysicalActivityScreen> {
         backgroundColor: colorScheme.surface,
         elevation: 0,
         title: Text(
-          '💪 Actividad Física',
+          _isSessionActive ? '⏱️ En sesión' : '💪 Actividad Física',
           style: TextStyle(
             fontWeight: FontWeight.bold,
             color: colorScheme.primary,
@@ -59,7 +135,12 @@ class _PhysicalActivityScreenState extends State<PhysicalActivityScreen> {
         centerTitle: true,
         leading: IconButton(
           icon: Icon(Icons.arrow_back_rounded, color: colorScheme.primary),
-          onPressed: () => Navigator.pop(context),
+          onPressed: () {
+            if (_isSessionActive) {
+              _stopTimer();
+            }
+            Navigator.pop(context);
+          },
         ),
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(1.0),
@@ -72,112 +153,172 @@ class _PhysicalActivityScreenState extends State<PhysicalActivityScreen> {
           ),
         ),
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: 24),
-              // Selector de duración
-              Text(
-                'Duración de la sesión:',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  fontFamily: 'Fredoka',
-                  color: colorScheme.primary,
-                ),
+      body: _isSessionActive 
+          ? _buildTimerView(colorScheme, isDark)
+          : _buildSelectionView(colorScheme, isDark),
+    );
+  }
+
+  Widget _buildSelectionView(ColorScheme colorScheme, bool isDark) {
+    final cardColor = isDark ? const Color(0xFF1E3A4A) : const Color(0xFF87CEEB);
+    final shadowColor = isDark 
+        ? Colors.black.withValues(alpha: 0.3) 
+        : const Color(0xFF87CEEB).withValues(alpha: 0.4);
+    final onCardColor = isDark ? const Color(0xFF90CAF9) : Colors.white;
+    final secondaryTextColor = isDark ? const Color(0xFF64B5F6) : Colors.white70;
+
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(height: 24),
+            Text(
+              'Duración de la sesión:',
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                fontFamily: 'Fredoka',
+                color: colorScheme.primary,
               ),
-              const SizedBox(height: 16),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
+            ),
+            const SizedBox(height: 16),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [10, 20, 30, 45].map((d) => _buildDurationButton(d)).toList(),
+            ),
+            const SizedBox(height: 32),
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(30),
+              decoration: BoxDecoration(
+                color: cardColor,
+                borderRadius: BorderRadius.circular(30),
+                boxShadow: [
+                  BoxShadow(
+                    color: shadowColor,
+                    blurRadius: 15,
+                    offset: const Offset(0, 8),
+                  ),
+                ],
+              ),
+              child: Column(
                 children: [
-                  10,
-                  20,
-                  30,
-                  45,
-                ].map((duration) => _buildDurationButton(duration)).toList(),
-              ),
-              const SizedBox(height: 32),
-              // Calorías quemadas
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(30),
-                decoration: BoxDecoration(
-                  color: cardColor,
-                  borderRadius: BorderRadius.circular(30),
-                  boxShadow: [
-                    BoxShadow(
-                      color: shadowColor,
-                      blurRadius: 15,
-                      offset: const Offset(0, 8),
+                  Text(
+                    'Calorías estimadas a quemar:',
+                    style: TextStyle(
+                      color: secondaryTextColor,
+                      fontFamily: 'Fredoka',
+                      fontSize: 16,
                     ),
-                  ],
-                ),
-                child: Column(
-                  children: [
-                    Text(
-                      'Calorías estimadas a quemar:',
-                      style: TextStyle(
-                        color: secondaryTextColor,
-                        fontFamily: 'Fredoka',
-                        fontSize: 16,
-                      ),
+                  ),
+                  const SizedBox(height: 12),
+                  Text(
+                    '$_burnedCalories kcal',
+                    style: TextStyle(
+                      fontSize: 36,
+                      fontWeight: FontWeight.bold,
+                      color: onCardColor,
+                      fontFamily: 'Fredoka',
                     ),
-                    const SizedBox(height: 12),
-                    Text(
-                      '$_burnedCalories kcal',
-                      style: TextStyle(
-                        fontSize: 36,
-                        fontWeight: FontWeight.bold,
-                        color: onCardColor,
-                        fontFamily: 'Fredoka',
-                      ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 32),
+            Text(
+              'Ejercicios disponibles:',
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                fontFamily: 'Fredoka',
+                color: colorScheme.primary,
+              ),
+            ),
+            const SizedBox(height: 16),
+            ...exercises.map((exercise) => _buildExerciseCard(exercise)),
+            const SizedBox(height: 32),
+            SizedBox(
+              width: double.infinity,
+              child: _ActionButton(
+                onPressed: _startTimer,
+                label: 'Iniciar Sesión',
+                icon: Icons.play_arrow_rounded,
+              ),
+            ),
+            const SizedBox(height: 24),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTimerView(ColorScheme colorScheme, bool isDark) {
+    final cardColor = isDark ? const Color(0xFF1E3A4A) : const Color(0xFF87CEEB);
+    final onCardColor = isDark ? const Color(0xFF90CAF9) : Colors.white;
+
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              padding: const EdgeInsets.all(50),
+              decoration: BoxDecoration(
+                color: cardColor,
+                shape: BoxShape.circle,
+                boxShadow: [
+                  BoxShadow(
+                    color: cardColor.withValues(alpha: 0.3),
+                    blurRadius: 25,
+                    offset: const Offset(0, 10),
+                  )
+                ],
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    _formatTime(_remainingSeconds),
+                    style: TextStyle(
+                      fontSize: 64,
+                      fontWeight: FontWeight.bold,
+                      color: onCardColor,
+                      fontFamily: 'Fredoka',
                     ),
-                  ],
-                ),
+                  ),
+                  Text(
+                    'tiempo restante',
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: onCardColor.withValues(alpha: 0.7),
+                      fontFamily: 'Fredoka',
+                    ),
+                  ),
+                ],
               ),
-              const SizedBox(height: 32),
-              // Lista de ejercicios
-              Text(
-                'Ejercicios disponibles:',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  fontFamily: 'Fredoka',
-                  color: colorScheme.primary,
+            ),
+            const SizedBox(height: 60),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                _TimerControlButton(
+                  onPressed: _isPaused ? _startTimer : _pauseTimer,
+                  icon: _isPaused ? Icons.play_arrow_rounded : Icons.pause_rounded,
+                  label: _isPaused ? 'Reanudar' : 'Pausar',
                 ),
-              ),
-              const SizedBox(height: 16),
-              ...exercises.map((exercise) => _buildExerciseCard(exercise)),
-              const SizedBox(height: 32),
-              // Botón de inicio
-              SizedBox(
-                width: double.infinity,
-                child: _ActionButton(
-                  onPressed: () {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(
-                          'Sesión de $_selectedDuration min iniciada!',
-                          style: const TextStyle(fontFamily: 'Fredoka'),
-                        ),
-                        backgroundColor: colorScheme.primary,
-                        behavior: SnackBarBehavior.floating,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                      ),
-                    );
-                  },
-                  label: 'Iniciar Sesión',
-                  icon: Icons.play_arrow_rounded,
+                const SizedBox(width: 20),
+                _TimerControlButton(
+                  onPressed: _stopTimer,
+                  icon: Icons.stop_rounded,
+                  label: 'Detener',
+                  isSecondary: true,
                 ),
-              ),
-              const SizedBox(height: 24),
-            ],
-          ),
+              ],
+            ),
+          ],
         ),
       ),
     );
@@ -264,6 +405,56 @@ class _PhysicalActivityScreenState extends State<PhysicalActivityScreen> {
   }
 }
 
+class _TimerControlButton extends StatelessWidget {
+  final VoidCallback onPressed;
+  final IconData icon;
+  final String label;
+  final bool isSecondary;
+
+  const _TimerControlButton({
+    required this.onPressed,
+    required this.icon,
+    required this.label,
+    this.isSecondary = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return InkWell(
+      onTap: onPressed,
+      borderRadius: BorderRadius.circular(20),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+        decoration: BoxDecoration(
+          color: isSecondary ? colorScheme.primary.withValues(alpha: 0.2) : colorScheme.primary,
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              icon,
+              color: isSecondary ? colorScheme.primary : Colors.white,
+              size: 24,
+            ),
+            const SizedBox(width: 8),
+            Text(
+              label,
+              style: TextStyle(
+                color: isSecondary ? colorScheme.primary : Colors.white,
+                fontWeight: FontWeight.bold,
+                fontFamily: 'Fredoka',
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 class _ActionButton extends StatelessWidget {
   final VoidCallback onPressed;
   final String label;
@@ -315,4 +506,3 @@ class _ActionButton extends StatelessWidget {
     );
   }
 }
-

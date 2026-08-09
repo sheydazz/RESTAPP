@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 
 class YogaScreen extends StatefulWidget {
@@ -9,11 +10,18 @@ class YogaScreen extends StatefulWidget {
 
 class _YogaScreenState extends State<YogaScreen> {
   int _selectedLevel = 1;
+  
+  Timer? _timer;
+  int _remainingSeconds = 0;
+  bool _isSessionActive = false;
+  bool _isPaused = false;
+  final int _totalDuration = 15; // Total aproximado de la sesión
+
   final List<Map<String, String>> poses = [
     {
       'name': 'Asana del Loto',
       'duration': '5 min',
-      'description': 'Pose de meditación fundamenta',
+      'description': 'Pose de meditación fundamental',
     },
     {
       'name': 'Cobra',
@@ -33,16 +41,80 @@ class _YogaScreenState extends State<YogaScreen> {
   ];
 
   @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
+
+  void _startTimer() {
+    setState(() {
+      if (!_isSessionActive) {
+        _remainingSeconds = _totalDuration * 60;
+        _isSessionActive = true;
+      }
+      _isPaused = false;
+    });
+
+    _timer?.cancel();
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (!mounted) return;
+      setState(() {
+        if (_remainingSeconds > 0) {
+          _remainingSeconds--;
+        } else {
+          _stopTimer();
+          _showCompletionDialog();
+        }
+      });
+    });
+  }
+
+  void _pauseTimer() {
+    setState(() {
+      _isPaused = true;
+      _timer?.cancel();
+    });
+  }
+
+  void _stopTimer() {
+    setState(() {
+      _timer?.cancel();
+      _isSessionActive = false;
+      _isPaused = false;
+      _remainingSeconds = 0;
+    });
+  }
+
+  String _formatTime(int seconds) {
+    int minutes = seconds ~/ 60;
+    int remainingSecs = seconds % 60;
+    return '${minutes.toString().padLeft(2, '0')}:${remainingSecs.toString().padLeft(2, '0')}';
+  }
+
+  void _showCompletionDialog() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+        title: const Text('Namasté', style: TextStyle(fontFamily: 'Fredoka')),
+        content: const Text(
+          'Has completado tu práctica de Yoga.\nTu mente y cuerpo te lo agradecen.',
+          style: TextStyle(fontFamily: 'Fredoka'),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cerrar', style: TextStyle(fontFamily: 'Fredoka')),
+          ),
+        ],
+      ),
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final isDark = Theme.of(context).brightness == Brightness.dark;
-
-    final cardColor = isDark ? const Color(0xFF1E3A4A) : const Color(0xFF87CEEB);
-    final shadowColor = isDark 
-        ? Colors.black.withValues(alpha: 0.3) 
-        : const Color(0xFF87CEEB).withValues(alpha: 0.4);
-    final onCardColor = isDark ? const Color(0xFF90CAF9) : Colors.white;
-    final secondaryTextColor = isDark ? const Color(0xFF64B5F6) : Colors.white70;
 
     return Scaffold(
       backgroundColor: colorScheme.surface,
@@ -50,7 +122,7 @@ class _YogaScreenState extends State<YogaScreen> {
         backgroundColor: colorScheme.surface,
         elevation: 0,
         title: Text(
-          '🧘 Yoga',
+          _isSessionActive ? '🧘 En sesión' : '🧘 Yoga',
           style: TextStyle(
             fontWeight: FontWeight.bold,
             color: colorScheme.primary,
@@ -61,7 +133,12 @@ class _YogaScreenState extends State<YogaScreen> {
         centerTitle: true,
         leading: IconButton(
           icon: Icon(Icons.arrow_back_rounded, color: colorScheme.primary),
-          onPressed: () => Navigator.pop(context),
+          onPressed: () {
+            if (_isSessionActive) {
+              _stopTimer();
+            }
+            Navigator.pop(context);
+          },
         ),
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(1.0),
@@ -74,114 +151,179 @@ class _YogaScreenState extends State<YogaScreen> {
           ),
         ),
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: 24),
-              // Selector de nivel
-              Text(
-                'Nivel de Dificultad:',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  fontFamily: 'Fredoka',
-                  color: colorScheme.primary,
-                ),
+      body: _isSessionActive
+          ? _buildTimerView(colorScheme, isDark)
+          : _buildSelectionView(colorScheme, isDark),
+    );
+  }
+
+  Widget _buildSelectionView(ColorScheme colorScheme, bool isDark) {
+    final cardColor = isDark ? const Color(0xFF1E3A4A) : const Color(0xFF87CEEB);
+    final shadowColor = isDark 
+        ? Colors.black.withValues(alpha: 0.3) 
+        : const Color(0xFF87CEEB).withValues(alpha: 0.4);
+    final onCardColor = isDark ? const Color(0xFF90CAF9) : Colors.white;
+    final secondaryTextColor = isDark ? const Color(0xFF64B5F6) : Colors.white70;
+
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(height: 24),
+            Text(
+              'Nivel de Dificultad:',
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                fontFamily: 'Fredoka',
+                color: colorScheme.primary,
               ),
-              const SizedBox(height: 16),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  _buildLevelButton(1, 'Principiante'),
-                  _buildLevelButton(2, 'Intermedio'),
-                  _buildLevelButton(3, 'Avanzado'),
+            ),
+            const SizedBox(height: 16),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                _buildLevelButton(1, 'Principiante'),
+                _buildLevelButton(2, 'Intermedio'),
+                _buildLevelButton(3, 'Avanzado'),
+              ],
+            ),
+            const SizedBox(height: 32),
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(30),
+              decoration: BoxDecoration(
+                color: cardColor,
+                borderRadius: BorderRadius.circular(30),
+                boxShadow: [
+                  BoxShadow(
+                    color: shadowColor,
+                    blurRadius: 15,
+                    offset: const Offset(0, 8),
+                  ),
                 ],
               ),
-              const SizedBox(height: 32),
-              // Resumen de sesión (Información centrada en tarjeta)
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(30),
-                decoration: BoxDecoration(
-                  color: cardColor,
-                  borderRadius: BorderRadius.circular(30),
-                  boxShadow: [
-                    BoxShadow(
-                      color: shadowColor,
-                      blurRadius: 15,
-                      offset: const Offset(0, 8),
+              child: Column(
+                children: [
+                  Text(
+                    'Sesión de Yoga Personalizada',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: onCardColor,
+                      fontFamily: 'Fredoka',
                     ),
-                  ],
-                ),
-                child: Column(
-                  children: [
-                    Text(
-                      'Sesión de Yoga Personalizada',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: onCardColor,
-                        fontFamily: 'Fredoka',
-                      ),
-                      textAlign: TextAlign.center,
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 12),
+                  Text(
+                    'Prepárate para conectar mente y cuerpo',
+                    style: TextStyle(
+                      fontSize: 15,
+                      color: secondaryTextColor,
+                      fontStyle: FontStyle.italic,
+                      fontFamily: 'Fredoka',
                     ),
-                    const SizedBox(height: 12),
-                    Text(
-                      'Prepárate para conectar mente y cuerpo',
-                      style: TextStyle(
-                        fontSize: 15,
-                        color: secondaryTextColor,
-                        fontStyle: FontStyle.italic,
-                        fontFamily: 'Fredoka',
-                      ),
-                      textAlign: TextAlign.center,
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 32),
+            Text(
+              'Poses para esta sesión:',
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                fontFamily: 'Fredoka',
+                color: colorScheme.primary,
+              ),
+            ),
+            const SizedBox(height: 16),
+            ...poses.map((pose) => _buildPoseCard(pose)),
+            const SizedBox(height: 32),
+            SizedBox(
+              width: double.infinity,
+              child: _ActionButton(
+                onPressed: _startTimer,
+                label: 'Iniciar Sesión',
+                icon: Icons.spa_rounded,
+              ),
+            ),
+            const SizedBox(height: 24),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTimerView(ColorScheme colorScheme, bool isDark) {
+    final cardColor = isDark ? const Color(0xFF1E3A4A) : const Color(0xFF87CEEB);
+    final onCardColor = isDark ? const Color(0xFF90CAF9) : Colors.white;
+
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              padding: const EdgeInsets.all(50),
+              decoration: BoxDecoration(
+                color: cardColor,
+                shape: BoxShape.circle,
+                boxShadow: [
+                  BoxShadow(
+                    color: cardColor.withValues(alpha: 0.3),
+                    blurRadius: 25,
+                    offset: const Offset(0, 10),
+                  )
+                ],
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    _formatTime(_remainingSeconds),
+                    style: TextStyle(
+                      fontSize: 64,
+                      fontWeight: FontWeight.bold,
+                      color: onCardColor,
+                      fontFamily: 'Fredoka',
                     ),
-                  ],
-                ),
+                  ),
+                  Text(
+                    'tiempo restante',
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: onCardColor.withValues(alpha: 0.7),
+                      fontFamily: 'Fredoka',
+                    ),
+                  ),
+                ],
               ),
-              const SizedBox(height: 32),
-              // Lista de poses
-              Text(
-                'Poses para esta sesión:',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  fontFamily: 'Fredoka',
-                  color: colorScheme.primary,
+            ),
+            const SizedBox(height: 60),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                _TimerControlButton(
+                  onPressed: _isPaused ? _startTimer : _pauseTimer,
+                  icon: _isPaused ? Icons.play_arrow_rounded : Icons.pause_rounded,
+                  label: _isPaused ? 'Reanudar' : 'Pausar',
                 ),
-              ),
-              const SizedBox(height: 16),
-              ...poses.map((pose) => _buildPoseCard(pose)),
-              const SizedBox(height: 32),
-              // Botón de inicio
-              SizedBox(
-                width: double.infinity,
-                child: _ActionButton(
-                  onPressed: () {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: const Text(
-                          '¡Iniciando sesión de Yoga!',
-                          style: TextStyle(fontFamily: 'Fredoka'),
-                        ),
-                        backgroundColor: colorScheme.primary,
-                        behavior: SnackBarBehavior.floating,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                      ),
-                    );
-                  },
-                  label: 'Iniciar Sesión',
-                  icon: Icons.spa_rounded,
+                const SizedBox(width: 20),
+                _TimerControlButton(
+                  onPressed: _stopTimer,
+                  icon: Icons.stop_rounded,
+                  label: 'Detener',
+                  isSecondary: true,
                 ),
-              ),
-              const SizedBox(height: 24),
-            ],
-          ),
+              ],
+            ),
+          ],
         ),
       ),
     );
@@ -279,6 +421,56 @@ class _YogaScreenState extends State<YogaScreen> {
   }
 }
 
+class _TimerControlButton extends StatelessWidget {
+  final VoidCallback onPressed;
+  final IconData icon;
+  final String label;
+  final bool isSecondary;
+
+  const _TimerControlButton({
+    required this.onPressed,
+    required this.icon,
+    required this.label,
+    this.isSecondary = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return InkWell(
+      onTap: onPressed,
+      borderRadius: BorderRadius.circular(20),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+        decoration: BoxDecoration(
+          color: isSecondary ? colorScheme.primary.withValues(alpha: 0.2) : colorScheme.primary,
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              icon,
+              color: isSecondary ? colorScheme.primary : Colors.white,
+              size: 24,
+            ),
+            const SizedBox(width: 8),
+            Text(
+              label,
+              style: TextStyle(
+                color: isSecondary ? colorScheme.primary : Colors.white,
+                fontWeight: FontWeight.bold,
+                fontFamily: 'Fredoka',
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 class _ActionButton extends StatelessWidget {
   final VoidCallback onPressed;
   final String label;
@@ -330,4 +522,3 @@ class _ActionButton extends StatelessWidget {
     );
   }
 }
-
