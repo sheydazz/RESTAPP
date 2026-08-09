@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'register_screen.dart';
 import 'package:rest/core/services/auth_service.dart';
+import 'package:rest/core/services/emotion_service.dart';
 import 'package:rest/core/routes/app_routes.dart';
 import 'package:rest/core/services/user_session.dart';
 import 'package:rest/features/emotion/screens/emotionregister_screen.dart';
@@ -20,6 +21,7 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _authService = AuthService();
+  final _emotionService = EmotionService();
   final _emailFocus = FocusNode();
   final _passwordFocus = FocusNode();
 
@@ -207,17 +209,31 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
         }
       }
 
-      // IMPORTANTE: Resetear lastTestDate para cada nuevo usuario
-      // Esto garantiza que TODOS los usuarios nuevos vean el test
-      UserSession.lastTestDate = null;
-
       await UserSession.persist();
 
       if (!mounted) return;
 
-      // Validar si el usuario puede hacer el test hoy (solo una vez al día)
-      if (UserSession.canDoTestToday()) {
-        // Mostrar EmotionRegisterScreen si puede hacer el test
+      // Consultar al backend si ya existe el registro emocional de hoy
+      bool yaHizoTest = false;
+      try {
+        yaHizoTest = await _emotionService.existeRegistroEmocionalHoy();
+        if (yaHizoTest) {
+          UserSession.lastTestDate = DateTime.now();
+          await UserSession.persist();
+        }
+      } catch (e) {
+        // Si falla la consulta, mostramos error y no navegamos a ciegas
+        if (mounted) {
+          AppToast.error(context, 'No se pudo verificar el estado del test diario. Inténtalo de nuevo.');
+        }
+        setState(() => _isLoading = false);
+        return;
+      }
+
+      if (!mounted) return;
+
+      if (!yaHizoTest) {
+        // Mostrar EmotionRegisterScreen si NO ha hecho el test
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(

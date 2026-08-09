@@ -206,6 +206,10 @@ class EmotionService {
       body: jsonEncode(payload),
     );
 
+    if (response.statusCode == 409) {
+      throw Exception('CONFLICT_ERROR');
+    }
+
     if (response.statusCode < 200 || response.statusCode >= 300) {
       throw Exception('Error al guardar el registro emocional.');
     }

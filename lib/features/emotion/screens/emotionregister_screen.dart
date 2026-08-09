@@ -111,9 +111,24 @@ class _CheckScreenState extends State<EmotionRegisterScreen> {
       );
     } catch (e) {
       if (!mounted) return;
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text(e.toString())));
+      
+      if (e.toString().contains('CONFLICT_ERROR')) {
+        // El test de hoy ya fue completado
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Ya has completado el test emocional de hoy.')),
+        );
+        UserSession.lastTestDate = DateTime.now();
+        await UserSession.persist();
+        
+        // Redirigir a MainApp
+        if (mounted) {
+          Navigator.pushReplacementNamed(context, AppRoutes.mainApp);
+        }
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(e.toString())),
+        );
+      }
     } finally {
       if (mounted) {
         setState(() {
