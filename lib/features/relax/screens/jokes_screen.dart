@@ -37,22 +37,50 @@ class _JokesScreenState extends State<JokesScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    
+    // Colores basados en HomeScreen
+    final cardColor = isDark ? const Color(0xFF1E3A4A) : const Color(0xFF87CEEB);
+    final shadowColor = isDark 
+        ? Colors.black.withValues(alpha: 0.3) 
+        : const Color(0xFF87CEEB).withValues(alpha: 0.4);
+    final onCardColor = isDark ? const Color(0xFF90CAF9) : Colors.white;
+    final secondaryTextColor = isDark ? const Color(0xFF64B5F6) : Colors.white70;
+
     return Scaffold(
+      backgroundColor: colorScheme.surface,
       appBar: AppBar(
-        backgroundColor: const Color(0xFFFFA000),
+        backgroundColor: colorScheme.surface,
+        elevation: 0,
         title: Text(
           '😂 Chistes',
-          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: colorScheme.primary,
+            fontFamily: 'Fredoka',
+            fontSize: 22.sp,
+          ),
         ),
         centerTitle: true,
-        leading: GestureDetector(
-          onTap: () => Navigator.pop(context),
-          child: const Icon(Icons.arrow_back, color: Colors.white),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_rounded, color: colorScheme.primary),
+          onPressed: () => Navigator.pop(context),
+        ),
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(1.0),
+          child: Divider(
+            color: colorScheme.outlineVariant,
+            thickness: 1,
+            height: 1.h,
+            indent: 20,
+            endIndent: 20,
+          ),
         ),
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.all(20),
           child: Column(
             children: [
               SizedBox(height: 24.h),
@@ -60,19 +88,16 @@ class _JokesScreenState extends State<JokesScreen> {
               GestureDetector(
                 onTap: () => setState(() => _showPunchline = !_showPunchline),
                 child: Container(
-                  padding: const EdgeInsets.all(24),
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(30),
                   decoration: BoxDecoration(
-                    gradient: const LinearGradient(
-                      colors: [Color(0xFFFFA000), Color(0xFFFFB74D)],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    ),
-                    borderRadius: BorderRadius.circular(20),
+                    color: cardColor,
+                    borderRadius: BorderRadius.circular(30),
                     boxShadow: [
                       BoxShadow(
-                        color: const Color(0xFFFFA000).withValues(alpha: 0.3),
-                        blurRadius: 12,
-                        offset: const Offset(0, 4),
+                        color: shadowColor,
+                        blurRadius: 15,
+                        offset: const Offset(0, 8),
                       ),
                     ],
                   ),
@@ -81,74 +106,164 @@ class _JokesScreenState extends State<JokesScreen> {
                       Text(
                         jokes[_currentJoke]['setup']!,
                         style: TextStyle(
-                          fontSize: 18.sp,
+                          fontSize: 20.sp,
                           fontWeight: FontWeight.bold,
-                          color: Colors.white,
+                          color: onCardColor,
+                          fontFamily: 'Fredoka',
+                          height: 1.3,
                         ),
                         textAlign: TextAlign.center,
                       ),
-                      SizedBox(height: 24.h),
+                      SizedBox(height: 30.h),
                       if (_showPunchline)
-                        Text(
-                          jokes[_currentJoke]['punchline']!,
-                          style: TextStyle(
-                            fontSize: 16.sp,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                          decoration: BoxDecoration(
+                            color: Colors.white.withValues(alpha: 0.2),
+                            borderRadius: BorderRadius.circular(15),
                           ),
-                          textAlign: TextAlign.center,
+                          child: Text(
+                            jokes[_currentJoke]['punchline']!,
+                            style: TextStyle(
+                              fontSize: 18.sp,
+                              fontWeight: FontWeight.w600,
+                              color: onCardColor,
+                              fontFamily: 'Fredoka',
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
                         )
                       else
                         Text(
-                          'Toca para ver la respuesta',
+                          'Toca para ver la respuesta ✨',
                           style: TextStyle(
-                            fontSize: 14.sp,
-                            color: Colors.white70,
+                            fontSize: 15.sp,
+                            color: secondaryTextColor,
                             fontStyle: FontStyle.italic,
+                            fontFamily: 'Fredoka',
                           ),
                         ),
                     ],
                   ),
                 ),
               ),
-              SizedBox(height: 32.h),
+              SizedBox(height: 40.h),
               // Botones de navegación
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  ElevatedButton.icon(
+                  _NavigationButton(
                     onPressed: _currentJoke > 0
                         ? () => setState(() {
                             _currentJoke--;
                             _showPunchline = false;
                           })
                         : null,
-                    icon: const Icon(Icons.arrow_back),
-                    label: Text('Anterior'),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFFFFA000),
+                    icon: Icons.arrow_back_rounded,
+                    label: 'Anterior',
+                  ),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    decoration: BoxDecoration(
+                      color: colorScheme.surfaceContainerLow,
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(color: colorScheme.outlineVariant),
+                    ),
+                    child: Text(
+                      '${_currentJoke + 1} / ${jokes.length}',
+                      style: TextStyle(
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.bold,
+                        color: colorScheme.primary,
+                        fontFamily: 'Fredoka',
+                      ),
                     ),
                   ),
-                  Text(
-                    '${_currentJoke + 1}/${jokes.length}',
-                    style: TextStyle(fontSize: 16.sp),
-                  ),
-                  ElevatedButton.icon(
+                  _NavigationButton(
                     onPressed: _currentJoke < jokes.length - 1
                         ? () => setState(() {
                             _currentJoke++;
                             _showPunchline = false;
                           })
                         : null,
-                    icon: const Icon(Icons.arrow_forward),
-                    label: Text('Siguiente'),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFFFFA000),
-                    ),
+                    icon: Icons.arrow_forward_rounded,
+                    label: 'Siguiente',
+                    isRight: true,
                   ),
                 ],
               ),
             ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _NavigationButton extends StatelessWidget {
+  final VoidCallback? onPressed;
+  final IconData icon;
+  final String label;
+  final bool isRight;
+
+  const _NavigationButton({
+    required this.onPressed,
+    required this.icon,
+    required this.label,
+    this.isRight = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final isEnabled = onPressed != null;
+
+    return InkWell(
+      onTap: onPressed,
+      borderRadius: BorderRadius.circular(20),
+      child: AnimatedOpacity(
+        duration: const Duration(milliseconds: 200),
+        opacity: isEnabled ? 1.0 : 0.3,
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          decoration: BoxDecoration(
+            color: isEnabled ? colorScheme.primary : colorScheme.surfaceContainerLow,
+            borderRadius: BorderRadius.circular(20),
+            boxShadow: isEnabled ? [
+              BoxShadow(
+                color: colorScheme.primary.withValues(alpha: 0.3),
+                blurRadius: 8,
+                offset: const Offset(0, 4),
+              )
+            ] : null,
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: isRight
+                ? [
+                    Text(
+                      label,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: 'Fredoka',
+                      ),
+                    ),
+                    SizedBox(width: 8.w),
+                    Icon(icon, color: Colors.white, size: 20),
+                  ]
+                : [
+                    Icon(icon, color: Colors.white, size: 20),
+                    SizedBox(width: 8.w),
+                    Text(
+                      label,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: 'Fredoka',
+                      ),
+                    ),
+                  ],
           ),
         ),
       ),

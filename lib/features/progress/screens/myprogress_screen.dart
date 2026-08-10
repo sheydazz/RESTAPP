@@ -297,10 +297,10 @@ class _MyProgressScreenState extends State<MyProgressScreen> {
     final serie = evo?.serieUltimos7Dias ?? const <EvolutionPoint>[];
 
     String tendenciaTexto(String tendencia) {
-      if (tendencia == 'subiendo') return 'Vas mejorando esta semana.';
+      if (tendencia == 'subiendo') return 'Tu promedio de ánimo ha mejorado respecto a la semana anterior.';
       if (tendencia == 'bajando')
-        return 'Tu semana va exigente, cuídate más hoy.';
-      return 'Tu estado se mantiene estable.';
+        return 'Tu promedio de ánimo ha bajado respecto a la semana anterior.';
+      return 'Tu promedio de ánimo se mantiene estable respecto a la semana anterior.';
     }
 
     return Container(
