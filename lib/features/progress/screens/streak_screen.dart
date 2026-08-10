@@ -1,5 +1,6 @@
-import 'dart:math' as math;
+﻿import 'dart:math' as math;
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:rest/core/services/personal_progress_service.dart';
@@ -90,45 +91,45 @@ class _GoalPickerScreenState extends State<GoalPickerScreen>
             position: _entrySlide,
             child: Column(
               children: [
-                const SizedBox(height: 24),
+                SizedBox(height: 24.h),
 
                 // ── Imagen llama animada ──
                 AnimatedBuilder(
                   animation: _bobCtrl,
                   builder: (_, __) => Transform.translate(
                     offset: Offset(0, _bob.value),
-                    child: Image.asset('assets/images/RachaDaily.png', width: 110, height: 110),
+                    child: Image.asset('assets/images/RachaDaily.png', width: 110.w, height: 110.h),
                   ),
                 ),
 
-                const SizedBox(height: 18),
+                SizedBox(height: 18.h),
 
                 ShaderMask(
                   shaderCallback: (b) => const LinearGradient(
                     colors: [_kBlue, _kPurple],
                   ).createShader(b),
                   child: Text('¡Empieza tu racha!',
-                    style: GoogleFonts.fredoka(fontSize: 30, fontWeight: FontWeight.bold, color: Colors.white),
+                    style: GoogleFonts.fredoka(fontSize: 30.sp, fontWeight: FontWeight.bold, color: Colors.white),
                   ),
                 ),
 
-                const SizedBox(height: 6),
+                SizedBox(height: 6.h),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 36),
                   child: Text(
                     'Habla con NOA cada día y elige cuántos días quieres mantener tu racha.',
                     textAlign: TextAlign.center,
-                    style: GoogleFonts.fredoka(fontSize: 14, color: const Color(0xFF6B7280), height: 1.4),
+                    style: GoogleFonts.fredoka(fontSize: 14.sp, color: const Color(0xFF6B7280), height: 1.4),
                   ),
                 ),
 
-                const SizedBox(height: 22),
+                SizedBox(height: 22.h),
 
                 Expanded(
                   child: ListView.separated(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     itemCount: _goals.length,
-                    separatorBuilder: (_, __) => const SizedBox(height: 10),
+                    separatorBuilder: (_, __) => SizedBox(height: 10.h),
                     itemBuilder: (_, i) {
                       final g = _goals[i];
                       final selected = _selectedGoal == g.days;
@@ -150,18 +151,18 @@ class _GoalPickerScreenState extends State<GoalPickerScreen>
                           ),
                           child: Row(
                             children: [
-                              Text(g.emoji, style: const TextStyle(fontSize: 26)),
-                              const SizedBox(width: 14),
+                              Text(g.emoji, style: TextStyle(fontSize: 26.sp)),
+                              SizedBox(width: 14.w),
                               Expanded(
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(g.label, style: GoogleFonts.fredoka(
-                                      fontSize: 19, fontWeight: FontWeight.bold,
+                                      fontSize: 19.sp, fontWeight: FontWeight.bold,
                                       color: selected ? Colors.white : const Color(0xFF1A1A2E),
                                     )),
                                     Text(g.desc, style: GoogleFonts.fredoka(
-                                      fontSize: 13,
+                                      fontSize: 13.sp,
                                       color: selected ? Colors.white70 : const Color(0xFF6B7280),
                                     )),
                                   ],
@@ -169,7 +170,7 @@ class _GoalPickerScreenState extends State<GoalPickerScreen>
                               ),
                               if (selected)
                                 Container(
-                                  width: 26, height: 26,
+                                  width: 26.w, height: 26.h,
                                   decoration: const BoxDecoration(color: Colors.white, shape: BoxShape.circle),
                                   child: const Icon(Icons.check_rounded, color: _kBlue, size: 16),
                                 ),
@@ -186,7 +187,7 @@ class _GoalPickerScreenState extends State<GoalPickerScreen>
                   child: GestureDetector(
                     onTap: _confirm,
                     child: Container(
-                      width: double.infinity, height: 56,
+                      width: double.infinity, height: 56.h,
                       decoration: BoxDecoration(
                         gradient: const LinearGradient(colors: [_kTeal, _kBlue]),
                         borderRadius: BorderRadius.circular(16),
@@ -194,7 +195,7 @@ class _GoalPickerScreenState extends State<GoalPickerScreen>
                       ),
                       child: Center(
                         child: Text('¡Activar mi racha! 🔥',
-                          style: GoogleFonts.fredoka(color: Colors.white, fontSize: 19, fontWeight: FontWeight.bold)),
+                          style: GoogleFonts.fredoka(color: Colors.white, fontSize: 19.sp, fontWeight: FontWeight.bold)),
                       ),
                     ),
                   ),
@@ -383,7 +384,7 @@ class _StreakCelebrationScreenState extends State<StreakCelebrationScreen>
 
             Column(
               children: [
-                const SizedBox(height: 20),
+                SizedBox(height: 20.h),
 
                 // ── Imagen llama con bounce + scale entry ──
                 AnimatedBuilder(
@@ -392,12 +393,12 @@ class _StreakCelebrationScreenState extends State<StreakCelebrationScreen>
                     offset: Offset(0, _bob.value),
                     child: ScaleTransition(
                       scale: _flameScale,
-                      child: Image.asset('assets/images/RachaDaily.png', width: 150, height: 150),
+                      child: Image.asset('assets/images/RachaDaily.png', width: 150.w, height: 150.h),
                     ),
                   ),
                 ),
 
-                const SizedBox(height: 8),
+                SizedBox(height: 8.h),
 
                 // ── Número de días ──
                 ScaleTransition(
@@ -406,8 +407,11 @@ class _StreakCelebrationScreenState extends State<StreakCelebrationScreen>
                     opacity: _numberFade,
                     child: ShaderMask(
                       shaderCallback: (b) => const LinearGradient(colors: [_kBlue, _kPurple]).createShader(b),
-                      child: Text('$streak',
-                        style: GoogleFonts.fredoka(fontSize: 90, fontWeight: FontWeight.bold, color: Colors.white, height: 1.0)),
+                      child: FittedBox(
+                        fit: BoxFit.scaleDown,
+                        child: Text('$streak',
+                          style: GoogleFonts.fredoka(fontSize: 90.sp, fontWeight: FontWeight.bold, color: Colors.white, height: 1.0)),
+                      ),
                     ),
                   ),
                 ),
@@ -416,11 +420,11 @@ class _StreakCelebrationScreenState extends State<StreakCelebrationScreen>
                   opacity: _numberFade,
                   child: Text(
                     streak == 1 ? 'día de racha 🔥' : 'días de racha 🔥',
-                    style: GoogleFonts.fredoka(fontSize: 20, color: _kPurple, fontWeight: FontWeight.w700),
+                    style: GoogleFonts.fredoka(fontSize: 20.sp, color: _kPurple, fontWeight: FontWeight.w700),
                   ),
                 ),
 
-                const SizedBox(height: 28),
+                SizedBox(height: 28.h),
 
                 // ── Días de la semana con animación de llenado ──
                 AnimatedBuilder(
@@ -440,10 +444,10 @@ class _StreakCelebrationScreenState extends State<StreakCelebrationScreen>
                           }).toList(),
                         ),
                       ),
-                      const SizedBox(height: 14),
+                      SizedBox(height: 14.h),
                       if (remaining > 0)
                         RichText(text: TextSpan(
-                          style: GoogleFonts.fredoka(fontSize: 14, color: const Color(0xFF6B7280)),
+                          style: GoogleFonts.fredoka(fontSize: 14.sp, color: const Color(0xFF6B7280)),
                           children: [
                             const TextSpan(text: 'Alcanza tu próximo objetivo en '),
                             TextSpan(text: '$remaining ${remaining == 1 ? "día" : "días"}',
@@ -452,12 +456,12 @@ class _StreakCelebrationScreenState extends State<StreakCelebrationScreen>
                         ))
                       else
                         Text('🏆 ¡Meta alcanzada! ¡Eres increíble!',
-                          style: GoogleFonts.fredoka(fontSize: 15, color: _kPurple, fontWeight: FontWeight.bold)),
+                          style: GoogleFonts.fredoka(fontSize: 15.sp, color: _kPurple, fontWeight: FontWeight.bold)),
                     ],
                   ),
                 ),
 
-                const SizedBox(height: 20),
+                SizedBox(height: 20.h),
 
                 // ── Barra de progreso hacia la meta ──
                 FadeTransition(
@@ -471,12 +475,12 @@ class _StreakCelebrationScreenState extends State<StreakCelebrationScreen>
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text('Tu meta: $goal días',
-                              style: GoogleFonts.fredoka(fontSize: 13, color: const Color(0xFF6B7280))),
+                              style: GoogleFonts.fredoka(fontSize: 13.sp, color: const Color(0xFF6B7280))),
                             Text('$streak/$goal',
-                              style: GoogleFonts.fredoka(fontSize: 13, color: _kBlue, fontWeight: FontWeight.bold)),
+                              style: GoogleFonts.fredoka(fontSize: 13.sp, color: _kBlue, fontWeight: FontWeight.bold)),
                           ],
                         ),
-                        const SizedBox(height: 6),
+                        SizedBox(height: 6.h),
                         ClipRRect(
                           borderRadius: BorderRadius.circular(8),
                           child: AnimatedBuilder(
@@ -511,7 +515,7 @@ class _StreakCelebrationScreenState extends State<StreakCelebrationScreen>
                                 : null,
                             child: Container(
                               width: double.infinity,
-                              height: 52,
+                              height: 52.h,
                               decoration: BoxDecoration(
                                 gradient: const LinearGradient(
                                   colors: [Color(0xFFFFD54F), Color(0xFFFFA000)],
@@ -527,9 +531,9 @@ class _StreakCelebrationScreenState extends State<StreakCelebrationScreen>
                               ),
                               child: Center(
                                 child: _claimingStar
-                                    ? const SizedBox(
-                                        width: 20,
-                                        height: 20,
+                                    ? SizedBox(
+                                        width: 20.w,
+                                        height: 20.h,
                                         child: CircularProgressIndicator(
                                           strokeWidth: 2,
                                           color: Colors.white,
@@ -543,7 +547,7 @@ class _StreakCelebrationScreenState extends State<StreakCelebrationScreen>
                                             : 'COMPLETA TU REGISTRO PARA RECLAMAR ⭐',
                                         style: GoogleFonts.fredoka(
                                           color: Colors.white,
-                                          fontSize: 14,
+                                          fontSize: 14.sp,
                                           fontWeight: FontWeight.bold,
                                           letterSpacing: 0.4,
                                         ),
@@ -552,11 +556,11 @@ class _StreakCelebrationScreenState extends State<StreakCelebrationScreen>
                               ),
                             ),
                           ),
-                          const SizedBox(height: 10),
+                          SizedBox(height: 10.h),
                           GestureDetector(
                             onTap: _dismiss,
                             child: Container(
-                              width: double.infinity, height: 56,
+                              width: double.infinity, height: 56.h,
                               decoration: BoxDecoration(
                                 gradient: const LinearGradient(colors: [_kTeal, _kBlue]),
                                 borderRadius: BorderRadius.circular(16),
@@ -564,15 +568,15 @@ class _StreakCelebrationScreenState extends State<StreakCelebrationScreen>
                               ),
                               child: Center(
                                 child: Text('MANTENER MI COMPROMISO 🔥',
-                                  style: GoogleFonts.fredoka(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold, letterSpacing: 0.5)),
+                                  style: GoogleFonts.fredoka(color: Colors.white, fontSize: 16.sp, fontWeight: FontWeight.bold, letterSpacing: 0.5)),
                               ),
                             ),
                           ),
-                          const SizedBox(height: 10),
+                          SizedBox(height: 10.h),
                           GestureDetector(
                             onTap: _dismiss,
                             child: Text('Continuar',
-                              style: GoogleFonts.fredoka(color: const Color(0xFFAAAAAA), fontSize: 13,
+                              style: GoogleFonts.fredoka(color: const Color(0xFFAAAAAA), fontSize: 13.sp,
                                 decoration: TextDecoration.underline, decorationColor: const Color(0xFFAAAAAA))),
                           ),
                         ],
@@ -612,22 +616,22 @@ class _AnimatedDayDot extends StatelessWidget {
         Text(
           dot.label,
           style: GoogleFonts.fredoka(
-            fontSize: 12,
+            fontSize: 12.sp,
             color: dot.isToday ? _kBlue : const Color(0xFF9CA3AF),
             fontWeight: dot.isToday ? FontWeight.bold : FontWeight.w500,
           ),
         ),
-        const SizedBox(height: 5),
+        SizedBox(height: 5.h),
 
         // Círculo con llenado + flamita
         SizedBox(
-          width: 40, height: 40,
+          width: 40.w, height: 40.h,
           child: Stack(
             alignment: Alignment.center,
             children: [
               // Fondo del círculo
               Container(
-                width: 40, height: 40,
+                width: 40.w, height: 40.h,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   color: const Color(0xFFF0F0F8),
@@ -645,7 +649,7 @@ class _AnimatedDayDot extends StatelessWidget {
                     alignment: Alignment.bottomCenter,
                     heightFactor: fillOpacity,
                     child: Container(
-                      width: 40, height: 40,
+                      width: 40.w, height: 40.h,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         gradient: const LinearGradient(
@@ -663,11 +667,11 @@ class _AnimatedDayDot extends StatelessWidget {
                 Opacity(
                   opacity: ((fillOpacity - 0.5) * 2).clamp(0.0, 1.0),
                   child: dot.isToday
-                      ? Image.asset('assets/images/RachaDaily.png', width: 26, height: 26)
+                      ? Image.asset('assets/images/RachaDaily.png', width: 26.w, height: 26.h)
                       : const Icon(Icons.check_rounded, color: Colors.white, size: 18),
                 )
               else if (!dot.completed && dot.isGoal && !dot.isToday)
-                const Text('🎯', style: TextStyle(fontSize: 16))
+                Text('🎯', style: TextStyle(fontSize: 16.sp))
               else if (!dot.completed)
                 Container(), // vacío
             ],

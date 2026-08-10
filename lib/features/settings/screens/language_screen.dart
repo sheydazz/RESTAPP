@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:rest/core/utils/app_toast.dart';
 import '../../home/screens/gradient_text.dart';
 
@@ -61,7 +62,7 @@ class _LanguageScreenState extends State<LanguageScreen> {
             'Idioma',
             style: TextStyle(
               fontWeight: FontWeight.w600,
-              fontSize: 30,
+              fontSize: 30.sp,
             ),
             gradient: LinearGradient(
               colors: [
@@ -100,12 +101,12 @@ class _LanguageScreenState extends State<LanguageScreen> {
               ),
             ),
 
-            const SizedBox(height: 20),
+            SizedBox(height: 20.h),
 
             // Botón de guardar cambios
             Container(
               width: double.infinity,
-              height: 55,
+              height: 55.h,
               decoration: BoxDecoration(
                 color: const Color(0xFF4FC3F7),
                 borderRadius: BorderRadius.circular(15),
@@ -125,11 +126,11 @@ class _LanguageScreenState extends State<LanguageScreen> {
                     // Aquí puedes agregar la lógica para guardar el idioma seleccionado
                     _showSaveDialog(context);
                   },
-                  child: const Center(
+                  child: Center(
                     child: Text(
                       'GUARDAR CAMBIOS',
                       style: TextStyle(
-                        fontSize: 16,
+                        fontSize: 16.sp,
                         fontWeight: FontWeight.w600,
                         color: Colors.white,
                         letterSpacing: 1.2,
@@ -139,7 +140,7 @@ class _LanguageScreenState extends State<LanguageScreen> {
                 ),
               ),
             ),
-            const SizedBox(height: 20),
+            SizedBox(height: 20.h),
           ],
         ),
       ),
@@ -179,7 +180,7 @@ class _LanguageScreenState extends State<LanguageScreen> {
                   child: Text(
                     languageName,
                     style: TextStyle(
-                      fontSize: 16,
+                      fontSize: 16.sp,
                       fontWeight: FontWeight.w500,
                       color: isSelected
                           ? const Color(0xFF4FC3F7)
@@ -188,8 +189,8 @@ class _LanguageScreenState extends State<LanguageScreen> {
                   ),
                 ),
                 Container(
-                  width: 24,
-                  height: 24,
+                  width: 24.w,
+                  height: 24.h,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     border: Border.all(

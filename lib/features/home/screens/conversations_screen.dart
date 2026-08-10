@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:rest/core/services/chat_service.dart';
 import 'package:rest/features/emotion/screens/chat_screen.dart';
@@ -83,7 +84,7 @@ class _ConversacionesScreenState extends State<ConversacionesScreen> {
           margin: const EdgeInsets.only(left: 10),
           child: GradientText(
             'Conversaciones',
-            style: TextStyle(fontWeight: FontWeight.w600, fontSize: 30),
+            style: TextStyle(fontWeight: FontWeight.w600, fontSize: 30.sp),
             gradient: LinearGradient(
               colors: [Color(0xFF0AF3FF), Color(0xFF0419FF)],
               begin: Alignment.topLeft,
@@ -128,9 +129,9 @@ class _ConversacionesScreenState extends State<ConversacionesScreen> {
           'No se pudo cargar conversaciones',
           style: TextStyle(color: Colors.red[700], fontWeight: FontWeight.w700),
         ),
-        const SizedBox(height: 8),
+        SizedBox(height: 8.h),
         Text(_error ?? '', textAlign: TextAlign.center),
-        const SizedBox(height: 12),
+        SizedBox(height: 12.h),
         ElevatedButton(
           onPressed: _loadHistorial,
           child: const Text('Reintentar'),
@@ -140,10 +141,10 @@ class _ConversacionesScreenState extends State<ConversacionesScreen> {
   }
 
   Widget _emptyState() {
-    return const Column(
+    return Column(
       children: [
-        Icon(Icons.forum_rounded, size: 72, color: Color(0xFF90A4AE)),
-        SizedBox(height: 10),
+        const Icon(Icons.forum_rounded, size: 72, color: Color(0xFF90A4AE)),
+        SizedBox(height: 10.h),
         Text(
           'Aun no tienes sesiones con NOA',
           style: TextStyle(
@@ -167,7 +168,7 @@ class _ConversacionesScreenState extends State<ConversacionesScreen> {
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.surfaceContainerLow,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: const Color(0xFF08B1DD), width: 2),
+        border: Border.all(color: const Color(0xFF08B1DD), width: 2.w),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.03),
@@ -186,15 +187,15 @@ class _ConversacionesScreenState extends State<ConversacionesScreen> {
             child: Row(
               children: [
                 Container(
-                  width: 44,
-                  height: 44,
+                  width: 44.w,
+                  height: 44.h,
                   decoration: BoxDecoration(
                     color: Colors.black,
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Icon(Icons.forum_rounded, color: Colors.white, size: 24),
                 ),
-                const SizedBox(width: 16),
+                SizedBox(width: 16.w),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -202,16 +203,16 @@ class _ConversacionesScreenState extends State<ConversacionesScreen> {
                       Text(
                         titulo,
                         style: TextStyle(
-                          fontSize: 16,
+                          fontSize: 16.sp,
                           fontWeight: FontWeight.w600,
                           color: Theme.of(context).colorScheme.onSurface,
                         ),
                       ),
-                      const SizedBox(height: 4),
+                      SizedBox(height: 4.h),
                       Text(
                         '$fecha • ${item.totalMensajes} mensajes\n${item.preview}',
                         style: TextStyle(
-                          fontSize: 14,
+                          fontSize: 14.sp,
                           fontWeight: FontWeight.w400,
                           color: Theme.of(context).colorScheme.onSurfaceVariant,
                         ),

@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../home/screens/gradient_text.dart';
 import 'feedback_screen.dart';
 import 'profile_screen.dart'; // Importar la pantalla de perfil
@@ -56,7 +57,7 @@ class SettingsScreen extends StatelessWidget {
           ), // Pequeño margen para separar del botón
           child: GradientText(
             'Configuración',
-            style: TextStyle(fontWeight: FontWeight.w600, fontSize: 30),
+            style: TextStyle(fontWeight: FontWeight.w600, fontSize: 30.sp),
             gradient: LinearGradient(
               colors: [Color(0xFF0AF3FF), Color(0xFF0419FF)],
               begin: Alignment.topLeft,
@@ -75,7 +76,7 @@ class SettingsScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 _buildSectionTitle('Cuenta', context),
-                const SizedBox(height: 15),
+                SizedBox(height: 15.h),
                 _buildConfigItem('Perfil', Icons.person_outline, () {
                   // Navegar a la pantalla de perfil
                   Navigator.push(
@@ -105,9 +106,9 @@ class SettingsScreen extends StatelessWidget {
                   disabled: true,
                 ),
 
-                const SizedBox(height: 30),
+                SizedBox(height: 30.h),
                 _buildSectionTitle('Ajustes', context),
-                const SizedBox(height: 15),
+                SizedBox(height: 15.h),
                 _buildDarkModeItem(context),
                 _buildConfigItem(
                   'Recordatorios',
@@ -131,9 +132,9 @@ class SettingsScreen extends StatelessWidget {
                   disabled: true,
                 ),
 
-                const SizedBox(height: 30),
+                SizedBox(height: 30.h),
                 _buildSectionTitle('Soporte', context),
-                const SizedBox(height: 15),
+                SizedBox(height: 15.h),
                 _buildConfigItem(
                   'Reportar falla técnica',
                   Icons.bug_report_outlined,
@@ -196,10 +197,10 @@ class SettingsScreen extends StatelessWidget {
                   context,
                 ),
 
-                const SizedBox(height: 40),
+                SizedBox(height: 40.h),
                 Container(
                   width: double.infinity,
-                  height: 55,
+                  height: 55.h,
                   decoration: BoxDecoration(
                     color: const Color(0xFFE91E63),
                     borderRadius: BorderRadius.circular(15),
@@ -218,11 +219,11 @@ class SettingsScreen extends StatelessWidget {
                       onTap: () {
                         _showLogoutDialog(context);
                       },
-                      child: const Center(
+                      child: Center(
                         child: Text(
                           'CERRAR SESIÓN',
                           style: TextStyle(
-                            fontSize: 16,
+                            fontSize: 16.sp,
                             fontWeight: FontWeight.w600,
                             color: Colors.white,
                             letterSpacing: 1.2,
@@ -232,7 +233,7 @@ class SettingsScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-                const SizedBox(height: 20),
+                SizedBox(height: 20.h),
               ],
             ),
           ),
@@ -246,7 +247,7 @@ class SettingsScreen extends StatelessWidget {
     return Text(
       title,
       style: TextStyle(
-        fontSize: 18,
+        fontSize: 18.sp,
         fontWeight: FontWeight.w600,
         color: colorScheme.onSurface,
       ),
@@ -281,8 +282,8 @@ class SettingsScreen extends StatelessWidget {
             child: Row(
               children: [
                 Container(
-                  width: 32,
-                  height: 32,
+                  width: 32.w,
+                  height: 32.h,
                   decoration: BoxDecoration(
                     color: const Color(0xFF4FC3F7).withValues(alpha: 0.1),
                     shape: BoxShape.circle,
@@ -293,12 +294,12 @@ class SettingsScreen extends StatelessWidget {
                     size: 16,
                   ),
                 ),
-                const SizedBox(width: 12),
+                SizedBox(width: 12.w),
                 Expanded(
                   child: Text(
                     'Modo oscuro',
                     style: TextStyle(
-                      fontSize: 14,
+                      fontSize: 14.sp,
                       fontWeight: FontWeight.w500,
                       color: colorScheme.onSurface,
                     ),
@@ -368,20 +369,20 @@ class SettingsScreen extends StatelessWidget {
             child: Row(
               children: [
                 Container(
-                  width: 32,
-                  height: 32,
+                  width: 32.w,
+                  height: 32.h,
                   decoration: BoxDecoration(
                     color: iconColor.withValues(alpha: 0.1),
                     shape: BoxShape.circle,
                   ),
                   child: Icon(icon, color: iconColor, size: 16),
                 ),
-                const SizedBox(width: 12),
+                SizedBox(width: 12.w),
                 Expanded(
                   child: Text(
                     title,
                     style: TextStyle(
-                      fontSize: 14,
+                      fontSize: 14.sp,
                       fontWeight: FontWeight.w500,
                       color: textColor,
                     ),
@@ -400,7 +401,7 @@ class SettingsScreen extends StatelessWidget {
                     child: Text(
                       'Próximamente',
                       style: TextStyle(
-                        fontSize: 11,
+                        fontSize: 11.sp,
                         fontWeight: FontWeight.w500,
                         color: colorScheme.onSurface.withValues(alpha: 0.4),
                       ),

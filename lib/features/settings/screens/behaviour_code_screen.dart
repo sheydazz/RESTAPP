@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../home/screens/gradient_text.dart';
 
 class BehaviourCodeScreen extends StatelessWidget {
@@ -39,7 +40,7 @@ class BehaviourCodeScreen extends StatelessWidget {
           margin: const EdgeInsets.only(left: 10),
           child: GradientText(
             'Código',
-            style: TextStyle(fontWeight: FontWeight.w600, fontSize: 30),
+            style: TextStyle(fontWeight: FontWeight.w600, fontSize: 30.sp),
             gradient: LinearGradient(
               colors: [Color(0xFF0AF3FF), Color(0xFF0419FF)],
               begin: Alignment.topLeft,
@@ -72,8 +73,8 @@ class BehaviourCodeScreen extends StatelessWidget {
                 child: Row(
                   children: [
                     Container(
-                      width: 50,
-                      height: 50,
+                      width: 50.w,
+                      height: 50.h,
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
                           colors: [Color(0xFF0AF3FF), Color(0xFF0419FF)],
@@ -84,12 +85,12 @@ class BehaviourCodeScreen extends StatelessWidget {
                       ),
                       child: Icon(Icons.gavel, color: Colors.white, size: 28),
                     ),
-                    const SizedBox(width: 15),
+                    SizedBox(width: 15.w),
                     Expanded(
                       child: Text(
                         'Código de conducta',
                         style: TextStyle(
-                          fontSize: 20,
+                          fontSize: 20.sp,
                           fontWeight: FontWeight.w600,
                           color: Theme.of(context).colorScheme.onSurface,
                         ),
@@ -99,7 +100,7 @@ class BehaviourCodeScreen extends StatelessWidget {
                 ),
               ),
 
-              const SizedBox(height: 30),
+              SizedBox(height: 30.h),
 
               // Contenido del código de conducta
               Container(
@@ -206,22 +207,22 @@ class BehaviourCodeScreen extends StatelessWidget {
         Text(
           title,
           style: TextStyle(
-            fontSize: 16,
+            fontSize: 16.sp,
             fontWeight: FontWeight.w600,
             color: colorScheme.onSurface,
           ),
         ),
-        const SizedBox(height: 8),
+        SizedBox(height: 8.h),
         Text(
           content,
           style: TextStyle(
-            fontSize: 14,
+            fontSize: 14.sp,
             fontWeight: FontWeight.w400,
             color: colorScheme.onSurfaceVariant,
             height: 1.5,
           ),
         ),
-        if (!isLast) const SizedBox(height: 20),
+        if (!isLast) SizedBox(height: 20.h),
       ],
     );
   }

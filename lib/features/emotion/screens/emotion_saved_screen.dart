@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:rest/core/routes/app_routes.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -122,127 +123,128 @@ class _EmotionSavedScreenState extends State<EmotionSavedScreen>
     final colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
       backgroundColor: const Color(0xFF2D2D2D),
-      body: Center(
-        child: Container(
-          width: 400,
-          height: 800,
-          margin: const EdgeInsets.all(20),
-          decoration: BoxDecoration(
-            color: colorScheme.surface,
-            borderRadius: BorderRadius.circular(24),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withValues(alpha: 0.15),
-                blurRadius: 20,
-                spreadRadius: 4,
-                offset: const Offset(0, 8),
-              ),
-            ],
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              // Checkmark animado
-              ScaleTransition(
-                scale: _checkAnimation,
-                child: Container(
-                  width: 120,
-                  height: 120,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    gradient: const LinearGradient(
-                      colors: [Color(0xFF08D557), Color(0xFF41AC20)],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: const Color(0xFF08D557).withValues(alpha: 0.4),
-                        blurRadius: 20,
-                        offset: const Offset(0, 8),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Container(
+            width: double.infinity,
+            margin: const EdgeInsets.all(20),
+            decoration: BoxDecoration(
+              color: colorScheme.surface,
+              borderRadius: BorderRadius.circular(24),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.15),
+                  blurRadius: 20,
+                  spreadRadius: 4,
+                  offset: const Offset(0, 8),
+                ),
+              ],
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                // Checkmark animado
+                ScaleTransition(
+                  scale: _checkAnimation,
+                  child: Container(
+                    width: 120.w,
+                    height: 120.h,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      gradient: const LinearGradient(
+                        colors: [Color(0xFF08D557), Color(0xFF41AC20)],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
                       ),
-                    ],
-                  ),
-                  child: const Center(
-                    child: Icon(
-                      Icons.check_rounded,
-                      size: 70,
-                      color: Colors.white,
+                      boxShadow: [
+                        BoxShadow(
+                          color: const Color(0xFF08D557).withValues(alpha: 0.4),
+                          blurRadius: 20,
+                          offset: const Offset(0, 8),
+                        ),
+                      ],
+                    ),
+                    child: const Center(
+                      child: Icon(
+                        Icons.check_rounded,
+                        size: 70,
+                        color: Colors.white,
+                      ),
                     ),
                   ),
                 ),
-              ),
 
-              const SizedBox(height: 40),
+                SizedBox(height: 40.h),
 
-              // Texto principal con animación de slide
-              SlideTransition(
-                position: _slideAnimation,
-                child: FadeTransition(
-                  opacity: _slideController,
-                  child: Column(
-                    children: [
-                      ShaderMask(
-                        shaderCallback: (bounds) => const LinearGradient(
-                          colors: [Color(0xFF08D557), Color(0xFF41AC20)],
-                          begin: Alignment.centerLeft,
-                          end: Alignment.centerRight,
-                        ).createShader(bounds),
-                        child: const Text(
-                          '¡REGISTRO\nEMOCIONAL\nGUARDADO!',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 36,
-                            fontWeight: FontWeight.w900,
-                            color: Colors.white,
-                            letterSpacing: 1.2,
-                            height: 1.2,
+                // Texto principal con animación de slide
+                SlideTransition(
+                  position: _slideAnimation,
+                  child: FadeTransition(
+                    opacity: _slideController,
+                    child: Column(
+                      children: [
+                        ShaderMask(
+                          shaderCallback: (bounds) => const LinearGradient(
+                            colors: [Color(0xFF08D557), Color(0xFF41AC20)],
+                            begin: Alignment.centerLeft,
+                            end: Alignment.centerRight,
+                          ).createShader(bounds),
+                          child: Text(
+                            '¡REGISTRO\nEMOCIONAL\nGUARDADO!',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 36.sp,
+                              fontWeight: FontWeight.w900,
+                              color: Colors.white,
+                              letterSpacing: 1.2,
+                              height: 1.2,
+                            ),
                           ),
                         ),
-                      ),
 
-                      const SizedBox(height: 16),
+                        SizedBox(height: 16.h),
 
-                      Text(
-                        'Tu estado de ánimo ha sido registrado con éxito',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                          color: colorScheme.onSurfaceVariant,
-                          height: 1.4,
+                        Text(
+                          'Tu estado de ánimo ha sido registrado con éxito',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 16.sp,
+                            fontWeight: FontWeight.w600,
+                            color: colorScheme.onSurfaceVariant,
+                            height: 1.4,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
-              ),
 
-              const SizedBox(height: 40),
+                SizedBox(height: 40.h),
 
-              // Indicador de carga animado
-              SizedBox(
-                width: 60,
-                height: 60,
-                child: CircularProgressIndicator(
-                  valueColor: AlwaysStoppedAnimation<Color>(
-                    colorScheme.outlineVariant,
+                // Indicador de carga animado
+                SizedBox(
+                  width: 60.w,
+                  height: 60.h,
+                  child: CircularProgressIndicator(
+                    valueColor: AlwaysStoppedAnimation<Color>(
+                      colorScheme.outlineVariant,
+                    ),
+                    strokeWidth: 3,
                   ),
-                  strokeWidth: 3,
                 ),
-              ),
 
-              const SizedBox(height: 20),
+                SizedBox(height: 20.h),
 
-              Text(
-                'Preparando tu resultado...',
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
-                  color: colorScheme.onSurfaceVariant,
+                Text(
+                  'Preparando tu resultado...',
+                  style: TextStyle(
+                    fontSize: 14.sp,
+                    fontWeight: FontWeight.w500,
+                    color: colorScheme.onSurfaceVariant,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

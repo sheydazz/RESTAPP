@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:rest/core/utils/app_toast.dart';
 import 'package:rest/core/routes/app_routes.dart';
 import 'package:rest/core/services/emotion_service.dart';
@@ -380,17 +381,17 @@ class _ProgressScreenState extends State<ProgressScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   _buildHeader(context),
-                  const SizedBox(height: 16),
+                  SizedBox(height: 16.h),
                   _buildRachaCard(context),
-                  const SizedBox(height: 20),
+                  SizedBox(height: 20.h),
                   _buildRegistroEmocional(context),
-                  const SizedBox(height: 24),
+                  SizedBox(height: 24.h),
                   _buildActividadesDiarias(context),
-                  const SizedBox(height: 24),
+                  SizedBox(height: 24.h),
                   _buildMiDiario(context),
-                  const SizedBox(height: 24),
+                  SizedBox(height: 24.h),
                   _buildTecnicasRelajacion(context),
-                  const SizedBox(height: 80),
+                  SizedBox(height: 80.h),
                 ],
               ),
             ),
@@ -433,8 +434,8 @@ class _ProgressScreenState extends State<ProgressScreen> {
         child: Row(
           children: [
             // Llama
-            Image.asset('assets/images/RachaDaily.png', width: 52, height: 52),
-            const SizedBox(width: 14),
+            Image.asset('assets/images/RachaDaily.png', width: 52.w, height: 52.h),
+            SizedBox(width: 14.w),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -444,21 +445,21 @@ class _ProgressScreenState extends State<ProgressScreen> {
                       Text(
                         goalSet ? '$streak ${streak == 1 ? "día" : "días"} de racha' : 'Sin racha activa',
                         style: GoogleFonts.fredoka(
-                          fontSize: 17, fontWeight: FontWeight.bold,
+                          fontSize: 17.sp, fontWeight: FontWeight.bold,
                           color: const Color(0xFF3A5AFF),
                         ),
                       ),
-                      const SizedBox(width: 6),
-                      if (streak > 0) Text('🔥', style: const TextStyle(fontSize: 16)),
+                      SizedBox(width: 6.w),
+                      if (streak > 0) Text('🔥', style: TextStyle(fontSize: 16.sp)),
                     ],
                   ),
-                  const SizedBox(height: 4),
+                  SizedBox(height: 4.h),
                   if (goalSet) ...[
                     Text(
                       'Meta: $goal días · faltan ${(goal - streak).clamp(0, goal)} días',
-                      style: GoogleFonts.fredoka(fontSize: 12, color: const Color(0xFF6B7280)),
+                      style: GoogleFonts.fredoka(fontSize: 12.sp, color: const Color(0xFF6B7280)),
                     ),
-                    const SizedBox(height: 6),
+                    SizedBox(height: 6.h),
                     ClipRRect(
                       borderRadius: BorderRadius.circular(6),
                       child: LinearProgressIndicator(
@@ -471,12 +472,12 @@ class _ProgressScreenState extends State<ProgressScreen> {
                   ] else
                     Text(
                       'Toca para elegir tu meta y activar la racha',
-                      style: GoogleFonts.fredoka(fontSize: 12, color: const Color(0xFF8C4EFF)),
+                      style: GoogleFonts.fredoka(fontSize: 12.sp, color: const Color(0xFF8C4EFF)),
                     ),
                 ],
               ),
             ),
-            const SizedBox(width: 8),
+            SizedBox(width: 8.w),
             const Icon(Icons.chevron_right_rounded, color: Color(0xFF3A5AFF), size: 20),
           ],
         ),
@@ -492,8 +493,8 @@ class _ProgressScreenState extends State<ProgressScreen> {
         Row(
           children: [
             Container(
-              width: 100,
-              height: 60,
+              width: 100.w,
+              height: 60.h,
               decoration: const BoxDecoration(
                 color: Color(0xFF87CEEB),
                 shape: BoxShape.circle,
@@ -503,12 +504,12 @@ class _ProgressScreenState extends State<ProgressScreen> {
                 ),
               ),
             ),
-            const SizedBox(width: 12),
+            SizedBox(width: 12.w),
             Expanded(
               child: Text(
                 '¡Hola! ${UserSession.displayName}',
                 style: TextStyle(
-                  fontSize: 20,
+                  fontSize: 20.sp,
                   fontWeight: FontWeight.bold,
                   color: colorScheme.primary,
                   fontFamily: 'Fredoka',
@@ -524,11 +525,11 @@ class _ProgressScreenState extends State<ProgressScreen> {
             ),
           ],
         ),
-        const SizedBox(height: 20),
+        SizedBox(height: 20.h),
         Divider(
           color: colorScheme.outlineVariant,
           thickness: 3,
-          height: 0,
+          height: 0.h,
           indent: 23,
           endIndent: 23,
         ),
@@ -545,8 +546,8 @@ class _ProgressScreenState extends State<ProgressScreen> {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        width: 40,
-        height: 40,
+        width: 40.w,
+        height: 40.h,
         decoration: const BoxDecoration(
           color: Color(0xFF87CEEB),
           shape: BoxShape.circle,
@@ -604,7 +605,7 @@ class _ProgressScreenState extends State<ProgressScreen> {
               Text(
                 'Registro Emocional',
                 style: TextStyle(
-                  fontSize: 23,
+                  fontSize: 23.sp,
                   fontWeight: FontWeight.bold,
                   color: cardTextColor,
                   fontFamily: 'Fredoka',
@@ -637,7 +638,7 @@ class _ProgressScreenState extends State<ProgressScreen> {
                         color: cardTextColor,
                         size: 16,
                       ),
-                      const SizedBox(width: 6),
+                      SizedBox(width: 6.w),
                       Text(
                         'Ver Todo',
                         style: TextStyle(
@@ -652,7 +653,7 @@ class _ProgressScreenState extends State<ProgressScreen> {
               ),
             ],
           ),
-          const SizedBox(height: 12),
+          SizedBox(height: 12.h),
           Text(
             'Resumen semanal rápido',
             style: TextStyle(
@@ -661,7 +662,7 @@ class _ProgressScreenState extends State<ProgressScreen> {
               fontFamily: 'Fredoka',
             ),
           ),
-          const SizedBox(height: 14),
+          SizedBox(height: 14.h),
           Container(
             decoration: BoxDecoration(
               color: Theme.of(context).colorScheme.surface,
@@ -669,8 +670,8 @@ class _ProgressScreenState extends State<ProgressScreen> {
             ),
             padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
             child: _loadingWeekly
-                ? const SizedBox(
-                    height: 72,
+                ? SizedBox(
+                    height: 72.h,
                     child: Center(child: CircularProgressIndicator()),
                   )
                 : _weeklyError != null
@@ -687,12 +688,12 @@ class _ProgressScreenState extends State<ProgressScreen> {
                     ],
                   )
                 : SizedBox(
-                    height: 100,
+                    height: 100.h,
                     child: ListView.separated(
                       scrollDirection: Axis.horizontal,
                       physics: const BouncingScrollPhysics(),
                       itemCount: quickDays.length,
-                      separatorBuilder: (_, __) => const SizedBox(width: 8),
+                      separatorBuilder: (_, __) => SizedBox(width: 8.w),
                       itemBuilder: (_, index) {
                         final date = quickDays[index];
                         final key = _toDateKey(date);
@@ -730,7 +731,7 @@ class _ProgressScreenState extends State<ProgressScreen> {
         : 'assets/images/star.png';
 
     return Container(
-      width: 78,
+      width: 78.w,
       decoration: BoxDecoration(
         color: isToday
             ? colorScheme.primaryContainer
@@ -748,7 +749,7 @@ class _ProgressScreenState extends State<ProgressScreen> {
           Text(
             dayNames[date.weekday - 1],
             style: TextStyle(
-              fontSize: 10,
+              fontSize: 10.sp,
               fontWeight: FontWeight.w700,
               color: colorScheme.onSurface,
               fontFamily: 'Fredoka',
@@ -758,31 +759,31 @@ class _ProgressScreenState extends State<ProgressScreen> {
             Text(
               'HOY',
               style: TextStyle(
-                fontSize: 9,
+                fontSize: 9.sp,
                 fontWeight: FontWeight.w800,
                 color: colorScheme.primary,
                 fontFamily: 'Fredoka',
               ),
             ),
-          const SizedBox(height: 2),
+          SizedBox(height: 2.h),
           CircleAvatar(
             radius: 16,
             backgroundColor: Colors.white,
             child: ClipOval(
               child: Image.asset(
                 asset,
-                width: 30,
-                height: 30,
+                width: 30.w,
+                height: 30.h,
                 fit: BoxFit.cover,
                 errorBuilder: (_, __, ___) => const Icon(Icons.emoji_emotions),
               ),
             ),
           ),
-          const SizedBox(height: 2),
+          SizedBox(height: 2.h),
           Text(
             hasData ? promedio.toStringAsFixed(1) : '--',
             style: TextStyle(
-              fontSize: 10,
+              fontSize: 10.sp,
               fontWeight: FontWeight.w700,
               color: colorScheme.onSurface,
               fontFamily: 'Fredoka',
@@ -812,13 +813,13 @@ class _ProgressScreenState extends State<ProgressScreen> {
         Text(
           'Mis actividades diarias',
           style: TextStyle(
-            fontSize: 24,
+            fontSize: 24.sp,
             fontWeight: FontWeight.bold,
             color: colorScheme.onSurface,
             fontFamily: 'Fredoka',
           ),
         ),
-        const SizedBox(height: 12),
+        SizedBox(height: 12.h),
         Container(
           width: double.infinity,
           decoration: BoxDecoration(
@@ -873,7 +874,7 @@ class _ProgressScreenState extends State<ProgressScreen> {
                                 color: Color(0xFFFFA726),
                                 size: 18,
                               ),
-                              const SizedBox(width: 4),
+                              SizedBox(width: 4.w),
                               Text(
                                 '$estrellasHoy',
                                 style: const TextStyle(
@@ -885,7 +886,7 @@ class _ProgressScreenState extends State<ProgressScreen> {
                             ],
                           ),
                         ),
-                        const SizedBox(width: 8),
+                        SizedBox(width: 8.w),
                         FilledButton.tonalIcon(
                           onPressed: _showRewardsSheet,
                           icon: const Icon(
@@ -904,7 +905,7 @@ class _ProgressScreenState extends State<ProgressScreen> {
                         ),
                       ],
                     ),
-                    const SizedBox(height: 8),
+                    SizedBox(height: 8.h),
                     ClipRRect(
                       borderRadius: BorderRadius.circular(999),
                       child: LinearProgressIndicator(
@@ -916,7 +917,7 @@ class _ProgressScreenState extends State<ProgressScreen> {
                         ),
                       ),
                     ),
-                    const SizedBox(height: 8),
+                    SizedBox(height: 8.h),
                     Text(
                       '$estrellasHoy de $metaDiaria completadas hoy. Objetivo: 5 actividades por dia.',
                       style: TextStyle(
@@ -925,7 +926,7 @@ class _ProgressScreenState extends State<ProgressScreen> {
                         fontFamily: 'Fredoka',
                       ),
                     ),
-                    const SizedBox(height: 10),
+                    SizedBox(height: 10.h),
                     Container(
                       width: double.infinity,
                       padding: const EdgeInsets.all(12),
@@ -943,7 +944,7 @@ class _ProgressScreenState extends State<ProgressScreen> {
                                 Icons.auto_awesome_rounded,
                                 color: Color(0xFFEF8D00),
                               ),
-                              const SizedBox(width: 8),
+                              SizedBox(width: 8.w),
                               Text(
                                 'Estrellas del mes: $estrellasMes / $metaMes',
                                 style: const TextStyle(
@@ -954,7 +955,7 @@ class _ProgressScreenState extends State<ProgressScreen> {
                               ),
                             ],
                           ),
-                          const SizedBox(height: 10),
+                          SizedBox(height: 10.h),
                           TweenAnimationBuilder<double>(
                             tween: Tween<double>(begin: 0, end: progresoMes),
                             duration: const Duration(milliseconds: 850),
@@ -976,7 +977,7 @@ class _ProgressScreenState extends State<ProgressScreen> {
                         ],
                       ),
                     ),
-                    const SizedBox(height: 16),
+                    SizedBox(height: 16.h),
                     const Text(
                       'Pendientes',
                       style: TextStyle(
@@ -984,7 +985,7 @@ class _ProgressScreenState extends State<ProgressScreen> {
                         fontFamily: 'Fredoka',
                       ),
                     ),
-                    const SizedBox(height: 8),
+                    SizedBox(height: 8.h),
                     if (pendientes.isEmpty)
                       _emptyHint(
                         context,
@@ -994,7 +995,7 @@ class _ProgressScreenState extends State<ProgressScreen> {
                       ...pendientes
                           .take(5)
                           .map((a) => _activityItem(context, a, isDone: false)),
-                    const SizedBox(height: 14),
+                    SizedBox(height: 14.h),
                     const Text(
                       'Completadas',
                       style: TextStyle(
@@ -1002,7 +1003,7 @@ class _ProgressScreenState extends State<ProgressScreen> {
                         fontFamily: 'Fredoka',
                       ),
                     ),
-                    const SizedBox(height: 8),
+                    SizedBox(height: 8.h),
                     if (hechas.isEmpty)
                       _emptyHint(context, 'Aún no has completado actividades')
                     else
@@ -1058,24 +1059,24 @@ class _ProgressScreenState extends State<ProgressScreen> {
                   children: [
                     Center(
                       child: Container(
-                        width: 54,
-                        height: 5,
+                        width: 54.w,
+                        height: 5.h,
                         decoration: BoxDecoration(
                           color: Theme.of(context).colorScheme.outlineVariant,
                           borderRadius: BorderRadius.circular(999),
                         ),
                       ),
                     ),
-                    const SizedBox(height: 14),
-                    const Text(
+                    SizedBox(height: 14.h),
+                    Text(
                       'Premios del mes',
                       style: TextStyle(
                         fontFamily: 'Fredoka',
-                        fontSize: 24,
+                        fontSize: 24.sp,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    const SizedBox(height: 6),
+                    SizedBox(height: 6.h),
                     if (_loadingRewards)
                       const Padding(
                         padding: EdgeInsets.symmetric(vertical: 24),
@@ -1093,7 +1094,7 @@ class _ProgressScreenState extends State<ProgressScreen> {
                               fontWeight: FontWeight.w700,
                             ),
                           ),
-                          const SizedBox(height: 8),
+                          SizedBox(height: 8.h),
                           TextButton(
                             onPressed: () async {
                               await _loadRewardsCatalog();
@@ -1119,7 +1120,7 @@ class _ProgressScreenState extends State<ProgressScreen> {
                               ).colorScheme.onSurfaceVariant,
                             ),
                           ),
-                          const SizedBox(height: 14),
+                          SizedBox(height: 14.h),
                           TweenAnimationBuilder<double>(
                             tween: Tween(begin: 0, end: ratio),
                             duration: const Duration(milliseconds: 850),
@@ -1139,7 +1140,7 @@ class _ProgressScreenState extends State<ProgressScreen> {
                                       ),
                                     ),
                                   ),
-                                  const SizedBox(height: 8),
+                                  SizedBox(height: 8.h),
                                   Text(
                                     'Estrellas disponibles para canjear: ${(value * 100).toStringAsFixed(0)}%',
                                     style: TextStyle(
@@ -1154,7 +1155,7 @@ class _ProgressScreenState extends State<ProgressScreen> {
                               );
                             },
                           ),
-                          const SizedBox(height: 16),
+                          SizedBox(height: 16.h),
                           if (rewards.isEmpty)
                             Text(
                               'No hay premios activos por el momento.',
@@ -1182,7 +1183,7 @@ class _ProgressScreenState extends State<ProgressScreen> {
                               );
                             }),
                           if (solicitudes.isNotEmpty) ...[
-                            const SizedBox(height: 8),
+                            SizedBox(height: 8.h),
                             Text(
                               'Solicitudes recientes',
                               style: TextStyle(
@@ -1191,7 +1192,7 @@ class _ProgressScreenState extends State<ProgressScreen> {
                                 color: Theme.of(context).colorScheme.onSurface,
                               ),
                             ),
-                            const SizedBox(height: 8),
+                            SizedBox(height: 8.h),
                             ...solicitudes
                                 .take(3)
                                 .map(
@@ -1256,7 +1257,7 @@ class _ProgressScreenState extends State<ProgressScreen> {
               color: Color(0xFF1D84B5),
             ),
           ),
-          const SizedBox(width: 12),
+          SizedBox(width: 12.w),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -1269,16 +1270,16 @@ class _ProgressScreenState extends State<ProgressScreen> {
                     color: colorScheme.onSurface,
                   ),
                 ),
-                const SizedBox(height: 2),
+                SizedBox(height: 2.h),
                 Text(
                   reward.descripcion,
                   style: TextStyle(
                     fontFamily: 'Fredoka',
                     color: colorScheme.onSurfaceVariant,
-                    fontSize: 13,
+                    fontSize: 13.sp,
                   ),
                 ),
-                const SizedBox(height: 8),
+                SizedBox(height: 8.h),
                 Text(
                   isPending
                       ? 'Ya tienes una solicitud pendiente para este premio'
@@ -1295,9 +1296,9 @@ class _ProgressScreenState extends State<ProgressScreen> {
                         : const Color(0xFF8D6E63),
                   ),
                 ),
-                const SizedBox(height: 8),
+                SizedBox(height: 8.h),
                 SizedBox(
-                  width: 170,
+                  width: 170.w,
                   child: ElevatedButton(
                     onPressed:
                         (unlocked &&
@@ -1317,9 +1318,9 @@ class _ProgressScreenState extends State<ProgressScreen> {
                       ),
                     ),
                     child: _sendingRewardId == reward.id
-                        ? const SizedBox(
-                            height: 16,
-                            width: 16,
+                        ? SizedBox(
+                            height: 16.h,
+                            width: 16.w,
                             child: CircularProgressIndicator(
                               strokeWidth: 2,
                               valueColor: AlwaysStoppedAnimation(Colors.white),
@@ -1375,7 +1376,7 @@ class _ProgressScreenState extends State<ProgressScreen> {
                 ? const Color(0xFF2E7D32)
                 : colorScheme.onSurfaceVariant,
           ),
-          const SizedBox(width: 10),
+          SizedBox(width: 10.w),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -1392,7 +1393,7 @@ class _ProgressScreenState extends State<ProgressScreen> {
                     item.descripcion,
                     style: TextStyle(
                       color: colorScheme.onSurfaceVariant,
-                      fontSize: 12,
+                      fontSize: 12.sp,
                     ),
                   ),
               ],
@@ -1404,9 +1405,9 @@ class _ProgressScreenState extends State<ProgressScreen> {
                   ? null
                   : () => _completeActivity(item),
               icon: isSendingThisItem
-                  ? const SizedBox(
-                      height: 18,
-                      width: 18,
+                  ? SizedBox(
+                      height: 18.h,
+                      width: 18.w,
                       child: CircularProgressIndicator(
                         strokeWidth: 2,
                         valueColor: AlwaysStoppedAnimation(Colors.white),
@@ -1455,13 +1456,13 @@ class _ProgressScreenState extends State<ProgressScreen> {
         Text(
           'Mi diario',
           style: TextStyle(
-            fontSize: 24,
+            fontSize: 24.sp,
             fontWeight: FontWeight.bold,
             color: colorScheme.onSurface,
             fontFamily: 'Fredoka',
           ),
         ),
-        const SizedBox(height: 12),
+        SizedBox(height: 12.h),
         GestureDetector(
           onTap: () => Navigator.pushNamed(context, AppRoutes.miDiario),
           child: Container(
@@ -1473,13 +1474,13 @@ class _ProgressScreenState extends State<ProgressScreen> {
             padding: const EdgeInsets.all(16),
             child: Row(
               children: [
-                Image.asset('assets/images/dairy.jpg', width: 110, height: 90),
-                const SizedBox(width: 16),
+                Image.asset('assets/images/dairy.jpg', width: 110.w, height: 90.h),
+                SizedBox(width: 16.w),
                 Expanded(
                   child: Text(
                     'Escribe aquí todas las cosas importantes de tu día',
                     style: TextStyle(
-                      fontSize: 15,
+                      fontSize: 15.sp,
                       color: colorScheme.onSurface,
                       fontWeight: FontWeight.bold,
                       fontFamily: 'Fredoka',
@@ -1513,13 +1514,13 @@ class _ProgressScreenState extends State<ProgressScreen> {
         Text(
           'Mis técnicas de relajación',
           style: TextStyle(
-            fontSize: 24,
+            fontSize: 24.sp,
             fontWeight: FontWeight.bold,
             color: colorScheme.onSurface,
             fontFamily: 'Fredoka',
           ),
         ),
-        const SizedBox(height: 12),
+        SizedBox(height: 12.h),
         Container(
           width: double.infinity,
           padding: const EdgeInsets.all(14),
@@ -1590,10 +1591,10 @@ class _ProgressScreenState extends State<ProgressScreen> {
                   color: colorScheme.surfaceContainerHigh,
                   borderRadius: BorderRadius.circular(999),
                 ),
-                child: const Text(
+                child: Text(
                   'API',
                   style: TextStyle(
-                    fontSize: 11,
+                    fontSize: 11.sp,
                     color: Color(0xFF00796B),
                     fontWeight: FontWeight.w700,
                     fontFamily: 'Fredoka',
@@ -1619,12 +1620,12 @@ class _ProgressScreenState extends State<ProgressScreen> {
               overflow: TextOverflow.ellipsis,
               style: TextStyle(
                 fontFamily: 'Fredoka',
-                fontSize: 14,
+                fontSize: 14.sp,
                 fontWeight: FontWeight.bold,
                 color: colorScheme.onSurface,
               ),
             ),
-            const SizedBox(height: 8),
+            SizedBox(height: 8.h),
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(

@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:rest/core/routes/app_routes.dart';
 import 'package:rest/core/services/diary_service.dart';
@@ -89,8 +90,8 @@ class _MiDiarioScreenState extends State<MiDiarioScreen> {
                   GestureDetector(
                     onTap: () => Navigator.pop(context),
                     child: Container(
-                      width: 40,
-                      height: 40,
+                      width: 40.w,
+                      height: 40.h,
                       decoration: BoxDecoration(
                         gradient: _gradient,
                         shape: BoxShape.circle,
@@ -102,7 +103,7 @@ class _MiDiarioScreenState extends State<MiDiarioScreen> {
                       ),
                     ),
                   ),
-                  const SizedBox(width: 16),
+                  SizedBox(width: 16.w),
 
                   // Texto con gradiente “Mi Diario”
                   ShaderMask(
@@ -110,7 +111,7 @@ class _MiDiarioScreenState extends State<MiDiarioScreen> {
                     child: Text(
                       'Mi Diario',
                       style: GoogleFonts.fredoka(
-                        fontSize: 26,
+                        fontSize: 26.sp,
                         fontWeight: FontWeight.bold,
                         color: Colors.white, // se pinta con el ShaderMask
                       ),
@@ -118,15 +119,15 @@ class _MiDiarioScreenState extends State<MiDiarioScreen> {
                   ),
                 ],
               ),
-              const SizedBox(height: 20),
+              SizedBox(height: 20.h),
               Divider(
                 color: colorScheme.outlineVariant,
                 thickness: 3,
-                height: 0,
+                height: 0.h,
                 indent: 23,
                 endIndent: 23,
               ),
-              const SizedBox(height: 8),
+              SizedBox(height: 8.h),
 
               // Mensaje de advertencia
               Container(
@@ -143,12 +144,12 @@ class _MiDiarioScreenState extends State<MiDiarioScreen> {
                       color: Color(0xFFFFA726),
                       size: 20,
                     ),
-                    const SizedBox(width: 8),
+                    SizedBox(width: 8.w),
                     Expanded(
                       child: Text(
                         'Recuerda que este espacio es solo tuyo. Nadie puede leer tus notas; es totalmente privado: tus pensamientos y tú.',
                         style: GoogleFonts.fredoka(
-                          fontSize: 15,
+                          fontSize: 15.sp,
                           color: colorScheme.onSurface,
                           fontWeight: FontWeight.bold,
                           height: 1.3,
@@ -158,7 +159,7 @@ class _MiDiarioScreenState extends State<MiDiarioScreen> {
                   ],
                 ),
               ),
-              const SizedBox(height: 24),
+              SizedBox(height: 24.h),
 
               // Formulario con borde de gradiente
               Expanded(
@@ -180,7 +181,7 @@ class _MiDiarioScreenState extends State<MiDiarioScreen> {
                         TextField(
                           controller: _tituloController,
                           style: GoogleFonts.fredoka(
-                            fontSize: 16,
+                            fontSize: 16.sp,
                             color: colorScheme.onSurface,
                             fontWeight: FontWeight.bold,
                           ),
@@ -194,7 +195,7 @@ class _MiDiarioScreenState extends State<MiDiarioScreen> {
                           ),
                         ),
                         const Divider(color: Color(0xFFE0E0E0), thickness: 1),
-                        const SizedBox(height: 8),
+                        SizedBox(height: 8.h),
 
                         // Campo descripción
                         Expanded(
@@ -204,7 +205,7 @@ class _MiDiarioScreenState extends State<MiDiarioScreen> {
                             expands: true,
                             textAlignVertical: TextAlignVertical.top,
                             style: GoogleFonts.fredoka(
-                              fontSize: 14,
+                              fontSize: 14.sp,
                               color: colorScheme.onSurface,
                               fontWeight: FontWeight.bold,
                             ),
@@ -223,7 +224,7 @@ class _MiDiarioScreenState extends State<MiDiarioScreen> {
                   ),
                 ),
               ),
-              const SizedBox(height: 20),
+              SizedBox(height: 20.h),
 
               // Botones
               Row(
@@ -231,7 +232,7 @@ class _MiDiarioScreenState extends State<MiDiarioScreen> {
                   // Botón “Ver mis capítulos” con gradiente
                   Expanded(
                     child: Container(
-                      height: 52,
+                      height: 52.h,
                       decoration: BoxDecoration(
                         gradient: _gradient,
                         borderRadius: BorderRadius.circular(25),
@@ -252,13 +253,13 @@ class _MiDiarioScreenState extends State<MiDiarioScreen> {
                           style: GoogleFonts.fredoka(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
-                            fontSize: 15,
+                            fontSize: 15.sp,
                           ),
                         ),
                       ),
                     ),
                   ),
-                  const SizedBox(width: 12),
+                  SizedBox(width: 12.w),
 
                   // Botón “Guardar” (verde, sin cambios)
                   Expanded(
@@ -274,9 +275,9 @@ class _MiDiarioScreenState extends State<MiDiarioScreen> {
                         elevation: 0,
                       ),
                       child: _saving
-                          ? const SizedBox(
-                              height: 20,
-                              width: 20,
+                          ? SizedBox(
+                              height: 20.h,
+                              width: 20.w,
                               child: CircularProgressIndicator(
                                 strokeWidth: 2.2,
                                 valueColor: AlwaysStoppedAnimation(
@@ -287,7 +288,7 @@ class _MiDiarioScreenState extends State<MiDiarioScreen> {
                           : Text(
                               'Guardar',
                               style: GoogleFonts.fredoka(
-                                fontSize: 15,
+                                fontSize: 15.sp,
                                 fontWeight: FontWeight.bold,
                                 color: Colors.white,
                               ),

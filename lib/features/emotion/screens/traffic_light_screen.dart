@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:rest/core/routes/app_routes.dart';
 import '../../../core/services/user_session.dart';
 import '../utils/emotion_state_config.dart';
@@ -25,10 +26,9 @@ class TrafficLightScreen extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
       backgroundColor: const Color(0xFF2D2D2D),
-      body: Center(
+      body: SafeArea(
         child: Container(
-          width: 400,
-          height: 800,
+          width: double.infinity,
           margin: const EdgeInsets.all(20),
           decoration: BoxDecoration(
             color: colorScheme.surface,
@@ -50,8 +50,8 @@ class TrafficLightScreen extends StatelessWidget {
                 children: [
                   // Circulo decorativo de fondo
                   Container(
-                    width: 280,
-                    height: 220,
+                    width: 280.w,
+                    height: 220.h,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       gradient: RadialGradient(
@@ -65,8 +65,8 @@ class TrafficLightScreen extends StatelessWidget {
                       child: ClipOval(
                         child: Image.asset(
                           config.imagenAsset,
-                          width: 200,
-                          height: 200,
+                          width: 200.w,
+                          height: 200.h,
                           fit: BoxFit.cover,
                           errorBuilder: (context, error, stackTrace) {
                             return Icon(
@@ -80,21 +80,21 @@ class TrafficLightScreen extends StatelessWidget {
                     ),
                   ),
 
-                  const SizedBox(height: 30),
+                  SizedBox(height: 30.h),
 
                   // Título dinámico con color según estado
                   Text(
                     config.titulo,
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      fontSize: 28,
+                      fontSize: 28.sp,
                       fontWeight: FontWeight.w900,
                       color: config.colorPrincipal,
                       letterSpacing: 0.8,
                     ),
                   ),
 
-                  const SizedBox(height: 20),
+                  SizedBox(height: 20.h),
 
                   // Contenedor del mensaje principal
                   Container(
@@ -117,18 +117,18 @@ class TrafficLightScreen extends StatelessWidget {
                           config.mensaje,
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                            fontSize: 18,
+                            fontSize: 18.sp,
                             fontWeight: FontWeight.w700,
                             color: config.colorTexto,
                             height: 1.4,
                           ),
                         ),
-                        const SizedBox(height: 10),
+                        SizedBox(height: 10.h),
                         Text(
                           config.mensaje2,
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                            fontSize: 14,
+                            fontSize: 14.sp,
                             fontWeight: FontWeight.w500,
                             color: config.colorTexto.withValues(alpha: 0.8),
                             height: 1.3,
@@ -138,19 +138,19 @@ class TrafficLightScreen extends StatelessWidget {
                     ),
                   ),
 
-                  const SizedBox(height: 24),
+                  SizedBox(height: 24.h),
 
                   // Recomendaciones quick tips
                   if (estado != 'excelente' && recomendaciones.isNotEmpty) ...[
                     Text(
                       'Sugerencias de bienestar:',
                       style: TextStyle(
-                        fontSize: 14,
+                        fontSize: 14.sp,
                         fontWeight: FontWeight.w700,
                         color: colorScheme.onSurface,
                       ),
                     ),
-                    const SizedBox(height: 12),
+                    SizedBox(height: 12.h),
                     Container(
                       padding: const EdgeInsets.all(12),
                       decoration: BoxDecoration(
@@ -166,8 +166,8 @@ class TrafficLightScreen extends StatelessWidget {
                                 ),
                                 child: Text(
                                   rec,
-                                  style: const TextStyle(
-                                    fontSize: 12,
+                                  style: TextStyle(
+                                    fontSize: 12.sp,
                                     color: Colors.black87,
                                     height: 1.3,
                                   ),
@@ -177,13 +177,13 @@ class TrafficLightScreen extends StatelessWidget {
                             .toList(),
                       ),
                     ),
-                    const SizedBox(height: 24),
+                    SizedBox(height: 24.h),
                   ],
 
                   // Botón de acción
                   Container(
-                    width: 220,
-                    height: 55,
+                    width: 220.w,
+                    height: 55.h,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(28),
                       gradient: LinearGradient(
@@ -230,8 +230,8 @@ class TrafficLightScreen extends StatelessWidget {
                       },
                       child: Text(
                         config.botonTexto,
-                        style: const TextStyle(
-                          fontSize: 16,
+                        style: TextStyle(
+                          fontSize: 16.sp,
                           fontWeight: FontWeight.w700,
                           color: Colors.white,
                           letterSpacing: 0.5,

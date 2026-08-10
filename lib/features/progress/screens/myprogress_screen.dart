@@ -1,8 +1,11 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:rest/features/progress/screens/globalprogress_screen.dart';
 import 'package:rest/core/services/personal_progress_service.dart';
 import '../../settings/screens/settings_screen.dart';
 import '../../../core/services/user_session.dart';
+import '../../../core/widgets/app_header_bar.dart';
+import '../../../core/widgets/info_card.dart';
 
 class MyProgressScreen extends StatefulWidget {
   const MyProgressScreen({super.key});
@@ -96,17 +99,19 @@ class _MyProgressScreenState extends State<MyProgressScreen> {
                 Divider(
                   color: colorScheme.outlineVariant,
                   thickness: 3,
-                  height: 0,
+                  height: 0.h,
                   indent: 23,
                   endIndent: 23,
                 ),
-                const SizedBox(height: 20),
+                SizedBox(height: 20.h),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: Text(
                     'He trabajado $diasTrabajados días en mí',
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
                     style: TextStyle(
-                      fontSize: 30,
+                      fontSize: 30.sp,
                       fontWeight: FontWeight.bold,
                       color: Theme.of(context).colorScheme.onSurface,
                       fontFamily: 'Fredoka',
@@ -114,7 +119,7 @@ class _MyProgressScreenState extends State<MyProgressScreen> {
                     textAlign: TextAlign.center,
                   ),
                 ),
-                const SizedBox(height: 16),
+                SizedBox(height: 16.h),
 
                 if (_loading)
                   const Padding(
@@ -125,14 +130,14 @@ class _MyProgressScreenState extends State<MyProgressScreen> {
                   _ErrorPanel(error: _error!, onRetry: _loadPersonalData)
                 else ...[
                   _buildStreakCard(context),
-                  const SizedBox(height: 16),
+                  SizedBox(height: 16.h),
                   _buildFrequentMoodCard(),
                   _buildFrequentEmotionsCard(),
                   _buildMoodEvolutionCard(),
                   _buildCreativeChallengeCard(),
                 ],
 
-                const SizedBox(height: 90),
+                SizedBox(height: 90.h),
               ],
             ),
           ),
@@ -142,46 +147,14 @@ class _MyProgressScreenState extends State<MyProgressScreen> {
   }
 
   Widget _buildHeader(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      child: Row(
-        children: [
-          Container(
-            width: 100,
-            height: 60,
-            decoration: const BoxDecoration(
-              color: Color(0xFF87CEEB),
-              shape: BoxShape.circle,
-              image: DecorationImage(
-                image: AssetImage('assets/images/normalrest.jpg'),
-                fit: BoxFit.cover,
-              ),
-            ),
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Text(
-              '¡Hola! ${UserSession.displayName}',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                color: Theme.of(context).colorScheme.primary,
-                fontFamily: 'Fredoka',
-              ),
-            ),
-          ),
-          _CircleIconAction(
-            imagePath: 'assets/images/config.png',
-            icon: Icons.settings,
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => SettingsScreen()),
-              );
-            },
-          ),
-        ],
-      ),
+    return AppHeaderBar(
+      title: '¡Hola! ${UserSession.displayName}',
+      onActionTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) => SettingsScreen()),
+        );
+      },
     );
   }
 
@@ -210,15 +183,17 @@ class _MyProgressScreenState extends State<MyProgressScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: data.semanaActual
                   .map(
-                    (day) => _DayItem(
-                      day: day.dia,
-                      active: day.estrellaActivada,
-                      completed: day.registroEmocional,
+                    (day) => Expanded(
+                      child: _DayItem(
+                        day: day.dia,
+                        active: day.estrellaActivada,
+                        completed: day.registroEmocional,
+                      ),
                     ),
                   )
                   .toList(),
             ),
-            const SizedBox(height: 10),
+            SizedBox(height: 10.h),
             Row(
               children: [
                 _MiniBadge(
@@ -227,7 +202,7 @@ class _MyProgressScreenState extends State<MyProgressScreen> {
                   bgColor: const Color(0xFFFFF4E5),
                   fgColor: const Color(0xFFE36A10),
                 ),
-                const SizedBox(width: 8),
+                SizedBox(width: 8.w),
                 _MiniBadge(
                   icon: Icons.auto_awesome_rounded,
                   label: 'Estrellas: ${data.estrellasRachaTotal}',
@@ -236,7 +211,7 @@ class _MyProgressScreenState extends State<MyProgressScreen> {
                 ),
               ],
             ),
-            const SizedBox(height: 10),
+            SizedBox(height: 10.h),
             SizedBox(
               width: double.infinity,
               child: FilledButton.icon(
@@ -253,9 +228,9 @@ class _MyProgressScreenState extends State<MyProgressScreen> {
                   ),
                 ),
                 icon: _activatingStreak
-                    ? const SizedBox(
-                        width: 16,
-                        height: 16,
+                    ? SizedBox(
+                        width: 16.w,
+                        height: 16.h,
                         child: CircularProgressIndicator(
                           strokeWidth: 2,
                           color: Colors.white,
@@ -271,7 +246,7 @@ class _MyProgressScreenState extends State<MyProgressScreen> {
                 ),
               ),
             ),
-            const SizedBox(height: 8),
+            SizedBox(height: 8.h),
             Text(
               'Activa tu estrella diaria para mantener la racha y sumar premios.',
               style: TextStyle(
@@ -294,7 +269,7 @@ class _MyProgressScreenState extends State<MyProgressScreen> {
         ? 'Aún no hay registros suficientes para detectar tu estado dominante.'
         : 'Tu estado más frecuente ha sido ${estado.nombre} (${estado.total} registros).';
 
-    return _InfoCard(
+    return InfoCard(
       title: 'Estado de ánimo más frecuente',
       content: content,
       icon: Icons.favorite_rounded,
@@ -309,7 +284,7 @@ class _MyProgressScreenState extends State<MyProgressScreen> {
         ? 'No se han registrado emociones suficientes en tus sesiones.'
         : emociones.map((e) => '${e.nombre} (${e.total})').join('  •  ');
 
-    return _InfoCard(
+    return InfoCard(
       title: 'Emociones más frecuentes',
       content: content,
       icon: Icons.emoji_emotions_rounded,
@@ -332,7 +307,7 @@ class _MyProgressScreenState extends State<MyProgressScreen> {
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        border: Border.all(color: const Color(0xFF2F9FE8), width: 1.5),
+        border: Border.all(color: const Color(0xFF2F9FE8), width: 1.5.w),
         borderRadius: BorderRadius.circular(15),
       ),
       child: Column(
@@ -341,12 +316,12 @@ class _MyProgressScreenState extends State<MyProgressScreen> {
           Row(
             children: [
               Icon(Icons.show_chart_rounded, color: Color(0xFF2F9FE8)),
-              SizedBox(width: 8),
+              SizedBox(width: 8.w),
               Expanded(
                 child: Text(
                   'Evolución del estado de ánimo',
                   style: TextStyle(
-                    fontSize: 18,
+                    fontSize: 18.sp,
                     fontWeight: FontWeight.bold,
                     color: Theme.of(context).colorScheme.onSurface,
                     fontFamily: 'Fredoka',
@@ -355,22 +330,22 @@ class _MyProgressScreenState extends State<MyProgressScreen> {
               ),
             ],
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: 8.h),
           Text(
             evo == null
                 ? 'Aún no hay evolución para mostrar.'
                 : tendenciaTexto(evo.tendencia),
-            style: TextStyle(fontSize: 14, color: Theme.of(context).colorScheme.onSurface),
+            style: TextStyle(fontSize: 14.sp, color: Theme.of(context).colorScheme.onSurface),
           ),
-          const SizedBox(height: 12),
+          SizedBox(height: 12.h),
           if (serie.isEmpty)
             Text(
               'No se han registrado estados de ánimo en el periodo seleccionado.',
-              style: TextStyle(fontSize: 14, color: Theme.of(context).colorScheme.onSurface),
+              style: TextStyle(fontSize: 14.sp, color: Theme.of(context).colorScheme.onSurface),
             )
           else
             SizedBox(
-              height: 60,
+              height: 60.h,
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: serie.map((point) {
@@ -411,7 +386,7 @@ class _MyProgressScreenState extends State<MyProgressScreen> {
           'Te falta registrar tu estado emocional de hoy para desbloquear tu estrella.';
     }
 
-    return _InfoCard(
+    return InfoCard(
       title: 'Reto personal inteligente',
       content: reto,
       icon: Icons.lightbulb_rounded,
@@ -449,11 +424,11 @@ class _DayItem extends StatelessWidget {
             color: Colors.grey,
             size: 24,
           ),
-        const SizedBox(height: 4),
+        SizedBox(height: 4.h),
         Text(
           day,
           style: TextStyle(
-            fontSize: 12,
+            fontSize: 12.sp,
             fontWeight: FontWeight.w600,
             color: Theme.of(context).colorScheme.onSurface,
           ),
@@ -463,93 +438,6 @@ class _DayItem extends StatelessWidget {
   }
 }
 
-class _InfoCard extends StatelessWidget {
-  final String title;
-  final String content;
-  final IconData icon;
-  final Color iconColor;
-
-  const _InfoCard({
-    required this.title,
-    required this.content,
-    required this.icon,
-    required this.iconColor,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        border: Border.all(color: const Color(0xFF2F9FE8), width: 1.5),
-        borderRadius: BorderRadius.circular(15),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Icon(icon, color: iconColor),
-              const SizedBox(width: 8),
-              Expanded(
-                child: Text(
-                  title,
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: Theme.of(context).colorScheme.onSurface,
-                    fontFamily: 'Fredoka',
-                  ),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 6),
-          Text(
-            content,
-            style: TextStyle(
-              fontSize: 14,
-              color: Theme.of(context).colorScheme.onSurface,
-              height: 1.35,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _CircleIconAction extends StatelessWidget {
-  const _CircleIconAction({required this.imagePath, required this.onTap, this.icon});
-
-  final String imagePath;
-  final VoidCallback onTap;
-  final IconData? icon;
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onTap,
-      child: Container(
-        width: 40,
-        height: 40,
-        decoration: const BoxDecoration(
-          color: Color(0xFF87CEEB),
-          shape: BoxShape.circle,
-        ),
-        child: Center(
-          child: icon != null
-              ? Icon(icon, color: Colors.white, size: 22)
-              : Padding(
-                  padding: const EdgeInsets.all(6),
-                  child: Image.asset(imagePath, fit: BoxFit.cover),
-                ),
-        ),
-      ),
-    );
-  }
-}
 
 class _MiniBadge extends StatelessWidget {
   const _MiniBadge({
@@ -576,7 +464,7 @@ class _MiniBadge extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Icon(icon, size: 16, color: fgColor),
-          const SizedBox(width: 5),
+          SizedBox(width: 5.w),
           Text(
             label,
             style: TextStyle(
@@ -616,9 +504,9 @@ class _ErrorPanel extends StatelessWidget {
               color: Color(0xFFB71C1C),
             ),
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: 8.h),
           Text(error, style: const TextStyle(color: Color(0xFFB71C1C))),
-          const SizedBox(height: 8),
+          SizedBox(height: 8.h),
           TextButton(onPressed: onRetry, child: const Text('Reintentar')),
         ],
       ),

@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class GamesScreen extends StatefulWidget {
   const GamesScreen({super.key});
@@ -65,7 +66,7 @@ class _GamesScreenState extends State<GamesScreen> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('¡Ganaste!'),
+        title: Text('¡Ganaste!'),
         content: Text('Puntuación: $_score'),
         actions: [
           ElevatedButton(
@@ -73,7 +74,7 @@ class _GamesScreenState extends State<GamesScreen> {
               Navigator.pop(context);
               setState(() => _initializeGame());
             },
-            child: const Text('Jugar Nuevamente'),
+            child: Text('Jugar Nuevamente'),
           ),
         ],
       ),
@@ -86,7 +87,7 @@ class _GamesScreenState extends State<GamesScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color(0xFF2196F3),
-        title: const Text(
+        title: Text(
           '🎮 Juegos',
           style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
         ),
@@ -111,14 +112,14 @@ class _GamesScreenState extends State<GamesScreen> {
               ),
               child: Text(
                 'Puntuación: $_score | Parejas: $_matches/4',
-                style: const TextStyle(
-                  fontSize: 20,
+                style: TextStyle(
+                  fontSize: 20.sp,
                   fontWeight: FontWeight.bold,
                   color: Colors.white,
                 ),
               ),
             ),
-            const SizedBox(height: 24),
+            SizedBox(height: 24.h),
             // Grid de tarjetas
             Expanded(
               child: GridView.count(
@@ -143,8 +144,8 @@ class _GamesScreenState extends State<GamesScreen> {
                         child: _revealed[index]
                             ? Text(
                                 '${_cards[index]}',
-                                style: const TextStyle(
-                                  fontSize: 24,
+                                style: TextStyle(
+                                  fontSize: 24.sp,
                                   fontWeight: FontWeight.bold,
                                   color: Colors.white,
                                 ),
@@ -160,7 +161,7 @@ class _GamesScreenState extends State<GamesScreen> {
                 }),
               ),
             ),
-            const SizedBox(height: 24),
+            SizedBox(height: 24.h),
             ElevatedButton(
               onPressed: () => setState(() => _initializeGame()),
               style: ElevatedButton.styleFrom(
@@ -170,9 +171,9 @@ class _GamesScreenState extends State<GamesScreen> {
                   vertical: 12,
                 ),
               ),
-              child: const Text(
+              child: Text(
                 'Reiniciar',
-                style: TextStyle(fontSize: 16, color: Colors.white),
+                style: TextStyle(fontSize: 16.sp, color: Colors.white),
               ),
             ),
           ],

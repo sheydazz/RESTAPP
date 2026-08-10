@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:rest/core/routes/app_routes.dart';
 import 'package:rest/core/services/user_session.dart';
 import '../utils/emotion_state_config.dart';
@@ -69,8 +70,8 @@ class AdviceScreen extends StatelessWidget {
                   children: [
                     // Cara del usuario con emoji
                     Container(
-                      width: 90,
-                      height: 90,
+                      width: 90.w,
+                      height: 90.h,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         border: Border.all(
@@ -97,7 +98,7 @@ class AdviceScreen extends StatelessWidget {
                         ),
                       ),
                     ),
-                    const SizedBox(width: 16),
+                    SizedBox(width: 16.w),
                     // Saludo y mensaje de bienvenida
                     Expanded(
                       child: Column(
@@ -106,16 +107,16 @@ class AdviceScreen extends StatelessWidget {
                           Text(
                             '¡Hola, ${UserSession.displayName}!',
                             style: TextStyle(
-                              fontSize: 22,
+                              fontSize: 22.sp,
                               fontWeight: FontWeight.w800,
                               color: config.colorPrincipal,
                             ),
                           ),
-                          const SizedBox(height: 4),
+                          SizedBox(height: 4.h),
                           Text(
                             'Aquí encontrarás recomendaciones',
                             style: TextStyle(
-                              fontSize: 12,
+                              fontSize: 12.sp,
                               fontWeight: FontWeight.w500,
                               color: colorScheme.onSurfaceVariant,
                             ),
@@ -127,20 +128,20 @@ class AdviceScreen extends StatelessWidget {
                 ),
               ),
 
-              const SizedBox(height: 24),
+              SizedBox(height: 24.h),
 
               // Título de sección
               Text(
                 config.titulo,
                 style: TextStyle(
-                  fontSize: 26,
+                  fontSize: 26.sp,
                   fontWeight: FontWeight.w900,
                   color: config.colorPrincipal,
                   letterSpacing: 0.5,
                 ),
               ),
 
-              const SizedBox(height: 12),
+              SizedBox(height: 12.h),
 
               // Mensaje contextual
               Container(
@@ -159,17 +160,17 @@ class AdviceScreen extends StatelessWidget {
                     Text(
                       config.mensaje,
                       style: TextStyle(
-                        fontSize: 16,
+                        fontSize: 16.sp,
                         fontWeight: FontWeight.w700,
                         color: config.colorTexto,
                         height: 1.4,
                       ),
                     ),
-                    const SizedBox(height: 8),
+                    SizedBox(height: 8.h),
                     Text(
                       config.mensaje2,
                       style: TextStyle(
-                        fontSize: 14,
+                        fontSize: 14.sp,
                         fontWeight: FontWeight.w500,
                         color: config.colorTexto.withValues(alpha: 0.85),
                         height: 1.4,
@@ -179,20 +180,20 @@ class AdviceScreen extends StatelessWidget {
                 ),
               ),
 
-              const SizedBox(height: 32),
+              SizedBox(height: 32.h),
 
               // Sección de Recomendaciones
               Text(
                 '💡 Recomendaciones para ti:',
                 style: TextStyle(
-                  fontSize: 18,
+                  fontSize: 18.sp,
                   fontWeight: FontWeight.w800,
                   color: colorScheme.onSurface,
                   letterSpacing: 0.3,
                 ),
               ),
 
-              const SizedBox(height: 16),
+              SizedBox(height: 16.h),
 
               // Lista de recomendaciones
               ...config.recomendaciones.map((rec) {
@@ -218,7 +219,7 @@ class AdviceScreen extends StatelessWidget {
                     child: Text(
                       rec,
                       style: TextStyle(
-                        fontSize: 14,
+                        fontSize: 14.sp,
                         fontWeight: FontWeight.w600,
                         color: colorScheme.onSurface,
                         height: 1.5,
@@ -228,19 +229,19 @@ class AdviceScreen extends StatelessWidget {
                 );
               }).toList(),
 
-              const SizedBox(height: 32),
+              SizedBox(height: 32.h),
 
               // Sección de recursos según el estado
               if (estado == 'preocupante' || estado == 'critico') ...[
                 Text(
                   '🆘 Recursos de Ayuda:',
                   style: TextStyle(
-                    fontSize: 18,
+                    fontSize: 18.sp,
                     fontWeight: FontWeight.w800,
                     color: colorScheme.onSurface,
                   ),
                 ),
-                const SizedBox(height: 12),
+                SizedBox(height: 12.h),
                 Container(
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
@@ -255,14 +256,14 @@ class AdviceScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       _buildResourceItem('PAS Colombia', '123', Colors.red, context),
-                      const SizedBox(height: 10),
+                      SizedBox(height: 10.h),
                       _buildResourceItem(
                         'Línea de Emergencia Mental',
                         '+57 1 2288019',
                         Colors.orange,
                         context,
                       ),
-                      const SizedBox(height: 10),
+                      SizedBox(height: 10.h),
                       _buildResourceItem(
                         'Chat con Psicólogo (24h)',
                         'Disponible en la app',
@@ -272,13 +273,13 @@ class AdviceScreen extends StatelessWidget {
                     ],
                   ),
                 ),
-                const SizedBox(height: 32),
+                SizedBox(height: 32.h),
               ],
 
               // Botón de acción
               SizedBox(
                 width: double.infinity,
-                height: 56,
+                height: 56.h,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     backgroundColor: config.colorPrincipal,
@@ -296,10 +297,10 @@ class AdviceScreen extends StatelessWidget {
                       arguments: {'promedioHoy': promedioHoy},
                     );
                   },
-                  child: const Text(
+                  child: Text(
                     'Ver Registro Guardado →',
                     style: TextStyle(
-                      fontSize: 16,
+                      fontSize: 16.sp,
                       fontWeight: FontWeight.w700,
                       letterSpacing: 0.5,
                     ),
@@ -307,7 +308,7 @@ class AdviceScreen extends StatelessWidget {
                 ),
               ),
 
-              const SizedBox(height: 20),
+              SizedBox(height: 20.h),
             ],
           ),
         ),
@@ -327,7 +328,7 @@ class AdviceScreen extends StatelessWidget {
       child: Row(
         children: [
           Icon(Icons.phone, color: color, size: 20),
-          const SizedBox(width: 12),
+          SizedBox(width: 12.w),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -335,7 +336,7 @@ class AdviceScreen extends StatelessWidget {
                 Text(
                   title,
                   style: TextStyle(
-                    fontSize: 12,
+                    fontSize: 12.sp,
                     fontWeight: FontWeight.w700,
                     color: colorScheme.onSurface,
                   ),
@@ -343,7 +344,7 @@ class AdviceScreen extends StatelessWidget {
                 Text(
                   contact,
                   style: TextStyle(
-                    fontSize: 13,
+                    fontSize: 13.sp,
                     fontWeight: FontWeight.w600,
                     color: color,
                   ),

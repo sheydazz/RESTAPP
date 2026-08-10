@@ -10,7 +10,14 @@ class ApiConfig {
 
   static const String universityBaseUrl = 'http://179.197.239.216:3000';
 
+  // Override manual: flutter run --dart-define=API_BASE_URL=http://179.197.239.216:3000
+  static const String _envBaseUrl = String.fromEnvironment('API_BASE_URL');
+
   static String get baseUrl {
+    if (_envBaseUrl.isNotEmpty) {
+      return _envBaseUrl;
+    }
+
     // debug/profile (flutter run) -> servidor local; release (flutter build) -> servidor universidad
     if (kReleaseMode) {
       return universityBaseUrl;

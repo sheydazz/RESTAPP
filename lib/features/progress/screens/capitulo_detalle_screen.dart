@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class CapituloDetalleScreen extends StatefulWidget {
@@ -60,8 +61,8 @@ class _CapituloDetalleScreenState extends State<CapituloDetalleScreen> {
                   GestureDetector(
                     onTap: () => Navigator.pop(context),
                     child: Container(
-                      width: 40,
-                      height: 40,
+                      width: 40.w,
+                      height: 40.h,
                       decoration: BoxDecoration(
                         gradient: _gradient,
                         shape: BoxShape.circle,
@@ -73,7 +74,7 @@ class _CapituloDetalleScreenState extends State<CapituloDetalleScreen> {
                       ),
                     ),
                   ),
-                  const SizedBox(width: 16),
+                  SizedBox(width: 16.w),
 
                   // Texto "Capítulo" con gradiente
                   ShaderMask(
@@ -81,7 +82,7 @@ class _CapituloDetalleScreenState extends State<CapituloDetalleScreen> {
                     child: Text(
                       'Capítulo',
                       style: GoogleFonts.fredoka(
-                        fontSize: 26,
+                        fontSize: 26.sp,
                         fontWeight: FontWeight.bold,
                         color: Colors.white,
                       ),
@@ -91,15 +92,15 @@ class _CapituloDetalleScreenState extends State<CapituloDetalleScreen> {
               ),
 
               // 🔸 Divider como en otras pantallas
-              const SizedBox(height: 20),
+              SizedBox(height: 20.h),
               Divider(
                 color: colorScheme.outlineVariant,
                 thickness: 3,
-                height: 0,
+                height: 0.h,
                 indent: 23,
                 endIndent: 23,
               ),
-              const SizedBox(height: 20),
+              SizedBox(height: 20.h),
 
               // 🔹 FORMULARIO
               Expanded(
@@ -121,7 +122,7 @@ class _CapituloDetalleScreenState extends State<CapituloDetalleScreen> {
                         TextField(
                           controller: _tituloController,
                           style: GoogleFonts.fredoka(
-                            fontSize: 16,
+                            fontSize: 16.sp,
                             color: colorScheme.onSurface,
                             fontWeight: FontWeight.bold,
                           ),
@@ -139,7 +140,7 @@ class _CapituloDetalleScreenState extends State<CapituloDetalleScreen> {
                           color: Color(0xFFE0E0E0),
                           thickness: 1,
                         ),
-                        const SizedBox(height: 8),
+                        SizedBox(height: 8.h),
 
                         // Campo Descripción
                         Expanded(
@@ -149,7 +150,7 @@ class _CapituloDetalleScreenState extends State<CapituloDetalleScreen> {
                             expands: true,
                             textAlignVertical: TextAlignVertical.top,
                             style: GoogleFonts.fredoka(
-                              fontSize: 14,
+                              fontSize: 14.sp,
                               color: colorScheme.onSurface,
                               fontWeight: FontWeight.bold,
                             ),

@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:rest/core/services/progress_service.dart';
 
@@ -88,8 +89,8 @@ class _ActivitiesScreenState extends State<ActivitiesScreen> {
                       Navigator.pop(context);
                     },
                     child: Container(
-                      width: 40,
-                      height: 40,
+                      width: 40.w,
+                      height: 40.h,
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
                           colors: [Color(0xFF0BBDAC), Color(0xFF6110E8)],
@@ -112,7 +113,7 @@ class _ActivitiesScreenState extends State<ActivitiesScreen> {
                         child: Text(
                           'Mis Actividades',
                           style: TextStyle(
-                            fontSize: 32,
+                            fontSize: 32.sp,
                             fontWeight: FontWeight.bold,
                             color: Colors.white,
                           ),
@@ -120,7 +121,7 @@ class _ActivitiesScreenState extends State<ActivitiesScreen> {
                       ),
                     ),
                   ),
-                  SizedBox(width: 30), // Para balancear el espacio de la X
+                  SizedBox(width: 30.w), // Para balancear el espacio de la X
                 ],
               ),
             ),
@@ -128,12 +129,12 @@ class _ActivitiesScreenState extends State<ActivitiesScreen> {
             Divider(
               color: Theme.of(context).colorScheme.outlineVariant,
               thickness: 2,
-              height: 0,
+              height: 0.h,
               indent: 16,
               endIndent: 16,
             ),
 
-            SizedBox(height: 20),
+            SizedBox(height: 20.h),
 
             // Texto motivacional
             Padding(
@@ -142,7 +143,7 @@ class _ActivitiesScreenState extends State<ActivitiesScreen> {
                 textAlign: TextAlign.left,
                 text: TextSpan(
                   style: TextStyle(
-                    fontSize: 16,
+                    fontSize: 16.sp,
                     color: Theme.of(context).colorScheme.onSurface,
                     fontFamily: 'Fredoka',
                   ),
@@ -158,7 +159,7 @@ class _ActivitiesScreenState extends State<ActivitiesScreen> {
               ),
             ),
 
-            SizedBox(height: 20),
+            SizedBox(height: 20.h),
 
             // Grid de actividades
             Expanded(
@@ -173,9 +174,9 @@ class _ActivitiesScreenState extends State<ActivitiesScreen> {
                             'No se pudo cargar actividades',
                             style: TextStyle(color: Colors.red[700]),
                           ),
-                          const SizedBox(height: 8),
+                          SizedBox(height: 8.h),
                           Text(_error!, textAlign: TextAlign.center),
-                          const SizedBox(height: 10),
+                          SizedBox(height: 10.h),
                           ElevatedButton(
                             onPressed: _loadActivities,
                             child: const Text('Reintentar'),
@@ -250,7 +251,7 @@ class _ActivitiesScreenState extends State<ActivitiesScreen> {
                     ),
             ),
 
-            SizedBox(height: 16),
+            SizedBox(height: 16.h),
           ],
         ),
       ),
@@ -277,24 +278,24 @@ class _ActivitiesScreenState extends State<ActivitiesScreen> {
             children: [
               // Imagen de la actividad
               Container(
-                width: 80,
-                height: 80,
+                width: 80.w,
+                height: 80.h,
                 child: Image.asset(imagePath, fit: BoxFit.contain),
               ),
-              SizedBox(height: 12),
+              SizedBox(height: 12.h),
 
               // Título de la actividad
               Text(
                 title,
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontSize: 14,
+                  fontSize: 14.sp,
                   fontWeight: FontWeight.bold,
                   color: Theme.of(context).colorScheme.onSurface,
                   height: 1.2,
                 ),
               ),
-              const SizedBox(height: 8),
+              SizedBox(height: 8.h),
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
@@ -314,16 +315,16 @@ class _ActivitiesScreenState extends State<ActivitiesScreen> {
             ],
           ),
         ),
-        SizedBox(height: 8),
+        SizedBox(height: 8.h),
         // Fecha de vencimiento fuera de la tarjeta
         Text(
           'Vence el:',
-          style: TextStyle(fontSize: 11, color: Theme.of(context).colorScheme.onSurfaceVariant),
+          style: TextStyle(fontSize: 11.sp, color: Theme.of(context).colorScheme.onSurfaceVariant),
         ),
         Text(
           date,
           style: TextStyle(
-            fontSize: 11,
+            fontSize: 11.sp,
             fontWeight: FontWeight.w600,
             color: Theme.of(context).colorScheme.onSurfaceVariant,
           ),

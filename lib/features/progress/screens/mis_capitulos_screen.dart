@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:rest/core/routes/app_routes.dart';
@@ -70,8 +71,8 @@ class _MisCapitulosScreenState extends State<MisCapitulosScreen> {
                       GestureDetector(
                         onTap: () => Navigator.pop(context),
                         child: Container(
-                          width: 40,
-                          height: 40,
+                          width: 40.w,
+                          height: 40.h,
                           decoration: BoxDecoration(
                             gradient: gradient,
                             shape: BoxShape.circle,
@@ -83,7 +84,7 @@ class _MisCapitulosScreenState extends State<MisCapitulosScreen> {
                           ),
                         ),
                       ),
-                      const SizedBox(width: 16),
+                      SizedBox(width: 16.w),
 
                       ShaderMask(
                         shaderCallback: (bounds) =>
@@ -91,7 +92,7 @@ class _MisCapitulosScreenState extends State<MisCapitulosScreen> {
                         child: Text(
                           'Mis Capítulos',
                           style: GoogleFonts.fredoka(
-                            fontSize: 26,
+                            fontSize: 26.sp,
                             fontWeight: FontWeight.bold,
                             color: Colors.white,
                           ),
@@ -101,11 +102,11 @@ class _MisCapitulosScreenState extends State<MisCapitulosScreen> {
                   ),
 
                   // divisor
-                  const SizedBox(height: 20),
+                  SizedBox(height: 20.h),
                   Divider(
                     color: colorScheme.outlineVariant,
                     thickness: 3,
-                    height: 0,
+                    height: 0.h,
                     indent: 23,
                     endIndent: 23,
                   ),
@@ -129,26 +130,26 @@ class _MisCapitulosScreenState extends State<MisCapitulosScreen> {
                               size: 64,
                               color: Color(0xFF90A4AE),
                             ),
-                            const SizedBox(height: 12),
+                            SizedBox(height: 12.h),
                             Text(
                               'No se pudieron cargar tus capitulos',
                               textAlign: TextAlign.center,
                               style: GoogleFonts.fredoka(
-                                fontSize: 17,
+                                fontSize: 17.sp,
                                 fontWeight: FontWeight.w700,
                                 color: const Color(0xFF546E7A),
                               ),
                             ),
-                            const SizedBox(height: 8),
+                            SizedBox(height: 8.h),
                             Text(
                               _error!,
                               textAlign: TextAlign.center,
                               style: GoogleFonts.fredoka(
-                                fontSize: 13,
+                                fontSize: 13.sp,
                                 color: const Color(0xFF90A4AE),
                               ),
                             ),
-                            const SizedBox(height: 16),
+                            SizedBox(height: 16.h),
                             ElevatedButton(
                               onPressed: _loadEntries,
                               child: const Text('Reintentar'),
@@ -167,20 +168,20 @@ class _MisCapitulosScreenState extends State<MisCapitulosScreen> {
                             size: 80,
                             color: colorScheme.outlineVariant,
                           ),
-                          const SizedBox(height: 16),
+                          SizedBox(height: 16.h),
                           Text(
                             'No hay capítulos aún',
                             style: TextStyle(
-                              fontSize: 18,
+                              fontSize: 18.sp,
                               color: colorScheme.onSurfaceVariant,
                               fontFamily: 'Fredoka',
                             ),
                           ),
-                          const SizedBox(height: 8),
+                          SizedBox(height: 8.h),
                           Text(
                             'Comienza escribiendo en tu diario',
                             style: TextStyle(
-                              fontSize: 14,
+                              fontSize: 14.sp,
                               color: colorScheme.onSurfaceVariant,
                               fontFamily: 'Fredoka',
                             ),
@@ -258,18 +259,18 @@ class _MisCapitulosScreenState extends State<MisCapitulosScreen> {
               Text(
                 titulo,
                 style: GoogleFonts.fredoka(
-                  fontSize: 18,
+                  fontSize: 18.sp,
                   fontWeight: FontWeight.bold,
                   color: Theme.of(context).colorScheme.onSurface,
                 ),
               ),
-              const SizedBox(height: 8),
+              SizedBox(height: 8.h),
 
               // descrip
               Text(
                 descripcion,
                 style: GoogleFonts.fredoka(
-                  fontSize: 14,
+                  fontSize: 14.sp,
                   fontWeight: FontWeight.bold,
                   color: Theme.of(context).colorScheme.onSurface,
                   height: 1.3,
@@ -278,13 +279,13 @@ class _MisCapitulosScreenState extends State<MisCapitulosScreen> {
                 overflow: TextOverflow.ellipsis,
               ),
 
-              const SizedBox(height: 12),
+              SizedBox(height: 12.h),
 
               // date
               Text(
                 fecha,
                 style: GoogleFonts.fredoka(
-                  fontSize: 12,
+                  fontSize: 12.sp,
                   color: Theme.of(context).colorScheme.onSurface,
                   fontWeight: FontWeight.bold,
                 ),

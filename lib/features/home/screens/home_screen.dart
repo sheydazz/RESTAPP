@@ -1,9 +1,11 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../settings/screens/settings_screen.dart';
 import 'activities_screen.dart';
 import 'package:rest/features/emotion/screens/chat_screen.dart';
 import 'conversations_screen.dart';
 import 'package:rest/core/services/user_session.dart';
+import 'package:rest/core/widgets/app_header_bar.dart';
 
 class HomeScreen extends StatelessWidget {
   @override
@@ -22,70 +24,23 @@ class MainScreen extends StatelessWidget {
         child: Column(
           children: [
             // Header
-            Container(
-              padding: EdgeInsets.all(16),
-              child: Row(
-                children: [
-                  // Avatar Mari
-                  Container(
-                    width: 100,
-                    height: 60,
-                    decoration: BoxDecoration(
-                      color: Color(0xFF87CEEB),
-                      shape: BoxShape.circle,
-                      image: DecorationImage(
-                        image: AssetImage('assets/images/normalrest.jpg'),
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  ),
-                  SizedBox(width: 12),
-                  // Texto "¡Hola! <nombre>"
-                  Text(
-                    '¡Hola! ${UserSession.displayName}',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: colorScheme.primary,
-                      fontFamily: 'Fredoka',
-                    ),
-                  ),
-                  Spacer(),
-                  // Iconos derecha
-                  InkWell(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => SettingsScreen(),
-                        ),
-                      );
-                    },
-                    child: Container(
-                      width: 40,
-                      height: 40,
-                      decoration: BoxDecoration(
-                        color: Color(0xFF87CEEB),
-                        shape: BoxShape.circle,
-                      ),
-                      child: const Icon(
-                        Icons.settings,
-                        color: Colors.white,
-                        size: 22,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+            AppHeaderBar(
+              title: '¡Hola! ${UserSession.displayName}',
+              onActionTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => SettingsScreen()),
+                );
+              },
             ),
             Divider(
               color: colorScheme.outlineVariant,
               thickness: 3,
-              height: 0,
+              height: 0.h,
               indent: 23,
               endIndent: 23,
             ),
-            SizedBox(height: 20),
+            SizedBox(height: 20.h),
 
             _ChatCard(onTap: () {
               Navigator.push(
@@ -94,10 +49,10 @@ class MainScreen extends StatelessWidget {
               );
             }),
 
-            SizedBox(height: 20),
+            SizedBox(height: 20.h),
 
             // Botón "ESCOGER UN TEMA"
-            SizedBox(height: 40),
+            SizedBox(height: 40.h),
 
             // Sección "Mis últimas sesiones"
             Container(
@@ -105,13 +60,17 @@ class MainScreen extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    'Mis últimas sesiones',
-                    style: TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
-                      color: colorScheme.onSurface,
-                      fontFamily: 'Fredoka',
+                  Flexible(
+                    child: Text(
+                      'Mis últimas sesiones',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontSize: 22.sp,
+                        fontWeight: FontWeight.bold,
+                        color: colorScheme.onSurface,
+                        fontFamily: 'Fredoka',
+                      ),
                     ),
                   ),
                   InkWell(
@@ -125,14 +84,14 @@ class MainScreen extends StatelessWidget {
                     },
                     child: Text(
                       'Ver todas',
-                      style: TextStyle(fontSize: 16, color: Color(0xFF2E86AB), fontFamily: 'Fredoka'),
+                      style: TextStyle(fontSize: 16.sp, color: Color(0xFF2E86AB), fontFamily: 'Fredoka'),
                     ),
                   ),
                 ],
               ),
             ),
 
-            SizedBox(height: 20),
+            SizedBox(height: 20.h),
 
             // Cards de sesiones
             Container(
@@ -162,17 +121,17 @@ class MainScreen extends StatelessWidget {
                             Text(
                               'Conversaciones',
                               style: TextStyle(
-                                fontSize: 14,
+                                fontSize: 14.sp,
                                 fontWeight: FontWeight.w500,
                                 color: colorScheme.onSurface,
                                 height: 1.2,
                                 fontFamily: 'Fredoka',
                               ),
                             ),
-                            SizedBox(height: 23),
+                            SizedBox(height: 23.h),
                             Container(
-                              width: 90,
-                              height: 95,
+                              width: 90.w,
+                              height: 95.h,
                               decoration: BoxDecoration(
                                 color: Color(0xFF87CEEB),
                                 shape: BoxShape.circle,
@@ -190,7 +149,7 @@ class MainScreen extends StatelessWidget {
                     ),
                   ),
 
-                  SizedBox(width: 16),
+                  SizedBox(width: 16.w),
 
                   // Card Progreso de las Actividad - CON NAVEGACIÓN
                   Expanded(
@@ -216,17 +175,17 @@ class MainScreen extends StatelessWidget {
                               'Progreso de las\nActividades',
                               textAlign: TextAlign.center,
                               style: TextStyle(
-                                fontSize: 14,
+                                fontSize: 14.sp,
                                 fontWeight: FontWeight.w500,
                                 color: colorScheme.onSurface,
                                 height: 1.2,
                                 fontFamily: 'Fredoka',
                               ),
                             ),
-                            SizedBox(height: 12),
+                            SizedBox(height: 12.h),
                             Container(
-                              width: 100,
-                              height: 90,
+                              width: 100.w,
+                              height: 90.h,
                               decoration: BoxDecoration(
                                 color: Color(0xFF87CEEB),
                                 shape: BoxShape.circle,
@@ -292,7 +251,7 @@ class _ChatCard extends StatelessWidget {
               decoration: BoxDecoration(color: iconBg, shape: BoxShape.circle),
               child: Icon(Icons.forum_rounded, color: iconColor, size: 32),
             ),
-            const SizedBox(width: 16),
+            SizedBox(width: 16.w),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -301,18 +260,18 @@ class _ChatCard extends StatelessWidget {
                     '¿Quieres hablar\nconmigo?',
                     style: TextStyle(
                       color: titleColor,
-                      fontSize: 26,
+                      fontSize: 26.sp,
                       fontWeight: FontWeight.bold,
                       height: 1.2,
                       fontFamily: 'Fredoka',
                     ),
                   ),
-                  const SizedBox(height: 6),
+                  SizedBox(height: 6.h),
                   Text(
                     'Iniciar conversación',
                     style: TextStyle(
                       color: subtitleColor,
-                      fontSize: 14,
+                      fontSize: 14.sp,
                       fontWeight: FontWeight.w500,
                       fontFamily: 'Fredoka',
                     ),

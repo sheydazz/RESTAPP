@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../home/screens/home_screen.dart';
 import '../progress/screens/progress_screen.dart';
 import '../progress/screens/myprogress_screen.dart';
@@ -70,7 +71,7 @@ class _MainAppState extends State<MainApp> {
         backgroundColor: const Color(0xFFD32F2F),
         tooltip: 'Pedir ayuda profesional',
         shape: const CircleBorder(),
-        child: const Icon(Icons.phone, color: Colors.white, size: 28),
+        child: Icon(Icons.phone, color: Colors.white, size: 28.sp),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       bottomNavigationBar: CustomBottomNavBar(
@@ -95,10 +96,10 @@ class CustomBottomNavBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.all(16),
-      height: 70,
+      margin: EdgeInsets.all(16.w),
+      height: 70.h,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(25),
+        borderRadius: BorderRadius.circular(25.r),
         gradient: const LinearGradient(
           colors: [Color(0xFF4DB6AC), Color(0xFF3F51B5)],
           begin: Alignment.centerLeft,
@@ -123,15 +124,15 @@ class CustomBottomNavBar extends StatelessWidget {
       onTap: () => onTap(index),
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 300),
-        width: 60,
-        height: 50,
+        width: 60.w,
+        height: 50.h,
         decoration: BoxDecoration(
           color: isActive ? Colors.white.withValues(alpha: 0.9) : Colors.transparent,
           shape: BoxShape.circle,
         ),
         child: Icon(
           icon,
-          size: 30,
+          size: 30.sp,
           color: isActive ? const Color(0xFF4A90E2) : Colors.white,
         ),
       ),

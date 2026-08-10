@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../home/screens/gradient_text.dart';
 
 class FailReportScreen extends StatefulWidget {
@@ -60,7 +61,7 @@ class _FailReportScreenState extends State<FailReportScreen> {
             'Reportar Falla',
             style: TextStyle(
               fontWeight: FontWeight.w600,
-              fontSize: 30,
+              fontSize: 30.sp,
             ),
             gradient: LinearGradient(
               colors: [
@@ -97,8 +98,8 @@ class _FailReportScreenState extends State<FailReportScreen> {
                 child: Row(
                   children: [
                     Container(
-                      width: 50,
-                      height: 50,
+                      width: 50.w,
+                      height: 50.h,
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
                           colors: [Color(0xFF0AF3FF), Color(0xFF0419FF)],
@@ -113,7 +114,7 @@ class _FailReportScreenState extends State<FailReportScreen> {
                         size: 28,
                       ),
                     ),
-                    const SizedBox(width: 15),
+                    SizedBox(width: 15.w),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -121,16 +122,16 @@ class _FailReportScreenState extends State<FailReportScreen> {
                           Text(
                             'Reportar falla técnica',
                             style: TextStyle(
-                              fontSize: 20,
+                              fontSize: 20.sp,
                               fontWeight: FontWeight.w600,
                               color: Theme.of(context).colorScheme.onSurface,
                             ),
                           ),
-                          const SizedBox(height: 5),
+                          SizedBox(height: 5.h),
                           Text(
                             'Déjanos saber qué problemas has presentado',
                             style: TextStyle(
-                              fontSize: 14,
+                              fontSize: 14.sp,
                               color: Theme.of(context).colorScheme.onSurfaceVariant,
                               fontWeight: FontWeight.w400,
                             ),
@@ -142,7 +143,7 @@ class _FailReportScreenState extends State<FailReportScreen> {
                 ),
               ),
 
-              const SizedBox(height: 30),
+              SizedBox(height: 30.h),
 
               // Campo de título
               _buildInputField(
@@ -151,7 +152,7 @@ class _FailReportScreenState extends State<FailReportScreen> {
                 maxLines: 1,
               ),
 
-              const SizedBox(height: 20),
+              SizedBox(height: 20.h),
 
               // Campo de descripción
               _buildInputField(
@@ -161,12 +162,12 @@ class _FailReportScreenState extends State<FailReportScreen> {
                 isDescription: true,
               ),
 
-              const SizedBox(height: 40),
+              SizedBox(height: 40.h),
 
               // Botón de enviar
               Container(
                 width: double.infinity,
-                height: 55,
+                height: 55.h,
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     colors: [Color(0xFF0AF3FF), Color(0xFF0419FF)],
@@ -189,11 +190,11 @@ class _FailReportScreenState extends State<FailReportScreen> {
                     onTap: () {
                       _sendReport();
                     },
-                    child: const Center(
+                    child: Center(
                       child: Text(
                         'Enviar Reporte',
                         style: TextStyle(
-                          fontSize: 16,
+                          fontSize: 16.sp,
                           fontWeight: FontWeight.w600,
                           color: Colors.white,
                           letterSpacing: 1.2,
@@ -204,7 +205,7 @@ class _FailReportScreenState extends State<FailReportScreen> {
                 ),
               ),
 
-              const SizedBox(height: 20),
+              SizedBox(height: 20.h),
             ],
           ),
         ),
@@ -242,7 +243,7 @@ class _FailReportScreenState extends State<FailReportScreen> {
           hintText: hintText,
           hintStyle: TextStyle(
             color: Theme.of(context).colorScheme.onSurfaceVariant,
-            fontSize: 14,
+            fontSize: 14.sp,
             fontWeight: FontWeight.w400,
           ),
           border: InputBorder.none,
@@ -250,7 +251,7 @@ class _FailReportScreenState extends State<FailReportScreen> {
         ),
         style: TextStyle(
           color: Theme.of(context).colorScheme.onSurface,
-          fontSize: 14,
+          fontSize: 14.sp,
           fontWeight: FontWeight.w500,
         ),
       ),

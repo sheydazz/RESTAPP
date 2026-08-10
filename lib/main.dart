@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'core/routes/app_routes.dart';
 import 'core/services/theme_service.dart';
 import 'core/services/user_session.dart';
@@ -37,92 +38,99 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ValueListenableBuilder<ThemeMode>(
-      valueListenable: ThemeService.instance.themeModeNotifier,
-      builder: (context, themeMode, _) {
-        return MaterialApp(
-          debugShowCheckedModeBanner: false,
-          theme: AppTheme.light,
-          darkTheme: AppTheme.dark,
-          themeMode: themeMode,
-          initialRoute: AppRoutes.intro,
-          routes: {
-            // Intro & Auth
-            AppRoutes.intro: (context) => IntroScreen(),
-            AppRoutes.login: (context) => LoginScreen(),
-            AppRoutes.register: (context) => RegisterScreen(),
-            AppRoutes.forgotPassword: (context) => const ForgotPasswordScreen(),
-            AppRoutes.howYouFound: (context) => HowYouFoundScreen(),
+    return ScreenUtilInit(
+      designSize: const Size(390, 844),
+      minTextAdapt: true,
+      builder: (context, child) {
+        return ValueListenableBuilder<ThemeMode>(
+          valueListenable: ThemeService.instance.themeModeNotifier,
+          builder: (context, themeMode, _) {
+            return MaterialApp(
+              debugShowCheckedModeBanner: false,
+              theme: AppTheme.light,
+              darkTheme: AppTheme.dark,
+              themeMode: themeMode,
+              initialRoute: AppRoutes.intro,
+              routes: {
+                // Intro & Auth
+                AppRoutes.intro: (context) => IntroScreen(),
+                AppRoutes.login: (context) => LoginScreen(),
+                AppRoutes.register: (context) => RegisterScreen(),
+                AppRoutes.forgotPassword: (context) =>
+                    const ForgotPasswordScreen(),
+                AppRoutes.howYouFound: (context) => HowYouFoundScreen(),
 
-            // Main App
-            AppRoutes.mainApp: (context) => MainApp(),
+                // Main App
+                AppRoutes.mainApp: (context) => MainApp(),
 
-            // Home
-            AppRoutes.home: (context) => HomeScreen(),
-            AppRoutes.settings: (context) => SettingsScreen(),
+                // Home
+                AppRoutes.home: (context) => HomeScreen(),
+                AppRoutes.settings: (context) => SettingsScreen(),
 
-            // Ayuda
-            AppRoutes.help: (context) => HelpScreen(),
-            AppRoutes.cancelhelp: (context) => CancelHelpScreen(),
+                // Ayuda
+                AppRoutes.help: (context) => HelpScreen(),
+                AppRoutes.cancelhelp: (context) => CancelHelpScreen(),
 
-            // Registro Emocional
-            AppRoutes.emotionHome: (context) => EmotionRegisterScreen(),
-            AppRoutes.chat: (context) => ChatScreen(),
-            AppRoutes.trafficLight: (context) {
-              final args =
-                  ModalRoute.of(context)?.settings.arguments
-                      as Map<String, dynamic>?;
-              return TrafficLightScreen(
-                estado: args?["estado"] ?? "excelente",
-                mensaje: args?["mensaje"] ?? "¡Qué bien te sientes hoy!",
-                botonTexto: args?["botonTexto"] ?? "Continuar",
-                promedioHoy: (args?["promedio"] is num)
-                    ? (args!["promedio"] as num).toDouble()
-                    : null,
-              );
-            },
+                // Registro Emocional
+                AppRoutes.emotionHome: (context) => EmotionRegisterScreen(),
+                AppRoutes.chat: (context) => ChatScreen(),
+                AppRoutes.trafficLight: (context) {
+                  final args =
+                      ModalRoute.of(context)?.settings.arguments
+                          as Map<String, dynamic>?;
+                  return TrafficLightScreen(
+                    estado: args?["estado"] ?? "excelente",
+                    mensaje: args?["mensaje"] ?? "¡Qué bien te sientes hoy!",
+                    botonTexto: args?["botonTexto"] ?? "Continuar",
+                    promedioHoy: (args?["promedio"] is num)
+                        ? (args!["promedio"] as num).toDouble()
+                        : null,
+                  );
+                },
 
-            AppRoutes.advice: (context) {
-              final args =
-                  ModalRoute.of(context)?.settings.arguments
-                      as Map<String, dynamic>?;
-              return AdviceScreen(
-                userName: args?["userName"] ?? "Usuario",
-                adviceTitle: args?["adviceTitle"] ?? "Consejo",
-                message: args?["message"] ?? "consejo personalizado.",
-                promedioHoy: (args?["promedioHoy"] is num)
-                    ? (args!["promedioHoy"] as num).toDouble()
-                    : null,
-                estado: args?["estado"] ?? "normal",
-              );
-            },
-            AppRoutes.check: (context) {
-              final args =
-                  ModalRoute.of(context)?.settings.arguments
-                      as Map<String, dynamic>?;
-              final promedioHoy = (args?["promedioHoy"] is num)
-                  ? (args!["promedioHoy"] as num).toDouble()
-                  : null;
-              return CheckScreen(promedioHoy: promedioHoy);
-            },
+                AppRoutes.advice: (context) {
+                  final args =
+                      ModalRoute.of(context)?.settings.arguments
+                          as Map<String, dynamic>?;
+                  return AdviceScreen(
+                    userName: args?["userName"] ?? "Usuario",
+                    adviceTitle: args?["adviceTitle"] ?? "Consejo",
+                    message: args?["message"] ?? "consejo personalizado.",
+                    promedioHoy: (args?["promedioHoy"] is num)
+                        ? (args!["promedioHoy"] as num).toDouble()
+                        : null,
+                    estado: args?["estado"] ?? "normal",
+                  );
+                },
+                AppRoutes.check: (context) {
+                  final args =
+                      ModalRoute.of(context)?.settings.arguments
+                          as Map<String, dynamic>?;
+                  final promedioHoy = (args?["promedioHoy"] is num)
+                      ? (args!["promedioHoy"] as num).toDouble()
+                      : null;
+                  return CheckScreen(promedioHoy: promedioHoy);
+                },
 
-            // Mi Progreso
-            AppRoutes.globalprogress: (context) => GlobalProgressScreen(),
-            AppRoutes.progress: (context) => MyProgressScreen(),
-            AppRoutes.miDiario: (context) => const MiDiarioScreen(),
-            AppRoutes.misCapitulos: (context) => const MisCapitulosScreen(),
-            AppRoutes.misTecnicas: (context) => const MisTecnicasScreen(),
+                // Mi Progreso
+                AppRoutes.globalprogress: (context) => GlobalProgressScreen(),
+                AppRoutes.progress: (context) => MyProgressScreen(),
+                AppRoutes.miDiario: (context) => const MiDiarioScreen(),
+                AppRoutes.misCapitulos: (context) => const MisCapitulosScreen(),
+                AppRoutes.misTecnicas: (context) => const MisTecnicasScreen(),
 
-            AppRoutes.capituloDetalle: (context) {
-              final args =
-                  ModalRoute.of(context)!.settings.arguments
-                      as Map<String, dynamic>?;
-              return CapituloDetalleScreen(
-                titulo: args?['titulo'],
-                descripcion: args?['descripcion'],
-                fecha: args?['fecha'],
-              );
-            },
+                AppRoutes.capituloDetalle: (context) {
+                  final args =
+                      ModalRoute.of(context)!.settings.arguments
+                          as Map<String, dynamic>?;
+                  return CapituloDetalleScreen(
+                    titulo: args?['titulo'],
+                    descripcion: args?['descripcion'],
+                    fecha: args?['fecha'],
+                  );
+                },
+              },
+            );
           },
         );
       },

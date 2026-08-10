@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class JokesScreen extends StatefulWidget {
   const JokesScreen({super.key});
@@ -39,7 +40,7 @@ class _JokesScreenState extends State<JokesScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color(0xFFFFA000),
-        title: const Text(
+        title: Text(
           '😂 Chistes',
           style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
         ),
@@ -54,7 +55,7 @@ class _JokesScreenState extends State<JokesScreen> {
           padding: const EdgeInsets.all(16),
           child: Column(
             children: [
-              const SizedBox(height: 24),
+              SizedBox(height: 24.h),
               // Tarjeta del chiste
               GestureDetector(
                 onTap: () => setState(() => _showPunchline = !_showPunchline),
@@ -79,29 +80,29 @@ class _JokesScreenState extends State<JokesScreen> {
                     children: [
                       Text(
                         jokes[_currentJoke]['setup']!,
-                        style: const TextStyle(
-                          fontSize: 18,
+                        style: TextStyle(
+                          fontSize: 18.sp,
                           fontWeight: FontWeight.bold,
                           color: Colors.white,
                         ),
                         textAlign: TextAlign.center,
                       ),
-                      const SizedBox(height: 24),
+                      SizedBox(height: 24.h),
                       if (_showPunchline)
                         Text(
                           jokes[_currentJoke]['punchline']!,
-                          style: const TextStyle(
-                            fontSize: 16,
+                          style: TextStyle(
+                            fontSize: 16.sp,
                             fontWeight: FontWeight.bold,
                             color: Colors.white,
                           ),
                           textAlign: TextAlign.center,
                         )
                       else
-                        const Text(
+                        Text(
                           'Toca para ver la respuesta',
                           style: TextStyle(
-                            fontSize: 14,
+                            fontSize: 14.sp,
                             color: Colors.white70,
                             fontStyle: FontStyle.italic,
                           ),
@@ -110,7 +111,7 @@ class _JokesScreenState extends State<JokesScreen> {
                   ),
                 ),
               ),
-              const SizedBox(height: 32),
+              SizedBox(height: 32.h),
               // Botones de navegación
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -123,14 +124,14 @@ class _JokesScreenState extends State<JokesScreen> {
                           })
                         : null,
                     icon: const Icon(Icons.arrow_back),
-                    label: const Text('Anterior'),
+                    label: Text('Anterior'),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFFFFA000),
                     ),
                   ),
                   Text(
                     '${_currentJoke + 1}/${jokes.length}',
-                    style: const TextStyle(fontSize: 16),
+                    style: TextStyle(fontSize: 16.sp),
                   ),
                   ElevatedButton.icon(
                     onPressed: _currentJoke < jokes.length - 1
@@ -140,7 +141,7 @@ class _JokesScreenState extends State<JokesScreen> {
                           })
                         : null,
                     icon: const Icon(Icons.arrow_forward),
-                    label: const Text('Siguiente'),
+                    label: Text('Siguiente'),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFFFFA000),
                     ),

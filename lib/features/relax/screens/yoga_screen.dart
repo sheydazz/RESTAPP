@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class YogaScreen extends StatefulWidget {
   const YogaScreen({super.key});
@@ -37,7 +38,7 @@ class _YogaScreenState extends State<YogaScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color(0xFF4CAF50),
-        title: const Text(
+        title: Text(
           '🧘 Yoga',
           style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
         ),
@@ -54,11 +55,11 @@ class _YogaScreenState extends State<YogaScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Selector de nivel
-              const Text(
+              Text(
                 'Nivel de Dificultad:',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold),
               ),
-              const SizedBox(height: 12),
+              SizedBox(height: 12.h),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
@@ -67,15 +68,15 @@ class _YogaScreenState extends State<YogaScreen> {
                   _buildLevelButton(3, 'Avanzado'),
                 ],
               ),
-              const SizedBox(height: 24),
+              SizedBox(height: 24.h),
               // Lista de poses
-              const Text(
+              Text(
                 'Poses para esta sesión:',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold),
               ),
-              const SizedBox(height: 12),
+              SizedBox(height: 12.h),
               ...poses.map((pose) => _buildPoseCard(pose)),
-              const SizedBox(height: 24),
+              SizedBox(height: 24.h),
               // Botón de inicio
               SizedBox(
                 width: double.infinity,
@@ -92,9 +93,9 @@ class _YogaScreenState extends State<YogaScreen> {
                       ),
                     );
                   },
-                  child: const Text(
+                  child: Text(
                     'Iniciar Sesión',
-                    style: TextStyle(fontSize: 16, color: Colors.white),
+                    style: TextStyle(fontSize: 16.sp, color: Colors.white),
                   ),
                 ),
               ),
@@ -149,15 +150,15 @@ class _YogaScreenState extends State<YogaScreen> {
         children: [
           Text(
             pose['name']!,
-            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold),
           ),
-          const SizedBox(height: 4),
-          Text(pose['description']!, style: const TextStyle(fontSize: 14)),
-          const SizedBox(height: 4),
+          SizedBox(height: 4.h),
+          Text(pose['description']!, style: TextStyle(fontSize: 14.sp)),
+          SizedBox(height: 4.h),
           Text(
             '⏱️ ${pose['duration']!}',
             style: TextStyle(
-              fontSize: 12,
+              fontSize: 12.sp,
               color: Theme.of(context).colorScheme.onSurfaceVariant,
             ),
           ),

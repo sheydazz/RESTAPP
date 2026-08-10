@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../home/screens/gradient_text.dart';
 
 class PrivacityScreen extends StatelessWidget {
@@ -45,7 +46,7 @@ class PrivacityScreen extends StatelessWidget {
             'Privacidad',
             style: TextStyle(
               fontWeight: FontWeight.w600,
-              fontSize: 30,
+              fontSize: 30.sp,
             ),
             gradient: LinearGradient(
               colors: [
@@ -82,8 +83,8 @@ class PrivacityScreen extends StatelessWidget {
                 child: Row(
                   children: [
                     Container(
-                      width: 50,
-                      height: 50,
+                      width: 50.w,
+                      height: 50.h,
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
                           colors: [Color(0xFF0AF3FF), Color(0xFF0419FF)],
@@ -98,12 +99,12 @@ class PrivacityScreen extends StatelessWidget {
                         size: 28,
                       ),
                     ),
-                    const SizedBox(width: 15),
+                    SizedBox(width: 15.w),
                     Expanded(
                       child: Text(
                         'Aviso de privacidad',
                         style: TextStyle(
-                          fontSize: 20,
+                          fontSize: 20.sp,
                           fontWeight: FontWeight.w600,
                           color: Theme.of(context).colorScheme.onSurface,
                         ),
@@ -113,7 +114,7 @@ class PrivacityScreen extends StatelessWidget {
                 ),
               ),
 
-              const SizedBox(height: 30),
+              SizedBox(height: 30.h),
 
               // Contenido de privacidad
               Container(
@@ -222,22 +223,22 @@ class PrivacityScreen extends StatelessWidget {
         Text(
           title,
           style: TextStyle(
-            fontSize: 16,
+            fontSize: 16.sp,
             fontWeight: FontWeight.w600,
             color: colorScheme.onSurface,
           ),
         ),
-        const SizedBox(height: 8),
+        SizedBox(height: 8.h),
         Text(
           content,
           style: TextStyle(
-            fontSize: 14,
+            fontSize: 14.sp,
             fontWeight: FontWeight.w400,
             color: colorScheme.onSurfaceVariant,
             height: 1.5,
           ),
         ),
-        if (!isLast) const SizedBox(height: 20),
+        if (!isLast) SizedBox(height: 20.h),
       ],
     );
   }

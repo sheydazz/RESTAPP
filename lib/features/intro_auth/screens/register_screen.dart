@@ -1,5 +1,6 @@
-import 'dart:async';
+﻿import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/services.dart';
 import 'package:rest/core/utils/app_toast.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -448,20 +449,20 @@ class _RegisterScreenState extends State<RegisterScreen>
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.asset('assets/images/NoaBase.png', width: 100, height: 100),
-            const SizedBox(height: 24),
-            const SizedBox(
-              width: 40, height: 40,
-              child: CircularProgressIndicator(
+            Image.asset('assets/images/NoaBase.png', width: 100.w, height: 100.h),
+            SizedBox(height: 24.h),
+            SizedBox(
+              width: 40.w, height: 40.h,
+              child: const CircularProgressIndicator(
                 strokeWidth: 3,
                 valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF3A5AFF)),
               ),
             ),
-            const SizedBox(height: 20),
+            SizedBox(height: 20.h),
             Text(
               'Creando tu perfil...',
               style: GoogleFonts.fredoka(
-                fontSize: 20, fontWeight: FontWeight.w600,
+                fontSize: 20.sp, fontWeight: FontWeight.w600,
                 color: colorScheme.onSurfaceVariant,
               ),
             ),
@@ -504,12 +505,12 @@ class _RegisterScreenState extends State<RegisterScreen>
                         ),
                         child: Image.asset(
                           'assets/images/NoaOjosEstrellas.png',
-                          width: 160, height: 160,
+                          width: 160.w, height: 160.h,
                         ),
                       ),
                     ),
                   ),
-                  const SizedBox(height: 28),
+                  SizedBox(height: 28.h),
                   FadeTransition(
                     opacity: _textFade,
                     child: Column(
@@ -522,24 +523,24 @@ class _RegisterScreenState extends State<RegisterScreen>
                             '¡Bienvenido/a, $nombre! 🎉',
                             textAlign: TextAlign.center,
                             style: GoogleFonts.fredoka(
-                              fontSize: 28, fontWeight: FontWeight.bold,
+                              fontSize: 28.sp, fontWeight: FontWeight.bold,
                               color: Colors.white,
                             ),
                           ),
                         ),
-                        const SizedBox(height: 12),
+                        SizedBox(height: 12.h),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 36),
                           child: Text(
                             'Estoy muy feliz de acompañarte en tu bienestar mental. ¡Juntos lo haremos increíble!',
                             textAlign: TextAlign.center,
                             style: GoogleFonts.fredoka(
-                              fontSize: 16, fontWeight: FontWeight.w500,
+                              fontSize: 16.sp, fontWeight: FontWeight.w500,
                               color: const Color(0xFF5C6080), height: 1.4,
                             ),
                           ),
                         ),
-                        const SizedBox(height: 40),
+                        SizedBox(height: 40.h),
                         GestureDetector(
                           onTap: () => Navigator.pushReplacement(
                             context,
@@ -567,7 +568,7 @@ class _RegisterScreenState extends State<RegisterScreen>
                             child: Text(
                               '¡Empecemos! →',
                               style: GoogleFonts.fredoka(
-                                color: Colors.white, fontSize: 22,
+                                color: Colors.white, fontSize: 22.sp,
                                 fontWeight: FontWeight.bold, letterSpacing: 0.8,
                               ),
                             ),
@@ -611,7 +612,7 @@ class _RegisterScreenState extends State<RegisterScreen>
                         onTap: _prevStep,
                         child: AnimatedContainer(
                           duration: const Duration(milliseconds: 200),
-                          width: 40, height: 40,
+                          width: 40.w, height: 40.h,
                           decoration: BoxDecoration(
                             color: const Color(0xFF3A5AFF).withValues(alpha: 0.1),
                             borderRadius: BorderRadius.circular(12),
@@ -625,7 +626,7 @@ class _RegisterScreenState extends State<RegisterScreen>
                         onTap: () => Navigator.pop(context),
                         child: AnimatedContainer(
                           duration: const Duration(milliseconds: 200),
-                          width: 40, height: 40,
+                          width: 40.w, height: 40.h,
                           decoration: BoxDecoration(
                             color: colorScheme.surfaceContainerLow,
                             borderRadius: BorderRadius.circular(12),
@@ -634,7 +635,7 @@ class _RegisterScreenState extends State<RegisterScreen>
                               color: colorScheme.onSurfaceVariant, size: 20),
                         ),
                       ),
-                    const SizedBox(width: 12),
+                    SizedBox(width: 12.w),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -642,11 +643,11 @@ class _RegisterScreenState extends State<RegisterScreen>
                           Text(
                             'Paso ${_currentStep + 1} de 3',
                             style: GoogleFonts.fredoka(
-                              fontSize: 12, fontWeight: FontWeight.w600,
+                              fontSize: 12.sp, fontWeight: FontWeight.w600,
                               color: colorScheme.onSurfaceVariant,
                             ),
                           ),
-                          const SizedBox(height: 6),
+                          SizedBox(height: 6.h),
                           // ── TIMELINE PROGRESS ──
                           ClipRRect(
                             borderRadius: BorderRadius.circular(4),
@@ -660,14 +661,14 @@ class _RegisterScreenState extends State<RegisterScreen>
                         ],
                       ),
                     ),
-                    const SizedBox(width: 12),
+                    SizedBox(width: 12.w),
                     // ── DOTS ──
                     Row(
                       children: List.generate(3, (i) => AnimatedContainer(
                         duration: const Duration(milliseconds: 300),
                         margin: const EdgeInsets.only(left: 5),
                         width: i == _currentStep ? 20 : 8,
-                        height: 8,
+                        height: 8.h,
                         decoration: BoxDecoration(
                           color: i <= _currentStep
                               ? const Color(0xFF3A5AFF)
@@ -680,7 +681,7 @@ class _RegisterScreenState extends State<RegisterScreen>
                 ),
               ),
 
-              const SizedBox(height: 8),
+              SizedBox(height: 8.h),
 
               // ── TÍTULO DE PASO ──
               Padding(
@@ -692,22 +693,22 @@ class _RegisterScreenState extends State<RegisterScreen>
                     child: Row(
                       children: [
                         Text(steps[_currentStep].emoji,
-                            style: const TextStyle(fontSize: 28)),
-                        const SizedBox(width: 10),
+                            style: TextStyle(fontSize: 28.sp)),
+                        SizedBox(width: 10.w),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
                               steps[_currentStep].title,
                               style: GoogleFonts.fredoka(
-                                fontSize: 22, fontWeight: FontWeight.bold,
+                                fontSize: 22.sp, fontWeight: FontWeight.bold,
                                 color: colorScheme.onSurface,
                               ),
                             ),
                             Text(
                               steps[_currentStep].subtitle,
                               style: GoogleFonts.fredoka(
-                                fontSize: 13, color: colorScheme.onSurfaceVariant,
+                                fontSize: 13.sp, color: colorScheme.onSurfaceVariant,
                               ),
                             ),
                           ],
@@ -718,7 +719,7 @@ class _RegisterScreenState extends State<RegisterScreen>
                 ),
               ),
 
-              const SizedBox(height: 12),
+              SizedBox(height: 12.h),
 
               // ── PÁGINAS ──
               Expanded(
@@ -746,7 +747,7 @@ class _RegisterScreenState extends State<RegisterScreen>
                         opacity: _checkCtrl.isAnimating ? 0 : 1,
                         duration: const Duration(milliseconds: 150),
                         child: Container(
-                          width: double.infinity, height: 58,
+                          width: double.infinity, height: 58.h,
                           decoration: BoxDecoration(
                             gradient: const LinearGradient(
                               colors: [Color(0xFF5CCFC0), Color(0xFF2981C1)],
@@ -768,11 +769,11 @@ class _RegisterScreenState extends State<RegisterScreen>
                                 Text(
                                   _currentStep < 2 ? 'Continuar' : 'Crear mi cuenta',
                                   style: GoogleFonts.fredoka(
-                                    color: Colors.white, fontSize: 20,
+                                    color: Colors.white, fontSize: 20.sp,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
-                                const SizedBox(width: 8),
+                                SizedBox(width: 8.w),
                                 const Icon(Icons.arrow_forward_rounded,
                                     color: Colors.white, size: 20),
                               ],
@@ -788,7 +789,7 @@ class _RegisterScreenState extends State<RegisterScreen>
                         child: FadeTransition(
                           opacity: _checkFade,
                           child: Container(
-                            width: 58, height: 58,
+                            width: 58.w, height: 58.h,
                             decoration: const BoxDecoration(
                               color: Color(0xFF00C853), shape: BoxShape.circle,
                             ),
@@ -815,17 +816,17 @@ class _RegisterScreenState extends State<RegisterScreen>
       child: Column(
         children: [
           _field('¿Cómo te llamas?', 'Tu nombre', _nombreController, _nombreFocus),
-          const SizedBox(height: 14),
+          SizedBox(height: 14.h),
           _field('Apellidos', 'Tus apellidos', _apellidoController, _apellidoFocus),
-          const SizedBox(height: 14),
+          SizedBox(height: 14.h),
           _dropdown('¿Cuántos años tienes?', 'Selecciona tu edad',
               _edadSeleccionada, _edades, (v) => setState(() => _edadSeleccionada = v)),
-          const SizedBox(height: 14),
+          SizedBox(height: 14.h),
           _datePicker(),
-          const SizedBox(height: 14),
+          SizedBox(height: 14.h),
           _dropdown('¿Con qué sexo te identificas?', 'Selecciona una opción',
               _sexoSeleccionado, _sexos, (v) => setState(() => _sexoSeleccionado = v)),
-          const SizedBox(height: 16),
+          SizedBox(height: 16.h),
         ],
       ),
     );
@@ -840,17 +841,17 @@ class _RegisterScreenState extends State<RegisterScreen>
         children: [
           _dropdown('¿De qué ciudad eres?', 'Selecciona tu ciudad',
               _ciudadSeleccionada, _ciudades, (v) => setState(() => _ciudadSeleccionada = v)),
-          const SizedBox(height: 14),
+          SizedBox(height: 14.h),
           _dropdown('¿Cuál es tu carrera?', 'Selecciona tu carrera',
               _carreraSeleccionada, _carreras, (v) => setState(() => _carreraSeleccionada = v)),
-          const SizedBox(height: 14),
+          SizedBox(height: 14.h),
           _dropdown('¿Qué semestre cursas?', 'Selecciona el semestre',
               _semestresSeleccionado, _semestres, (v) => setState(() => _semestresSeleccionado = v)),
-          const SizedBox(height: 14),
+          SizedBox(height: 14.h),
           _field('Teléfono', '3001234567', _telefonoController, _telefonoFocus,
               keyboardType: TextInputType.phone,
               inputFormatters: [FilteringTextInputFormatter.digitsOnly]),
-          const SizedBox(height: 16),
+          SizedBox(height: 16.h),
         ],
       ),
     );
@@ -868,22 +869,22 @@ class _RegisterScreenState extends State<RegisterScreen>
           _field('Correo institucional', 'example@correo.com',
               _correoController, _correoFocus,
               keyboardType: TextInputType.emailAddress),
-          const SizedBox(height: 14),
+          SizedBox(height: 14.h),
           _field('Contraseña', '••••••••', _passwordController, _passwordFocus,
               isPassword: true),
-          const SizedBox(height: 4),
+          SizedBox(height: 4.h),
           Padding(
             padding: const EdgeInsets.only(left: 4),
             child: Row(
               children: [
                 const Icon(Icons.info_outline_rounded, size: 13, color: Color(0xFF8C4EFF)),
-                const SizedBox(width: 5),
+                SizedBox(width: 5.w),
                 Text('Mínimo 9 caracteres',
-                    style: GoogleFonts.fredoka(fontSize: 12, color: const Color(0xFF8C4EFF), fontWeight: FontWeight.w500)),
+                    style: GoogleFonts.fredoka(fontSize: 12.sp, color: const Color(0xFF8C4EFF), fontWeight: FontWeight.w500)),
               ],
             ),
           ),
-          const SizedBox(height: 18),
+          SizedBox(height: 18.h),
 
           // ── BLOQUE TÉRMINOS Y CONDICIONES ──
           _buildTermsBlock(colorScheme),
@@ -902,17 +903,17 @@ class _RegisterScreenState extends State<RegisterScreen>
           Row(
             children: [
               Container(
-                width: 28, height: 28,
+                width: 28.w, height: 28.h,
                 decoration: BoxDecoration(
                   gradient: const LinearGradient(colors: [Color(0xFF3A5AFF), Color(0xFF8C4EFF)]),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: const Icon(Icons.gavel_rounded, color: Colors.white, size: 16),
               ),
-              const SizedBox(width: 8),
+              SizedBox(width: 8.w),
               Text('Términos y Condiciones',
                   style: GoogleFonts.fredoka(
-                    fontSize: 15, fontWeight: FontWeight.bold,
+                    fontSize: 15.sp, fontWeight: FontWeight.bold,
                     color: colorScheme.onSurface,
                   )),
               const Spacer(),
@@ -920,24 +921,24 @@ class _RegisterScreenState extends State<RegisterScreen>
                 Row(
                   children: [
                     Icon(Icons.arrow_downward_rounded, size: 13, color: colorScheme.onSurfaceVariant),
-                    const SizedBox(width: 3),
+                    SizedBox(width: 3.w),
                     Text('Desliza', style: GoogleFonts.fredoka(
-                      fontSize: 11, color: colorScheme.onSurfaceVariant,
+                      fontSize: 11.sp, color: colorScheme.onSurfaceVariant,
                     )),
                   ],
                 )
               else
                 Text('✓ Leídos', style: GoogleFonts.fredoka(
-                  fontSize: 11, color: const Color(0xFF00C853), fontWeight: FontWeight.bold,
+                  fontSize: 11.sp, color: const Color(0xFF00C853), fontWeight: FontWeight.bold,
                 )),
             ],
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: 8.h),
 
           // Caja de T&C scrolleable
           AnimatedContainer(
             duration: const Duration(milliseconds: 300),
-            height: 180,
+            height: 180.h,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(14),
               border: Border.all(
@@ -959,7 +960,7 @@ class _RegisterScreenState extends State<RegisterScreen>
                   child: Text(
                     _termsText,
                     style: GoogleFonts.fredoka(
-                      fontSize: 13, color: colorScheme.onSurface,
+                      fontSize: 13.sp, color: colorScheme.onSurface,
                       height: 1.6, fontWeight: FontWeight.w400,
                     ),
                   ),
@@ -967,7 +968,7 @@ class _RegisterScreenState extends State<RegisterScreen>
               ),
             ),
           ),
-          const SizedBox(height: 12),
+          SizedBox(height: 12.h),
 
           // Checkbox animado (se desbloquea al llegar al fondo)
           GestureDetector(
@@ -989,7 +990,7 @@ class _RegisterScreenState extends State<RegisterScreen>
                         : const AlwaysStoppedAnimation(0.7),
                     child: AnimatedContainer(
                       duration: const Duration(milliseconds: 250),
-                      width: 26, height: 26,
+                      width: 26.w, height: 26.h,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(8),
                         gradient: _termsAccepted
@@ -1015,12 +1016,12 @@ class _RegisterScreenState extends State<RegisterScreen>
                           : null,
                     ),
                   ),
-                  const SizedBox(width: 10),
+                  SizedBox(width: 10.w),
                   Expanded(
                     child: RichText(
                       text: TextSpan(
                         style: GoogleFonts.fredoka(
-                          fontSize: 13, color: colorScheme.onSurface,
+                          fontSize: 13.sp, color: colorScheme.onSurface,
                           fontWeight: FontWeight.w500,
                         ),
                         children: const [
@@ -1045,15 +1046,15 @@ class _RegisterScreenState extends State<RegisterScreen>
 
           // Hint si aún no ha scrolleado
           if (!_termsScrolledToBottom) ...[
-            const SizedBox(height: 8),
+            SizedBox(height: 8.h),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Icon(Icons.touch_app_rounded, size: 13, color: colorScheme.onSurfaceVariant.withValues(alpha: 0.5)),
-                const SizedBox(width: 4),
+                SizedBox(width: 4.w),
                 Text('Lee los términos para desbloquear',
                     style: GoogleFonts.fredoka(
-                      fontSize: 11, color: colorScheme.onSurfaceVariant.withValues(alpha: 0.5),
+                      fontSize: 11.sp, color: colorScheme.onSurfaceVariant.withValues(alpha: 0.5),
                     )),
               ],
             ),
@@ -1126,7 +1127,7 @@ Al aceptar, confirmas que tienes al menos 15 años de edad y que has leído y co
           AnimatedDefaultTextStyle(
             duration: const Duration(milliseconds: 180),
             style: GoogleFonts.fredoka(
-              fontSize: 13, fontWeight: FontWeight.bold,
+              fontSize: 13.sp, fontWeight: FontWeight.bold,
               color: isFocused ? const Color(0xFF3A5AFF) : colorScheme.onSurfaceVariant,
             ),
             child: Padding(
@@ -1154,13 +1155,13 @@ Al aceptar, confirmas que tienes al menos 15 años de edad y que has leído y co
                 keyboardType: keyboardType,
                 inputFormatters: inputFormatters,
                 style: GoogleFonts.fredoka(
-                  color: colorScheme.onSurface, fontSize: 15,
+                  color: colorScheme.onSurface, fontSize: 15.sp,
                   fontWeight: FontWeight.w600,
                 ),
                 decoration: InputDecoration(
                   hintText: hint,
                   hintStyle: GoogleFonts.fredoka(
-                    color: colorScheme.onSurfaceVariant.withValues(alpha: 0.55), fontSize: 14,
+                    color: colorScheme.onSurfaceVariant.withValues(alpha: 0.55), fontSize: 14.sp,
                   ),
                   prefixIcon: Icon(
                     isPassword ? Icons.lock_outline_rounded : Icons.edit_outlined,
@@ -1177,7 +1178,7 @@ Al aceptar, confirmas que tienes al menos 15 años de edad y que has leído y co
                           child: Padding(
                             padding: const EdgeInsets.only(right: 4),
                             child: Container(
-                              width: 22, height: 22,
+                              width: 22.w, height: 22.h,
                               decoration: const BoxDecoration(
                                   color: Color(0xFF3709EC), shape: BoxShape.circle),
                               child: const Icon(Icons.check, color: Colors.white, size: 13),
@@ -1228,7 +1229,7 @@ Al aceptar, confirmas que tienes al menos 15 años de edad y que has leído y co
           padding: const EdgeInsets.only(left: 4, bottom: 5),
           child: Text(label,
             style: GoogleFonts.fredoka(
-              fontSize: 13, fontWeight: FontWeight.bold,
+              fontSize: 13.sp, fontWeight: FontWeight.bold,
               color: hasValue ? const Color(0xFF3A5AFF) : colorScheme.onSurfaceVariant,
             ),
           ),
@@ -1252,12 +1253,12 @@ Al aceptar, confirmas que tienes al menos 15 años de edad y que has leído y co
                 child: DropdownButton<String>(
                   isExpanded: true,
                   hint: Text(hint, style: GoogleFonts.fredoka(
-                    color: colorScheme.onSurfaceVariant.withValues(alpha: 0.55), fontSize: 14,
+                    color: colorScheme.onSurfaceVariant.withValues(alpha: 0.55), fontSize: 14.sp,
                   )),
                   value: value,
                   icon: hasValue
                       ? Container(
-                          width: 22, height: 22,
+                          width: 22.w, height: 22.h,
                           decoration: const BoxDecoration(
                               color: Color(0xFF3709EC), shape: BoxShape.circle),
                           child: const Icon(Icons.check, color: Colors.white, size: 13),
@@ -1267,12 +1268,12 @@ Al aceptar, confirmas que tienes al menos 15 años de edad y que has leído y co
                   items: items.map((item) => DropdownMenuItem(
                     value: item,
                     child: Text(item, style: GoogleFonts.fredoka(
-                      color: colorScheme.onSurface, fontSize: 14,
+                      color: colorScheme.onSurface, fontSize: 14.sp,
                       fontWeight: FontWeight.w600,
                     )),
                   )).toList(),
                   onChanged: onChanged,
-                  style: GoogleFonts.fredoka(color: colorScheme.onSurface, fontSize: 14),
+                  style: GoogleFonts.fredoka(color: colorScheme.onSurface, fontSize: 14.sp),
                 ),
               ),
             ),
@@ -1294,7 +1295,7 @@ Al aceptar, confirmas que tienes al menos 15 años de edad y que has leído y co
           padding: const EdgeInsets.only(left: 4, bottom: 5),
           child: Text('Fecha de nacimiento',
             style: GoogleFonts.fredoka(
-              fontSize: 13, fontWeight: FontWeight.bold,
+              fontSize: 13.sp, fontWeight: FontWeight.bold,
               color: hasDate ? const Color(0xFF3A5AFF) : colorScheme.onSurfaceVariant,
             ),
           ),
@@ -1329,19 +1330,19 @@ Al aceptar, confirmas que tienes al menos 15 años de edad y que has leído y co
                 children: [
                   Icon(Icons.calendar_today_rounded, size: 18,
                       color: hasDate ? const Color(0xFF3A5AFF) : colorScheme.onSurfaceVariant),
-                  const SizedBox(width: 10),
+                  SizedBox(width: 10.w),
                   Expanded(
                     child: Text(
                       hasDate ? _fechaNacimientoController.text : 'Selecciona tu fecha',
                       style: GoogleFonts.fredoka(
                         color: hasDate ? colorScheme.onSurface : colorScheme.onSurfaceVariant.withValues(alpha: 0.55),
-                        fontSize: 14, fontWeight: FontWeight.w600,
+                        fontSize: 14.sp, fontWeight: FontWeight.w600,
                       ),
                     ),
                   ),
                   if (hasDate)
                     Container(
-                      width: 22, height: 22,
+                      width: 22.w, height: 22.h,
                       decoration: const BoxDecoration(
                           color: Color(0xFF3709EC), shape: BoxShape.circle),
                       child: const Icon(Icons.check, color: Colors.white, size: 13),

@@ -1,5 +1,6 @@
-// emotionregister_screen.dart (Preguntas de evaluación emocional)
+﻿// emotionregister_screen.dart (Preguntas de evaluación emocional)
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:rest/core/routes/app_routes.dart';
 import 'package:rest/core/services/emotion_service.dart';
 import 'package:rest/core/services/user_session.dart';
@@ -138,8 +139,8 @@ class _CheckScreenState extends State<EmotionRegisterScreen> {
                 children: [
                   // Logo igual al del chat
                   Container(
-                    width: 80,
-                    height: 80,
+                    width: 80.w,
+                    height: 80.h,
                     decoration: BoxDecoration(
                       gradient: RadialGradient(
                         colors: [
@@ -162,20 +163,20 @@ class _CheckScreenState extends State<EmotionRegisterScreen> {
                     child: ClipOval(
                       child: Image.asset(
                         'assets/images/normalrest.jpg',
-                        width: 80,
-                        height: 80,
+                        width: 80.w,
+                        height: 80.h,
                         fit: BoxFit.cover,
                       ),
                     ),
                   ),
-                  const SizedBox(width: 15),
+                  SizedBox(width: 15.w),
                   // Título
                   Expanded(
                     child: Text(
                       "¡Cuéntame\nsobre tu día¡",
                       style: TextStyle(
                         fontFamily: 'Fredoka',
-                        fontSize: 35,
+                        fontSize: 35.sp,
                         height: 0.9,
                         fontWeight: FontWeight.bold,
                         foreground: Paint()
@@ -242,7 +243,7 @@ class _CheckScreenState extends State<EmotionRegisterScreen> {
                       "GUARDAR",
                       style: TextStyle(
                         fontFamily: 'Fredoka',
-                        fontSize: 30,
+                        fontSize: 30.sp,
                         fontWeight: FontWeight.bold,
                         color: Colors.white,
                         letterSpacing: 3.0,
@@ -263,21 +264,21 @@ class _CheckScreenState extends State<EmotionRegisterScreen> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Text(
+          Text(
             'No pudimos cargar las preguntas.',
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold),
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: 8.h),
           if (_error != null)
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: Text(
                 _error!,
                 textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 12, color: Colors.red),
+                style: TextStyle(fontSize: 12.sp, color: Colors.red),
               ),
             ),
-          const SizedBox(height: 12),
+          SizedBox(height: 12.h),
           ElevatedButton(
             onPressed: _cargarPreguntas,
             child: const Text('Reintentar'),
@@ -297,7 +298,7 @@ class _CheckScreenState extends State<EmotionRegisterScreen> {
           child: Text(
             "Test Personal Diario",
             style: TextStyle(
-              fontSize: 20,
+              fontSize: 20.sp,
               fontWeight: FontWeight.bold,
               color: colorScheme.onSurface,
               fontFamily: 'Freeman',
@@ -334,14 +335,14 @@ class _CheckScreenState extends State<EmotionRegisterScreen> {
                         child: Text(
                           textoPregunta,
                           style: TextStyle(
-                            fontSize: 13,
+                            fontSize: 13.sp,
                             fontWeight: FontWeight.w900,
                             color: colorScheme.onPrimaryContainer,
                             fontFamily: 'Freeman',
                           ),
                         ),
                       ),
-                      const SizedBox(height: 12),
+                      SizedBox(height: 12.h),
                       LayoutBuilder(
                         builder: (context, constraints) {
                           final int count = opciones.length.clamp(
@@ -415,7 +416,7 @@ class _CheckScreenState extends State<EmotionRegisterScreen> {
                                   );
                                 }),
                               ),
-                              const SizedBox(height: 8),
+                              SizedBox(height: 8.h),
                               // Agregar etiquetas de emociones
                               Row(
                                 mainAxisAlignment:
@@ -436,7 +437,7 @@ class _CheckScreenState extends State<EmotionRegisterScreen> {
                                       nombreOpcion,
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
-                                        fontSize: 10,
+                                        fontSize: 10.sp,
                                         fontWeight: FontWeight.w600,
                                         color: colorScheme.onSurfaceVariant,
                                         fontFamily: 'Freeman',

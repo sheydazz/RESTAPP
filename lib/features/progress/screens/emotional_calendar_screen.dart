@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 import 'package:rest/core/services/emotion_service.dart';
@@ -108,12 +109,12 @@ class _EmotionalCalendarScreenState extends State<EmotionalCalendarScreen> {
               padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
               child: _buildHeader(context),
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: 16.h),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: _buildLegend(),
             ),
-            const SizedBox(height: 18),
+            SizedBox(height: 18.h),
             Expanded(
               child: RefreshIndicator(
                 onRefresh: _loadCalendar,
@@ -180,14 +181,14 @@ class _EmotionalCalendarScreenState extends State<EmotionalCalendarScreen> {
         Text(
           'Registro Global $_year',
           style: TextStyle(
-            fontSize: 34,
+            fontSize: 34.sp,
             fontWeight: FontWeight.bold,
             color: colorScheme.primary,
             fontFamily: 'Fredoka',
           ),
         ),
         const Spacer(),
-        const SizedBox(width: 28),
+        SizedBox(width: 28.w),
       ],
     );
   }
@@ -202,13 +203,13 @@ class _EmotionalCalendarScreenState extends State<EmotionalCalendarScreen> {
           ClipOval(
             child: Image.asset(
               asset,
-              width: 22,
-              height: 22,
+              width: 22.w,
+              height: 22.h,
               fit: BoxFit.cover,
               errorBuilder: (_, __, ___) => const Icon(Icons.emoji_emotions),
             ),
           ),
-          const SizedBox(width: 6),
+          SizedBox(width: 6.w),
           Text(
             label,
             style: TextStyle(
@@ -251,7 +252,7 @@ class _EmotionalCalendarScreenState extends State<EmotionalCalendarScreen> {
             'No se pudo cargar tu calendario',
             style: TextStyle(color: Colors.red[700]),
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: 8.h),
           TextButton(onPressed: _loadCalendar, child: const Text('Reintentar')),
         ],
       ),
@@ -286,13 +287,13 @@ class _EmotionalCalendarScreenState extends State<EmotionalCalendarScreen> {
           Text(
             _capitalize(monthName),
             style: TextStyle(
-              fontSize: 36,
+              fontSize: 36.sp,
               fontWeight: FontWeight.w800,
               color: Theme.of(context).colorScheme.onSurface,
               fontFamily: 'Fredoka',
             ),
           ),
-          const SizedBox(height: 12),
+          SizedBox(height: 12.h),
           const Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
@@ -305,7 +306,7 @@ class _EmotionalCalendarScreenState extends State<EmotionalCalendarScreen> {
               _WeekName('DOM'),
             ],
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: 8.h),
           GridView.count(
             crossAxisCount: 7,
             crossAxisSpacing: 6,
@@ -336,7 +337,7 @@ class _EmotionalCalendarScreenState extends State<EmotionalCalendarScreen> {
             right: 4,
             child: Text(
               '$day',
-              style: TextStyle(fontSize: 10, color: Theme.of(context).colorScheme.onSurfaceVariant),
+              style: TextStyle(fontSize: 10.sp, color: Theme.of(context).colorScheme.onSurfaceVariant),
             ),
           ),
           Center(
@@ -344,8 +345,8 @@ class _EmotionalCalendarScreenState extends State<EmotionalCalendarScreen> {
                 ? ClipOval(
                     child: Image.asset(
                       asset!,
-                      width: 28,
-                      height: 28,
+                      width: 28.w,
+                      height: 28.h,
                       fit: BoxFit.cover,
                       errorBuilder: (_, __, ___) => const Icon(
                         Icons.emoji_emotions,
@@ -414,7 +415,7 @@ class _WeekName extends StatelessWidget {
     return Text(
       label,
       style: TextStyle(
-        fontSize: 10,
+        fontSize: 10.sp,
         fontWeight: FontWeight.w700,
         color: Theme.of(context).colorScheme.onSurfaceVariant,
       ),

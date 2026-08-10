@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class PhysicalActivityScreen extends StatefulWidget {
   const PhysicalActivityScreen({super.key});
@@ -35,7 +36,7 @@ class _PhysicalActivityScreenState extends State<PhysicalActivityScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color(0xFFE53935),
-        title: const Text(
+        title: Text(
           '💪 Actividad Física',
           style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
         ),
@@ -52,11 +53,11 @@ class _PhysicalActivityScreenState extends State<PhysicalActivityScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Selector de duración
-              const Text(
+              Text(
                 'Duración de la sesión:',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold),
               ),
-              const SizedBox(height: 12),
+              SizedBox(height: 12.h),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
@@ -66,7 +67,7 @@ class _PhysicalActivityScreenState extends State<PhysicalActivityScreen> {
                   45,
                 ].map((duration) => _buildDurationButton(duration)).toList(),
               ),
-              const SizedBox(height: 24),
+              SizedBox(height: 24.h),
               // Calorías quemadas
               Container(
                 padding: const EdgeInsets.all(20),
@@ -80,15 +81,15 @@ class _PhysicalActivityScreenState extends State<PhysicalActivityScreen> {
                 ),
                 child: Column(
                   children: [
-                    const Text(
+                    Text(
                       'Calorías estimadas a quemar:',
                       style: TextStyle(color: Colors.white70),
                     ),
-                    const SizedBox(height: 8),
+                    SizedBox(height: 8.h),
                     Text(
                       '$_burnedCalories kcal',
-                      style: const TextStyle(
-                        fontSize: 32,
+                      style: TextStyle(
+                        fontSize: 32.sp,
                         fontWeight: FontWeight.bold,
                         color: Colors.white,
                       ),
@@ -96,15 +97,15 @@ class _PhysicalActivityScreenState extends State<PhysicalActivityScreen> {
                   ],
                 ),
               ),
-              const SizedBox(height: 24),
+              SizedBox(height: 24.h),
               // Lista de ejercicios
-              const Text(
+              Text(
                 'Ejercicios disponibles:',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold),
               ),
-              const SizedBox(height: 12),
+              SizedBox(height: 12.h),
               ...exercises.map((exercise) => _buildExerciseCard(exercise)),
-              const SizedBox(height: 24),
+              SizedBox(height: 24.h),
               // Botón de inicio
               SizedBox(
                 width: double.infinity,
@@ -123,9 +124,9 @@ class _PhysicalActivityScreenState extends State<PhysicalActivityScreen> {
                       ),
                     );
                   },
-                  child: const Text(
+                  child: Text(
                     'Iniciar Sesión',
-                    style: TextStyle(fontSize: 16, color: Colors.white),
+                    style: TextStyle(fontSize: 16.sp, color: Colors.white),
                   ),
                 ),
               ),
@@ -177,18 +178,18 @@ class _PhysicalActivityScreenState extends State<PhysicalActivityScreen> {
       ),
       child: Row(
         children: [
-          Text(exercise['emoji'], style: const TextStyle(fontSize: 28)),
-          const SizedBox(width: 12),
+          Text(exercise['emoji'], style: TextStyle(fontSize: 28.sp)),
+          SizedBox(width: 12.w),
           Expanded(
             child: Text(
               exercise['name'],
-              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold),
             ),
           ),
           Text(
             '${exercise['cal']} kcal/min',
             style: TextStyle(
-              fontSize: 12,
+              fontSize: 12.sp,
               color: Theme.of(context).colorScheme.onSurfaceVariant,
             ),
           ),

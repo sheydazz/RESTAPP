@@ -1,6 +1,7 @@
-import 'dart:async';
+﻿import 'dart:async';
 import 'package:rest/core/utils/app_toast.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'register_screen.dart';
 import 'package:rest/core/services/auth_service.dart';
@@ -8,6 +9,7 @@ import 'package:rest/core/routes/app_routes.dart';
 import 'package:rest/core/services/user_session.dart';
 import 'package:rest/features/emotion/screens/emotionregister_screen.dart';
 import 'package:rest/features/navigation/main_app.dart';
+import 'package:rest/core/widgets/primary_gradient_button.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -268,8 +270,8 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
                           padding: const EdgeInsets.only(top: 8, bottom: 0),
                           child: Image.asset(
                             'assets/images/restSalud-removebg-preview.png',
-                            width: 200,
-                            height: 160,
+                            width: 200.w,
+                            height: 160.h,
                             fit: BoxFit.contain,
                           ),
                         ),
@@ -291,7 +293,7 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
                       ),
                     ),
 
-                    const SizedBox(height: 18),
+                    SizedBox(height: 18.h),
 
                     // ── CAMPO CONTRASEÑA ──
                     FadeTransition(
@@ -309,7 +311,7 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
                       ),
                     ),
 
-                    const SizedBox(height: 10),
+                    SizedBox(height: 10.h),
 
                     // ── OLVIDÉ CONTRASEÑA ──
                     FadeTransition(
@@ -323,7 +325,7 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
                           ),
                           child: RichText(
                             text: TextSpan(
-                              style: GoogleFonts.fredoka(fontSize: 14, fontWeight: FontWeight.w600),
+                              style: GoogleFonts.fredoka(fontSize: 14.sp, fontWeight: FontWeight.w600),
                               children: [
                                 TextSpan(
                                   text: '¿Se te olvidó? ',
@@ -340,7 +342,7 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
                       ),
                     ),
 
-                    const SizedBox(height: 28),
+                    SizedBox(height: 28.h),
 
                     // ── BOTÓN INGRESAR ──
                     FadeTransition(
@@ -351,7 +353,7 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
                       ),
                     ),
 
-                    const SizedBox(height: 28),
+                    SizedBox(height: 28.h),
 
                     // ── DIVIDER ──
                     FadeTransition(
@@ -364,7 +366,7 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
                             child: Text(
                               '¿Eres nueva/o?',
                               style: GoogleFonts.fredoka(
-                                fontSize: 15,
+                                fontSize: 15.sp,
                                 fontWeight: FontWeight.w600,
                                 color: colorScheme.onSurfaceVariant,
                               ),
@@ -375,7 +377,7 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
                       ),
                     ),
 
-                    const SizedBox(height: 20),
+                    SizedBox(height: 20.h),
 
                     // ── BIENVENIDA ──
                     FadeTransition(
@@ -388,7 +390,7 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
                             Text(
                               'Bienvenidos a ',
                               style: GoogleFonts.fredoka(
-                                fontSize: 22,
+                                fontSize: 22.sp,
                                 fontWeight: FontWeight.bold,
                                 color: colorScheme.onSurface,
                               ),
@@ -402,7 +404,7 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
                               child: Text(
                                 'REST',
                                 style: GoogleFonts.fredoka(
-                                  fontSize: 22,
+                                  fontSize: 22.sp,
                                   fontWeight: FontWeight.bold,
                                   color: Colors.white,
                                 ),
@@ -413,7 +415,7 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
                       ),
                     ),
 
-                    const SizedBox(height: 16),
+                    SizedBox(height: 16.h),
 
                     // ── BOTÓN UNIRME ──
                     FadeTransition(
@@ -424,7 +426,7 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
                       ),
                     ),
 
-                    const SizedBox(height: 24),
+                    SizedBox(height: 24.h),
 
                     // ── CARTEL NOA ──
                     FadeTransition(
@@ -435,7 +437,7 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
                       ),
                     ),
 
-                    const SizedBox(height: 24),
+                    SizedBox(height: 24.h),
                   ],
                 ),
               ),
@@ -462,7 +464,7 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
         ),
         border: Border.all(
           color: const Color(0xFF3A5AFF).withValues(alpha: 0.18),
-          width: 1.5,
+          width: 1.5.w,
         ),
       ),
       child: Row(
@@ -470,11 +472,11 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
         children: [
           Image.asset(
             'assets/images/NoaBase.png',
-            width: 60,
-            height: 60,
+            width: 60.w,
+            height: 60.h,
             fit: BoxFit.contain,
           ),
-          const SizedBox(width: 12),
+          SizedBox(width: 12.w),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -482,16 +484,16 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
                 Text(
                   '¡Hola! Soy NOA 👋',
                   style: GoogleFonts.fredoka(
-                    fontSize: 16,
+                    fontSize: 16.sp,
                     fontWeight: FontWeight.bold,
                     color: const Color(0xFF2B13B2),
                   ),
                 ),
-                const SizedBox(height: 3),
+                SizedBox(height: 3.h),
                 Text(
                   'Ingresa o únete y te acompañaré en tu bienestar mental cada día.',
                   style: GoogleFonts.fredoka(
-                    fontSize: 13,
+                    fontSize: 13.sp,
                     fontWeight: FontWeight.w500,
                     color: colorScheme.onSurfaceVariant,
                     height: 1.3,
@@ -575,14 +577,14 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
                 obscureText: isPassword && !_passwordVisible,
                 style: GoogleFonts.fredoka(
                   color: colorScheme.onSurface,
-                  fontSize: 16,
+                  fontSize: 16.sp,
                   fontWeight: FontWeight.w600,
                 ),
                 decoration: InputDecoration(
                   hintText: hint,
                   hintStyle: GoogleFonts.fredoka(
                     color: colorScheme.onSurfaceVariant.withValues(alpha: 0.6),
-                    fontSize: 15,
+                    fontSize: 15.sp,
                   ),
                   prefixIcon: AnimatedContainer(
                     duration: const Duration(milliseconds: 200),
@@ -603,8 +605,8 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
                             duration: const Duration(milliseconds: 200),
                             curve: Curves.elasticOut,
                             child: Container(
-                              width: 24,
-                              height: 24,
+                              width: 24.w,
+                              height: 24.h,
                               decoration: const BoxDecoration(
                                 color: Color(0xFF3709EC),
                                 shape: BoxShape.circle,
@@ -654,74 +656,12 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
         if (!_isLoading) _handleLogin();
       },
       onTapCancel: () => setState(() => _buttonPressed = false),
-      child: AnimatedScale(
-        scale: _buttonPressed ? 0.96 : 1.0,
-        duration: const Duration(milliseconds: 120),
-        curve: Curves.easeOut,
-        child: Container(
-          width: double.infinity,
-          height: 60,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(16),
-            gradient: const LinearGradient(
-              colors: [Color(0xFF5CCFC0), Color(0xFF2981C1)],
-              begin: Alignment.centerLeft,
-              end: Alignment.centerRight,
-            ),
-            boxShadow: [
-              BoxShadow(
-                color: const Color(0xFF2981C1).withValues(alpha: 0.35),
-                blurRadius: 18,
-                offset: const Offset(0, 6),
-              ),
-            ],
-          ),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(16),
-            child: Stack(
-              children: [
-                // Shimmer
-                Positioned.fill(
-                  child: Transform.translate(
-                    offset: Offset(_shimmer.value * 300, 0),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          colors: [
-                            Colors.white.withValues(alpha: 0.0),
-                            Colors.white.withValues(alpha: 0.18),
-                            Colors.white.withValues(alpha: 0.0),
-                          ],
-                          stops: const [0.0, 0.5, 1.0],
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                Center(
-                  child: _isLoading
-                      ? const SizedBox(
-                          width: 24,
-                          height: 24,
-                          child: CircularProgressIndicator(
-                            color: Colors.white,
-                            strokeWidth: 2.5,
-                          ),
-                        )
-                      : Text(
-                          'INGRESAR',
-                          style: GoogleFonts.fredoka(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 26,
-                            letterSpacing: 1.5,
-                          ),
-                        ),
-                ),
-              ],
-            ),
-          ),
-        ),
+      child: PrimaryGradientButton(
+        label: 'INGRESAR',
+        fontSize: 26.sp,
+        isLoading: _isLoading,
+        pressed: _buttonPressed,
+        shimmerValue: _shimmer.value,
       ),
     );
   }
@@ -742,55 +682,17 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
         );
       },
       onTapCancel: () => setState(() => _joinButtonPressed = false),
-      child: AnimatedScale(
-        scale: _joinButtonPressed ? 0.96 : 1.0,
-        duration: const Duration(milliseconds: 120),
-        child: SizedBox(
-          width: MediaQuery.of(context).size.width * 0.65,
-          height: 56,
-          child: Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(16),
-              border: Border.all(
-                width: 2.5,
-                color: Colors.transparent,
-              ),
-              gradient: const LinearGradient(
-                colors: [Color(0xFF5CCFC0), Color(0xFF2981C1)],
-                begin: Alignment.centerLeft,
-                end: Alignment.centerRight,
-              ),
-              boxShadow: [
-                BoxShadow(
-                  color: const Color(0xFF5CCFC0).withValues(alpha: 0.3),
-                  blurRadius: 14,
-                  offset: const Offset(0, 5),
-                ),
-              ],
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  'UNIRME',
-                  style: GoogleFonts.fredoka(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 24,
-                    letterSpacing: 1.2,
-                  ),
-                ),
-                const SizedBox(width: 8),
-                Transform.translate(
-                  offset: Offset(_arrowOffset.value, 0),
-                  child: const Icon(
-                    Icons.arrow_forward_rounded,
-                    color: Colors.white,
-                    size: 22,
-                  ),
-                ),
-              ],
-            ),
+      child: PrimaryGradientButton(
+        label: 'UNIRME',
+        height: 56.h,
+        widthFraction: 0.65,
+        pressed: _joinButtonPressed,
+        trailing: Transform.translate(
+          offset: Offset(_arrowOffset.value, 0),
+          child: Icon(
+            Icons.arrow_forward_rounded,
+            color: Colors.white,
+            size: 22.sp,
           ),
         ),
       ),

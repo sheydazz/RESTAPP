@@ -1,6 +1,7 @@
-import 'dart:async';
+﻿import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:rest/core/services/chat_service.dart';
 import 'package:rest/core/services/user_session.dart';
 import 'package:rest/features/help/screens/help_screen.dart';
@@ -264,21 +265,21 @@ class _ChatScreenState extends State<ChatScreen> {
                     style: TextStyle(
                       fontFamily: 'Fredoka',
                       fontWeight: FontWeight.bold,
-                      fontSize: 22,
+                      fontSize: 22.sp,
                       color: sheetColorScheme.onSurface,
                     ),
                   ),
                 ),
-                const SizedBox(height: 14),
+                SizedBox(height: 14.h),
                 Text(
                   feedback.retroalimentacion,
                   style: TextStyle(
                     fontFamily: 'Fredoka',
-                    fontSize: 15,
+                    fontSize: 15.sp,
                     color: sheetColorScheme.onSurfaceVariant,
                   ),
                 ),
-                const SizedBox(height: 12),
+                SizedBox(height: 12.h),
                 Text(
                   'Consejos para ti',
                   style: TextStyle(
@@ -287,7 +288,7 @@ class _ChatScreenState extends State<ChatScreen> {
                     color: sheetColorScheme.primary,
                   ),
                 ),
-                const SizedBox(height: 8),
+                SizedBox(height: 8.h),
                 ...feedback.consejos.map(
                   (c) => Padding(
                     padding: const EdgeInsets.only(bottom: 6),
@@ -300,7 +301,7 @@ class _ChatScreenState extends State<ChatScreen> {
                     ),
                   ),
                 ),
-                const SizedBox(height: 16),
+                SizedBox(height: 16.h),
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
@@ -356,80 +357,86 @@ class _ChatScreenState extends State<ChatScreen> {
     );
   }
 
+  // Header: antes usaba un Stack con avatar y titulo posicionados de forma
+  // independiente (Align topLeft / Align topCenter), lo que podia hacer que
+  // se solaparan en pantallas angostas. Ahora es un Row con Expanded, que
+  // garantiza que el avatar y el titulo siempre respetan su espacio.
   Widget _buildHeader(ColorScheme colorScheme) {
-    return Container(
-      padding: const EdgeInsets.all(20),
-      child: Stack(
+    final avatarSize = 80.w;
+    return Padding(
+      padding: EdgeInsets.all(20.w),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Align(
-            alignment: Alignment.topLeft,
-            child: Container(
-              width: 80,
-              height: 80,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                border: Border.all(color: const Color(0xFF4ECDC4), width: 4),
-                boxShadow: [
-                  BoxShadow(
-                    color: const Color(0xFF4ECDC4).withValues(alpha: 0.3),
-                    blurRadius: 8,
-                    offset: const Offset(0, 2),
-                  ),
-                ],
-                image: const DecorationImage(
-                  image: AssetImage('assets/images/normalrest.jpg'),
-                  fit: BoxFit.cover,
+          Container(
+            width: avatarSize,
+            height: avatarSize,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              border: Border.all(color: const Color(0xFF4ECDC4), width: 4),
+              boxShadow: [
+                BoxShadow(
+                  color: const Color(0xFF4ECDC4).withValues(alpha: 0.3),
+                  blurRadius: 8,
+                  offset: const Offset(0, 2),
                 ),
+              ],
+              image: const DecorationImage(
+                image: AssetImage('assets/images/normalrest.jpg'),
+                fit: BoxFit.cover,
               ),
             ),
           ),
-          Align(
-            alignment: Alignment.topCenter,
-            child: Padding(
-              padding: const EdgeInsets.only(top: 10),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  ShaderMask(
-                    shaderCallback: (Rect bounds) => const LinearGradient(
-                      colors: [Color(0xFF7DFDFE), Color(0xFF2196F3)],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    ).createShader(bounds),
-                    child: const Text(
-                      '¡Hablemos',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 35,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Fredoka',
-                        height: 0.9,
-                        color: Colors.white,
-                      ),
+          Expanded(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                ShaderMask(
+                  shaderCallback: (Rect bounds) => const LinearGradient(
+                    colors: [Color(0xFF7DFDFE), Color(0xFF2196F3)],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ).createShader(bounds),
+                  child: Text(
+                    '¡Hablemos',
+                    textAlign: TextAlign.center,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontSize: 30.sp,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'Fredoka',
+                      height: 0.9,
+                      color: Colors.white,
                     ),
                   ),
-                  ShaderMask(
-                    shaderCallback: (Rect bounds) => const LinearGradient(
-                      colors: [Color(0xFF7DFDFE), Color(0xFF2196F3)],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    ).createShader(bounds),
-                    child: const Text(
-                      'un Rato!',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 35,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Fredoka',
-                        height: 0.9,
-                        color: Colors.white,
-                      ),
+                ),
+                ShaderMask(
+                  shaderCallback: (Rect bounds) => const LinearGradient(
+                    colors: [Color(0xFF7DFDFE), Color(0xFF2196F3)],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ).createShader(bounds),
+                  child: Text(
+                    'un Rato!',
+                    textAlign: TextAlign.center,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontSize: 30.sp,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'Fredoka',
+                      height: 0.9,
+                      color: Colors.white,
                     ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
+          // Balancea el ancho del avatar para que el titulo quede centrado
+          // en el espacio disponible, igual que en el diseno original.
+          SizedBox(width: avatarSize),
         ],
       ),
     );
@@ -471,12 +478,12 @@ class _ChatScreenState extends State<ChatScreen> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       const Icon(Icons.pause, color: Colors.black, size: 18),
-                      const SizedBox(width: 6),
-                      const Text(
+                      SizedBox(width: 6.w),
+                      Text(
                         'Detener',
                         style: TextStyle(
                           color: Colors.black,
-                          fontSize: 15,
+                          fontSize: 15.sp,
                           fontWeight: FontWeight.bold,
                           fontFamily: 'Fredoka',
                         ),
@@ -525,30 +532,30 @@ class _ChatScreenState extends State<ChatScreen> {
                         color: colorScheme.onSurface,
                         fontFamily: 'Fredoka',
                         fontWeight: FontWeight.bold,
-                        fontSize: 20,
+                        fontSize: 20.sp,
                       ),
                     ),
-                    style: const TextStyle(fontFamily: 'Freeman', fontSize: 16),
+                    style: TextStyle(fontFamily: 'Freeman', fontSize: 16.sp),
                     onSubmitted: (_) => _sendMessage(),
                   ),
                 ),
               ),
             ),
           ),
-          const SizedBox(width: 12),
+          SizedBox(width: 12.w),
           GestureDetector(
             onTap: _sendMessage,
             child: Container(
-              width: 55,
-              height: 55,
+              width: 55.w,
+              height: 55.h,
               decoration: const BoxDecoration(
                 color: Color(0xFF3B2C5E),
                 shape: BoxShape.circle,
               ),
               child: Center(
                 child: Container(
-                  width: 38,
-                  height: 38,
+                  width: 38.w,
+                  height: 38.h,
                   decoration: BoxDecoration(
                     color: Colors.transparent,
                     shape: BoxShape.circle,
@@ -619,7 +626,7 @@ class ChatBubble extends StatelessWidget {
                 message.text,
                 style: TextStyle(
                   color: bubbleText,
-                  fontSize: 15,
+                  fontSize: 15.sp,
                   fontWeight: FontWeight.bold,
                   fontFamily: 'Freeman',
                   height: 1.4,
@@ -693,7 +700,7 @@ class _TypingBubbleState extends State<TypingBubble>
               borderRadius: BorderRadius.circular(20),
             ),
             child: SizedBox(
-              width: 56,
+              width: 56.w,
               child: AnimatedBuilder(
                 animation: _controller,
                 builder: (context, _) {
@@ -707,10 +714,10 @@ class _TypingBubbleState extends State<TypingBubble>
                       final scale = 0.72 + (0.5 * (1 - (2 * t - 1).abs()));
                       return Transform.scale(
                         scale: scale,
-                        child: const SizedBox(
-                          width: 8,
-                          height: 8,
-                          child: DecoratedBox(
+                        child: SizedBox(
+                          width: 8.w,
+                          height: 8.h,
+                          child: const DecoratedBox(
                             decoration: BoxDecoration(
                               color: Color(0xFF2F9FE8),
                               shape: BoxShape.circle,

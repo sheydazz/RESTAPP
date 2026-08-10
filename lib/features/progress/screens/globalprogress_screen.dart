@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class GlobalProgressScreen extends StatelessWidget {
   const GlobalProgressScreen({super.key});
@@ -43,18 +44,18 @@ class GlobalProgressScreen extends StatelessWidget {
                       Navigator.pop(context);
                     },
                   ),
-                  const Text(
+                  Text(
                     "Registro Global",
                     style: TextStyle(
-                      fontSize: 24,
+                      fontSize: 24.sp,
                       fontWeight: FontWeight.bold,
                       color: Colors.blue,
                     ),
                   ),
-                  const SizedBox(width: 40), // para balancear
+                  SizedBox(width: 40.w), // para balancear
                 ],
               ),
-              const SizedBox(height: 20),
+              SizedBox(height: 20.h),
 
               // Switch Mes/Año
               Container(
@@ -74,11 +75,11 @@ class GlobalProgressScreen extends StatelessWidget {
                 ),
               ),
 
-              const SizedBox(height: 30),
+              SizedBox(height: 30.h),
 
               // Agosto
               _buildMonthSection("Agosto", 31, agostoDays, startOffset: 5),
-              const SizedBox(height: 30),
+              SizedBox(height: 30.h),
 
               // Septiembre
               _buildMonthSection("Septiembre", 30, septiembreDays, startOffset: 0),
@@ -102,7 +103,7 @@ class GlobalProgressScreen extends StatelessWidget {
       child: Text(
         text,
         style: TextStyle(
-          fontSize: 16,
+          fontSize: 16.sp,
           fontWeight: FontWeight.bold,
           color: active ? Colors.blue : Colors.white,
         ),
@@ -117,24 +118,24 @@ class GlobalProgressScreen extends StatelessWidget {
       children: [
         Text(
           month,
-          style: const TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
+          style: TextStyle(fontSize: 26.sp, fontWeight: FontWeight.bold),
         ),
-        const SizedBox(height: 10),
+        SizedBox(height: 10.h),
 
         // Encabezado de semana
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: const [
-            Text("LUNES", style: TextStyle(fontWeight: FontWeight.bold, fontSize  : 7),),
-            Text("MARTES", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 7),),
-            Text("MIERCOLES", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 7),),
-            Text("JUEVES", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 7),),
-            Text("VIERNES", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 7),),
-            Text("SABADO", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 7),),
-            Text("DOMINGO", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 7),),
+          children: [
+            Expanded(child: Text("LUN", textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 9.sp),)),
+            Expanded(child: Text("MAR", textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 9.sp),)),
+            Expanded(child: Text("MIE", textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 9.sp),)),
+            Expanded(child: Text("JUE", textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 9.sp),)),
+            Expanded(child: Text("VIE", textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 9.sp),)),
+            Expanded(child: Text("SAB", textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 9.sp),)),
+            Expanded(child: Text("DOM", textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 9.sp),)),
           ],
         ),
-        const SizedBox(height: 10),
+        SizedBox(height: 10.h),
 
         // Calendario
         Container(
@@ -181,15 +182,15 @@ class GlobalProgressScreen extends StatelessWidget {
                       right: 2,
                       child: Text(
                         "$dayNumber",
-                        style: const TextStyle(fontSize: 10),
+                        style: TextStyle(fontSize: 10.sp),
                       ),
                     ),
                     if (emojiDay != null)
                       Center(
                         child: Image.asset(
                           emojiDay['emoji'],
-                          width: 40,
-                          height: 40,
+                          width: 40.w,
+                          height: 40.h,
                         ),
                       ),
                   ],

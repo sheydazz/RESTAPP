@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:rest/core/services/profile_service.dart';
 
 import '../../home/screens/gradient_text.dart';
@@ -103,7 +104,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           margin: const EdgeInsets.only(left: 10),
           child: GradientText(
             'Perfil',
-            style: TextStyle(fontWeight: FontWeight.w600, fontSize: 30),
+            style: TextStyle(fontWeight: FontWeight.w600, fontSize: 30.sp),
             gradient: LinearGradient(
               colors: [Color(0xFF0AF3FF), Color(0xFF0419FF)],
               begin: Alignment.topLeft,
@@ -119,7 +120,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Widget _buildBody() {
     if (_isLoading) {
-      return const Center(child: CircularProgressIndicator());
+      return Center(child: CircularProgressIndicator());
     }
 
     if (_errorMessage != null) {
@@ -134,16 +135,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 color: Colors.redAccent,
                 size: 40,
               ),
-              const SizedBox(height: 12),
+              SizedBox(height: 12.h),
               Text(
                 _errorMessage!,
                 textAlign: TextAlign.center,
-                style: TextStyle(color: Theme.of(context).colorScheme.onSurface, fontSize: 14),
+                style: TextStyle(color: Theme.of(context).colorScheme.onSurface, fontSize: 14.sp),
               ),
-              const SizedBox(height: 16),
+              SizedBox(height: 16.h),
               ElevatedButton(
                 onPressed: _loadProfile,
-                child: const Text('Reintentar'),
+                child: Text('Reintentar'),
               ),
             ],
           ),
@@ -159,8 +160,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
           children: [
             Center(
               child: Container(
-                width: 100,
-                height: 100,
+                width: 100.w,
+                height: 100.h,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   gradient: LinearGradient(
@@ -179,22 +180,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 child: Icon(Icons.person, color: Colors.white, size: 50),
               ),
             ),
-            const SizedBox(height: 30),
+            SizedBox(height: 30.h),
             _buildInputField('Nombre', _nombreController),
-            const SizedBox(height: 20),
+            SizedBox(height: 20.h),
             _buildInputField('Correo', _correoController),
-            const SizedBox(height: 20),
+            SizedBox(height: 20.h),
             _buildInputField('Ciudad', _ciudadController),
-            const SizedBox(height: 20),
+            SizedBox(height: 20.h),
             _buildInputField('Semestre', _semestreController),
-            const SizedBox(height: 20),
+            SizedBox(height: 20.h),
             _buildInputField('Teléfono', _telefonoController),
-            const SizedBox(height: 20),
+            SizedBox(height: 20.h),
             _buildInputField('Fecha de nacimiento', _fechaNacimientoController),
-            const SizedBox(height: 40),
+            SizedBox(height: 40.h),
             Container(
               width: double.infinity,
-              height: 55,
+              height: 55.h,
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   colors: [Color(0xFF0AF3FF), Color(0xFF0419FF)],
@@ -222,11 +223,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                     );
                   },
-                  child: const Center(
+                  child: Center(
                     child: Text(
                       'GUARDAR CAMBIOS',
                       style: TextStyle(
-                        fontSize: 16,
+                        fontSize: 16.sp,
                         fontWeight: FontWeight.w600,
                         color: Colors.white,
                         letterSpacing: 1.2,
@@ -236,7 +237,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
               ),
             ),
-            const SizedBox(height: 20),
+            SizedBox(height: 20.h),
           ],
         ),
       ),
@@ -250,12 +251,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
         Text(
           label,
           style: TextStyle(
-            fontSize: 16,
+            fontSize: 16.sp,
             fontWeight: FontWeight.w600,
             color: Theme.of(context).colorScheme.onSurface,
           ),
         ),
-        const SizedBox(height: 8),
+        SizedBox(height: 8.h),
         Container(
           decoration: BoxDecoration(
             color: Theme.of(context).colorScheme.surfaceContainerLow,
@@ -282,11 +283,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
               hintStyle: TextStyle(
                 color: Theme.of(context).colorScheme.onSurfaceVariant,
-                fontSize: 14,
+                fontSize: 14.sp,
               ),
             ),
             style: TextStyle(
-              fontSize: 14,
+              fontSize: 14.sp,
               fontWeight: FontWeight.w500,
               color: Theme.of(context).colorScheme.onSurface,
             ),

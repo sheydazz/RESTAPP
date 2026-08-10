@@ -16,6 +16,9 @@ class NoaVideoWeb extends StatefulWidget {
 class _NoaVideoWebState extends State<NoaVideoWeb> {
   late final String _viewId;
   late final html.VideoElement _videoElement;
+  // Null hasta que el video reporte sus dimensiones reales; mientras tanto
+  // usamos widget.height como estimado para no dejar un hueco en el layout.
+  double? _videoAspectRatio;
 
   @override
   void initState() {
@@ -34,6 +37,18 @@ class _NoaVideoWebState extends State<NoaVideoWeb> {
       ..style.border = 'none'
       ..style.outline = 'none';
 
+    // En cuanto el navegador conoce las dimensiones reales del video,
+    // recalculamos la relacion de aspecto para no forzarlo a una caja
+    // cuadrada que no le corresponde (lo que se veia "descuadrado").
+    _videoElement.onLoadedMetadata.listen((_) {
+      final w = _videoElement.videoWidth;
+      final h = _videoElement.videoHeight;
+      if (!mounted || w == 0 || h == 0) return;
+      setState(() {
+        _videoAspectRatio = w / h;
+      });
+    });
+
     ui.platformViewRegistry.registerViewFactory(
       _viewId,
       (int id) => _videoElement,
@@ -48,9 +63,12 @@ class _NoaVideoWebState extends State<NoaVideoWeb> {
 
   @override
   Widget build(BuildContext context) {
+    final height = _videoAspectRatio != null
+        ? widget.width / _videoAspectRatio!
+        : widget.height;
     return SizedBox(
       width: widget.width,
-      height: widget.height,
+      height: height,
       child: HtmlElementView(viewType: _viewId),
     );
   }

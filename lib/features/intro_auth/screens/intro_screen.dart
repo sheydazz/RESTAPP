@@ -1,6 +1,7 @@
-import 'dart:async';
+﻿import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:video_player/video_player.dart';
 import 'login_screen.dart';
 import 'noa_video_stub.dart'
@@ -318,7 +319,7 @@ class _IntroScreenState extends State<IntroScreen> with TickerProviderStateMixin
                 Positioned(
                   left: 24,
                   right: 24,
-                  bottom: _showButton ? 190 : 170,
+                  bottom: size.height * (_showButton ? 0.225 : 0.201),
                   child: FadeTransition(
                     opacity: _textFade,
                     child: SlideTransition(
@@ -335,9 +336,9 @@ class _IntroScreenState extends State<IntroScreen> with TickerProviderStateMixin
                             child: Text(
                               _displayGreeting,
                               textAlign: TextAlign.center,
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontFamily: 'Fredoka',
-                                fontSize: 42,
+                                fontSize: 42.sp,
                                 fontWeight: FontWeight.bold,
                                 color: Colors.white,
                                 height: 1.05,
@@ -345,13 +346,13 @@ class _IntroScreenState extends State<IntroScreen> with TickerProviderStateMixin
                             ),
                           ),
                           if (_displaySubtitle.isNotEmpty) ...[
-                            const SizedBox(height: 6),
+                            SizedBox(height: 6.h),
                             Text(
                               _displaySubtitle,
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                 fontFamily: 'Fredoka',
-                                fontSize: 19,
+                                fontSize: 19.sp,
                                 fontWeight: FontWeight.w500,
                                 color: Theme.of(context).colorScheme.onSurfaceVariant,
                                 height: 1.3,
@@ -369,7 +370,7 @@ class _IntroScreenState extends State<IntroScreen> with TickerProviderStateMixin
                 Positioned(
                   left: 32,
                   right: 32,
-                  bottom: 90,
+                  bottom: size.height * 0.107,
                   child: FadeTransition(
                     opacity: _buttonFade,
                     child: Transform.scale(
@@ -418,7 +419,7 @@ class _IntroScreenState extends State<IntroScreen> with TickerProviderStateMixin
       onTap: _navigateToLogin,
       child: Container(
         width: double.infinity,
-        height: 62,
+        height: 62.h,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(31),
           gradient: const LinearGradient(
@@ -441,7 +442,7 @@ class _IntroScreenState extends State<IntroScreen> with TickerProviderStateMixin
               // Shimmer deslizante
               Positioned.fill(
                 child: Transform.translate(
-                  offset: Offset(_shimmer.value * 220, 0),
+                  offset: Offset(_shimmer.value * 220.w, 0),
                   child: Container(
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
@@ -456,12 +457,12 @@ class _IntroScreenState extends State<IntroScreen> with TickerProviderStateMixin
                   ),
                 ),
               ),
-              const Center(
+              Center(
                 child: Text(
                   'COMENZAR',
                   style: TextStyle(
                     fontFamily: 'Fredoka',
-                    fontSize: 26,
+                    fontSize: 26.sp,
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
                     letterSpacing: 1.5,

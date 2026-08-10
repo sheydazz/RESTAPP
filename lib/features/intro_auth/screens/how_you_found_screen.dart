@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:rest/core/services/user_session.dart';
 import 'package:rest/features/emotion/screens/emotionregister_screen.dart';
@@ -69,7 +70,7 @@ class _HowYouFoundScreenState extends State<HowYouFoundScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    const SizedBox(height: 10),
+                    SizedBox(height: 10.h),
 
                     Column(
                       children: [
@@ -82,18 +83,18 @@ class _HowYouFoundScreenState extends State<HowYouFoundScreen> {
                           child: Text(
                             '¡Perfecto!',
                             style: GoogleFonts.fredoka(
-                              fontSize: 60,
+                              fontSize: 60.sp,
                               fontWeight: FontWeight.bold,
                               color: Colors.white,
                             ),
                           ),
                         ),
 
-                        const SizedBox(height: 8),
+                        SizedBox(height: 8.h),
 
                         SizedBox(
-                          width: 230,
-                          height: 230,
+                          width: 230.w,
+                          height: 230.h,
                           child: Stack(
                             children: [
                               Center(
@@ -104,7 +105,7 @@ class _HowYouFoundScreenState extends State<HowYouFoundScreen> {
                                 left: 0,
                                 child: Image.asset(
                                   'assets/images/star.png',
-                                  width: 30,
+                                  width: 30.w,
                                 ),
                               ),
                               Positioned(
@@ -112,7 +113,7 @@ class _HowYouFoundScreenState extends State<HowYouFoundScreen> {
                                 right: 50,
                                 child: Image.asset(
                                   'assets/images/star.png',
-                                  width: 20,
+                                  width: 20.w,
                                 ),
                               ),
                               Positioned(
@@ -120,7 +121,7 @@ class _HowYouFoundScreenState extends State<HowYouFoundScreen> {
                                 left: 50,
                                 child: Image.asset(
                                   'assets/images/star.png',
-                                  width: 25,
+                                  width: 25.w,
                                 ),
                               ),
                               Positioned(
@@ -128,7 +129,7 @@ class _HowYouFoundScreenState extends State<HowYouFoundScreen> {
                                 right: 0,
                                 child: Image.asset(
                                   'assets/images/star.png',
-                                  width: 35,
+                                  width: 35.w,
                                 ),
                               ),
                               Positioned(
@@ -136,7 +137,7 @@ class _HowYouFoundScreenState extends State<HowYouFoundScreen> {
                                 left: 0,
                                 child: Image.asset(
                                   'assets/images/star.png',
-                                  width: 18,
+                                  width: 18.w,
                                 ),
                               ),
                               Positioned(
@@ -144,7 +145,7 @@ class _HowYouFoundScreenState extends State<HowYouFoundScreen> {
                                 right: 0,
                                 child: Image.asset(
                                   'assets/images/star.png',
-                                  width: 22,
+                                  width: 22.w,
                                 ),
                               ),
                               Positioned(
@@ -152,19 +153,19 @@ class _HowYouFoundScreenState extends State<HowYouFoundScreen> {
                                 right: 20,
                                 child: Image.asset(
                                   'assets/images/star.png',
-                                  width: 28,
+                                  width: 28.w,
                                 ),
                               ),
                             ],
                           ),
                         ),
 
-                        const SizedBox(height: 12),
+                        SizedBox(height: 12.h),
 
                         Text(
                           '¡Una última cosa!',
                           style: GoogleFonts.fredoka(
-                            fontSize: 32,
+                            fontSize: 32.sp,
                             fontWeight: FontWeight.bold,
                             color: const Color(0xFF5020FD),
                           ),
@@ -172,18 +173,18 @@ class _HowYouFoundScreenState extends State<HowYouFoundScreen> {
                       ],
                     ),
 
-                    const SizedBox(height: 10),
+                    SizedBox(height: 10.h),
 
                     Text(
                       '¿Cómo supiste de mí?',
                       style: GoogleFonts.fredoka(
-                        fontSize: 22,
+                        fontSize: 22.sp,
                         fontWeight: FontWeight.bold,
                         color: colorScheme.onSurface,
                       ),
                     ),
 
-                    const SizedBox(height: 12),
+                    SizedBox(height: 12.h),
 
                     ...options.map(
                       (option) => Padding(
@@ -213,7 +214,7 @@ class _HowYouFoundScreenState extends State<HowYouFoundScreen> {
                             child: Text(
                               option,
                               style: GoogleFonts.fredoka(
-                                fontSize: 16,
+                                fontSize: 16.sp,
                                 fontWeight: FontWeight.bold,
                                 color: selectedOption == option
                                     ? Colors.white
@@ -225,11 +226,11 @@ class _HowYouFoundScreenState extends State<HowYouFoundScreen> {
                       ),
                     ),
 
-                    const SizedBox(height: 30),
+                    SizedBox(height: 30.h),
 
                     Container(
-                      width: 345,
-                      height: 52,
+                      width: 345.w,
+                      height: 52.h,
                       decoration: const BoxDecoration(
                         gradient: RadialGradient(
                           center: Alignment.centerLeft,
@@ -243,7 +244,7 @@ class _HowYouFoundScreenState extends State<HowYouFoundScreen> {
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.transparent,
                           shadowColor: Colors.transparent,
-                          fixedSize: const Size(345, 52),
+                          fixedSize: Size(345.w, 52.h),
                           padding: EdgeInsets.zero,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(30),
@@ -254,7 +255,7 @@ class _HowYouFoundScreenState extends State<HowYouFoundScreen> {
                           child: Text(
                             'Siguiente',
                             style: GoogleFonts.fredoka(
-                              fontSize: 30,
+                              fontSize: 30.sp,
                               fontWeight: FontWeight.bold,
                               color: Colors.white,
                             ),
@@ -263,7 +264,7 @@ class _HowYouFoundScreenState extends State<HowYouFoundScreen> {
                       ),
                     ),
 
-                    const SizedBox(height: 30),
+                    SizedBox(height: 30.h),
                   ],
                 ),
               ),

@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class MisTecnicasScreen extends StatelessWidget {
   const MisTecnicasScreen({super.key});
@@ -35,8 +36,8 @@ class MisTecnicasScreen extends StatelessWidget {
                 child: GestureDetector(
                   onTap: () => Navigator.pop(context),
                   child: Container(
-                    width: 36,
-                    height: 36,
+                    width: 36.w,
+                    height: 36.h,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       gradient: _gradient,
@@ -50,18 +51,18 @@ class MisTecnicasScreen extends StatelessWidget {
                 ),
               ),
 
-              const SizedBox(height: 8),
+              SizedBox(height: 8.h),
 
               // Título con texto degradado
               Center(
                 child: ShaderMask(
                   shaderCallback: (bounds) => _gradient.createShader(bounds),
-                  child: const Text(
+                  child: Text(
                     'Mis Técnicas de\nRelajación',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontFamily: 'Fredoka',
-                      fontSize: 34,
+                      fontSize: 34.sp,
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
                     ),
@@ -69,7 +70,7 @@ class MisTecnicasScreen extends StatelessWidget {
                 ),
               ),
 
-              const SizedBox(height: 12),
+              SizedBox(height: 12.h),
 
               Padding(
                 padding: const EdgeInsets.only(left: 4),
@@ -77,14 +78,14 @@ class MisTecnicasScreen extends StatelessWidget {
                   '⭐ Lo importante es mantener la calma y hacer algo que disfrutes',
                   style: TextStyle(
                     fontFamily: 'Fredoka',
-                    fontSize: 16,
+                    fontSize: 16.sp,
                     fontWeight: FontWeight.bold,
                     color: colorScheme.onSurface,
                   ),
                 ),
               ),
 
-              const SizedBox(height: 20),
+              SizedBox(height: 20.h),
 
               // Cuadro principal con borde degradado
               Expanded(
@@ -147,15 +148,15 @@ class MisTecnicasScreen extends StatelessWidget {
                 ),
               ),
             ),
-            const SizedBox(height: 8),
+            SizedBox(height: 8.h),
             Expanded(
               flex: 3,
               child: Text(
                 nombre,
                 textAlign: TextAlign.center,
-                style: const TextStyle(
+                style: TextStyle(
                   fontFamily: 'Fredoka',
-                  fontSize: 15,
+                  fontSize: 15.sp,
                   fontWeight: FontWeight.bold,
                   color: Colors.black87,
                 ),

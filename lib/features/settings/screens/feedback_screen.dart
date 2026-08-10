@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:rest/core/utils/app_toast.dart';
 import '../../home/screens/gradient_text.dart';
 
@@ -86,7 +87,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
             'Feedback',
             style: TextStyle(
               fontWeight: FontWeight.w600,
-              fontSize: 30,
+              fontSize: 30.sp,
             ),
             gradient: LinearGradient(
               colors: [
@@ -127,21 +128,21 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                       Text(
                         'Comparte tu opinión',
                         style: TextStyle(
-                          fontSize: 22,
+                          fontSize: 22.sp,
                           fontWeight: FontWeight.w700,
                           color: Theme.of(context).colorScheme.onSurface,
                         ),
                       ),
-                      const SizedBox(height: 8),
+                      SizedBox(height: 8.h),
                       Text(
                         'Califica tu experiencia',
                         style: TextStyle(
-                          fontSize: 14,
+                          fontSize: 14.sp,
                           fontWeight: FontWeight.w400,
                           color: Theme.of(context).colorScheme.onSurfaceVariant,
                         ),
                       ),
-                      const SizedBox(height: 25),
+                      SizedBox(height: 25.h),
 
                       // Rating emojis
                       Row(
@@ -157,8 +158,8 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                               });
                             },
                             child: Container(
-                              width: 55,
-                              height: 55,
+                              width: 55.w,
+                              height: 55.h,
                               decoration: BoxDecoration(
                                 color: selectedRating == index
                                     ? Color(0xFF4FC3F7).withValues(alpha: 0.1)
@@ -174,7 +175,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                               child: Center(
                                 child: Text(
                                   ratingEmojis[index],
-                                  style: TextStyle(fontSize: 30),
+                                  style: TextStyle(fontSize: 30.sp),
                                 ),
                               ),
                             ),
@@ -183,7 +184,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                       ),
 
                       if (selectedRating != -1) ...[
-                        const SizedBox(height: 15),
+                        SizedBox(height: 15.h),
                         Center(
                           child: Text(
                             selectedRating == 4 ? '¡Excelente!' :
@@ -191,7 +192,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                             selectedRating == 2 ? 'Regular' :
                             selectedRating == 1 ? 'Mala' : 'Muy mala',
                             style: TextStyle(
-                              fontSize: 14,
+                              fontSize: 14.sp,
                               fontWeight: FontWeight.w500,
                               color: Color(0xFF4FC3F7),
                             ),
@@ -199,25 +200,25 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                         ),
                       ],
 
-                      const SizedBox(height: 30),
+                      SizedBox(height: 30.h),
 
                       Text(
                         _optionsQuestion,
                         style: TextStyle(
-                          fontSize: 16,
+                          fontSize: 16.sp,
                           fontWeight: FontWeight.w600,
                           color: Theme.of(context).colorScheme.onSurface,
                         ),
                       ),
-                      const SizedBox(height: 4),
+                      SizedBox(height: 4.h),
                       Text(
                         'Puedes elegir varias opciones',
                         style: TextStyle(
-                          fontSize: 12,
+                          fontSize: 12.sp,
                           color: Theme.of(context).colorScheme.onSurfaceVariant,
                         ),
                       ),
-                      const SizedBox(height: 15),
+                      SizedBox(height: 15.h),
 
                       // Options
                       ...List.generate(_currentOptions.length, (index) {
@@ -250,8 +251,8 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                             child: Row(
                               children: [
                                 Container(
-                                  width: 20,
-                                  height: 20,
+                                  width: 20.w,
+                                  height: 20.h,
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(5),
                                     border: Border.all(
@@ -268,11 +269,11 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                                       ? const Icon(Icons.check, color: Colors.white, size: 14)
                                       : null,
                                 ),
-                                const SizedBox(width: 12),
+                                SizedBox(width: 12.w),
                                 Text(
                                   _currentOptions[index],
                                   style: TextStyle(
-                                    fontSize: 14,
+                                    fontSize: 14.sp,
                                     fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
                                     color: isSelected
                                         ? const Color(0xFF4FC3F7)
@@ -285,17 +286,17 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                         );
                       }),
 
-                      const SizedBox(height: 25),
+                      SizedBox(height: 25.h),
 
                       Text(
                         'Escribe tu comentario (opcional)',
                         style: TextStyle(
-                          fontSize: 16,
+                          fontSize: 16.sp,
                           fontWeight: FontWeight.w600,
                           color: Theme.of(context).colorScheme.onSurface,
                         ),
                       ),
-                      const SizedBox(height: 12),
+                      SizedBox(height: 12.h),
 
                       // Comment text field
                       Container(
@@ -314,24 +315,24 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                             hintText: 'Describe tu experiencia',
                             hintStyle: TextStyle(
                               color: Theme.of(context).colorScheme.onSurfaceVariant,
-                              fontSize: 14,
+                              fontSize: 14.sp,
                             ),
                             border: InputBorder.none,
                             contentPadding: EdgeInsets.all(15),
                           ),
                           style: TextStyle(
                             color: Theme.of(context).colorScheme.onSurface,
-                            fontSize: 14,
+                            fontSize: 14.sp,
                           ),
                         ),
                       ),
 
-                      const SizedBox(height: 30),
+                      SizedBox(height: 30.h),
 
                       // Send button
                       Container(
                         width: double.infinity,
-                        height: 55,
+                        height: 55.h,
                         decoration: BoxDecoration(
                           gradient: LinearGradient(
                             colors: [
@@ -357,11 +358,11 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                             onTap: () {
                               _sendFeedback();
                             },
-                            child: const Center(
+                            child: Center(
                               child: Text(
                                 'Enviar',
                                 style: TextStyle(
-                                  fontSize: 16,
+                                  fontSize: 16.sp,
                                   fontWeight: FontWeight.w600,
                                   color: Colors.white,
                                   letterSpacing: 1.2,

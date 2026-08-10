@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:rest/core/services/user_session.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'cancelhelp_screen.dart';
@@ -129,18 +130,18 @@ class _LoadingScreenState extends State<HelpScreen>
                       children: [
                         Text(
                           '¡Hola, ${UserSession.displayName}!',
-                          style: const TextStyle(
-                            fontSize: 24,
+                          style: TextStyle(
+                            fontSize: 24.sp,
                             fontWeight: FontWeight.w800,
                             color: Colors.white,
                             letterSpacing: 0.5,
                           ),
                         ),
-                        const SizedBox(height: 4),
-                        const Text(
+                        SizedBox(height: 4.h),
+                        Text(
                           'Contactaremos a un especialista',
                           style: TextStyle(
-                            fontSize: 14,
+                            fontSize: 14.sp,
                             fontWeight: FontWeight.w500,
                             color: Colors.white70,
                           ),
@@ -164,17 +165,17 @@ class _LoadingScreenState extends State<HelpScreen>
                         color: Colors.white.withValues(alpha: 0.25),
                         borderRadius: BorderRadius.circular(20),
                       ),
-                      child: const Row(
+                      child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Icon(Icons.close, color: Colors.white, size: 18),
-                          SizedBox(width: 6),
+                          const Icon(Icons.close, color: Colors.white, size: 18),
+                          SizedBox(width: 6.w),
                           Text(
                             'Cancelar',
                             style: TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.w600,
-                              fontSize: 14,
+                              fontSize: 14.sp,
                             ),
                           ),
                         ],
@@ -191,7 +192,7 @@ class _LoadingScreenState extends State<HelpScreen>
                 padding: const EdgeInsets.all(20),
                 child: Column(
                   children: [
-                    const SizedBox(height: 20),
+                    SizedBox(height: 20.h),
 
                     // Imagen principal con animación
                     Container(
@@ -210,11 +211,11 @@ class _LoadingScreenState extends State<HelpScreen>
                         borderRadius: BorderRadius.circular(24),
                         child: Image.asset(
                           'assets/images/helprest.jpg',
-                          height: 300,
+                          height: 300.h,
                           fit: BoxFit.cover,
                           errorBuilder: (context, error, stackTrace) {
                             return Container(
-                              height: 300,
+                              height: 300.h,
                               decoration: BoxDecoration(
                                 gradient: LinearGradient(
                                   colors: [
@@ -223,7 +224,7 @@ class _LoadingScreenState extends State<HelpScreen>
                                   ],
                                 ),
                               ),
-                              child: const Center(
+                              child: Center(
                                 child: Icon(
                                   Icons.psychology_outlined,
                                   size: 80,
@@ -236,7 +237,7 @@ class _LoadingScreenState extends State<HelpScreen>
                       ),
                     ),
 
-                    const SizedBox(height: 32),
+                    SizedBox(height: 32.h),
 
                     // Status Text mejorado
                     Container(
@@ -261,8 +262,8 @@ class _LoadingScreenState extends State<HelpScreen>
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               Container(
-                                width: 12,
-                                height: 12,
+                                width: 12.w,
+                                height: 12.h,
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
                                   color: const Color(0xFF1BD77C),
@@ -276,34 +277,34 @@ class _LoadingScreenState extends State<HelpScreen>
                                   ],
                                 ),
                               ),
-                              const SizedBox(width: 10),
-                              const Text(
+                              SizedBox(width: 10.w),
+                              Text(
                                 'Está en progreso...',
                                 style: TextStyle(
-                                  fontSize: 12,
+                                  fontSize: 12.sp,
                                   fontWeight: FontWeight.w600,
                                   color: Color(0xFF1BD77C),
                                 ),
                               ),
                             ],
                           ),
-                          const SizedBox(height: 16),
-                          const Text(
+                          SizedBox(height: 16.h),
+                          Text(
                             'ENVIANDO SOLICITUD\nA UN ESPECIALISTA',
                             textAlign: TextAlign.center,
                             style: TextStyle(
-                              fontSize: 18,
+                              fontSize: 18.sp,
                               fontWeight: FontWeight.w800,
                               color: Color(0xFF1BD77C),
                               letterSpacing: 0.8,
                               height: 1.4,
                             ),
                           ),
-                          const SizedBox(height: 24),
+                          SizedBox(height: 24.h),
                           // Timer visible
                           Container(
-                            width: 120,
-                            height: 120,
+                            width: 120.w,
+                            height: 120.h,
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
                               gradient: const LinearGradient(
@@ -324,31 +325,31 @@ class _LoadingScreenState extends State<HelpScreen>
                             child: Center(
                               child: Text(
                                 '$_remainingSeconds',
-                                style: const TextStyle(
-                                  fontSize: 64,
+                                style: TextStyle(
+                                  fontSize: 64.sp,
                                   fontWeight: FontWeight.w900,
                                   color: Colors.white,
                                 ),
                               ),
                             ),
                           ),
-                          const SizedBox(height: 16),
+                          SizedBox(height: 16.h),
                           Text(
                             'Abriendo WhatsApp...',
                             style: TextStyle(
-                              fontSize: 13,
+                              fontSize: 13.sp,
                               fontWeight: FontWeight.w500,
                               color: Theme.of(
                                 context,
                               ).colorScheme.onSurfaceVariant,
                             ),
                           ),
-                          const SizedBox(height: 16),
+                          SizedBox(height: 16.h),
                           Text(
                             'Un psicólogo reviará tu solicitud y se contactará pronto contigo',
                             textAlign: TextAlign.center,
                             style: TextStyle(
-                              fontSize: 13,
+                              fontSize: 13.sp,
                               fontWeight: FontWeight.w500,
                               color: Theme.of(
                                 context,
@@ -360,7 +361,7 @@ class _LoadingScreenState extends State<HelpScreen>
                       ),
                     ),
 
-                    const SizedBox(height: 32),
+                    SizedBox(height: 32.h),
 
                     // Info box
                     Container(
@@ -375,19 +376,19 @@ class _LoadingScreenState extends State<HelpScreen>
                       ),
                       child: Column(
                         children: [
-                          const Row(
+                          Row(
                             children: [
-                              Icon(
+                              const Icon(
                                 Icons.info_outlined,
                                 color: Color(0xFF4FC3F7),
                                 size: 22,
                               ),
-                              SizedBox(width: 12),
+                              SizedBox(width: 12.w),
                               Expanded(
                                 child: Text(
                                   'Recibirás una notificación cuando esté listo',
                                   style: TextStyle(
-                                    fontSize: 13,
+                                    fontSize: 13.sp,
                                     fontWeight: FontWeight.w600,
                                     color: Color(0xFF4FC3F7),
                                   ),
@@ -395,11 +396,11 @@ class _LoadingScreenState extends State<HelpScreen>
                               ),
                             ],
                           ),
-                          const SizedBox(height: 12),
+                          SizedBox(height: 12.h),
                           Text(
                             'Tiempo estimado: 2-5 minutos',
                             style: TextStyle(
-                              fontSize: 12,
+                              fontSize: 12.sp,
                               fontWeight: FontWeight.w500,
                               color: Theme.of(
                                 context,
@@ -410,7 +411,7 @@ class _LoadingScreenState extends State<HelpScreen>
                       ),
                     ),
 
-                    const SizedBox(height: 32),
+                    SizedBox(height: 32.h),
                   ],
                 ),
               ),

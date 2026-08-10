@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:rest/core/services/auth_service.dart';
 
@@ -112,34 +113,34 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
               Text(
                 'Actualiza tu contraseña para volver a ingresar',
                 style: GoogleFonts.fredoka(
-                  fontSize: 18,
+                  fontSize: 18.sp,
                   fontWeight: FontWeight.w600,
                 ),
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 24),
+              SizedBox(height: 24.h),
               _buildInputField(
                 controller: _correoController,
                 label: 'Correo institucional',
                 hint: 'correo@universidad.edu',
               ),
-              const SizedBox(height: 16),
+              SizedBox(height: 16.h),
               _buildInputField(
                 controller: _nuevaContrasenaController,
                 label: 'Nueva contraseña',
                 hint: '********',
                 obscure: true,
               ),
-              const SizedBox(height: 16),
+              SizedBox(height: 16.h),
               _buildInputField(
                 controller: _confirmarContrasenaController,
                 label: 'Confirmar nueva contraseña',
                 hint: '********',
                 obscure: true,
               ),
-              const SizedBox(height: 28),
+              SizedBox(height: 28.h),
               SizedBox(
-                height: 52,
+                height: 52.h,
                 child: ElevatedButton(
                   onPressed: _isLoading ? null : _handleRecoverPassword,
                   style: ElevatedButton.styleFrom(
@@ -151,7 +152,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                   child: Text(
                     _isLoading ? 'ACTUALIZANDO...' : 'ACTUALIZAR CONTRASEÑA',
                     style: GoogleFonts.fredoka(
-                      fontSize: 20,
+                      fontSize: 20.sp,
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
                     ),
@@ -177,9 +178,9 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
       children: [
         Text(
           label,
-          style: GoogleFonts.fredoka(fontSize: 16, fontWeight: FontWeight.bold),
+          style: GoogleFonts.fredoka(fontSize: 16.sp, fontWeight: FontWeight.bold),
         ),
-        const SizedBox(height: 8),
+        SizedBox(height: 8.h),
         TextField(
           controller: controller,
           obscureText: obscure,

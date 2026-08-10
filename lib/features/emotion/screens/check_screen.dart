@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:rest/core/routes/app_routes.dart';
 import 'package:rest/core/services/emotion_service.dart';
 import 'package:rest/features/emotion/utils/emotion_calculator.dart';
@@ -74,37 +75,35 @@ class _CheckScreenState extends State<CheckScreen> {
     final colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
       backgroundColor: const Color(0xFF2D2D2D),
-      body: Center(
-        child: Container(
-          width: 400,
-          height: 800,
-          margin: const EdgeInsets.all(20),
-          decoration: BoxDecoration(
-            color: colorScheme.surface,
-            borderRadius: BorderRadius.circular(24),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withValues(alpha: 0.1),
-                blurRadius: 20,
-                spreadRadius: 4,
-                offset: const Offset(0, 8),
-              ),
-            ],
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(24),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                // Logo principal
-                Container(
-                  width: 250,
-                  height: 200,
-                  child: ClipOval(
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Container(
+            width: double.infinity,
+            margin: const EdgeInsets.all(20),
+            decoration: BoxDecoration(
+              color: colorScheme.surface,
+              borderRadius: BorderRadius.circular(24),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.1),
+                  blurRadius: 20,
+                  spreadRadius: 4,
+                  offset: const Offset(0, 8),
+                ),
+              ],
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(24),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  // Logo principal
+                  ClipOval(
                     child: Image.asset(
                       "assets/images/kingrest.jpg",
-                      width: 200,
-                      height: 200,
+                      width: 200.w,
+                      height: 200.w,
                       fit: BoxFit.cover,
                       errorBuilder: (context, error, stackTrace) {
                         return Container(
@@ -116,164 +115,164 @@ class _CheckScreenState extends State<CheckScreen> {
                               end: Alignment.bottomCenter,
                             ),
                           ),
-                          child: const Center(
-                            child: Text('😊', style: TextStyle(fontSize: 80)),
+                          child: Center(
+                            child: Text('😊', style: TextStyle(fontSize: 80.sp)),
                           ),
                         );
                       },
                     ),
                   ),
-                ),
 
-                const SizedBox(height: 20),
+                  SizedBox(height: 20.h),
 
-                ShaderMask(
-                  shaderCallback: (bounds) => const LinearGradient(
-                    colors: [
-                      Color(0xFFE91E63),
-                      Color(0xFFFF5722),
-                      Color(0xFFFF9800),
-                      Color(0xFFFFEB3B),
-                    ],
-                    begin: Alignment.centerLeft,
-                    end: Alignment.centerRight,
-                  ).createShader(bounds),
-                  child: const Text(
-                    "¡Ok Listo!",
-                    style: TextStyle(
-                      fontSize: 48,
-                      fontWeight: FontWeight.w900,
-                      color: Colors.white,
-                      letterSpacing: 2.0,
-                      shadows: [
-                        Shadow(
-                          color: Colors.black26,
-                          offset: Offset(2, 2),
-                          blurRadius: 4,
+                  ShaderMask(
+                    shaderCallback: (bounds) => const LinearGradient(
+                      colors: [
+                        Color(0xFFE91E63),
+                        Color(0xFFFF5722),
+                        Color(0xFFFF9800),
+                        Color(0xFFFFEB3B),
+                      ],
+                      begin: Alignment.centerLeft,
+                      end: Alignment.centerRight,
+                    ).createShader(bounds),
+                    child: Text(
+                      "¡Ok Listo!",
+                      style: TextStyle(
+                        fontSize: 48.sp,
+                        fontWeight: FontWeight.w900,
+                        color: Colors.white,
+                        letterSpacing: 2.0,
+                        shadows: [
+                          Shadow(
+                            color: Colors.black26,
+                            offset: Offset(2, 2),
+                            blurRadius: 4,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+
+                  SizedBox(height: 30.h),
+
+                  // Contenedor del registro emocional
+                  Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.all(20),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF9ADDFF),
+                      borderRadius: BorderRadius.circular(25),
+                      border: Border.all(color: Colors.black, width: 1),
+                      boxShadow: [
+                        BoxShadow(
+                          color: const Color(0xFF4FC3F7).withValues(alpha: 0.4),
+                          blurRadius: 10,
+                          spreadRadius: 2,
+                          offset: const Offset(0, 4),
                         ),
                       ],
                     ),
+                    child: Column(
+                      children: [
+                        Text(
+                          "REGISTRO EMOCIONAL",
+                          style: TextStyle(
+                            fontSize: 20.sp,
+                            fontWeight: FontWeight.w900,
+                            color: Color(0xFFFF9800),
+                            letterSpacing: 1.5,
+                            shadows: [
+                              Shadow(
+                                color: Colors.white,
+                                offset: Offset(1, 1),
+                                blurRadius: 1,
+                              ),
+                            ],
+                          ),
+                        ),
+                        Text(
+                          "¡GUARDADO!",
+                          style: TextStyle(
+                            fontSize: 20.sp,
+                            fontWeight: FontWeight.w900,
+                            color: Colors.white,
+                            letterSpacing: 1.5,
+                            shadows: [
+                              Shadow(
+                                color: Colors.black26,
+                                offset: Offset(1, 1),
+                                blurRadius: 2,
+                              ),
+                            ],
+                          ),
+                        ),
+                        SizedBox(height: 15.h),
+                        Text(
+                          "HISTORIAL SEMANAL",
+                          style: TextStyle(
+                            fontSize: 16.sp,
+                            fontWeight: FontWeight.w700,
+                            color: Color(0xFF0277BD),
+                            letterSpacing: 1.0,
+                            fontStyle: FontStyle.italic,
+                          ),
+                        ),
+                        SizedBox(height: 15.h),
+                        _buildCalendarioContent(colorScheme),
+                      ],
+                    ),
                   ),
-                ),
 
-                const SizedBox(height: 30),
+                  SizedBox(height: 30.h),
 
-                // Contenedor del registro emocional
-                Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.all(20),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFF9ADDFF),
-                    borderRadius: BorderRadius.circular(25),
-                    border: Border.all(color: Colors.black, width: 1),
-                    boxShadow: [
-                      BoxShadow(
-                        color: const Color(0xFF4FC3F7).withValues(alpha: 0.4),
-                        blurRadius: 10,
-                        spreadRadius: 2,
-                        offset: const Offset(0, 4),
+                  Container(
+                    width: 200.w,
+                    height: 60.h,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(28),
+                      gradient: const RadialGradient(
+                        colors: [Color(0xFF0BBDAC), Color(0xFF6110E8)],
+                        center: Alignment.center,
+                        radius: 3.5,
                       ),
-                    ],
-                  ),
-                  child: Column(
-                    children: [
-                      const Text(
-                        "REGISTRO EMOCIONAL",
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.w900,
-                          color: Color(0xFFFF9800),
-                          letterSpacing: 1.5,
-                          shadows: [
-                            Shadow(
-                              color: Colors.white,
-                              offset: Offset(1, 1),
-                              blurRadius: 1,
-                            ),
-                          ],
+                      boxShadow: [
+                        BoxShadow(
+                          color: const Color(0xFF0BBDAC).withValues(alpha: 0.4),
+                          blurRadius: 12,
+                          spreadRadius: 1,
+                          offset: const Offset(0, 4),
+                        ),
+                      ],
+                    ),
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        elevation: 0,
+                        backgroundColor: Colors.transparent,
+                        shadowColor: Colors.transparent,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(28),
                         ),
                       ),
-                      const Text(
-                        "¡GUARDADO!",
+                      onPressed: () {
+                        Navigator.pushReplacementNamed(
+                          context,
+                          AppRoutes.mainApp,
+                        );
+                      },
+                      child: Text(
+                        "LISTO",
                         style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.w900,
+                          fontSize: 28.sp,
+                          fontWeight: FontWeight.bold,
+                          letterSpacing: 1.1,
                           color: Colors.white,
-                          letterSpacing: 1.5,
-                          shadows: [
-                            Shadow(
-                              color: Colors.black26,
-                              offset: Offset(1, 1),
-                              blurRadius: 2,
-                            ),
-                          ],
                         ),
                       ),
-                      const SizedBox(height: 15),
-                      const Text(
-                        "HISTORIAL SEMANAL",
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w700,
-                          color: Color(0xFF0277BD),
-                          letterSpacing: 1.0,
-                          fontStyle: FontStyle.italic,
-                        ),
-                      ),
-                      const SizedBox(height: 15),
-                      _buildCalendarioContent(colorScheme),
-                    ],
-                  ),
-                ),
-
-                const SizedBox(height: 30),
-
-                Container(
-                  width: 200,
-                  height: 60,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(28),
-                    gradient: const RadialGradient(
-                      colors: [Color(0xFF0BBDAC), Color(0xFF6110E8)],
-                      center: Alignment.center,
-                      radius: 3.5,
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: const Color(0xFF0BBDAC).withValues(alpha: 0.4),
-                        blurRadius: 12,
-                        spreadRadius: 1,
-                        offset: const Offset(0, 4),
-                      ),
-                    ],
-                  ),
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      elevation: 0,
-                      backgroundColor: Colors.transparent,
-                      shadowColor: Colors.transparent,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(28),
-                      ),
-                    ),
-                    onPressed: () {
-                      Navigator.pushReplacementNamed(
-                        context,
-                        AppRoutes.mainApp,
-                      );
-                    },
-                    child: const Text(
-                      "LISTO",
-                      style: TextStyle(
-                        fontSize: 28,
-                        fontWeight: FontWeight.bold,
-                        letterSpacing: 1.1,
-                        color: Colors.white,
-                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
@@ -296,10 +295,10 @@ class _CheckScreenState extends State<CheckScreen> {
           children: [
             Text(
               'No se pudo cargar el historial.',
-              style: TextStyle(fontSize: 14, color: Colors.red[700]),
+              style: TextStyle(fontSize: 14.sp, color: Colors.red[700]),
               textAlign: TextAlign.center,
             ),
-            const SizedBox(height: 8),
+            SizedBox(height: 8.h),
             TextButton(
               onPressed: _cargarCalendario,
               child: const Text('Reintentar'),
@@ -386,7 +385,7 @@ class _CheckScreenState extends State<CheckScreen> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   _buildDayLabel(diaNombre),
-                  const SizedBox(height: 6),
+                  SizedBox(height: 6.h),
                   icono,
                 ],
               ),
@@ -433,15 +432,15 @@ class _CheckScreenState extends State<CheckScreen> {
   Widget _buildNoLlenoIcon() {
     final colorScheme = Theme.of(context).colorScheme;
     return Container(
-      width: 36,
-      height: 36,
+      width: 36.w,
+      height: 36.h,
       alignment: Alignment.center,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         color: colorScheme.surfaceContainerLow,
         border: Border.all(color: colorScheme.outlineVariant, width: 1),
       ),
-      child: Container(width: 20, height: 2, color: colorScheme.outlineVariant),
+      child: Container(width: 20.w, height: 2.h, color: colorScheme.outlineVariant),
     );
   }
 
@@ -449,8 +448,8 @@ class _CheckScreenState extends State<CheckScreen> {
   Widget _buildPendienteIcon() {
     final colorScheme = Theme.of(context).colorScheme;
     return Container(
-      width: 36,
-      height: 36,
+      width: 36.w,
+      height: 36.h,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         color: colorScheme.surfaceContainerLow,
@@ -458,8 +457,8 @@ class _CheckScreenState extends State<CheckScreen> {
       ),
       child: Center(
         child: Container(
-          width: 8,
-          height: 8,
+          width: 8.w,
+          height: 8.h,
           decoration: const BoxDecoration(
             shape: BoxShape.circle,
             color: Color(0xFF0277BD),
@@ -478,12 +477,12 @@ class _CheckScreenState extends State<CheckScreen> {
 
   Widget _buildDayLabel(String day) {
     return SizedBox(
-      width: 36,
+      width: 36.w,
       child: Text(
         day,
         textAlign: TextAlign.center,
         style: TextStyle(
-          fontSize: 10,
+          fontSize: 10.sp,
           fontWeight: FontWeight.w600,
           color: Theme.of(context).colorScheme.onSurfaceVariant,
           letterSpacing: 0.2,
@@ -536,8 +535,8 @@ class _CheckScreenState extends State<CheckScreen> {
     }
 
     return Container(
-      width: 50,
-      height: 50,
+      width: 50.w,
+      height: 50.h,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         gradient: LinearGradient(
@@ -558,14 +557,14 @@ class _CheckScreenState extends State<CheckScreen> {
       child: ClipOval(
         child: Image.asset(
           imagenAsset,
-          width: 50,
-          height: 50,
+          width: 50.w,
+          height: 50.h,
           fit: BoxFit.cover,
           errorBuilder: (context, error, stackTrace) {
             // Fallback color si la imagen no existe
             return Container(
               color: colorFondo,
-              child: Center(child: Text('😊', style: TextStyle(fontSize: 20))),
+              child: Center(child: Text('😊', style: TextStyle(fontSize: 20.sp))),
             );
           },
         ),

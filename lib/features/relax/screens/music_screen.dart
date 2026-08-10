@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class MusicScreen extends StatefulWidget {
   const MusicScreen({super.key});
@@ -31,7 +32,7 @@ class _MusicScreenState extends State<MusicScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color(0xFF9C27B0),
-        title: const Text(
+        title: Text(
           '🎵 Música',
           style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
         ),
@@ -60,16 +61,16 @@ class _MusicScreenState extends State<MusicScreen> {
                 ),
                 child: Column(
                   children: [
-                    const Text(
+                    Text(
                       'Ahora reproduciendo:',
-                      style: TextStyle(color: Colors.white70, fontSize: 14),
+                      style: TextStyle(color: Colors.white70, fontSize: 14.sp),
                     ),
-                    const SizedBox(height: 16),
+                    SizedBox(height: 16.h),
                     GestureDetector(
                       onTap: () => setState(() => _isPlaying = !_isPlaying),
                       child: Container(
-                        width: 80,
-                        height: 80,
+                        width: 80.w,
+                        height: 80.h,
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           color: Colors.white.withValues(alpha: 0.2),
@@ -81,12 +82,12 @@ class _MusicScreenState extends State<MusicScreen> {
                         ),
                       ),
                     ),
-                    const SizedBox(height: 16),
+                    SizedBox(height: 16.h),
                     Text(
                       songs[0],
-                      style: const TextStyle(
+                      style: TextStyle(
                         color: Colors.white,
-                        fontSize: 18,
+                        fontSize: 18.sp,
                         fontWeight: FontWeight.bold,
                       ),
                       textAlign: TextAlign.center,
@@ -94,13 +95,13 @@ class _MusicScreenState extends State<MusicScreen> {
                   ],
                 ),
               ),
-              const SizedBox(height: 24),
+              SizedBox(height: 24.h),
               // Playlists
-              const Text(
+              Text(
                 'Mis Playlists:',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold),
               ),
-              const SizedBox(height: 12),
+              SizedBox(height: 12.h),
               ...List.generate(
                 playlists.length,
                 (index) => GestureDetector(
@@ -127,23 +128,23 @@ class _MusicScreenState extends State<MusicScreen> {
                           color: Color(0xFF9C27B0),
                           size: 24,
                         ),
-                        const SizedBox(width: 12),
+                        SizedBox(width: 12.w),
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
                                 playlists[index]['name']!,
-                                style: const TextStyle(
+                                style: TextStyle(
                                   fontWeight: FontWeight.bold,
-                                  fontSize: 16,
+                                  fontSize: 16.sp,
                                 ),
                               ),
                               Text(
                                 playlists[index]['songs']!,
                                 style: TextStyle(
                                   color: colorScheme.onSurfaceVariant,
-                                  fontSize: 12,
+                                  fontSize: 12.sp,
                                 ),
                               ),
                             ],
@@ -158,16 +159,16 @@ class _MusicScreenState extends State<MusicScreen> {
                   ),
                 ),
               ),
-              const SizedBox(height: 24),
+              SizedBox(height: 24.h),
               // Canciones
               Text(
                 'Canciones en ${playlists[_selectedPlaylist]['name']}:',
-                style: const TextStyle(
-                  fontSize: 16,
+                style: TextStyle(
+                  fontSize: 16.sp,
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              const SizedBox(height: 12),
+              SizedBox(height: 12.h),
               ...List.generate(
                 songs.length,
                 (index) => Container(
@@ -184,11 +185,11 @@ class _MusicScreenState extends State<MusicScreen> {
                         color: Color(0xFF9C27B0),
                         size: 20,
                       ),
-                      const SizedBox(width: 12),
+                      SizedBox(width: 12.w),
                       Expanded(
                         child: Text(
                           songs[index],
-                          style: const TextStyle(fontSize: 14),
+                          style: TextStyle(fontSize: 14.sp),
                         ),
                       ),
                       const Icon(
