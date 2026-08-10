@@ -123,11 +123,19 @@ class _EmotionSavedScreenState extends State<EmotionSavedScreen>
     final colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
       backgroundColor: const Color(0xFF2D2D2D),
+<<<<<<< HEAD
       body: SafeArea(
         child: SingleChildScrollView(
           child: Container(
             width: double.infinity,
             margin: const EdgeInsets.all(20),
+=======
+      body: Center(
+        child: SingleChildScrollView(
+          child: Container(
+            constraints: const BoxConstraints(maxWidth: 450),
+            margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 40),
+>>>>>>> fix-button-overloaded
             decoration: BoxDecoration(
               color: colorScheme.surface,
               borderRadius: BorderRadius.circular(24),
@@ -137,6 +145,7 @@ class _EmotionSavedScreenState extends State<EmotionSavedScreen>
                   blurRadius: 20,
                   spreadRadius: 4,
                   offset: const Offset(0, 8),
+<<<<<<< HEAD
                 ),
               ],
             ),
@@ -199,8 +208,45 @@ class _EmotionSavedScreenState extends State<EmotionSavedScreen>
                               letterSpacing: 1.2,
                               height: 1.2,
                             ),
-                          ),
+=======
+                ),
+              ],
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(24),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  // Checkmark animado
+                  ScaleTransition(
+                    scale: _checkAnimation,
+                    child: Container(
+                      width: 120,
+                      height: 120,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        gradient: const LinearGradient(
+                          colors: [Color(0xFF08D557), Color(0xFF41AC20)],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
                         ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: const Color(0xFF08D557).withValues(alpha: 0.4),
+                            blurRadius: 20,
+                            offset: const Offset(0, 8),
+>>>>>>> fix-button-overloaded
+                          ),
+                        ],
+                      ),
+                      child: const Center(
+                        child: Icon(
+                          Icons.check_rounded,
+                          size: 70,
+                          color: Colors.white,
+                        ),
+<<<<<<< HEAD
 
                         SizedBox(height: 16.h),
 
@@ -244,10 +290,90 @@ class _EmotionSavedScreenState extends State<EmotionSavedScreen>
                   ),
                 ),
               ],
+=======
+                      ),
+                    ),
+                  ),
+
+                  const SizedBox(height: 40),
+
+                  // Texto principal con animación de slide
+                  SlideTransition(
+                    position: _slideAnimation,
+                    child: FadeTransition(
+                      opacity: _slideController,
+                      child: Column(
+                        children: [
+                          ShaderMask(
+                            shaderCallback: (bounds) => const LinearGradient(
+                              colors: [Color(0xFF08D557), Color(0xFF41AC20)],
+                              begin: Alignment.centerLeft,
+                              end: Alignment.centerRight,
+                            ).createShader(bounds),
+                            child: const Text(
+                              '¡REGISTRO\nEMOCIONAL\nGUARDADO!',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 36,
+                                fontWeight: FontWeight.w900,
+                                color: Colors.white,
+                                letterSpacing: 1.2,
+                                height: 1.2,
+                              ),
+                            ),
+                          ),
+
+                          const SizedBox(height: 16),
+
+                          Text(
+                            'Tu estado de ánimo ha sido registrado con éxito',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                              color: colorScheme.onSurfaceVariant,
+                              height: 1.4,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+
+                  const SizedBox(height: 40),
+
+                  // Indicador de carga animado
+                  SizedBox(
+                    width: 60,
+                    height: 60,
+                    child: CircularProgressIndicator(
+                      valueColor: AlwaysStoppedAnimation<Color>(
+                        colorScheme.outlineVariant,
+                      ),
+                      strokeWidth: 3,
+                    ),
+                  ),
+
+                  const SizedBox(height: 20),
+
+                  Text(
+                    'Preparando tu resultado...',
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                      color: colorScheme.onSurfaceVariant,
+                    ),
+                  ),
+                ],
+              ),
+>>>>>>> fix-button-overloaded
             ),
           ),
         ),
       ),
+    );
+  }
+),
     );
   }
 }
