@@ -123,97 +123,25 @@ class _EmotionSavedScreenState extends State<EmotionSavedScreen>
     final colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
       backgroundColor: const Color(0xFF2D2D2D),
-<<<<<<< HEAD
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Container(
-            width: double.infinity,
-            margin: const EdgeInsets.all(20),
-=======
       body: Center(
         child: SingleChildScrollView(
           child: Container(
-            constraints: const BoxConstraints(maxWidth: 450),
-            margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 40),
->>>>>>> fix-button-overloaded
+            constraints: BoxConstraints(maxWidth: 450.w),
+            margin: EdgeInsets.symmetric(horizontal: 20.w, vertical: 40.h),
             decoration: BoxDecoration(
               color: colorScheme.surface,
-              borderRadius: BorderRadius.circular(24),
+              borderRadius: BorderRadius.circular(24.r),
               boxShadow: [
                 BoxShadow(
                   color: Colors.black.withValues(alpha: 0.15),
                   blurRadius: 20,
                   spreadRadius: 4,
                   offset: const Offset(0, 8),
-<<<<<<< HEAD
-                ),
-              ],
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                // Checkmark animado
-                ScaleTransition(
-                  scale: _checkAnimation,
-                  child: Container(
-                    width: 120.w,
-                    height: 120.h,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      gradient: const LinearGradient(
-                        colors: [Color(0xFF08D557), Color(0xFF41AC20)],
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                      ),
-                      boxShadow: [
-                        BoxShadow(
-                          color: const Color(0xFF08D557).withValues(alpha: 0.4),
-                          blurRadius: 20,
-                          offset: const Offset(0, 8),
-                        ),
-                      ],
-                    ),
-                    child: const Center(
-                      child: Icon(
-                        Icons.check_rounded,
-                        size: 70,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                ),
-
-                SizedBox(height: 40.h),
-
-                // Texto principal con animación de slide
-                SlideTransition(
-                  position: _slideAnimation,
-                  child: FadeTransition(
-                    opacity: _slideController,
-                    child: Column(
-                      children: [
-                        ShaderMask(
-                          shaderCallback: (bounds) => const LinearGradient(
-                            colors: [Color(0xFF08D557), Color(0xFF41AC20)],
-                            begin: Alignment.centerLeft,
-                            end: Alignment.centerRight,
-                          ).createShader(bounds),
-                          child: Text(
-                            '¡REGISTRO\nEMOCIONAL\nGUARDADO!',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: 36.sp,
-                              fontWeight: FontWeight.w900,
-                              color: Colors.white,
-                              letterSpacing: 1.2,
-                              height: 1.2,
-                            ),
-=======
                 ),
               ],
             ),
             child: Padding(
-              padding: const EdgeInsets.all(24),
+              padding: EdgeInsets.all(24.w),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -222,8 +150,8 @@ class _EmotionSavedScreenState extends State<EmotionSavedScreen>
                   ScaleTransition(
                     scale: _checkAnimation,
                     child: Container(
-                      width: 120,
-                      height: 120,
+                      width: 120.w,
+                      height: 120.h,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         gradient: const LinearGradient(
@@ -236,7 +164,6 @@ class _EmotionSavedScreenState extends State<EmotionSavedScreen>
                             color: const Color(0xFF08D557).withValues(alpha: 0.4),
                             blurRadius: 20,
                             offset: const Offset(0, 8),
->>>>>>> fix-button-overloaded
                           ),
                         ],
                       ),
@@ -246,56 +173,11 @@ class _EmotionSavedScreenState extends State<EmotionSavedScreen>
                           size: 70,
                           color: Colors.white,
                         ),
-<<<<<<< HEAD
-
-                        SizedBox(height: 16.h),
-
-                        Text(
-                          'Tu estado de ánimo ha sido registrado con éxito',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 16.sp,
-                            fontWeight: FontWeight.w600,
-                            color: colorScheme.onSurfaceVariant,
-                            height: 1.4,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-
-                SizedBox(height: 40.h),
-
-                // Indicador de carga animado
-                SizedBox(
-                  width: 60.w,
-                  height: 60.h,
-                  child: CircularProgressIndicator(
-                    valueColor: AlwaysStoppedAnimation<Color>(
-                      colorScheme.outlineVariant,
-                    ),
-                    strokeWidth: 3,
-                  ),
-                ),
-
-                SizedBox(height: 20.h),
-
-                Text(
-                  'Preparando tu resultado...',
-                  style: TextStyle(
-                    fontSize: 14.sp,
-                    fontWeight: FontWeight.w500,
-                    color: colorScheme.onSurfaceVariant,
-                  ),
-                ),
-              ],
-=======
                       ),
                     ),
                   ),
 
-                  const SizedBox(height: 40),
+                  SizedBox(height: 40.h),
 
                   // Texto principal con animación de slide
                   SlideTransition(
@@ -310,11 +192,11 @@ class _EmotionSavedScreenState extends State<EmotionSavedScreen>
                               begin: Alignment.centerLeft,
                               end: Alignment.centerRight,
                             ).createShader(bounds),
-                            child: const Text(
+                            child: Text(
                               '¡REGISTRO\nEMOCIONAL\nGUARDADO!',
                               textAlign: TextAlign.center,
                               style: TextStyle(
-                                fontSize: 36,
+                                fontSize: 36.sp,
                                 fontWeight: FontWeight.w900,
                                 color: Colors.white,
                                 letterSpacing: 1.2,
@@ -323,13 +205,13 @@ class _EmotionSavedScreenState extends State<EmotionSavedScreen>
                             ),
                           ),
 
-                          const SizedBox(height: 16),
+                          SizedBox(height: 16.h),
 
                           Text(
                             'Tu estado de ánimo ha sido registrado con éxito',
                             textAlign: TextAlign.center,
                             style: TextStyle(
-                              fontSize: 16,
+                              fontSize: 16.sp,
                               fontWeight: FontWeight.w600,
                               color: colorScheme.onSurfaceVariant,
                               height: 1.4,
@@ -340,12 +222,12 @@ class _EmotionSavedScreenState extends State<EmotionSavedScreen>
                     ),
                   ),
 
-                  const SizedBox(height: 40),
+                  SizedBox(height: 40.h),
 
                   // Indicador de carga animado
                   SizedBox(
-                    width: 60,
-                    height: 60,
+                    width: 60.w,
+                    height: 60.h,
                     child: CircularProgressIndicator(
                       valueColor: AlwaysStoppedAnimation<Color>(
                         colorScheme.outlineVariant,
@@ -354,26 +236,22 @@ class _EmotionSavedScreenState extends State<EmotionSavedScreen>
                     ),
                   ),
 
-                  const SizedBox(height: 20),
+                  SizedBox(height: 20.h),
 
                   Text(
                     'Preparando tu resultado...',
                     style: TextStyle(
-                      fontSize: 14,
+                      fontSize: 14.sp,
                       fontWeight: FontWeight.w500,
                       color: colorScheme.onSurfaceVariant,
                     ),
                   ),
                 ],
               ),
->>>>>>> fix-button-overloaded
             ),
           ),
         ),
       ),
-    );
-  }
-),
     );
   }
 }

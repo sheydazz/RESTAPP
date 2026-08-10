@@ -1,6 +1,7 @@
 ﻿import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:rest/core/services/profile_service.dart';
+import 'package:rest/core/services/user_session.dart';
 
 import '../../home/screens/gradient_text.dart';
 
@@ -12,6 +13,7 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   final ProfileService _profileService = ProfileService();
   final TextEditingController _nombreController = TextEditingController();
+  final TextEditingController _apellidosController = TextEditingController();
   final TextEditingController _correoController = TextEditingController();
   final TextEditingController _ciudadController = TextEditingController();
   final TextEditingController _semestreController = TextEditingController();
@@ -20,6 +22,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       TextEditingController();
 
   bool _isLoading = true;
+  bool _isUpdating = false;
   String? _errorMessage;
 
   @override
@@ -39,7 +42,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
       if (!mounted) return;
 
       setState(() {
-        _nombreController.text = profile.nombreCompleto;
+        _nombreController.text = profile.nombres;
+        _apellidosController.text = profile.apellidos;
         _correoController.text = profile.correo;
         _ciudadController.text = profile.ciudad ?? '';
         _semestreController.text = profile.semestreActual ?? '';
@@ -47,6 +51,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
         _fechaNacimientoController.text = profile.fechaNacimientoFormateada;
         _isLoading = false;
       });
+
+      // Actualizar nombre en la sesión global para otras pantallas
+      UserSession.currentUserName = profile.nombres;
+      await UserSession.persist();
     } catch (e) {
       if (!mounted) return;
       setState(() {
@@ -56,9 +64,67 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
   }
 
+  Future<void> _handleSave() async {
+    if (_isUpdating) return;
+
+    setState(() {
+      _isUpdating = true;
+    });
+
+    try {
+      // Construir el payload según el contrato corregido
+      final Map<String, dynamic> payload = {
+        'nombres': _nombreController.text.trim(),
+        'apellidos': _apellidosController.text.trim(),
+        'semestre_actual': _semestreController.text.trim(),
+        'telefono': _telefonoController.text.trim(),
+      };
+
+      // Manejar la fecha de nacimiento si tiene contenido
+      final fechaRaw = _fechaNacimientoController.text.trim();
+      if (fechaRaw.isNotEmpty) {
+        // Convertir de DD/MM/YYYY a YYYY-MM-DD
+        final parts = fechaRaw.split('/');
+        if (parts.length == 3) {
+          final day = parts[0].padLeft(2, '0');
+          final month = parts[1].padLeft(2, '0');
+          final year = parts[2];
+          payload['fecha_nacimiento'] = '$year-$month-$day';
+        }
+      }
+
+      await _profileService.updateProfile(payload);
+      
+      if (!mounted) return;
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Perfil actualizado correctamente'),
+          backgroundColor: Color(0xFF4FC3F7),
+        ),
+      );
+
+      // Recargar perfil para confirmar cambios
+      await _loadProfile();
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Error al actualizar: $e'),
+          backgroundColor: Colors.redAccent,
+        ),
+      );
+    } finally {
+      if (mounted) {
+        setState(() => _isUpdating = false);
+      }
+    }
+  }
+
   @override
   void dispose() {
     _nombreController.dispose();
+    _apellidosController.dispose();
     _correoController.dispose();
     _ciudadController.dispose();
     _semestreController.dispose();
@@ -181,7 +247,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
             ),
             SizedBox(height: 30.h),
-            _buildInputField('Nombre', _nombreController),
+            _buildInputField('Nombres', _nombreController),
+            SizedBox(height: 20.h),
+            _buildInputField('Apellidos', _apellidosController),
             SizedBox(height: 20.h),
             _buildInputField('Correo', _correoController),
             SizedBox(height: 20.h),
@@ -215,24 +283,26 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 color: Colors.transparent,
                 child: InkWell(
                   borderRadius: BorderRadius.circular(15),
-                  onTap: () {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text('Perfil actualizado correctamente'),
-                        backgroundColor: Color(0xFF4FC3F7),
-                      ),
-                    );
-                  },
+                  onTap: _isUpdating ? null : _handleSave,
                   child: Center(
-                    child: Text(
-                      'GUARDAR CAMBIOS',
-                      style: TextStyle(
-                        fontSize: 16.sp,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.white,
-                        letterSpacing: 1.2,
-                      ),
-                    ),
+                    child: _isUpdating
+                        ? const SizedBox(
+                            width: 24,
+                            height: 24,
+                            child: CircularProgressIndicator(
+                              color: Colors.white,
+                              strokeWidth: 2,
+                            ),
+                          )
+                        : Text(
+                            'GUARDAR CAMBIOS',
+                            style: TextStyle(
+                              fontSize: 16.sp,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.white,
+                              letterSpacing: 1.2,
+                            ),
+                          ),
                   ),
                 ),
               ),

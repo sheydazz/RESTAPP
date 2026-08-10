@@ -75,22 +75,14 @@ class _CheckScreenState extends State<CheckScreen> {
     final colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
       backgroundColor: const Color(0xFF2D2D2D),
-<<<<<<< HEAD
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Container(
-            width: double.infinity,
-            margin: const EdgeInsets.all(20),
-=======
       body: Center(
         child: SingleChildScrollView(
           child: Container(
-            constraints: const BoxConstraints(maxWidth: 450),
-            margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 40),
->>>>>>> fix-button-overloaded
+            constraints: BoxConstraints(maxWidth: 450.w),
+            margin: EdgeInsets.symmetric(horizontal: 20.w, vertical: 40.h),
             decoration: BoxDecoration(
               color: colorScheme.surface,
-              borderRadius: BorderRadius.circular(24),
+              borderRadius: BorderRadius.circular(24.r),
               boxShadow: [
                 BoxShadow(
                   color: Colors.black.withValues(alpha: 0.1),
@@ -101,13 +93,12 @@ class _CheckScreenState extends State<CheckScreen> {
               ],
             ),
             child: Padding(
-              padding: const EdgeInsets.all(24),
+              padding: EdgeInsets.all(24.w),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   // Logo principal
-<<<<<<< HEAD
                   ClipOval(
                     child: Image.asset(
                       "assets/images/kingrest.jpg",
@@ -133,37 +124,6 @@ class _CheckScreenState extends State<CheckScreen> {
                   ),
 
                   SizedBox(height: 20.h),
-=======
-                  Container(
-                    width: 250,
-                    height: 200,
-                    child: ClipOval(
-                      child: Image.asset(
-                        "assets/images/kingrest.jpg",
-                        width: 200,
-                        height: 200,
-                        fit: BoxFit.cover,
-                        errorBuilder: (context, error, stackTrace) {
-                          return Container(
-                            decoration: const BoxDecoration(
-                              shape: BoxShape.circle,
-                              gradient: LinearGradient(
-                                colors: [Color(0xFF4DD0E1), Color(0xFF26C6DA)],
-                                begin: Alignment.topCenter,
-                                end: Alignment.bottomCenter,
-                              ),
-                            ),
-                            child: const Center(
-                              child: Text('😊', style: TextStyle(fontSize: 80)),
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                  ),
-
-                  const SizedBox(height: 20),
->>>>>>> fix-button-overloaded
 
                   ShaderMask(
                     shaderCallback: (bounds) => const LinearGradient(
@@ -176,24 +136,17 @@ class _CheckScreenState extends State<CheckScreen> {
                       begin: Alignment.centerLeft,
                       end: Alignment.centerRight,
                     ).createShader(bounds),
-<<<<<<< HEAD
                     child: Text(
                       "¡Ok Listo!",
                       style: TextStyle(
                         fontSize: 48.sp,
-=======
-                    child: const Text(
-                      "¡Ok Listo!",
-                      style: TextStyle(
-                        fontSize: 48,
->>>>>>> fix-button-overloaded
                         fontWeight: FontWeight.w900,
                         color: Colors.white,
                         letterSpacing: 2.0,
                         shadows: [
                           Shadow(
                             color: Colors.black26,
-                            offset: Offset(2, 2),
+                            offset: const Offset(2, 2),
                             blurRadius: 4,
                           ),
                         ],
@@ -201,19 +154,15 @@ class _CheckScreenState extends State<CheckScreen> {
                     ),
                   ),
 
-<<<<<<< HEAD
                   SizedBox(height: 30.h),
-=======
-                  const SizedBox(height: 30),
->>>>>>> fix-button-overloaded
 
                   // Contenedor del registro emocional
                   Container(
                     width: double.infinity,
-                    padding: const EdgeInsets.all(20),
+                    padding: EdgeInsets.all(20.w),
                     decoration: BoxDecoration(
                       color: const Color(0xFF9ADDFF),
-                      borderRadius: BorderRadius.circular(25),
+                      borderRadius: BorderRadius.circular(25.r),
                       border: Border.all(color: Colors.black, width: 1),
                       boxShadow: [
                         BoxShadow(
@@ -226,96 +175,62 @@ class _CheckScreenState extends State<CheckScreen> {
                     ),
                     child: Column(
                       children: [
-<<<<<<< HEAD
                         Text(
                           "REGISTRO EMOCIONAL",
                           style: TextStyle(
                             fontSize: 20.sp,
-=======
-                        const Text(
-                          "REGISTRO EMOCIONAL",
-                          style: TextStyle(
-                            fontSize: 20,
->>>>>>> fix-button-overloaded
                             fontWeight: FontWeight.w900,
-                            color: Color(0xFFFF9800),
+                            color: const Color(0xFFFF9800),
                             letterSpacing: 1.5,
                             shadows: [
                               Shadow(
                                 color: Colors.white,
-                                offset: Offset(1, 1),
+                                offset: const Offset(1, 1),
                                 blurRadius: 1,
                               ),
                             ],
                           ),
                         ),
-<<<<<<< HEAD
                         Text(
                           "¡GUARDADO!",
                           style: TextStyle(
                             fontSize: 20.sp,
-=======
-                        const Text(
-                          "¡GUARDADO!",
-                          style: TextStyle(
-                            fontSize: 20,
->>>>>>> fix-button-overloaded
                             fontWeight: FontWeight.w900,
                             color: Colors.white,
                             letterSpacing: 1.5,
                             shadows: [
                               Shadow(
                                 color: Colors.black26,
-                                offset: Offset(1, 1),
+                                offset: const Offset(1, 1),
                                 blurRadius: 2,
                               ),
                             ],
                           ),
                         ),
-<<<<<<< HEAD
                         SizedBox(height: 15.h),
                         Text(
                           "HISTORIAL SEMANAL",
                           style: TextStyle(
                             fontSize: 16.sp,
-=======
-                        const SizedBox(height: 15),
-                        const Text(
-                          "HISTORIAL SEMANAL",
-                          style: TextStyle(
-                            fontSize: 16,
->>>>>>> fix-button-overloaded
                             fontWeight: FontWeight.w700,
-                            color: Color(0xFF0277BD),
+                            color: const Color(0xFF0277BD),
                             letterSpacing: 1.0,
                             fontStyle: FontStyle.italic,
                           ),
                         ),
-<<<<<<< HEAD
                         SizedBox(height: 15.h),
-=======
-                        const SizedBox(height: 15),
->>>>>>> fix-button-overloaded
                         _buildCalendarioContent(colorScheme),
                       ],
                     ),
                   ),
 
-<<<<<<< HEAD
                   SizedBox(height: 30.h),
 
                   Container(
                     width: 200.w,
                     height: 60.h,
-=======
-                  const SizedBox(height: 30),
-
-                  Container(
-                    width: 200,
-                    height: 60,
->>>>>>> fix-button-overloaded
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(28),
+                      borderRadius: BorderRadius.circular(28.r),
                       gradient: const RadialGradient(
                         colors: [Color(0xFF0BBDAC), Color(0xFF6110E8)],
                         center: Alignment.center,
@@ -336,7 +251,7 @@ class _CheckScreenState extends State<CheckScreen> {
                         backgroundColor: Colors.transparent,
                         shadowColor: Colors.transparent,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(28),
+                          borderRadius: BorderRadius.circular(28.r),
                         ),
                       ),
                       onPressed: () {
@@ -345,17 +260,10 @@ class _CheckScreenState extends State<CheckScreen> {
                           AppRoutes.mainApp,
                         );
                       },
-<<<<<<< HEAD
                       child: Text(
                         "LISTO",
                         style: TextStyle(
                           fontSize: 28.sp,
-=======
-                      child: const Text(
-                        "LISTO",
-                        style: TextStyle(
-                          fontSize: 28,
->>>>>>> fix-button-overloaded
                           fontWeight: FontWeight.bold,
                           letterSpacing: 1.1,
                           color: Colors.white,
@@ -433,7 +341,7 @@ class _CheckScreenState extends State<CheckScreen> {
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: colorScheme.surface,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(20.r),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.1),

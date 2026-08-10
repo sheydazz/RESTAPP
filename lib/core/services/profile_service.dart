@@ -171,4 +171,30 @@ class ProfileService {
 
     throw Exception('Respuesta de perfil invalida.');
   }
+
+  Future<UserProfile> updateProfile(Map<String, dynamic> data) async {
+    final uri = Uri.parse('$_baseUrl/api/settings/profile');
+    final response = await http.put(
+      uri,
+      headers: _authHeaders(),
+      body: jsonEncode(data),
+    );
+
+    if (response.statusCode < 200 || response.statusCode >= 300) {
+      throw Exception(
+        'No se pudo actualizar el perfil (${response.statusCode}): ${response.body}',
+      );
+    }
+
+    final decoded = jsonDecode(response.body);
+    final rawProfile = decoded is Map<String, dynamic> ? decoded['data'] : null;
+
+    if (rawProfile is Map<String, dynamic>) {
+      return UserProfile.fromJson(rawProfile);
+    } else if (decoded is Map<String, dynamic>) {
+      return UserProfile.fromJson(decoded);
+    }
+
+    throw Exception('Respuesta de actualización invalida.');
+  }
 }
